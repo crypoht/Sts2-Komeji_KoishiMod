@@ -13,6 +13,7 @@
 # (可选) 忽略构建输出的 dll 或 pck
 *.dll
 *.pck
+*.uid
 
 # 确保不忽略 cs 和 json
 !*.cs
