@@ -1,0 +1,29 @@
+{
+  "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.title": "最终的无意识",
+  "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.smartDescription": "打出牌时，自动打出手牌中等于层数张数的无意识牌。打出无意识牌时，抽 1 张牌。",
+
+  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.title": "盛开",
+  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 50%。进入该状态时,获得{Amount:energyIcons()}",
+
+  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.title": "闭合",
+  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.smartDescription": "获得的[gold]格挡[/gold]提升 20%。进入该状态时抽取一张牌",
+
+  "KOMEIJIKOISHI-FETUS_DREAM_POWER.title": "胎儿之梦",
+  "KOMEIJIKOISHI-FETUS_DREAM_POWER.smartDescription": "[gold]无意识[/gold]得到了扩张!",
+
+  "KOMEIJIKOISHI-TRACING_POWER.title": "追踪",
+  "KOMEIJIKOISHI-TRACING_POWER.smartDescription": "受到的 [gold]弹幕[/gold] 攻击伤害提升 50%。",
+
+  "KOMEIJIKOISHI-DANMAKU_ART_POWER.title": "弹幕艺术",
+  "KOMEIJIKOISHI-DANMAKU_ART_POWER.smartDescription": "每当打出一张[gold]弹幕[/gold]牌时，获得 {Amount} 点[gold]格挡[/gold]。",
+
+ "KOMEIJIKOISHI-RECOGNIZED_GENIUS_POWER.title": "偏差「被认知的天才」",
+ "KOMEIJIKOISHI-RECOGNIZED_GENIUS_POWER.smartDescription": "你在战斗中生成的[gold]弹幕[/gold]牌会被自动升级。",
+
+ "KOMEIJIKOISHI-SUPEREGO_POWER.title": "超我",
+ "KOMEIJIKOISHI-SUPEREGO_POWER.smartDescription": "进入 [gold]闭合[/gold] 姿态时，额外抽取 {Amount} 张牌。进入 [gold]盛开[/gold] 姿态时，额外获得 {Amount:energyIcons()}。",
+
+ "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.title": "地灵符「精神恒星接替」",
+ "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.smartDescription": "在本场战斗中，[gold]追踪[/gold] 的伤害加成效果提高 {Amount}%。"
+
+}

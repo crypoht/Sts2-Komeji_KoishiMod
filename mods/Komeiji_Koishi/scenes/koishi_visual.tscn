@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dlqiafxdwm5gq"]
+
+[ext_resource type="Texture2D" uid="uid://casj38d5c487g" path="res://mods/Komeiji_Koishi/images/ui/koishi_icon_64.png" id="1_ifmwu"]
+
+[node name="KoishiVisual" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(3, -615)
+texture = ExtResource("1_ifmwu")

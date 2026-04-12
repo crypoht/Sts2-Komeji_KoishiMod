@@ -1,0 +1,28 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Komeiji_Koishi"
+run/main_scene="uid://c3xusef6aalag"
+config/features=PackedStringArray("4.5", "C#", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+KoishiModLoader="*res://Scripts/KoishiModLoader.cs"
+
+[dotnet]
+
+project/assembly_name="Komeiji_Koishi"
+
+[editor]
+
+export/convert_text_resources_to_binary=false

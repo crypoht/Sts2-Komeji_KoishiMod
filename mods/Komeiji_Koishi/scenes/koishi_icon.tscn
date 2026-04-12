@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://2px3bxjs7fil"]
+
+[ext_resource type="Texture2D" uid="uid://casj38d5c487g" path="res://mods/Komeiji_Koishi/images/ui/koishi_icon_64.png" id="1_4st6t"]
+
+[node name="TextureRect" type="TextureRect"]
+offset_top = -2.0
+offset_right = 54.0
+offset_bottom = 46.0
+texture = ExtResource("1_4st6t")
+stretch_mode = 6
+
+[node name="koishi_energy_counter" type="Control" parent="."]
+anchors_preset = 0
