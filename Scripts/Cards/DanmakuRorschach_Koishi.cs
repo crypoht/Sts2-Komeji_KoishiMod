@@ -37,7 +37,7 @@ namespace KomeijiKoishi.Cards
         {
             get
             {
-                try { return KoishiExtensions.IsUnconscious(this) ? new[] { KoishiKeywords.Unconscious } : new CardKeyword[0]; }
+                try { return KoishiExtensions.IsTrulyUnconscious(this) ? new[] { KoishiKeywords.Unconscious } : new CardKeyword[0]; }
                 catch (Exception) { return new CardKeyword[0]; }
             }
         }
@@ -66,7 +66,6 @@ namespace KomeijiKoishi.Cards
 
                 if (allDanmakusSnapshot.Count > 0)
                 {
-                    Random rng = new Random();
                     foreach (var danmaku in allDanmakusSnapshot)
                     {
                         var aliveEnemies = base.CombatState!.HittableEnemies.Where(e => e != null && !e.IsDead).ToList();
@@ -78,11 +77,15 @@ namespace KomeijiKoishi.Cards
                         {
                             if (danmaku.TargetType == TargetType.AnyEnemy)
                             {
-                                targetCreature = aliveEnemies[rng.Next(aliveEnemies.Count)]!;
+                                targetCreature = player.RunState.Rng.Shuffle.NextItem(aliveEnemies);
                             }
                         }
 
+                        KoishiExtensions.AutoPlayedByUnconsciousCards.Add(danmaku);
+
                         await CardCmd.AutoPlay(choiceContext, danmaku, targetCreature, AutoPlayType.Default, false, false);
+                        
+                        KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(danmaku);
                         
                         await Cmd.Wait(0.15f, false); 
                     }

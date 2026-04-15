@@ -16,6 +16,7 @@ namespace KomeijiKoishi.Powers
     public sealed class BloomStancePower : KoishiStancePower
     {
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/BloomStancePower.png";
+        public override string? CustomBigIconPath => "res://mods/Komeiji_Koishi/images/powers/BloomStancePower.png";
         public static int BloomEnergyGainAmount = 1;
         private bool _isFirstCard = true;
 
@@ -26,10 +27,11 @@ namespace KomeijiKoishi.Powers
 
         public static async Task EnterThisStance(PlayerChoiceContext context, Player player, CardModel sourceCard)
         {
-            if (player.Creature.Powers.Any(p => p is BloomStancePower)) {
+            if (player.Creature.GetPower<BloomStancePower>() != null) {
                 return;
             }
-            ClearOldStances(player); 
+
+            await ClearOldStances(player); 
             
             int bonusEnergy = 0;
             var superego = player.Creature.Powers.FirstOrDefault(p => p is SuperegoPower);
@@ -47,6 +49,12 @@ namespace KomeijiKoishi.Powers
             
             await PowerCmd.Apply<BloomStancePower>(player.Creature, 1m, player.Creature, sourceCard, false);
             NotifyAllCardsStanceChanged(player, "Bloom"); 
+
+            var kokoroPower = player.Creature.GetPower<KoishiKokoroPower>();
+            if (kokoroPower != null)
+            {
+                await kokoroPower.TriggerEffects(context, sourceCard);
+            }
         }
 
         public override decimal ModifyBlockMultiplicative(Creature target, decimal block, ValueProp props, CardModel? cardSource, CardPlay? cardPlay)

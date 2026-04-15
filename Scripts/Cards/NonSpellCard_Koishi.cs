@@ -38,25 +38,21 @@ namespace KomeijiKoishi.Cards
         {
             try
             {
-                await CreatureCmd.TriggerAnim(base.Owner!.Creature, "Cast", base.Owner.Character!.CastAnimDelay);
+                var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
+                if (player == null || base.CombatState == null) return;
 
-                IEnumerable<CardModel> generatedCards = CardFactory.GetForCombat(
-                    base.Owner, 
-                    DanmakuPool.Pool, 
-                    base.DynamicVars.Cards.IntValue, 
-                    base.Owner.RunState!.Rng!.CombatCardGeneration!
-                );
+                await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
 
-                foreach (CardModel generatedDanmaku in generatedCards)
+                int count = base.DynamicVars.Cards.IntValue;
+                for (int i = 0; i < count; i++)
                 {
-                    CardPileAddResult result = await CardPileCmd.AddGeneratedCardToCombat(generatedDanmaku, PileType.Hand, true, CardPilePosition.Bottom);
-                    CardCmd.PreviewCardPileAdd(result, 2.2f, CardPreviewStyle.HorizontalLayout);
+                    await DanmakuPool.CreateRandomDanmakuInHand(player, base.CombatState);
                     await Cmd.Wait(0.1f, false);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"[NonSpellCard] FATAL ERROR PREVENTED: {e}");
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[NonSpellCard] ERROR: {e}");
             }
         }
 

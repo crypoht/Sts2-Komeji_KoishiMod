@@ -10,11 +10,12 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Nodes.CommonUi; 
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums;
-using KomeijiKoishi.Powers; 
-using System.Reflection;
-using BaseLib.Utils;
-using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using BaseLib.Utils; 
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
+using KomeijiKoishi.Powers; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -26,7 +27,7 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
-         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku) 
         };
@@ -40,6 +41,7 @@ namespace KomeijiKoishi.Cards
 
                 await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
 
+
                 var piles = new[] { 
                     PileType.Hand.GetPile(player), 
                     PileType.Draw.GetPile(player), 
@@ -47,22 +49,30 @@ namespace KomeijiKoishi.Cards
                     PileType.Exhaust.GetPile(player) 
                 };
 
+                List<CardModel> danmakuToUpgrade = new List<CardModel>();
+                
                 foreach (var pile in piles)
                 {
-                    if (pile != null && pile.Cards != null)
+                    if (pile != null)
                     {
-                        var danmakus = pile.Cards.Where(c => c.Tags != null && c.Tags.Contains(KoishiTags.Danmaku)).ToList();
-                        foreach (var card in danmakus)
-                        {
-                            if (!card.IsUpgraded) 
-                            {
-                                CardCmd.Upgrade(card, CardPreviewStyle.None);
-                            }
-                        }
+                        var danmakuInPile = pile.Cards.Where(c => 
+                            c.Tags != null && 
+                            c.Tags.Contains(KoishiTags.Danmaku) && 
+                            !c.IsUpgraded
+                        );
+                        danmakuToUpgrade.AddRange(danmakuInPile);
                     }
                 }
 
-                await PowerCmd.Apply<RecognizedGeniusPower>(player.Creature, 1m, player.Creature, this, false);
+                if (danmakuToUpgrade.Count > 0)
+                {
+                    foreach (CardModel cardModel in danmakuToUpgrade)
+                    {
+                        CardCmd.Upgrade(cardModel, CardPreviewStyle.None);
+                        
+                        await Cmd.Wait(0.05f, false);
+                    }
+                }
             }
             catch (Exception e)
             {

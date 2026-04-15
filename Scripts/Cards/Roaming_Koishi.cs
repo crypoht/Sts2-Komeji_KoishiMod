@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -15,6 +14,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums;
+using KomeijiKoishi.Utils_Koishi; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -49,9 +49,10 @@ namespace KomeijiKoishi.Cards
                 await CreatureCmd.GainBlock(player.Creature, base.DynamicVars.Block.BaseValue, ValueProp.Move, cardPlay, false);
 
                 var handPile = PileType.Hand.GetPile(player);
+                
                 var validCards = handPile.Cards.Where(c => 
                     c != this && 
-                    (c.Keywords == null || !c.Keywords.Contains(KoishiKeywords.Unconscious))
+                    !KoishiExtensions.IsTrulyUnconscious(c)
                 ).ToList();
 
                 int amount = (int)base.DynamicVars["Amount"].BaseValue;
@@ -63,11 +64,8 @@ namespace KomeijiKoishi.Cards
                     var targetCard = player.RunState.Rng.Shuffle.NextItem(validCards);
                     if (targetCard != null)
                     {
-                        var applyMethod = typeof(CardCmd).GetMethod("ApplyKeyword", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                        if (applyMethod != null)
-                        {
-                            applyMethod.Invoke(null, new object[] { targetCard, new CardKeyword[] { KoishiKeywords.Unconscious } });
-                        }
+                        KoishiExtensions.ApplyUnconsciousToCard(targetCard);
+                        
                         validCards.Remove(targetCard);
                     }
                 }

@@ -24,23 +24,14 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
-        
-
-        public override IEnumerable<CardKeyword> CanonicalKeywords
-        {
-            get
-            {
-                try { return KoishiExtensions.IsUnconscious(this) ? new[] { KoishiKeywords.Unconscious } : new CardKeyword[0]; }
-                catch (Exception) { return new[] {CardKeyword.Ethereal}; }
-            }
-        }
+      public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal };
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip> { HoverTipFactory.FromPower<IntangiblePower>() };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new PowerVar<IntangiblePower>(1m) };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
-            var owner = KoishiExtensions.GetOwner(this);
+            var owner = base.Owner;
             if (owner != null)
             {
                 await CreatureCmd.TriggerAnim(owner.Creature, "Cast", owner.Character.CastAnimDelay);

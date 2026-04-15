@@ -46,7 +46,7 @@
   "KOMEIJIKOISHI-YIN_YANG_ORB_DANMAKU_KOISHI.description": "造成 {Damage:diff()} 点伤害。",
 
   "KOMEIJIKOISHI-RICE_DANMAKU_KOISHI.title": "米粒弹幕",
-  "KOMEIJIKOISHI-RICE_DANMAKU_KOISHI.description": "[gold]消耗[/gold]。造成 {Damage:diff()} 点伤害。将一张此牌的复制品加入弃牌堆。",
+  "KOMEIJIKOISHI-RICE_DANMAKU_KOISHI.description": "造成 {Damage:diff()} 点伤害。将一张此牌的复制品加入弃牌堆。",
 
   "KOMEIJIKOISHI-SMALL_ORB_DANMAKU_KOISHI.title": "小玉弹幕",
   "KOMEIJIKOISHI-SMALL_ORB_DANMAKU_KOISHI.description": "[gold]消耗[/gold]。造成 {Damage:diff()} 点伤害 {Repeat:diff()} 次。",
@@ -141,6 +141,21 @@
   "KOMEIJIKOISHI-DISINTEGRATING_CONSCIOUSNESS_CAPTURE_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n如果你的弃牌堆中有 [gold]无意识[/gold] 牌，获得 {Energy:energyIcons()} 。",
 
   "KOMEIJIKOISHI-JOYFUL_DANCE_KOISHI.title": "欢乐舞步",
-  "KOMEIJIKOISHI-JOYFUL_DANCE_KOISHI.description": "获得 {Block:diff()} 点[gold]格挡[/gold]。\n进入[gold]盛开[/gold]姿态。\n抽 {Cards:diff()} 张牌。"
+  "KOMEIJIKOISHI-JOYFUL_DANCE_KOISHI.description": "获得 {Block:diff()} 点[gold]格挡[/gold]。\n进入[gold]盛开[/gold]姿态。\n抽 {Cards:diff()} 张牌。",
   
+  "KOMEIJIKOISHI-KOISHI_KOKORO_AND_UNCONSCIOUS_KOISHI.title": "恋，秦心，与无意识",
+  "KOMEIJIKOISHI-KOISHI_KOKORO_AND_UNCONSCIOUS_KOISHI.description": "切换姿态时，随机获得以下效果之一：\n[gold]喜[/gold]：下{JoyMaskPower:diff()}张牌耗能为0。\n[gold]怒[/gold]：获得{StrengthPower:diff()}点[gold]力量[/gold]。\n[gold]哀[/gold]：获得{DexterityPower:diff()}点[gold]敏捷[/gold]。\n[gold]乐[/gold]：抽{Cards:diff()}张牌。",
+
+  "KOMEIJIKOISHI-ID_LIBERATION_KOISHI.title": "本能「本我的解放」",
+  "KOMEIJIKOISHI-ID_LIBERATION_KOISHI.description": "造成 {Damage:diff()} 点伤害 {Repeat:diff()} 次。\n打出手中所有 [gold]无意识[/gold] 牌。",
+
+  "KOMEIJIKOISHI-INSTINCT_STRIKE_KOISHI.title": "本能打击",
+  "KOMEIJIKOISHI-INSTINCT_STRIKE_KOISHI.description": "造成 {Damage:diff()} 点伤害。选择手牌中的一张牌，赋予其 [gold]无意识[/gold] 。",
+  "KOMEIJIKOISHI-INSTINCT_STRIKE_KOISHI.selectionScreenPrompt": "选择一张牌赋予无意识",
+
+  "KOMEIJIKOISHI-HIDDEN_CONSCIOUSNESS_KOISHI.title": "意识潜藏",
+  "KOMEIJIKOISHI-HIDDEN_CONSCIOUSNESS_KOISHI.description": "获得 {Block:diff()} 点格挡。\n随机打出消耗牌堆的 {Cards:diff()} 张 [gold]弹幕[/gold] 牌。",
+
+  "KOMEIJIKOISHI-BIG_HUG_KOISHI.title": "古明地大抱抱",
+  "KOMEIJIKOISHI-BIG_HUG_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n如果你上一张打出的牌是 [gold]无意识[/gold] 牌，耗能减少 1 点。"
 }

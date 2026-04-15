@@ -67,7 +67,11 @@ namespace KomeijiKoishi.Cards
                         var validEnemies = base.CombatState!.HittableEnemies.Where(e => !e.IsDead).ToList();
                         Creature? autoTarget = validEnemies.Count > 0 ? player.RunState.Rng.Shuffle.NextItem(validEnemies) : null;
 
+                        KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
+                        
                         await CardCmd.AutoPlay(choiceContext, targetCard, autoTarget, AutoPlayType.Default, true, false);
+                        
+                        KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(targetCard);
                     }
                 }
             }

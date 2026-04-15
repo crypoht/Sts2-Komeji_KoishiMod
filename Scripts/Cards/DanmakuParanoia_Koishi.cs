@@ -40,20 +40,19 @@ namespace KomeijiKoishi.Cards
             try 
             {
                 var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
-                if (player == null) return;
+                if (player == null || base.CombatState == null) return;
 
                 await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
 
-                List<CardModel> handCards = PileType.Hand.GetPile(base.Owner).Cards.ToList();
+                List<CardModel> handCards = PileType.Hand.GetPile(player).Cards.ToList();
                 int exhaustedCount = 0;
 
                 foreach (CardModel card in handCards)
                 {
                     bool isUnconscious = false;
-                    
                     try 
                     {
-                        isUnconscious = KoishiExtensions.IsUnconscious(card);
+                        isUnconscious = KoishiExtensions.IsTrulyUnconscious(card);
                     }
                     catch 
                     {
@@ -70,22 +69,9 @@ namespace KomeijiKoishi.Cards
 
                 if (exhaustedCount > 0)
                 {
-                    if (DanmakuPool.Pool == null || DanmakuPool.Pool.Count == 0)
+                    for (int i = 0; i < exhaustedCount; i++)
                     {
-                        MegaCrit.Sts2.Core.Logging.Log.Error("[DanmakuParanoia] 弹幕池为空！请检查注册逻辑。");
-                        return; 
-                    }
-
-                    IEnumerable<CardModel> generatedCards = CardFactory.GetForCombat(
-                        base.Owner, 
-                        DanmakuPool.Pool, 
-                        exhaustedCount, 
-                        player.RunState!.Rng.CombatCardGeneration
-                    );
-
-                    foreach (CardModel generatedDanmaku in generatedCards)
-                    {
-                        await CardPileCmd.AddGeneratedCardToCombat(generatedDanmaku, PileType.Hand, false, CardPilePosition.Random);
+                        await DanmakuPool.CreateRandomDanmakuInHand(player, base.CombatState);
                     }
                 }
             }
@@ -94,7 +80,6 @@ namespace KomeijiKoishi.Cards
                 MegaCrit.Sts2.Core.Logging.Log.Error($"[DanmakuParanoia] 拦截到 Bug: {ex.Message}");
             }
         }
-
         protected override void OnUpgrade()
         {
             base.AddKeyword(CardKeyword.Retain);

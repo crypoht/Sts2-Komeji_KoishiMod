@@ -9,36 +9,50 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Creatures; 
-using MegaCrit.Sts2.Core.Entities.Relics; 
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics; 
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums; 
 using KomeijiKoishi.Utils_Koishi; 
+using MegaCrit.Sts2.Core.Entities.Relics; 
+using MegaCrit.Sts2.Core.HoverTips; 
+using MegaCrit.Sts2.Core.Models.Powers;
+
 
 namespace KomeijiKoishi.Relics
 {
     [Pool(typeof(KoishiRelicPool))]
-    public sealed class KoishiStarterRelic : CustomRelicModel
+    public sealed class KoishiAnicentRelic : CustomRelicModel
     {
         public override RelicRarity Rarity => RelicRarity.Starter;
 
-        public override string PackedIconPath => $"res://mods/Komeiji_Koishi/images/relics/{Id.Entry.ToLowerInvariant()}.png";
-        protected override string PackedIconOutlinePath => $"res://mods/Komeiji_Koishi/images/relics/{Id.Entry.ToLowerInvariant()}.png";
+        public override string PackedIconPath => "res://mods/Komeiji_Koishi/images/relics/koishi_anicent_relic.png";
+        protected override string PackedIconOutlinePath => "res://mods/Komeiji_Koishi/images/relics/koishi_anicent_relic.png";
+         protected override string BigIconPath => "res://mods/Komeiji_Koishi/images/relics/koishi_anicent_relic.png";
+        
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip>
+        {
+            HoverTipFactory.FromPower<ThornsPower>()
+        };
 
-        protected override string BigIconPath => $"res://mods/Komeiji_Koishi/images/relics/{Id.Entry.ToLowerInvariant()}.png";
-        public override RelicModel? GetUpgradeReplacement() => ModelDb.Relic<KoishiAnicentRelic>();
+        public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
+        {
+            if (cardPlay.Card.Owner.Creature != base.Owner.Creature) return;
+
+            if (!KoishiExtensions.IsTrulyUnconscious(cardPlay.Card)) return;
+
+            this.Flash(); 
+
+            await PowerCmd.Apply<ThornsPower>(base.Owner.Creature, 1m, base.Owner.Creature, null, false);
+        }
         public override async Task BeforeTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
         {
             try
             {
-                if (side != base.Owner.Creature.Side)
-                {
-                    return;
-                }
+                if (side != base.Owner.Creature.Side) return;
 
-                var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
+                var player = base.Owner as Player;
                 if (player == null) return;
 
                 var list = PileType.Hand.GetPile(player).Cards.Where(c => 
@@ -65,17 +79,14 @@ namespace KomeijiKoishi.Relics
                                 targetCreature = player.RunState.Rng.Shuffle.NextItem(validEnemies);
                             }
                         }
-                        KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
-                        
-                        await CardCmd.AutoPlay(choiceContext, targetCard, targetCreature, AutoPlayType.Default, true, false);
 
-                        KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(targetCard);
+                        await CardCmd.AutoPlay(choiceContext, targetCard, targetCreature, AutoPlayType.Default, true, false);
                     }
                 }
             }
             catch (Exception e)
             {
-                MegaCrit.Sts2.Core.Logging.Log.Error($"[Relic] KoishiStarterRelic Error: {e.Message}");
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[Relic] KoishiAnicentRelic Error: {e.Message}");
             }
         }
     }

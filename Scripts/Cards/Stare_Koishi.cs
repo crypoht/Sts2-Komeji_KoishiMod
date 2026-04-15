@@ -15,7 +15,6 @@ using KomeijiKoishi.Powers;
 using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers; 
- 
 
 namespace KomeijiKoishi.Cards
 {
@@ -31,7 +30,7 @@ namespace KomeijiKoishi.Cards
         { 
             new DamageVar(4m, ValueProp.Move),    
             new CardsVar(1),                       
-            new DynamicVar("Tracking", 1m)         
+            new DynamicVar("Tracing", 1m)         
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -47,9 +46,9 @@ namespace KomeijiKoishi.Cards
                     .WithHitFx("vfx/vfx_attack_blunt") 
                     .Execute(choiceContext);
 
-                await PowerCmd.Apply<TrackingPower>(
+                await PowerCmd.Apply<TracingPower>(
                     cardPlay.Target, 
-                    base.DynamicVars["Tracking"].BaseValue, 
+                    base.DynamicVars["Tracing"].BaseValue, 
                     player.Creature, 
                     this, 
                     false

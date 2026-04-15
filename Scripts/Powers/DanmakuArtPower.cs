@@ -24,14 +24,15 @@ namespace KomeijiKoishi.Powers
         public override PowerStackType StackType => PowerStackType.Counter;
         
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/{GetType().Name}.png";
+
+        public override string? CustomBigIconPath => $"res://test/powers/{GetType().Name}.png";
         public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
         {
             try
             {
                 if (cardPlay?.Card != null && cardPlay.Card.Owner == base.Owner.Player)
                 {
-                    bool isDanmaku = DanmakuPool.Pool.Any(c => c.GetType() == cardPlay.Card.GetType());
-
+                    bool isDanmaku = cardPlay.Card.Tags != null && cardPlay.Card.Tags.Contains(KoishiTags.Danmaku);
                     if (isDanmaku)
                     {
                         this.Flash();

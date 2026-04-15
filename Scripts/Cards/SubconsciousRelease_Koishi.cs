@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer; 
 using KomeijiKoishi.Pools; 
 using KomeijiKoishi.Enums;
+using KomeijiKoishi.Utils_Koishi; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -33,17 +34,30 @@ namespace KomeijiKoishi.Cards
         {
             try
             {
-                await CreatureCmd.TriggerAnim(base.Owner!.Creature, "Cast", base.Owner.Character!.CastAnimDelay);
+                var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
+                if (player == null) return;
 
-                Random rng = new Random();
-                List<CardModel> availableDanmaku = PileType.Exhaust.GetPile(base.Owner)
+                await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
+
+                List<CardModel> availableDanmaku = PileType.Exhaust.GetPile(player)
                     .Cards
-                    .Where(c => c.Tags.Contains(KoishiTags.Danmaku)) 
-                    .OrderBy(x => rng.Next()) 
+                    .Where(c => c.Tags != null && c.Tags.Contains(KoishiTags.Danmaku)) 
                     .ToList();
 
                 int playCount = base.DynamicVars.Cards.IntValue;
-                List<CardModel> danmakuToPlay = availableDanmaku.Take(playCount).ToList();
+                List<CardModel> danmakuToPlay = new List<CardModel>();
+
+                for (int i = 0; i < playCount; i++)
+                {
+                    if (availableDanmaku.Count == 0) break;
+                    
+                    var card = player.RunState.Rng.Shuffle.NextItem(availableDanmaku);
+                    if (card != null)
+                    {
+                        danmakuToPlay.Add(card);
+                        availableDanmaku.Remove(card); 
+                    }
+                }
 
                 foreach (CardModel cardModel in danmakuToPlay)
                 {
@@ -54,13 +68,18 @@ namespace KomeijiKoishi.Cards
                         targetCreature = cardPlay.Target;
                     }
 
+                    KoishiExtensions.AutoPlayedByUnconsciousCards.Add(cardModel);
+
                     await CardCmd.AutoPlay(choiceContext, cardModel, targetCreature, AutoPlayType.Default, true, false);
+                    
+                    KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(cardModel);
+
                     await Cmd.Wait(0.15f, false);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"[SubconsciousRelease] FATAL ERROR PREVENTED: {e}");
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[SubconsciousRelease] FATAL ERROR PREVENTED: {e}");
             }
         }
 

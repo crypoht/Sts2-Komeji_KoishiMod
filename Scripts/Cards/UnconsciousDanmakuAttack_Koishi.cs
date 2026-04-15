@@ -38,7 +38,7 @@ namespace KomeijiKoishi.Cards
         {
             get
             {
-                try { return KoishiExtensions.IsUnconscious(this) ? new[] { KoishiKeywords.Unconscious } : new CardKeyword[0]; }
+                try { return KoishiExtensions.IsTrulyUnconscious(this) ? new[] { KoishiKeywords.Unconscious } : new CardKeyword[0]; }
                 catch (Exception) { return new CardKeyword[0]; }
             }
         }
@@ -49,35 +49,41 @@ namespace KomeijiKoishi.Cards
         {
             try
             {
-                await CreatureCmd.TriggerAnim(base.Owner!.Creature, "Cast", base.Owner.Character!.CastAnimDelay);
+                var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
+                if (player == null || base.CombatState == null) return;
 
-                IEnumerable<CardModel> generatedCards = CardFactory.GetForCombat(
-                    base.Owner, 
-                    DanmakuPool.Pool, 
-                    base.DynamicVars.Cards.IntValue, 
-                    base.Owner.RunState!.Rng!.CombatCardGeneration!
-                );
+                await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
 
-                Random rng = new Random(); 
+                int count = base.DynamicVars.Cards.IntValue;
 
-                foreach (CardModel generatedDanmaku in generatedCards)
+                for (int i = 0; i < count; i++)
                 {
-                    var aliveEnemies = base.CombatState!.HittableEnemies.Where(e => e != null && !e.IsDead).ToList();
-                    if (aliveEnemies.Count == 0) break;
-
-                    Creature? targetCreature = null;
-                    if (generatedDanmaku.TargetType == TargetType.AnyEnemy)
+                    var generatedDanmaku = await DanmakuPool.CreateRandomDanmakuInHand(player, base.CombatState);
+                    
+                    if (generatedDanmaku != null)
                     {
-                        targetCreature = aliveEnemies[rng.Next(aliveEnemies.Count)]!;
-                    }
+                        var aliveEnemies = base.CombatState.HittableEnemies.Where(e => e != null && !e.IsDead).ToList();
+                        if (aliveEnemies.Count == 0) break;
 
-                    await CardCmd.AutoPlay(choiceContext, generatedDanmaku, targetCreature, AutoPlayType.Default, true, false);
-                    await Cmd.Wait(0.15f, false);
+                        Creature? targetCreature = null;
+                        if (generatedDanmaku.TargetType == TargetType.AnyEnemy)
+                        {
+                            targetCreature = player.RunState.Rng.Shuffle.NextItem(aliveEnemies);
+                        }
+
+                        KoishiExtensions.AutoPlayedByUnconsciousCards.Add(generatedDanmaku);
+                        
+                        await CardCmd.AutoPlay(choiceContext, generatedDanmaku, targetCreature, AutoPlayType.Default, true, false);
+                        
+                        KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(generatedDanmaku);
+
+                        await Cmd.Wait(0.15f, false);
+                    }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"[UnconsciousDanmakuAttack] FATAL ERROR PREVENTED: {e}");
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[UnconsciousDanmakuAttack] ERROR: {e}");
             }
         }
 

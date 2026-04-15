@@ -39,6 +39,26 @@ namespace KomeijiKoishi.Cards
             new EnergyVar(1) 
         };
 
+        protected override bool ShouldGlowGoldInternal
+        {
+            get
+            {
+                if (base.CombatState == null || base.Owner == null)
+                {
+                    return false;
+                }
+
+                var discardPile = PileType.Discard.GetPile(base.Owner);
+                
+                if (discardPile == null)
+                {
+                    return false;
+                }
+
+                return discardPile.Cards.Any(c => KoishiExtensions.IsTrulyUnconscious(c));
+            }
+        }
+
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             try

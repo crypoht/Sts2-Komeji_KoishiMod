@@ -1,66 +1,60 @@
 using System.Linq;
-using System.Reflection; 
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
-using MegaCrit.Sts2.Core.Combat;
-using MegaCrit.Sts2.Core.Entities.Players; 
 using KomeijiKoishi.Enums;  
 using KomeijiKoishi.Powers; 
+using System.Linq;
+using System.Reflection; 
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Entities.Players; 
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using System.Collections.Generic;
 
 namespace KomeijiKoishi.Utils_Koishi
 {
     public static class KoishiExtensions
     {
-        public static Player? GetOwner(CardModel card)
+        public static bool IsTrulyUnconscious(CardModel card)
         {
-            var ownerProp = typeof(CardModel).GetProperty("Owner", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            if (ownerProp != null)
+            if (card == null) return false;
+
+            if (card.Tags != null && card.Tags.Contains(KoishiTags.Unconscious))
             {
-                return ownerProp.GetValue(card) as Player;
+                return true;
             }
-            return null;
-        }
-
-        public static bool IsUnconscious(CardModel card)
-        {
-            if (card.Tags.Contains(KoishiTags.Unconscious)) return true;
-
-            if (card.Tags.Contains(KoishiTags.Subconscious))
+            if (card.Owner != null && card.Owner.Creature != null)
             {
-                var owner = GetOwner(card);
-                return CombatManager.Instance.IsInProgress && 
-                       owner != null && 
-                       owner.Creature.HasPower<FetusDreamPower>();
-            }
-            return false;
-        }
+                bool hasFetusDream = card.Owner.Creature.Powers.Any(p => p is FetusDreamPower);
 
-        public static bool IsTrulyUnconscious(CardModel c)
-        {
-            if (c == null) return false;
-
-            bool isUnc = false;
-            
-            try 
-            {
-                isUnc = IsUnconscious(c); 
-            } 
-            catch { }
-            
-            if (!isUnc)
-            {
-                isUnc = c.Tags != null && c.Tags.Contains(KoishiTags.Unconscious);
-            }
-
-            if (c.Owner != null && c.Owner.Creature.Powers.Any(p => p is FetusDreamPower))
-            {
-                if (!string.IsNullOrEmpty(c.Title) && c.Title.Contains("无意识"))
+                if (hasFetusDream)
                 {
-                    return true;
+                    if (card.Tags != null && card.Tags.Contains(KoishiTags.Subconscious))
+                    {
+                        return true;
+                    }
+
+                    if (!string.IsNullOrEmpty(card.Title) && card.Title.Contains("无意识"))
+                    {
+                        return true;
+                    }
                 }
             }
 
-            return isUnc;
+            return false;
         }
+
+        public static void ApplyUnconsciousToCard(CardModel card)
+        {
+            if (card == null) return;
+
+            CardCmd.ApplyKeyword(card, new CardKeyword[] { KoishiKeywords.Unconscious });
+
+            if (card.Tags is HashSet<CardTag> tagsSet && !tagsSet.Contains(KoishiTags.Unconscious))
+            {
+                tagsSet.Add(KoishiTags.Unconscious);
+            }
+        }
+        public static HashSet<CardModel> AutoPlayedByUnconsciousCards = new HashSet<CardModel>();
     }
 }

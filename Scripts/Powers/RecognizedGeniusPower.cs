@@ -22,14 +22,15 @@ namespace KomeijiKoishi.Powers
         
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/{GetType().Name}.png";
 
+        public override string? CustomBigIconPath => $"res://test/powers/{GetType().Name}.png";
+
         public override Task AfterCardGeneratedForCombat(CardModel card, bool addedByPlayer)
         {
             try
             {
                 if (card != null && card.Owner == base.Owner.Player)
                 {
-                    bool isDanmaku = (card.Tags != null && card.Tags.Contains(KoishiTags.Danmaku)) || 
-                                     DanmakuPool.Pool.Any(c => c.GetType() == card.GetType());
+                    bool isDanmaku = card.Tags != null && card.Tags.Contains(KoishiTags.Danmaku);
 
                     if (isDanmaku)
                     {

@@ -27,7 +27,7 @@ namespace KomeijiKoishi.Cards
     public sealed class BuriedFire_Koishi : CustomCardModel
     {
         public BuriedFire_Koishi() 
-            : base(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) { }
+            : base(4, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
@@ -40,7 +40,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(11m, ValueProp.Move), 
+            new DamageVar(3m, ValueProp.Move), 
             new DynamicVar("Tracing", 1m)      
         };
 
@@ -54,7 +54,7 @@ namespace KomeijiKoishi.Cards
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                     .FromCard(this)
                     .Targeting(cardPlay.Target)
-                    .WithHitFx("vfx/vfx_attack_blunt") 
+                    .WithHitFx("vfx/vfx_attack_blunt")
                     .Execute(choiceContext);
 
                 var discardPile = PileType.Discard.GetPile(player);
@@ -72,6 +72,11 @@ namespace KomeijiKoishi.Cards
 
                         if (autoTarget != null)
                         {
+                            if (targetCard.Keywords == null || !targetCard.Keywords.Contains(CardKeyword.Exhaust))
+                            {
+                                targetCard.AddKeyword(CardKeyword.Exhaust);
+                            }
+
                             await CardCmd.AutoPlay(choiceContext, targetCard, autoTarget, AutoPlayType.Default, true, false);
                             playedCount++;
                         }

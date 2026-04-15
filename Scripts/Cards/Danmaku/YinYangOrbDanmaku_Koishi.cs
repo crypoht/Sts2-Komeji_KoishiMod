@@ -15,13 +15,12 @@ using KomeijiKoishi.Enums;
 
 namespace KomeijiKoishi.Cards.Danmaku
 {
-    [Pool(typeof(KoishiCardPool))]
+    [Pool(typeof(DanmakuCardPool))]
     public sealed class YinYangOrbDanmaku_Koishi : CustomCardModel
     {
         public YinYangOrbDanmaku_Koishi() 
-            : base(3, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy, false) 
+            : base(3, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, false) 
         { 
-            DanmakuPool.Register(this); 
         }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";

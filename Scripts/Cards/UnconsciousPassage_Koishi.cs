@@ -13,7 +13,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using KomeijiKoishi.Pools; 
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Powers; 
-
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]

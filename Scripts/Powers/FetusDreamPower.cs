@@ -21,5 +21,7 @@ namespace KomeijiKoishi.Powers
         public override PowerType Type => PowerType.Buff;
         public override PowerStackType StackType => PowerStackType.Single;
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/FetusDreamPower.png";
+
+        public override string? CustomBigIconPath => $"res://test/powers/{GetType().Name}.png";
     }
 }

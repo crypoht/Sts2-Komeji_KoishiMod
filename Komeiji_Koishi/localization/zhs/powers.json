@@ -1,6 +1,6 @@
 {
   "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.title": "最终的无意识",
-  "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.smartDescription": "打出牌时，自动打出手牌中等于层数张数的无意识牌。打出无意识牌时，抽 1 张牌。",
+  "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.smartDescription": "当由你自己打出牌时，自动打出手牌中等于层数张数的无意识牌。打出无意识牌时，抽 1 张牌。",
 
   "KOMEIJIKOISHI-BLOOM_STANCE_POWER.title": "盛开",
   "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 50%。进入该状态时,获得{Amount:energyIcons()}",
@@ -24,6 +24,12 @@
  "KOMEIJIKOISHI-SUPEREGO_POWER.smartDescription": "进入 [gold]闭合[/gold] 姿态时，额外抽取 {Amount} 张牌。进入 [gold]盛开[/gold] 姿态时，额外获得 {Amount:energyIcons()}。",
 
  "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.title": "地灵符「精神恒星接替」",
- "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.smartDescription": "在本场战斗中，[gold]追踪[/gold] 的伤害加成效果提高 {Amount}%。"
+ "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.smartDescription": "在本场战斗中，[gold]追踪[/gold] 的伤害加成效果提高 {Amount}%。",
+
+ "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.title": "秦心之面",
+  "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.description": "切换姿态时，随机触发一种情绪。",
+  
+  "KOMEIJIKOISHI-JOY_MASK_POWER.title": "喜之面具",
+  "KOMEIJIKOISHI-JOY_MASK_POWER.description": "你的下 {Amount} 张牌耗能为 0。"
 
 }

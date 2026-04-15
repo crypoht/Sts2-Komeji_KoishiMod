@@ -22,7 +22,7 @@ namespace KomeijiKoishi.Powers
         public override PowerType Type => PowerType.Buff;
         public override PowerStackType StackType => PowerStackType.Counter;
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/UltimateUnconsciousFormPower.png";
-        public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/UltimateUnconsciousFormPower.png";
+        public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/texiao1.png";
         protected override object InitInternalData() => new FormPowerData();
 
         public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
@@ -30,6 +30,11 @@ namespace KomeijiKoishi.Powers
             try 
             {
                 if (base.CombatState == null || base.CombatState.HittableEnemies.All(e => e.IsDead)) return;
+
+                if (KoishiExtensions.AutoPlayedByUnconsciousCards.Contains(cardPlay.Card))
+                {
+                    return; 
+                }
 
                 if (cardPlay?.Card != null && cardPlay.Card.Owner == base.Owner.Player)
                 {
@@ -41,12 +46,6 @@ namespace KomeijiKoishi.Powers
                         {
                             this.Flash();
                             await CardPileCmd.Draw(context, 1m, base.Owner.Player, false); 
-                        }
-
-                        if (data.autoPlayedCards.Contains(cardPlay.Card))
-                        {
-                            data.autoPlayedCards.Remove(cardPlay.Card); 
-                            return; 
                         }
 
                         if (!data.isAutoPlaying)
@@ -72,14 +71,17 @@ namespace KomeijiKoishi.Powers
                                     if (targetCard != null)
                                     {
                                         unconsciousCards.Remove(targetCard); 
-                                        data.autoPlayedCards.Add(targetCard);
                                         
-                                        this.Flash();
-
                                         var validEnemies = base.CombatState.HittableEnemies.Where(e => !e.IsDead).ToList();
                                         Creature? targetCreature = validEnemies.Count > 0 ? base.Owner.Player.RunState.Rng.Shuffle.NextItem(validEnemies) : null;
 
+                                        KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
+                                        
+                                        this.Flash();
+                                        
                                         await CardCmd.AutoPlay(context, targetCard, targetCreature, AutoPlayType.Default, true, false);
+                                        
+                                        KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(targetCard);
                                     }
                                 }
                             }
@@ -102,7 +104,6 @@ namespace KomeijiKoishi.Powers
         { 
             public bool alreadyApplied; 
             public bool isAutoPlaying; 
-            public HashSet<CardModel> autoPlayedCards = new HashSet<CardModel>(); 
         }
     }
 }

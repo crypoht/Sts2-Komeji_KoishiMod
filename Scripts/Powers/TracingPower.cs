@@ -26,8 +26,19 @@ namespace KomeijiKoishi.Powers
 
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/TracingPower.png";
 
+        public override string? CustomBigIconPath => $"res://test/powers/{GetType().Name}.png";
+
+        public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+        {
+            if (side == base.Owner.Side)
+            {
+                await PowerCmd.TickDownDuration(this);
+            }
+        }
+
         public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
         {
+
             if (target == null || target != base.Owner)
             {
                 return 1m;

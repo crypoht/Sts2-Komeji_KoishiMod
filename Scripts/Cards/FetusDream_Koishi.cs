@@ -29,7 +29,7 @@ namespace KomeijiKoishi.Cards
         };
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
-            var owner = KoishiExtensions.GetOwner(this);
+            var owner = base.Owner;
             if (owner != null)
             {
                 await PowerCmd.Apply<FetusDreamPower>(owner.Creature, 1m, owner.Creature, this, false);

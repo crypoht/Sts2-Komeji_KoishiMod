@@ -38,35 +38,19 @@ namespace KomeijiKoishi.Cards
             new DynamicVar("Amount", 1m)     
         };
 
-        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+       protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             try
             {
-                var player = base.Owner as Player;
-                if (player == null) return;
+                var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
+                if (player == null || base.CombatState == null) return;
 
                 await CreatureCmd.GainBlock(player.Creature, base.DynamicVars.Block.BaseValue, ValueProp.Move, cardPlay, false);
 
-                if (base.CombatState != null)
+                int count = (int)base.DynamicVars["Amount"].BaseValue;
+                for (int i = 0; i < count; i++)
                 {
-                    int count = (int)base.DynamicVars["Amount"].BaseValue;
-                    List<CardModel> generatedCards = new List<CardModel>();
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        var randomCardModel = player.RunState.Rng.Shuffle.NextItem(DanmakuPool.Pool);
-                        
-                        if (randomCardModel != null)
-                        {
-                            var newCard = base.CombatState.CreateCard(randomCardModel, player);
-                            generatedCards.Add(newCard);
-                        }
-                    }
-
-                    if (generatedCards.Count > 0)
-                    {
-                        await CardPileCmd.AddGeneratedCardsToCombat(generatedCards, PileType.Hand, true, CardPilePosition.Bottom);
-                    }
+                    await DanmakuPool.CreateRandomDanmakuInHand(player, base.CombatState);
                 }
             }
             catch (Exception e)

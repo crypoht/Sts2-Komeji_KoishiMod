@@ -13,13 +13,14 @@ namespace KomeijiKoishi.Powers
     public sealed class ClosedStancePower : KoishiStancePower
     {
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/ClosedStancePower.png";
-
+        public override string? CustomBigIconPath => "res://test/powers/ClosedStancePower.png";
         public static async Task EnterThisStance(PlayerChoiceContext context, Player player, CardModel sourceCard)
         {
-            if (player.Creature.Powers.Any(p => p is ClosedStancePower)) {
+            if (player.Creature.GetPower<ClosedStancePower>() != null) {
                 return;
             }
-            ClearOldStances(player); 
+            
+            await ClearOldStances(player); 
 
             decimal drawAmount = 1m;
             var superego = player.Creature.Powers.FirstOrDefault(p => p is SuperegoPower);
@@ -31,6 +32,12 @@ namespace KomeijiKoishi.Powers
             await CardPileCmd.Draw(context, drawAmount, player, false);
             await PowerCmd.Apply<ClosedStancePower>(player.Creature, 1m, player.Creature, sourceCard, false);
             NotifyAllCardsStanceChanged(player, "Closed"); 
+
+            var kokoroPower = player.Creature.GetPower<KoishiKokoroPower>();
+            if (kokoroPower != null)
+            {
+                await kokoroPower.TriggerEffects(context, sourceCard);
+            }
         }
 
         public override decimal ModifyBlockMultiplicative(Creature target, decimal block, ValueProp props, CardModel? cardSource, CardPlay? cardPlay)

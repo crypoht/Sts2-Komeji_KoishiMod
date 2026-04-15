@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection; 
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -15,6 +14,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums;
+using KomeijiKoishi.Utils_Koishi; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -25,6 +25,7 @@ namespace KomeijiKoishi.Cards
             : base(1, CardType.Skill, CardRarity.Common, TargetType.Self, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
@@ -48,28 +49,16 @@ namespace KomeijiKoishi.Cards
                 
                 var validCards = handPile.Cards.Where(c => 
                     c != this && 
-                    (c.Keywords == null || !c.Keywords.Contains(KoishiKeywords.Unconscious))
+                    !KoishiExtensions.IsTrulyUnconscious(c) 
                 ).ToList();
 
                 if (validCards.Count > 0)
                 {
-
                     var targetCard = player.RunState.Rng.Shuffle.NextItem(validCards);
 
                     if (targetCard != null)
                     {
-                        var applyMethod = typeof(CardCmd).GetMethod(
-                            "ApplyKeyword", 
-                            BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic
-                        );
-
-                        if (applyMethod != null)
-                        {
-                            applyMethod.Invoke(null, new object[] { 
-                                targetCard, 
-                                new CardKeyword[] { KoishiKeywords.Unconscious } 
-                            });
-                        }
+                        KoishiExtensions.ApplyUnconsciousToCard(targetCard);
                     }
                 }
             }

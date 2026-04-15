@@ -32,4 +32,14 @@ namespace KomeijiKoishi.Pools
         public override string? TextEnergyIconPath => "res://mods/Komeiji_Koishi/images/energy_koishi_small.png";
         public override string? BigEnergyIconPath => "res://mods/Komeiji_Koishi/images/energy_koishi_big.png";
     }
+    
+
+    public class DanmakuCardPool : CustomCardPoolModel 
+    {
+        public override string Title => "koishi_danmaku"; 
+        public override bool IsColorless => true;
+        public override Color DeckEntryCardColor => new(1f, 1f, 1f);
+        public override Color ShaderColor => new(1f, 1f, 1f);
+    }
+    
 }
