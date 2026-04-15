@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Powers
 
         public override string? CustomPackedIconPath => "res://mods/Komeiji_Koishi/images/powers/KoishiKokoroPower.png";
 
-        public override string? CustomBigIconPath => $"res://test/powers/{GetType().Name}.png";
+        public override string? CustomBigIconPath => "res://mods/Komeiji_Koishi/images/powers/KoishiKokoroPower.png";
         protected override object InitInternalData() => new Data();
 
         public override Task BeforeApplied(Creature target, decimal amount, Creature? applier, CardModel? cardSource)

@@ -22,6 +22,6 @@ namespace KomeijiKoishi.Powers
         
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/{GetType().Name}.png";
 
-        public override string? CustomBigIconPath => $"res://test/powers/{GetType().Name}.png";
+        public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/{GetType().Name}.png";
     }
 }

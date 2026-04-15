@@ -40,6 +40,7 @@ namespace KomeijiKoishi.Cards
                 if (player == null) return;
 
                 await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
+                await PowerCmd.Apply<RecognizedGeniusPower>(player.Creature, 1m, player.Creature, this, false);
 
 
                 var piles = new[] { 

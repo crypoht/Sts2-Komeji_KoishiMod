@@ -20,24 +20,33 @@ namespace KomeijiKoishi.Cards.Danmaku
 {
     public static class DanmakuPool
     {
-        public static List<Func<Player, CombatState, CardModel>> Generators = new();
-
-        public static void Register<T>() where T : CardModel, new()
-        {
-            Generators.Add((owner, combatState) => combatState.CreateCard<T>(owner));
-        }
-
         public static async Task<CardModel?> CreateRandomDanmakuInHand(Player owner, CombatState combatState)
         {
-            if (Generators.Count == 0 || combatState == null) return null;
+            if (combatState == null) return null;
 
-            var generator = owner.RunState.Rng.CombatCardGeneration.NextItem(Generators);
+            var generators = new List<Func<Player, CombatState, CardModel>>
+            {
+                (p, c) => c.CreateCard<ArrowDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<HeartDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<LargeOrbDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<RiceDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<SmallOrbDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<SquareDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<StarDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<YinYangOrbDanmaku_Koishi>(p),
+
+            };
+
+
+            var generator = owner.RunState.Rng.CombatCardGeneration.NextItem(generators);
             CardModel? generatedCard = generator?.Invoke(owner, combatState);
 
+   
             if (generatedCard != null)
             {
                 await CardPileCmd.AddGeneratedCardToCombat(generatedCard, PileType.Hand, true, CardPilePosition.Bottom);
             }
+            
             return generatedCard;
         }
     }

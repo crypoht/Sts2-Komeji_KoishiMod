@@ -13,7 +13,7 @@ namespace KomeijiKoishi.Powers
     public sealed class ClosedStancePower : KoishiStancePower
     {
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/ClosedStancePower.png";
-        public override string? CustomBigIconPath => "res://test/powers/ClosedStancePower.png";
+        public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/ClosedStancePower.png";
         public static async Task EnterThisStance(PlayerChoiceContext context, Player player, CardModel sourceCard)
         {
             if (player.Creature.GetPower<ClosedStancePower>() != null) {

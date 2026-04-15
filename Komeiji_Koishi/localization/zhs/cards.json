@@ -157,5 +157,12 @@
   "KOMEIJIKOISHI-HIDDEN_CONSCIOUSNESS_KOISHI.description": "获得 {Block:diff()} 点格挡。\n随机打出消耗牌堆的 {Cards:diff()} 张 [gold]弹幕[/gold] 牌。",
 
   "KOMEIJIKOISHI-BIG_HUG_KOISHI.title": "古明地大抱抱",
-  "KOMEIJIKOISHI-BIG_HUG_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n如果你上一张打出的牌是 [gold]无意识[/gold] 牌，耗能减少 1 点。"
+  "KOMEIJIKOISHI-BIG_HUG_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n如果你上一张打出的牌是 [gold]无意识[/gold] 牌，耗能减少 1 点。",
+
+  "KOMEIJIKOISHI-SELF_OVERFLOW_KOISHI.title":"自我的流动",
+  "KOMEIJIKOISHI-SELF_OVERFLOW_KOISHI.description":"获得{Energy:energyIcons()}，生成{Cards:diff()}张[gold]意识溢出[/gold]",
+
+  "KOMEIJIKOISHI-CONSCIOUS_OVERFLOW_KOISHI.title":"意识溢出",
+  "KOMEIJIKOISHI-CONSCIOUS_OVERFLOW_KOISHI.description":"想的太多了哦~"
+
 }

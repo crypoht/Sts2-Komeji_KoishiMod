@@ -13,14 +13,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer; 
 using KomeijiKoishi.Pools; 
 using KomeijiKoishi.Enums;
+using MegaCrit.Sts2.Core.Models.CardPools;
 
 namespace KomeijiKoishi.Cards.Danmaku
 {
-    [Pool(typeof(DanmakuCardPool))]
+    [Pool(typeof(TokenCardPool))]
     public sealed class HeartDanmaku_Koishi : CustomCardModel
     {
         public HeartDanmaku_Koishi() 
-            : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, false) 
+            : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy, true) 
         { 
         }
 

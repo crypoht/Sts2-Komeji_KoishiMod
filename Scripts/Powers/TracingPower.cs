@@ -26,7 +26,7 @@ namespace KomeijiKoishi.Powers
 
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/TracingPower.png";
 
-        public override string? CustomBigIconPath => $"res://test/powers/{GetType().Name}.png";
+        public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/TracingPower.png";
 
         public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
         {

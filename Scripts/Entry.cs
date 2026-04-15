@@ -15,15 +15,6 @@ public class Entry
 
         ScriptManagerBridge.LookupScriptsInAssembly(typeof(Entry).Assembly);
 
-        DanmakuPool.Register<ArrowDanmaku_Koishi>();
-        DanmakuPool.Register<HeartDanmaku_Koishi>();
-        DanmakuPool.Register<LargeOrbDanmaku_Koishi>();
-        DanmakuPool.Register<RiceDanmaku_Koishi>();
-        DanmakuPool.Register<SmallOrbDanmaku_Koishi>();
-        DanmakuPool.Register<SquareDanmaku_Koishi>(); 
-        DanmakuPool.Register<StarDanmaku_Koishi>();
-        DanmakuPool.Register<YinYangOrbDanmaku_Koishi>();
-
         Log.Debug("Koishi Mod: Initialized successfully!");
     }
 }

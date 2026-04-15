@@ -14,14 +14,15 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using KomeijiKoishi.Pools; 
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Powers; 
+using MegaCrit.Sts2.Core.Models.CardPools;
 
 namespace KomeijiKoishi.Cards.Danmaku
 {
-    [Pool(typeof(DanmakuCardPool))]
+    [Pool(typeof(TokenCardPool))]
     public sealed class SquareDanmaku_Koishi : CustomCardModel
     {
         public SquareDanmaku_Koishi() 
-            : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, false) 
+            : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy, true) 
         { 
 
         }

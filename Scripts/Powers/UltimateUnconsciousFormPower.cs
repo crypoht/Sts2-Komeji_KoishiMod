@@ -22,7 +22,7 @@ namespace KomeijiKoishi.Powers
         public override PowerType Type => PowerType.Buff;
         public override PowerStackType StackType => PowerStackType.Counter;
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/UltimateUnconsciousFormPower.png";
-        public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/texiao1.png";
+        public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/UltimateUnconsciousFormPower.png";
         protected override object InitInternalData() => new FormPowerData();
 
         public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)

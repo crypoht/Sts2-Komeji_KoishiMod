@@ -15,14 +15,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.Models.Powers; 
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Pools;
+using MegaCrit.Sts2.Core.Models.CardPools;
 
 namespace KomeijiKoishi.Cards
 {
-    [Pool(typeof(KoishiCardPool))]
+    [Pool(typeof(TokenCardPool))]
     public sealed class RoseDanmaku_Koishi : CustomCardModel
     {
         public RoseDanmaku_Koishi() 
-            : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, false) 
+            : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy, true) 
         { 
         }
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Danmaku };
