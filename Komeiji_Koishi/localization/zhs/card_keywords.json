@@ -3,7 +3,7 @@
   "KOMEIJIKOISHI-UNCONSCIOUS.description": "带有此标记的牌会被无意识的打出。",
 
   "KOMEIJIKOISHI-BLOOM.title": "盛开",
-  "KOMEIJIKOISHI-BLOOM.description": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 50%。进入该状态时,获得能量",
+  "KOMEIJIKOISHI-BLOOM.description": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少70%。进入该状态时,获得能量",
 
   "KOMEIJIKOISHI-CLOSED.title": "闭合",
   "KOMEIJIKOISHI-CLOSED.description": "获得的[gold]格挡[/gold]提升 20%。进入该状态时抽取一张牌",

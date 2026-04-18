@@ -20,6 +20,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models.Powers;
 
 
+
 namespace KomeijiKoishi.Relics
 {
     [Pool(typeof(KoishiRelicPool))]
@@ -89,5 +90,6 @@ namespace KomeijiKoishi.Relics
                 MegaCrit.Sts2.Core.Logging.Log.Error($"[Relic] KoishiAnicentRelic Error: {e.Message}");
             }
         }
+
     }
 }

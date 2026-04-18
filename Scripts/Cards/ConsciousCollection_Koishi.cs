@@ -8,24 +8,25 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using KomeijiKoishi.Pools;
-using MegaCrit.Sts2.Core.Models.CardPools;
-using System.Linq;
-using BaseLib.Utils;
-using MegaCrit.Sts2.Core.HoverTips; 
-using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Cards.Danmaku;
+using KomeijiKoishi.Powers; 
+using KomeijiKoishi.Utils_Koishi;
+using System;
+using BaseLib.Utils;     
+using KomeijiKoishi.Enums;
+ 
 
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class SelfOverflow_Koishi : CustomCardModel
+    public sealed class ConsciousCollection_Koishi : CustomCardModel
     {
-        public SelfOverflow_Koishi() 
-            : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
+        public ConsciousCollection_Koishi() 
+            : base(0, CardType.Skill, CardRarity.Common, TargetType.Self, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
-
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromCard<ConsciousOverflow_Koishi>(false)
@@ -33,8 +34,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new EnergyVar(2),
-            new CardsVar(1)  
+            new CardsVar(2) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -42,14 +42,9 @@ namespace KomeijiKoishi.Cards
             var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
             if (player == null || base.CombatState == null) return;
 
+            await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
 
-            await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
-
-  
-            int energyGain = base.DynamicVars.Energy.IntValue;
-            await PlayerCmd.GainEnergy(energyGain, player);
-
-
+            await CardPileCmd.Draw(choiceContext, base.DynamicVars.Cards.BaseValue, player, false);
 
             var token = base.CombatState.CreateCard<ConsciousOverflow_Koishi>(player);
             if (token != null)
@@ -60,8 +55,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-
-            base.DynamicVars.Energy.UpgradeValueBy(1m);
+            base.DynamicVars.Cards.UpgradeValueBy(1m);
         }
     }
 }

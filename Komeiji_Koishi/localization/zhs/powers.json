@@ -3,7 +3,7 @@
   "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.smartDescription": "当由你自己打出牌时，自动打出手牌中等于层数张数的无意识牌。打出无意识牌时，抽 1 张牌。",
 
   "KOMEIJIKOISHI-BLOOM_STANCE_POWER.title": "盛开",
-  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 50%。进入该状态时,获得{Amount:energyIcons()}",
+  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 70%。进入该状态时,获得{Amount:energyIcons()}",
 
   "KOMEIJIKOISHI-CLOSED_STANCE_POWER.title": "闭合",
   "KOMEIJIKOISHI-CLOSED_STANCE_POWER.smartDescription": "获得的[gold]格挡[/gold]提升 20%。进入该状态时抽取一张牌",
@@ -27,9 +27,24 @@
  "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.smartDescription": "在本场战斗中，[gold]追踪[/gold] 的伤害加成效果提高 {Amount}%。",
 
  "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.title": "秦心之面",
-  "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.description": "切换姿态时，随机触发一种情绪。",
+  "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.smartDescription": "切换姿态时，随机触发一种情绪。",
   
   "KOMEIJIKOISHI-JOY_MASK_POWER.title": "喜之面具",
-  "KOMEIJIKOISHI-JOY_MASK_POWER.description": "你的下 {Amount} 张牌耗能为 0。"
+  "KOMEIJIKOISHI-JOY_MASK_POWER.smartDescription": "你的下 {Amount} 张牌耗能为 0。",
+
+  "KOMEIJIKOISHI-REIMU_HELP_POWER.title": "灵梦小姐的帮助",
+  "KOMEIJIKOISHI-REIMU_HELP_POWER.smartDescription": "每当你抽到[gold]阴阳玉弹幕[/gold]时，自动打出它。",
+
+  "KOMEIJIKOISHI-ROSE_PROTECTION_POWER.title": "蔷薇护身",
+  "KOMEIJIKOISHI-ROSE_PROTECTION_POWER.smartDescription": "处于[gold]闭合[/gold]姿态时，获得的格挡值额外提高 {Amount} %。",
+
+  "KOMEIJIKOISHI-MIRACLE_POWER.title": "奇迹",
+  "KOMEIJIKOISHI-MIRACLE_POWER.smartDescription": "每当你打出一张[gold]弹幕[/gold]牌，再打出该牌 {Amount} 次。",
+
+  "KOMEIJIKOISHI-KUUGA_POWER.title": "空我",
+  "KOMEIJIKOISHI-KUUGA_POWER.smartDescription": "你所有耗能为 0 的攻击牌造成的伤害增加 {Amount}点。",
+
+  "KOMEIJIKOISHI-SECOND_NEED_POWER.title": "第二需求",
+  "KOMEIJIKOISHI-SECOND_NEED_POWER.smartDescription": "每当你切换姿态时，获得 {Amount} 点格挡。"
 
 }

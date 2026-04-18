@@ -14,29 +14,42 @@ namespace KomeijiKoishi.Powers
     {
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/ClosedStancePower.png";
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/ClosedStancePower.png";
-        public static async Task EnterThisStance(PlayerChoiceContext context, Player player, CardModel sourceCard)
+       public static async Task EnterThisStance(PlayerChoiceContext context, Player player, CardModel sourceCard)
         {
-            if (player.Creature.GetPower<ClosedStancePower>() != null) {
-                return;
-            }
-            
-            await ClearOldStances(player); 
-
-            decimal drawAmount = 1m;
-            var superego = player.Creature.Powers.FirstOrDefault(p => p is SuperegoPower);
-            if (superego != null)
+            try 
             {
-                drawAmount += superego.Amount;
+                if (player.Creature.GetPower<ClosedStancePower>() != null) return;
+                
+                await ClearOldStances(player); 
+
+                decimal drawAmount = 1m;
+                var superego = player.Creature.Powers.FirstOrDefault(p => p is SuperegoPower);
+                if (superego != null) drawAmount += superego.Amount;
+
+                await CardPileCmd.Draw(context, drawAmount, player, false);
+                await PowerCmd.Apply<ClosedStancePower>(player.Creature, 1m, player.Creature, sourceCard, false);
+                
+                NotifyAllCardsStanceChanged(player, "Closed"); 
+                // 🌟 传入 sourceCard
+                await NotifyAllPowersStanceChanged(context, player, "Closed", sourceCard);
             }
-
-            await CardPileCmd.Draw(context, drawAmount, player, false);
-            await PowerCmd.Apply<ClosedStancePower>(player.Creature, 1m, player.Creature, sourceCard, false);
-            NotifyAllCardsStanceChanged(player, "Closed"); 
-
-            var kokoroPower = player.Creature.GetPower<KoishiKokoroPower>();
-            if (kokoroPower != null)
+            catch (Exception e)
             {
-                await kokoroPower.TriggerEffects(context, sourceCard);
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[ClosedStance] EnterThisStance 严重报错: {e}");
+            }
+        }
+
+        public decimal BlockBonus 
+        {
+            get 
+            {
+                decimal bonus = 20m; 
+                var rosePower = base.Owner?.GetPower<RoseProtectionPower>();
+                if (rosePower != null)
+                {
+                    bonus += rosePower.Amount;
+                }
+                return bonus;
             }
         }
 
@@ -44,9 +57,8 @@ namespace KomeijiKoishi.Powers
         {
             if (target == base.Owner)
             {
-                return 1.2m;
+                return 1m + (BlockBonus / 100m);
             }
-            
             return 1m;
         }
     }

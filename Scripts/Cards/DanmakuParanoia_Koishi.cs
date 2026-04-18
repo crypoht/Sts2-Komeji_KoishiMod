@@ -25,7 +25,7 @@ namespace KomeijiKoishi.Cards
     public sealed class DanmakuParanoia_Koishi : CustomCardModel
     {
         public DanmakuParanoia_Koishi() 
-            : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self, true) { }
+            : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };

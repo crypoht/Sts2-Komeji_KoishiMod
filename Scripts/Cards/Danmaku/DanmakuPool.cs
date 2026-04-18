@@ -49,5 +49,35 @@ namespace KomeijiKoishi.Cards.Danmaku
             
             return generatedCard;
         }
+
+        public static async Task<CardModel?> CreateRandomDanmakuInExhaust(Player owner, CombatState combatState)
+        {
+            if (combatState == null) return null;
+
+            var generators = new List<Func<Player, CombatState, CardModel>>
+            {
+                (p, c) => c.CreateCard<ArrowDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<HeartDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<LargeOrbDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<RiceDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<SmallOrbDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<SquareDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<StarDanmaku_Koishi>(p),
+                (p, c) => c.CreateCard<YinYangOrbDanmaku_Koishi>(p),
+
+            };
+
+
+            var generator = owner.RunState.Rng.CombatCardGeneration.NextItem(generators);
+            CardModel? generatedCard = generator?.Invoke(owner, combatState);
+
+   
+            if (generatedCard != null)
+            {
+                await CardPileCmd.AddGeneratedCardToCombat(generatedCard, PileType.Exhaust, true, CardPilePosition.Bottom);
+            }
+            
+            return generatedCard;
+        }
     }
 }

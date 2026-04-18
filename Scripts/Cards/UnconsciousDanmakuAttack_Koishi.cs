@@ -27,23 +27,18 @@ namespace KomeijiKoishi.Cards
             : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
 
-                protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku) 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku),
+            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
         };
 
-        public override IEnumerable<CardKeyword> CanonicalKeywords
-        {
-            get
-            {
-                try { return KoishiExtensions.IsTrulyUnconscious(this) ? new[] { KoishiKeywords.Unconscious } : new CardKeyword[0]; }
-                catch (Exception) { return new CardKeyword[0]; }
-            }
-        }
+        public override IEnumerable<CardKeyword> CanonicalKeywords => new CardKeyword[0];
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new CardsVar(3) };
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new CardsVar(5) };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
@@ -72,9 +67,7 @@ namespace KomeijiKoishi.Cards
                         }
 
                         KoishiExtensions.AutoPlayedByUnconsciousCards.Add(generatedDanmaku);
-                        
                         await CardCmd.AutoPlay(choiceContext, generatedDanmaku, targetCreature, AutoPlayType.Default, true, false);
-                        
                         KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(generatedDanmaku);
 
                         await Cmd.Wait(0.15f, false);

@@ -14,7 +14,7 @@ namespace KomeijiKoishi.Characters
 {
 	public class KoishiCharacter : PlaceholderCharacterModel
 	{
-		public override int StartingHp => 70; 
+		public override int StartingHp => 64; 
 		
 		public override Color NameColor => new(0.3f, 0.7f, 0.3f); 
 		public override Color EnergyLabelOutlineColor => new(0.1f, 0.4f, 0.1f); 
@@ -40,6 +40,10 @@ namespace KomeijiKoishi.Characters
 		public override string CustomEnergyCounterPath => "res://mods/Komeiji_Koishi/scenes/koishi_energy_counter.tscn";
 
 		public override string CharacterTransitionSfx => "event:/sfx/ui/wipe_ironclad";
+		public override string CustomArmPointingTexturePath => "res://mods/Komeiji_Koishi/images/hands/up.png";
+		public override string CustomArmRockTexturePath => "res://mods/Komeiji_Koishi/images/hands/koishiya.png";
+		public override string CustomArmPaperTexturePath => "res://mods/Komeiji_Koishi/images/hands/bu.png";
+		public override string CustomArmScissorsTexturePath => "res://mods/Komeiji_Koishi/images/hands/jiandao.png";
 
 		public override CardPoolModel CardPool => ModelDb.CardPool<KoishiCardPool>();
 		public override RelicPoolModel RelicPool => ModelDb.RelicPool<KoishiRelicPool>();

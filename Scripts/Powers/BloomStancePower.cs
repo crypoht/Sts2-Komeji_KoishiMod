@@ -27,43 +27,40 @@ namespace KomeijiKoishi.Powers
 
         public static async Task EnterThisStance(PlayerChoiceContext context, Player player, CardModel sourceCard)
         {
-            if (player.Creature.GetPower<BloomStancePower>() != null) {
-                return;
-            }
 
-            await ClearOldStances(player); 
-            
-            int bonusEnergy = 0;
-            var superego = player.Creature.Powers.FirstOrDefault(p => p is SuperegoPower);
-            if (superego != null)
+            try 
             {
-                bonusEnergy = (int)superego.Amount;
+                if (player.Creature.GetPower<BloomStancePower>() != null) return;
+
+                await ClearOldStances(player); 
+                
+                int bonusEnergy = 0;
+                var superego = player.Creature.Powers.FirstOrDefault(p => p is SuperegoPower);
+                if (superego != null) bonusEnergy = (int)superego.Amount;
+
+                int totalEnergyGain = BloomEnergyGainAmount + bonusEnergy;
+                if (totalEnergyGain > 0) await PlayerCmd.GainEnergy(totalEnergyGain, player);
+                
+                await PowerCmd.Apply<BloomStancePower>(player.Creature, 1m, player.Creature, sourceCard, false);
+                
+                NotifyAllCardsStanceChanged(player, "Bloom"); 
+
+                await NotifyAllPowersStanceChanged(context, player, "Bloom", sourceCard);
             }
-
-            int totalEnergyGain = BloomEnergyGainAmount + bonusEnergy;
-
-            if (totalEnergyGain > 0)
+            catch (Exception e)
             {
-                await PlayerCmd.GainEnergy(totalEnergyGain, player);
-            }
-            
-            await PowerCmd.Apply<BloomStancePower>(player.Creature, 1m, player.Creature, sourceCard, false);
-            NotifyAllCardsStanceChanged(player, "Bloom"); 
-
-            var kokoroPower = player.Creature.GetPower<KoishiKokoroPower>();
-            if (kokoroPower != null)
-            {
-                await kokoroPower.TriggerEffects(context, sourceCard);
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[BloomStance] EnterThisStance 严重报错: {e}");
             }
         }
+
+        public decimal BlockReduction => 70m;
 
         public override decimal ModifyBlockMultiplicative(Creature target, decimal block, ValueProp props, CardModel? cardSource, CardPlay? cardPlay)
         {
             if (target == base.Owner)
             {
-                return 0.5m; 
+                return 1m - (BlockReduction / 100m); 
             }
-            
             return 1m; 
         }
 
@@ -117,5 +114,7 @@ namespace KomeijiKoishi.Powers
                 MegaCrit.Sts2.Core.Logging.Log.Error($"[BloomStance] Softlock Prevented: {e}");
             }
         }
+
+        
     }
 }

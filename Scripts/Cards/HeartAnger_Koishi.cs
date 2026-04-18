@@ -79,6 +79,8 @@ namespace KomeijiKoishi.Cards
                 await Cmd.Wait(0.2f, false);
 
                 await BloomStancePower.EnterThisStance(choiceContext, player, this);
+
+                this.OnStanceChanged(false, true);
             }
             catch (Exception ex)
             {

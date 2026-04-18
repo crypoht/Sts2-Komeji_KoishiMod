@@ -21,13 +21,13 @@ namespace KomeijiKoishi.Cards.Danmaku
     public sealed class ConsciousOverflow_Koishi : CustomCardModel
     {
         public ConsciousOverflow_Koishi() 
-            : base(514, CardType.Skill, CardRarity.Token, TargetType.None, true) { }
+            : base(514, CardType.Status, CardRarity.Token, TargetType.None, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Unconscious };
 
-        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Unconscious };
+        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Unconscious, CardKeyword.Exhaust };
 
         protected override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {

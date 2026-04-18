@@ -12,7 +12,6 @@ using KomeijiKoishi.Pools;
 using MegaCrit.Sts2.Core.Entities.Powers; 
 using MegaCrit.Sts2.Core.Models; 
 using MegaCrit.Sts2.Core.Models.Cards; 
-using System.Threading.Tasks;
 
 namespace KomeijiKoishi.Powers
 {
@@ -21,6 +20,7 @@ namespace KomeijiKoishi.Powers
         public override PowerType Type => PowerType.Buff;
         public override PowerStackType StackType => PowerStackType.None;
 
+        // 广播给所有卡牌
         protected static void NotifyAllCardsStanceChanged(Player player, string stanceName)
         {
             bool isClosedStance = stanceName == "Closed";
@@ -48,6 +48,25 @@ namespace KomeijiKoishi.Powers
             }
         }
 
+        protected static async Task NotifyAllPowersStanceChanged(PlayerChoiceContext context, Player player, string stanceName, CardModel? sourceCard)
+        {
+            bool isClosedStance = stanceName == "Closed";
+            bool isBloomStance = stanceName == "Bloom";
+
+            foreach (var power in player.Creature.Powers.ToList()) 
+            {
+                if (power is IStanceListenerPower listenerPower)
+                {
+                    try {
+                        await listenerPower.OnStanceChanged(isClosedStance, isBloomStance, context, sourceCard);
+                    }
+                    catch (Exception ex) {
+                        MegaCrit.Sts2.Core.Logging.Log.Error($"[排查专用] 广播崩溃的完整真凶：\n{ex.ToString()}");
+                    }
+                }
+            }
+        }
+
         protected static async Task ClearOldStances(Player player)
         {
             var powersToRemove = player.Creature.Powers
@@ -64,5 +83,10 @@ namespace KomeijiKoishi.Powers
     public interface IStanceListenerCard
     {
         void OnStanceChanged(bool isClosedStance, bool isBloomStance);
+    }
+
+    public interface IStanceListenerPower
+    {
+        Task OnStanceChanged(bool isClosedStance, bool isBloomStance, PlayerChoiceContext context, CardModel? sourceCard);
     }
 }

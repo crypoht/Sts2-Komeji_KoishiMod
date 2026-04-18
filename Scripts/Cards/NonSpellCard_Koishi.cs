@@ -32,7 +32,7 @@ namespace KomeijiKoishi.Cards
             HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
         };
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new CardsVar(2) };
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new CardsVar(3) };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {

@@ -17,14 +17,14 @@ using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace KomeijiKoishi.Powers
 {
-    public sealed class KoishiKokoroPower : CustomPowerModel
+    public sealed class KoishiKokoroPower : CustomPowerModel, IStanceListenerPower
     {
         public override PowerType Type => PowerType.Buff;
         public override PowerStackType StackType => PowerStackType.Counter;
 
         public override string? CustomPackedIconPath => "res://mods/Komeiji_Koishi/images/powers/KoishiKokoroPower.png";
-
         public override string? CustomBigIconPath => "res://mods/Komeiji_Koishi/images/powers/KoishiKokoroPower.png";
+        
         protected override object InitInternalData() => new Data();
 
         public override Task BeforeApplied(Creature target, decimal amount, Creature? applier, CardModel? cardSource)
@@ -42,11 +42,25 @@ namespace KomeijiKoishi.Powers
             }
             return Task.CompletedTask;
         }
+
+        public async Task OnStanceChanged(bool isClosedStance, bool isBloomStance, PlayerChoiceContext context, CardModel? sourceCard)
+        {
+            try 
+            {
+                await TriggerEffects(context, sourceCard);
+            }
+            catch (Exception ex)
+            {
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[KoishiKokoro] 触发效果报错: {ex}");
+            }
+        }
+
         public async Task TriggerEffects(PlayerChoiceContext context, CardModel? sourceCard)
         {
             var data = base.GetInternalData<Data>();
             var player = base.Owner.Player;
             if (player == null) return;
+            this.Flash();
 
             for (int i = 0; i < base.Amount; i++)
             {

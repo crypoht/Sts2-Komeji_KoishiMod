@@ -15,6 +15,8 @@
 *.pck
 *.uid
 *.import
+*.cfg
+*.sln
 
 # 确保不忽略 cs 和 json
 !*.cs

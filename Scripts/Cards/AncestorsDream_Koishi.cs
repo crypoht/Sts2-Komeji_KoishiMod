@@ -17,7 +17,7 @@ namespace KomeijiKoishi.Cards
     public sealed class AncestorsDream_Koishi : CustomCardModel
     {
         public AncestorsDream_Koishi() 
-            : base(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
+            : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 

@@ -48,15 +48,14 @@ namespace KomeijiKoishi.Cards.Danmaku
                 .Targeting(cardPlay.Target)
                 .Execute(choiceContext);
 
-            // 复制自身塞入弃牌堆
             CardModel cardModel = base.CreateClone();
-            CardPileAddResult cardPileAddResult = await CardPileCmd.AddGeneratedCardToCombat(cardModel, PileType.Discard, true, CardPilePosition.Bottom);
-            CardCmd.PreviewCardPileAdd(cardPileAddResult, 2.2f, CardPreviewStyle.HorizontalLayout);
+            CardPileAddResult cardPileAddResult = await CardPileCmd.AddGeneratedCardToCombat(cardModel, PileType.Exhaust, true, CardPilePosition.Bottom);
+            CardCmd.PreviewCardPileAdd(cardPileAddResult, 0.8f, CardPreviewStyle.HorizontalLayout);
         }
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(1m); // 4(5)
+            base.DynamicVars.Damage.UpgradeValueBy(2m); 
         }
     }
 }

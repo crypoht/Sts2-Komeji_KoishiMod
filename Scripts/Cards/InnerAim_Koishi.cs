@@ -12,6 +12,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Powers; 
+using MegaCrit.Sts2.Core.HoverTips; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -25,7 +26,13 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DynamicVar("Tracing", 2m) 
+            new DynamicVar("Tracing", 4m),
+            new PowerVar<KuugaPower>(2m)
+        };
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromPower<TracingPower>() 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -42,6 +49,12 @@ namespace KomeijiKoishi.Cards
                     this, 
                     false
                 );
+                await PowerCmd.Apply<KuugaPower>(
+                player.Creature, 
+                base.DynamicVars["KuugaPower"].BaseValue, 
+                player.Creature, 
+                this, 
+                false);
             }
             catch (Exception e)
             {
@@ -52,6 +65,7 @@ namespace KomeijiKoishi.Cards
         protected override void OnUpgrade()
         {
             base.DynamicVars["Tracing"].UpgradeValueBy(1m);
+            base.DynamicVars["KuugaPower"].UpgradeValueBy(1m);
         }
     }
 }

@@ -29,7 +29,12 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku) 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku),
+        };
+
+        protected override IEnumerable<DynamicVar> CanonicalVars => new[] 
+        { 
+            new PowerVar<KuugaPower>(4m) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -41,6 +46,7 @@ namespace KomeijiKoishi.Cards
 
                 await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
                 await PowerCmd.Apply<RecognizedGeniusPower>(player.Creature, 1m, player.Creature, this, false);
+                await PowerCmd.Apply<KuugaPower>(player.Creature, base.DynamicVars["KuugaPower"].BaseValue, player.Creature, this, false);
 
 
                 var piles = new[] { 
@@ -84,6 +90,7 @@ namespace KomeijiKoishi.Cards
         protected override void OnUpgrade()
         {
             base.AddKeyword(CardKeyword.Retain);
+            base.DynamicVars["KuugaPower"].UpgradeValueBy(1m);
         }
     }
 }

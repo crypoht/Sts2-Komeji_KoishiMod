@@ -16,6 +16,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Utils_Koishi;
+using KomeijiKoishi.Cards.Danmaku; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -29,7 +30,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new BlockVar(17m, ValueProp.Move),
+            new BlockVar(14m, ValueProp.Move),
             new CardsVar(2)
         };
 
@@ -38,9 +39,16 @@ namespace KomeijiKoishi.Cards
             try
             {
                 var player = base.Owner as Player;
-                if (player == null) return;
+                if (player == null || base.CombatState == null) return;
 
                 await CreatureCmd.GainBlock(player.Creature, base.DynamicVars.Block.BaseValue, ValueProp.Move, cardPlay, false);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    await DanmakuPool.CreateRandomDanmakuInExhaust(player, base.CombatState);
+                }
+
+                await Cmd.Wait(0.1f, false);
 
                 var availableDanmaku = PileType.Exhaust.GetPile(player)
                     .Cards
@@ -56,7 +64,6 @@ namespace KomeijiKoishi.Cards
                 {
                     if (tempAvailable.Count <= 0) break;
                     var card = player.RunState.Rng.Shuffle.NextItem(tempAvailable);
-
 
                     if (card != null)
                     {

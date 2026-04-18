@@ -34,7 +34,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(10m, ValueProp.Move),
+            new DamageVar(14m, ValueProp.Move),
             new DynamicVar("Thorns", 1m)       
         };
 
@@ -61,7 +61,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(4m);
+            base.DynamicVars.Damage.UpgradeValueBy(6m);
         }
 
         public static async Task CreateInHand(Player owner, int count, CombatState combatState)

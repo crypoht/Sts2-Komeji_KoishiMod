@@ -28,19 +28,12 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku) 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku),
+            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious)
         };
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
-
-        public override IEnumerable<CardKeyword> CanonicalKeywords
-        {
-            get
-            {
-                try { return KoishiExtensions.IsTrulyUnconscious(this) ? new[] { KoishiKeywords.Unconscious } : new CardKeyword[0]; }
-                catch (Exception) { return new CardKeyword[0]; }
-            }
-        }
+        public override IEnumerable<CardKeyword> CanonicalKeywords => new CardKeyword[0];
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {

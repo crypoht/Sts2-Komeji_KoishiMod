@@ -27,7 +27,7 @@ namespace KomeijiKoishi.Cards
     public sealed class BuriedFire_Koishi : CustomCardModel
     {
         public BuriedFire_Koishi() 
-            : base(4, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) { }
+            : base(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
@@ -35,7 +35,8 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku) 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku),
+            HoverTipFactory.FromPower<TracingPower>() 
         };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
