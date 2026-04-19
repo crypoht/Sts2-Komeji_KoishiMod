@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq; // 必须引入 Linq，用于判断是否击杀
+using System.Linq; 
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
@@ -15,6 +15,8 @@ using MegaCrit.Sts2.Core.Models;
 using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.HoverTips; 
 using MegaCrit.Sts2.Core.Nodes.CommonUi; 
+using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Combat; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -38,7 +40,7 @@ namespace KomeijiKoishi.Cards
             new DamageVar(3m, ValueProp.Move) 
         };
 
-        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+       protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
             
@@ -50,24 +52,50 @@ namespace KomeijiKoishi.Cards
                 await CreatureCmd.TriggerAnim(player.Creature, "Attack", player.Character.AttackAnimDelay);
             }
 
+            bool shouldTriggerFatal = cardPlay.Target.Powers.All((PowerModel p) => p.ShouldOwnerDeathTriggerFatal());
+
             var attackCommand = await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                 .FromCard(this)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_slash", null, "knife_attack.mp3") 
                 .Execute(choiceContext);
 
-            if (attackCommand.Results.Any(r => r.WasTargetKilled))
+
+            if (shouldTriggerFatal && attackCommand.Results.Any(r => r.WasTargetKilled))
             {
+  
                 CardCmd.Upgrade(this, CardPreviewStyle.HorizontalLayout);
 
+  
                 var masterDeckPile = PileType.Deck.GetPile(player);
                 if (masterDeckPile != null && masterDeckPile.Cards != null)
                 {
                     var originalKnife = masterDeckPile.Cards.FirstOrDefault(c => c is KoishisKnife_Koishi);
-
                     if (originalKnife != null)
                     {
-                        CardCmd.Upgrade(originalKnife, CardPreviewStyle.HorizontalLayout);
+                        if (base.CombatState?.HittableEnemies?.All(e => e.IsDead) == true)
+                        {
+                            var upgradeMethod = typeof(CardModel).GetMethod("Upgrade", 
+                                System.Reflection.BindingFlags.Public | 
+                                System.Reflection.BindingFlags.Instance | 
+                                System.Reflection.BindingFlags.NonPublic);
+                            
+                            if (upgradeMethod != null)
+                            {
+                                upgradeMethod.Invoke(originalKnife, null);
+                            }
+                            else
+                            {
+                                var onUpgradeMethod = typeof(KoishisKnife_Koishi).GetMethod("OnUpgrade", 
+                                    System.Reflection.BindingFlags.NonPublic | 
+                                    System.Reflection.BindingFlags.Instance);
+                                onUpgradeMethod?.Invoke(originalKnife, null);
+                            }
+                        }
+                        else
+                        {
+                            CardCmd.Upgrade(originalKnife, CardPreviewStyle.HorizontalLayout);
+                        }
                     }
                 }
             }

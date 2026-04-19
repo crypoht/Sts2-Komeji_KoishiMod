@@ -25,7 +25,7 @@ namespace KomeijiKoishi.Cards
         public KuugaStrike_Koishi() 
             : base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) { }
 
-            protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike };
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike };
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
@@ -34,7 +34,7 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DamageVar(1m, ValueProp.Move),
-            new KuugaVar(2m) 
+            new KuugaVar(1m) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -53,23 +53,19 @@ namespace KomeijiKoishi.Cards
             await PowerCmd.Apply<KuugaPower>(player.Creature, amount, player.Creature, this, false);
         }
 
-        public async void OnStanceChanged(bool isClosedStance, bool isBloomStance)
+        public async Task OnStanceChanged(bool isClosedStance, bool isBloomStance)
         {
             var pile = base.Pile;
             
             if (pile != null && pile.Type != PileType.Hand && pile.Type != PileType.Exhaust)
             {
-                await Cmd.Wait(0.05f, false);
-
-                if (base.Pile != null && base.Pile.Type != PileType.Hand && base.Pile.Type != PileType.Exhaust)
-                {
-                    await CardPileCmd.Add(this, PileType.Hand, CardPilePosition.Bottom, null, false);
-                }
+                await CardPileCmd.Add(this, PileType.Hand, CardPilePosition.Bottom, null, false);
             }
         }
 
         protected override void OnUpgrade()
         {
+            base.DynamicVars.Damage.UpgradeValueBy(2m);
             base.DynamicVars["Kuuga"].UpgradeValueBy(1m);
         }
     }

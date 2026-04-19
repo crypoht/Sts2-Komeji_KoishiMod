@@ -13,6 +13,7 @@
 
   "KOMEIJIKOISHI-TRACING_POWER.title": "追踪",
   "KOMEIJIKOISHI-TRACING_POWER.smartDescription": "受到的 [gold]弹幕[/gold] 攻击伤害提升 50%。",
+  "KOMEIJIKOISHI-TRACING_POWER.description":"受到的 [gold]弹幕[/gold] 攻击伤害提升 50%",
 
   "KOMEIJIKOISHI-DANMAKU_ART_POWER.title": "弹幕艺术",
   "KOMEIJIKOISHI-DANMAKU_ART_POWER.smartDescription": "每当打出一张[gold]弹幕[/gold]牌时，获得 {Amount} 点[gold]格挡[/gold]。",
@@ -33,7 +34,7 @@
   "KOMEIJIKOISHI-JOY_MASK_POWER.smartDescription": "你的下 {Amount} 张牌耗能为 0。",
 
   "KOMEIJIKOISHI-REIMU_HELP_POWER.title": "灵梦小姐的帮助",
-  "KOMEIJIKOISHI-REIMU_HELP_POWER.smartDescription": "每当你抽到[gold]阴阳玉弹幕[/gold]时，自动打出它。",
+  "KOMEIJIKOISHI-REIMU_HELP_POWER.smartDescription": "每当你抽到[gold]阴阳玉弹幕[/gold]时，自动打出它。[gold]阴阳玉弹幕[/gold]弹幕伤害提高{Amout}%",
 
   "KOMEIJIKOISHI-ROSE_PROTECTION_POWER.title": "蔷薇护身",
   "KOMEIJIKOISHI-ROSE_PROTECTION_POWER.smartDescription": "处于[gold]闭合[/gold]姿态时，获得的格挡值额外提高 {Amount} %。",
@@ -45,6 +46,15 @@
   "KOMEIJIKOISHI-KUUGA_POWER.smartDescription": "你所有耗能为 0 的攻击牌造成的伤害增加 {Amount}点。",
 
   "KOMEIJIKOISHI-SECOND_NEED_POWER.title": "第二需求",
-  "KOMEIJIKOISHI-SECOND_NEED_POWER.smartDescription": "每当你切换姿态时，获得 {Amount} 点格挡。"
+  "KOMEIJIKOISHI-SECOND_NEED_POWER.smartDescription": "每当你切换姿态时，获得 {Amount} 点格挡。",
+
+  "KOMEIJIKOISHI-UNDERGROUND_ROSE_POWER.title": "地底蔷薇",
+  "KOMEIJIKOISHI-UNDERGROUND_ROSE_POWER.smartDescription": "每当你切换姿态时，生成并自动打出 {Amount} 张 [gold]蔷薇弹幕[/gold] 。",
+
+  "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_POWER.title": "意识的螺旋",
+  "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_POWER.smartDescription": "你的回合开始时，将 {Amount} 张 [gold]意识的回转[/gold] 加入手牌。",
+
+  "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_POWER.title": "被厌恶者的哲学",
+  "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_POWER.smartDescription": "每当你进入 [gold]闭合姿态[/gold] 时，自动打出手中 {Amount} 张 [gold]无意识[/gold] 牌。"
 
 }

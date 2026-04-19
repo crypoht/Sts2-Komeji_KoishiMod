@@ -38,7 +38,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new DamageVar(31m, ValueProp.Move), 
+            new DamageVar(24m, ValueProp.Move), 
             new ReductionVar(2m)               
         };
 
@@ -88,13 +88,12 @@ namespace KomeijiKoishi.Cards
 
             int playedCount = CombatManager.Instance.History.CardPlaysFinished.Count((CardPlayFinishedEntry e) =>
                 e.CardPlay.Card.Owner == base.Owner &&
-                KoishiExtensions.IsTrulyUnconscious(e.CardPlay.Card) &&
-                e.HappenedThisTurn(base.CombatState)
+                KoishiExtensions.IsTrulyUnconscious(e.CardPlay.Card)
             );
 
             if (playedCount > 0)
             {
-                this.ReduceCostBy(playedCount * reductionAmount);
+                base.EnergyCost.AddThisCombat(-(playedCount * reductionAmount), false);
             }
             return Task.CompletedTask;
         }
@@ -106,19 +105,14 @@ namespace KomeijiKoishi.Cards
             if (KoishiExtensions.IsTrulyUnconscious(cardPlay.Card))
             {
                 int reductionAmount = base.DynamicVars["Reduction"].IntValue;
-                this.ReduceCostBy(reductionAmount);
+                base.EnergyCost.AddThisCombat(-reductionAmount, false);
             }
             return Task.CompletedTask;
         }
 
-        private void ReduceCostBy(int amount)
-        {
-            base.EnergyCost.AddThisTurn(-amount, false);
-        }
-
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(9m);     
+            base.DynamicVars.Damage.UpgradeValueBy(8m);     
             base.DynamicVars["Reduction"].UpgradeValueBy(1m); 
         }
     }

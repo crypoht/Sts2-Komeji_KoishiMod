@@ -37,7 +37,8 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromCard<YinYangOrbDanmaku_Koishi>(base.IsUpgraded)
+            HoverTipFactory.FromCard<YinYangOrbDanmaku_Koishi>(base.IsUpgraded),
+            HoverTipFactory.FromCard<ConsciousOverflow_Koishi>(false)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -68,6 +69,16 @@ namespace KomeijiKoishi.Cards
 
                 KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(orbCard);
             }
+
+            int overflowCount = xValue * 4;
+            var overflowCards = new List<CardModel>();
+            
+            for (int i = 0; i < overflowCount; i++)
+            {
+                overflowCards.Add(base.CombatState.CreateCard<ConsciousOverflow_Koishi>(player));
+            }
+
+            await CardPileCmd.AddGeneratedCardsToCombat(overflowCards, PileType.Draw, true, CardPilePosition.Random);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace KomeijiKoishi.Powers
                 
                 await PowerCmd.Apply<BloomStancePower>(player.Creature, 1m, player.Creature, sourceCard, false);
                 
-                NotifyAllCardsStanceChanged(player, "Bloom"); 
+                await NotifyAllCardsStanceChanged(player, "Bloom"); 
 
                 await NotifyAllPowersStanceChanged(context, player, "Bloom", sourceCard);
             }

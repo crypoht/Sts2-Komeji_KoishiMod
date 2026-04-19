@@ -29,33 +29,10 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(18m, ValueProp.Move) 
+            new DamageVar(16m, ValueProp.Move)
         };
 
-        protected override bool ShouldGlowGoldInternal => base.Owner?.Creature?.Powers.Any(p => p is ClosedStancePower && p.Amount > 0) ?? false;
-
-        public void OnStanceChanged(bool isClosedStance, bool isBloomStance)
-        {
-            if (isClosedStance)
-            {
-                base.EnergyCost.SetThisCombat(1, false); 
-            }
-            else
-            {
-                base.EnergyCost.SetThisCombat(2, false);
-            }
-        }
-
-        public override Task AfterCardEnteredCombat(CardModel card)
-        {
-            if (card == this)
-            {
-                bool isClosed = base.Owner?.Creature?.Powers.Any(p => p is ClosedStancePower && p.Amount > 0) ?? false;
-                bool isBloom = base.Owner?.Creature?.Powers.Any(p => p is BloomStancePower && p.Amount > 0) ?? false;
-                OnStanceChanged(isClosed, isBloom);
-            }
-            return Task.CompletedTask;
-        }
+        private bool _isCostModified = false;
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
@@ -80,7 +57,7 @@ namespace KomeijiKoishi.Cards
 
                 await BloomStancePower.EnterThisStance(choiceContext, player, this);
 
-                this.OnStanceChanged(false, true);
+                await this.OnStanceChanged(false, true);
             }
             catch (Exception ex)
             {
@@ -90,7 +67,28 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(4m);
+            base.DynamicVars.Damage.UpgradeValueBy(6m);
+        }
+
+       public Task OnStanceChanged(bool isClosedStance, bool isBloomStance)
+        {
+            bool shouldReduceCost = isClosedStance;
+
+            if (shouldReduceCost != _isCostModified)
+            {
+                if (shouldReduceCost)
+                {
+                    base.EnergyCost.AddThisCombat(-1, false);
+                    _isCostModified = true;
+                }
+                else
+                {
+                    base.EnergyCost.AddThisCombat(1, false);
+                    _isCostModified = false;
+                }
+            }
+            
+            return Task.CompletedTask;
         }
     }
 }

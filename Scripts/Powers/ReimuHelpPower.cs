@@ -11,22 +11,31 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using KomeijiKoishi.Cards.Danmaku; 
 using MegaCrit.Sts2.Core.Nodes.CommonUi; 
 using KomeijiKoishi.Enums;
-
+using MegaCrit.Sts2.Core.ValueProps; 
 using MegaCrit.Sts2.Core.Entities.Powers; 
 using MegaCrit.Sts2.Core.Models; 
-
-
 
 namespace KomeijiKoishi.Powers
 {
     public sealed class ReimuHelpPower : CustomPowerModel
     {
         public override PowerType Type => PowerType.Buff;
-        public override PowerStackType StackType => PowerStackType.None;
+        
+        public override PowerStackType StackType => PowerStackType.Counter;
 
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/ReimuHelpPower.png";
         
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/ReimuHelpPower.png";
+
+        public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+        {
+            if (cardSource != null && cardSource is YinYangOrbDanmaku_Koishi)
+            {
+
+                return 1m + (base.Amount / 100m); 
+            }
+            return 1m;
+        }
         public override async Task AfterCardDrawnEarly(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
         {
             if (card.Owner.Creature == base.Owner)

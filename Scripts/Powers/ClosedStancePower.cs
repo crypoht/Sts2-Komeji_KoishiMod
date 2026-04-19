@@ -29,8 +29,8 @@ namespace KomeijiKoishi.Powers
                 await CardPileCmd.Draw(context, drawAmount, player, false);
                 await PowerCmd.Apply<ClosedStancePower>(player.Creature, 1m, player.Creature, sourceCard, false);
                 
-                NotifyAllCardsStanceChanged(player, "Closed"); 
-                // 🌟 传入 sourceCard
+                await NotifyAllCardsStanceChanged(player, "Closed"); 
+
                 await NotifyAllPowersStanceChanged(context, player, "Closed", sourceCard);
             }
             catch (Exception e)

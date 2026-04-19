@@ -3,7 +3,7 @@
   "name": "Komeiji Koishi",
   "author": "UINYA",
   "description": "古明地恋",
-  "version": "0.1.1",
+  "version": "0.2.4",
   "has_pck": true,
   "has_dll": true,
   "dependencies": [

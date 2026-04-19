@@ -162,10 +162,10 @@
   "KOMEIJIKOISHI-SELF_OVERFLOW_KOISHI.description":"获得{Energy:energyIcons()}，生成{Cards:diff()}张[gold]意识溢出[/gold]",
 
   "KOMEIJIKOISHI-CONSCIOUS_OVERFLOW_KOISHI.title":"意识溢出",
-  "KOMEIJIKOISHI-CONSCIOUS_OVERFLOW_KOISHI.description":"想的太多了哦~",
+  "KOMEIJIKOISHI-CONSCIOUS_OVERFLOW_KOISHI.description":"想的太多了哦~ \n{IfUpgraded:show:想的也太多了~}",
 
   "KOMEIJIKOISHI-REIMU_HELP_KOISHI.title":"灵梦小姐的帮助",
-  "KOMEIJIKOISHI-REIMU_HELP_KOISHI.description":"每当你抽到[gold]阴阳玉弹幕[/gold]时，自动打出它",
+  "KOMEIJIKOISHI-REIMU_HELP_KOISHI.description": "每当你抽到 [gold]阴阳玉弹幕[/gold] 时，自动打出它。\n生成 {Orbs:diff()} 张 [gold]阴阳玉弹幕[/gold] 到抽牌堆。\n所有的[gold]阴阳玉弹幕[/gold]伤害提高20%",
 
   "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.title": "蔷薇护身",
   "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.description": "处于[gold]闭眼[/gold]姿态时，获得的格挡值额外提高{Rose:diff()}%。",
@@ -174,7 +174,7 @@
   "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.description": "造成{Damage:diff()}点伤害。每当你打出一张[gold]无意识[/gold]牌时，如果这张牌不在消耗堆中，将其加入你的手牌。",
 
   "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.title": "空我打击",
-  "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n所有0{energyPrefix:energyIcons(1)}费攻击卡增加{Kuuga:diff()}点伤害\n每当你切换姿态时，将其加入你的手牌。",
+  "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n所有0{energyPrefix:energyIcons(1)}费攻击卡增加{Kuuga:diff()}点伤害\n每次切换姿态时,且没有被[gold]消耗[/gold],回到手中",
   
   "KOMEIJIKOISHI-DANMAKU_ENDLESS_MIRACLE_KOISHI.title": "弹幕永续奇迹",
   "KOMEIJIKOISHI-DANMAKU_ENDLESS_MIRACLE_KOISHI.description": "本回合内,打出的弹幕会再打出一次",
@@ -186,7 +186,7 @@
   "KOMEIJIKOISHI-ATTACHMENT_SAFE_HAVEN_UNCONSCIOUS_KOISHI.description": "获得 {Block:diff()} 点格挡。",
 
   "KOMEIJIKOISHI-UNCONSCIOUS_GENE_KOISHI.title": "深层「无意识的基因」",
-  "KOMEIJIKOISHI-UNCONSCIOUS_GENE_KOISHI.description": "造成 {Damage:diff()} 点伤害。将你手牌中所有牌添加[gold]无意识[/gold]。本回合你每打出一张[gold]无意识[/gold]牌，此牌耗能减少 {Reduction:diff()}。",
+  "KOMEIJIKOISHI-UNCONSCIOUS_GENE_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n将你手牌中所有牌添加[gold]无意识[/gold]。\n你每打出一张[gold]无意识[/gold]牌，本场战斗此牌耗能减少 {Reduction:diff()}。",
 
   "KOMEIJIKOISHI-LOOKING_GLASS_SELF_KOISHI.title": "认知「镜中我」",
   "KOMEIJIKOISHI-LOOKING_GLASS_SELF_KOISHI.description": "消耗牌堆每有1张牌，获得1点[gold]格挡[/gold]。",
@@ -202,7 +202,7 @@
   "KOMEIJIKOISHI-UNINTENTIONAL_HARVEST_KOISHI.description": "抽 {Cards:diff()} 张牌。",
 
   "KOMEIJIKOISHI-SPIRITUAL_DESTRUCTION_KOISHI.title": "灵力破坏",
-  "KOMEIJIKOISHI-SPIRITUAL_DESTRUCTION_KOISHI.description": "自动生成并打出 X 张{IfUpgraded:show:[gold]升级过[/gold]的}[gold]阴阳玉弹幕[/gold]。",
+  "KOMEIJIKOISHI-SPIRITUAL_DESTRUCTION_KOISHI.description": "自动生成并打出X张{IfUpgraded:show:[gold]升级过[/gold]的}[gold]阴阳玉弹幕[/gold]。\n生成4x张[gold]意识溢出[/gold]到抽牌堆",
 
   "KOMEIJIKOISHI-KOMEIJI_DASH_KOISHI.title": "古明地大冲刺",
   "KOMEIJIKOISHI-KOMEIJI_DASH_KOISHI.description": "对所有敌人造成{Damage:diff()}点伤害。",
@@ -214,5 +214,17 @@
   "KOMEIJIKOISHI-CASUAL_GAME_KOISHI.description": "抽 {Cards:diff()} 张牌。\n随机打出手牌中的1张 [gold]无意识[/gold] 牌。",
 
   "KOMEIJIKOISHI-CONSCIOUS_COLLECTION_KOISHI.title": "意识的收集",
-  "KOMEIJIKOISHI-CONSCIOUS_COLLECTION_KOISHI.description": "抽 {Cards:diff()} 张牌。\n将 1 张 [gold]意识溢出[/gold] 放入你的[gold]手牌[/gold]。"
+  "KOMEIJIKOISHI-CONSCIOUS_COLLECTION_KOISHI.description": "抽 {Cards:diff()} 张牌。\n将 1 张 [gold]意识溢出[/gold] 放入你的[gold]手牌[/gold]。",
+
+  "KOMEIJIKOISHI-UNDERGROUND_ROSE_KOISHI.title": "地底蔷薇",
+  "KOMEIJIKOISHI-UNDERGROUND_ROSE_KOISHI.description": "每当你切换姿态时，生成并自动打出1张 [gold]蔷薇弹幕[/gold] 。",
+
+  "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_KOISHI.title": "意识的螺旋",
+  "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_KOISHI.description": "你的回合开始时，将1张 [gold]意识的回转[/gold] 加入手牌。",
+
+  "KOMEIJIKOISHI-CONSCIOUSNESS_ROTATION_KOISHI.title": "意识的回转",
+  "KOMEIJIKOISHI-CONSCIOUSNESS_ROTATION_KOISHI.description": " 切换当前姿态。 \n本场战斗中，此牌耗能增加 1。\n打出后会回到手中",
+
+  "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.title": "被厌恶者的哲学",
+  "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.description": "每当你进入 [gold]闭合姿态[/gold] 时，自动打出手中 1 张 [gold]无意识[/gold] 牌。"
 }

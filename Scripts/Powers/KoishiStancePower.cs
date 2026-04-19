@@ -20,31 +20,26 @@ namespace KomeijiKoishi.Powers
         public override PowerType Type => PowerType.Buff;
         public override PowerStackType StackType => PowerStackType.None;
 
-        // 广播给所有卡牌
-        protected static void NotifyAllCardsStanceChanged(Player player, string stanceName)
+       protected static async Task NotifyAllCardsStanceChanged(Player player, string stanceName)
         {
             bool isClosedStance = stanceName == "Closed";
             bool isBloomStance = stanceName == "Bloom";
 
-            var allPiles = new[] 
+            var listeners = new List<IStanceListenerCard>();
+            
+            var piles = new[] { PileType.Hand, PileType.Draw, PileType.Discard };
+            foreach (var type in piles)
             {
-                PileType.Hand.GetPile(player),
-                PileType.Draw.GetPile(player),
-                PileType.Discard.GetPile(player),
-                PileType.Exhaust.GetPile(player)
-            };
-
-            foreach (var pile in allPiles)
-            {
-                if (pile == null) continue; 
-                
-                foreach (var card in pile.Cards)
+                var pile = type.GetPile(player);
+                if (pile?.Cards != null)
                 {
-                    if (card is IStanceListenerCard listenerCard)
-                    {
-                        listenerCard.OnStanceChanged(isClosedStance, isBloomStance);
-                    }
+                    listeners.AddRange(pile.Cards.OfType<IStanceListenerCard>().ToList());
                 }
+            }
+
+            foreach (var listener in listeners)
+            {
+                await listener.OnStanceChanged(isClosedStance, isBloomStance);
             }
         }
 
@@ -82,7 +77,7 @@ namespace KomeijiKoishi.Powers
 
     public interface IStanceListenerCard
     {
-        void OnStanceChanged(bool isClosedStance, bool isBloomStance);
+        Task OnStanceChanged(bool isClosedStance, bool isBloomStance);
     }
 
     public interface IStanceListenerPower

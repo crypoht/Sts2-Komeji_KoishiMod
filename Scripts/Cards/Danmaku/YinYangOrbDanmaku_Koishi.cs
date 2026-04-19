@@ -31,14 +31,9 @@ namespace KomeijiKoishi.Cards.Danmaku
             KoishiTags.Danmaku 
         };
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
-            HoverTipFactory.FromCard<YinYangOrbDanmaku_Koishi>(base.IsUpgraded)
-        };
-
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(27m, ValueProp.Move)
+            new DamageVar(22m, ValueProp.Move)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -53,7 +48,7 @@ namespace KomeijiKoishi.Cards.Danmaku
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(12m);
+            base.DynamicVars.Damage.UpgradeValueBy(10m);
         }
     }
 }

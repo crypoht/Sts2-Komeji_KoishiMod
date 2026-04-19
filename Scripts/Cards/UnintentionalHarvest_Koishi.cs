@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Cards
     public sealed class UnintentionalHarvest_Koishi : CustomCardModel
     {
         public UnintentionalHarvest_Koishi() 
-            : base(4, CardType.Skill, CardRarity.Rare, TargetType.Self, true)
+            : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self, true)
         {
         }
 
@@ -41,7 +41,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new CardsVar(6) 
+            new CardsVar(7) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

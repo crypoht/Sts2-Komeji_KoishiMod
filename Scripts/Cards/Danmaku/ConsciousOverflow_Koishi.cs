@@ -14,7 +14,6 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers; 
 using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.Models.CardPools;
-
 namespace KomeijiKoishi.Cards.Danmaku
 {
     [Pool(typeof(TokenCardPool))]

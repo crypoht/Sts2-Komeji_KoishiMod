@@ -44,6 +44,7 @@ namespace KomeijiKoishi.Characters
 		public override string CustomArmRockTexturePath => "res://mods/Komeiji_Koishi/images/hands/koishiya.png";
 		public override string CustomArmPaperTexturePath => "res://mods/Komeiji_Koishi/images/hands/bu.png";
 		public override string CustomArmScissorsTexturePath => "res://mods/Komeiji_Koishi/images/hands/jiandao.png";
+		public override string CharacterSelectSfx => null;
 
 		public override CardPoolModel CardPool => ModelDb.CardPool<KoishiCardPool>();
 		public override RelicPoolModel RelicPool => ModelDb.RelicPool<KoishiRelicPool>();

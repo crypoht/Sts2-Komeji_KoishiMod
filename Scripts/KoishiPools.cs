@@ -16,7 +16,7 @@ namespace KomeijiKoishi.Pools
 
         public override Color ShaderColor => new(0.486f, 0.988f, 0f);
         
-        public override bool IsColorless => true;
+        public override bool IsColorless => false;
     }
 
 
