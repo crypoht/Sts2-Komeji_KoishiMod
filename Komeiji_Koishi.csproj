@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
+    <NuGetAudit>false</NuGetAudit>
+
     <Sts2Dir>D:\SteamLibrary\steamapps\common\Slay the Spire 2</Sts2Dir>
     <Sts2DataDir>$(Sts2Dir)\data_sts2_windows_x86_64</Sts2DataDir>
   </PropertyGroup>
@@ -22,7 +24,7 @@
     </Reference>
 
     <Reference Include="BaseLib">
-      <HintPath>$(Sts2Dir)\mods\BaseLib.dll</HintPath>
+      <HintPath>$(Sts2Dir)\mods\BaseLib\BaseLib.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

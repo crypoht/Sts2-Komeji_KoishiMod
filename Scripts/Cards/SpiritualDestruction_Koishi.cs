@@ -70,7 +70,7 @@ namespace KomeijiKoishi.Cards
                 KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(orbCard);
             }
 
-            int overflowCount = xValue * 4;
+            int overflowCount = xValue * 2;
             var overflowCards = new List<CardModel>();
             
             for (int i = 0; i < overflowCount; i++)

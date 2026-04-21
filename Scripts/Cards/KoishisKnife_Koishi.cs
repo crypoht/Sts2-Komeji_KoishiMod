@@ -61,36 +61,26 @@ namespace KomeijiKoishi.Cards
                 .Execute(choiceContext);
 
 
-            if (shouldTriggerFatal && attackCommand.Results.Any(r => r.WasTargetKilled))
+           if (shouldTriggerFatal && attackCommand.Results.Any(r => r.WasTargetKilled))
             {
-  
+
                 CardCmd.Upgrade(this, CardPreviewStyle.HorizontalLayout);
 
-  
+
+                if (base.IsClone) return;
+
+
                 var masterDeckPile = PileType.Deck.GetPile(player);
                 if (masterDeckPile != null && masterDeckPile.Cards != null)
                 {
                     var originalKnife = masterDeckPile.Cards.FirstOrDefault(c => c is KoishisKnife_Koishi);
                     if (originalKnife != null)
                     {
+
                         if (base.CombatState?.HittableEnemies?.All(e => e.IsDead) == true)
                         {
-                            var upgradeMethod = typeof(CardModel).GetMethod("Upgrade", 
-                                System.Reflection.BindingFlags.Public | 
-                                System.Reflection.BindingFlags.Instance | 
-                                System.Reflection.BindingFlags.NonPublic);
-                            
-                            if (upgradeMethod != null)
-                            {
-                                upgradeMethod.Invoke(originalKnife, null);
-                            }
-                            else
-                            {
-                                var onUpgradeMethod = typeof(KoishisKnife_Koishi).GetMethod("OnUpgrade", 
-                                    System.Reflection.BindingFlags.NonPublic | 
-                                    System.Reflection.BindingFlags.Instance);
-                                onUpgradeMethod?.Invoke(originalKnife, null);
-                            }
+
+                            CardCmd.Upgrade(originalKnife, CardPreviewStyle.None);
                         }
                         else
                         {
@@ -103,9 +93,14 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-
-            decimal increase = base.DynamicVars.Damage.BaseValue * 0.4m;
-            base.DynamicVars.Damage.UpgradeValueBy(increase);
+            decimal rawIncrease = base.DynamicVars.Damage.BaseValue * 0.4m;
+            
+            decimal finalIncrease = Math.Floor(rawIncrease);
+            if (finalIncrease < 1m) 
+            {
+                finalIncrease = 1m;
+            }
+            base.DynamicVars.Damage.UpgradeValueBy(finalIncrease);
         }
     }
 }

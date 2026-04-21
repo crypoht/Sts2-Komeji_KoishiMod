@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace KomeijiKoishi.Powers
 {
@@ -14,6 +15,11 @@ namespace KomeijiKoishi.Powers
     {
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/ClosedStancePower.png";
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/ClosedStancePower.png";
+
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
+        { 
+    new     DynamicVar("BlockBonus", 20m) 
+        };
        public static async Task EnterThisStance(PlayerChoiceContext context, Player player, CardModel sourceCard)
         {
             try 

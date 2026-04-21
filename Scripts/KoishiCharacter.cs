@@ -9,6 +9,9 @@ using MegaCrit.Sts2.Core.Entities.Characters;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Relics;
 using MegaCrit.Sts2.Core.Nodes.RestSite;
+using MegaCrit.Sts2.Core.Models.Relics;
+using BaseLib.Patches.UI;
+
 
 namespace KomeijiKoishi.Characters
 {
@@ -45,6 +48,7 @@ namespace KomeijiKoishi.Characters
 		public override string CustomArmPaperTexturePath => "res://mods/Komeiji_Koishi/images/hands/bu.png";
 		public override string CustomArmScissorsTexturePath => "res://mods/Komeiji_Koishi/images/hands/jiandao.png";
 		public override string CharacterSelectSfx => null;
+		
 
 		public override CardPoolModel CardPool => ModelDb.CardPool<KoishiCardPool>();
 		public override RelicPoolModel RelicPool => ModelDb.RelicPool<KoishiRelicPool>();
@@ -69,10 +73,17 @@ namespace KomeijiKoishi.Characters
 			ModelDb.Relic<KoishiStarterRelic>()
 		};
 
+		public override BaseLib.Patches.UI.RelicIconData? CustomYummyCookie => new BaseLib.Patches.UI.RelicIconData(
+			BigIconPath: "res://mods/Komeiji_Koishi/images/relics/cookie_koishi.png",
+			PackedIconPath: "res://mods/Komeiji_Koishi/images/relics/cookie_koishi.png",
+			PackedIconOutlinePath: "res://mods/Komeiji_Koishi/images/relics/cookie_koishi.png"
+		);
+
 		public override MegaCrit.Sts2.Core.Animation.CreatureAnimator GenerateAnimator(MegaCrit.Sts2.Core.Bindings.MegaSpine.MegaSprite controller)
 		{
 			return null!; 
 		}
+
 
 		public override List<string> GetArchitectAttackVfx() => new List<string>
 		{

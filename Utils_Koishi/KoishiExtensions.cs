@@ -9,55 +9,40 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using System.Collections.Generic;
-
 namespace KomeijiKoishi.Utils_Koishi
 {
     public static class KoishiExtensions
     {
-        private static HashSet<CardModel> TempUnconsciousCardsThisCombat = new HashSet<CardModel>();
-        
-        private static CombatState? _currentCombatState = null;
-
-        private static void AutoCleanCheck(CombatState? combatState)
-        {
-            if (combatState != null && _currentCombatState != combatState)
-            {
-                TempUnconsciousCardsThisCombat.Clear();
-                _currentCombatState = combatState;
-            }
-        }
 
         public static bool IsTrulyUnconscious(CardModel card)
         {
             if (card == null) return false;
 
-            AutoCleanCheck(card.CombatState);
 
-            if (TempUnconsciousCardsThisCombat.Contains(card))
+            if (card.Tags != null && card.Tags.Contains(KoishiTags.Unconscious)) 
             {
                 return true;
             }
 
-            if (card.Tags != null && (int)KoishiTags.Unconscious != 0 && card.Tags.Contains(KoishiTags.Unconscious))
-            {
-                return true;
-            }
-            if (card.CanonicalKeywords != null && (int)KoishiKeywords.Unconscious != 0 && card.CanonicalKeywords.Contains(KoishiKeywords.Unconscious))
+
+            if (card.CanonicalKeywords != null && card.CanonicalKeywords.Contains(KoishiKeywords.Unconscious)) 
             {
                 return true;
             }
 
-            if (card.Owner != null && card.Owner.Creature != null)
+
+            if (card.Keywords != null && card.Keywords.Contains(KoishiKeywords.Unconscious))
+            {
+                return true;
+            }
+
+            if (card.Owner?.Creature != null)
             {
                 bool hasFetusDream = card.Owner.Creature.Powers.Any(p => p is FetusDreamPower);
 
-                if (hasFetusDream)
+                if (hasFetusDream && card.Tags != null && card.Tags.Contains(KoishiTags.Subconscious)) 
                 {
-                    string className = card.GetType().Name;
-                    if (card.Tags != null && (int)KoishiTags.Subconscious != 0 && card.Tags.Contains(KoishiTags.Subconscious)) 
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -68,14 +53,7 @@ namespace KomeijiKoishi.Utils_Koishi
         {
             if (card == null) return;
 
-            AutoCleanCheck(card.CombatState);
-
             CardCmd.ApplyKeyword(card, new CardKeyword[] { KoishiKeywords.Unconscious });
-
-            if (!TempUnconsciousCardsThisCombat.Contains(card))
-            {
-                TempUnconsciousCardsThisCombat.Add(card);
-            }
         }
 
         public static HashSet<CardModel> AutoPlayedByUnconsciousCards = new HashSet<CardModel>();

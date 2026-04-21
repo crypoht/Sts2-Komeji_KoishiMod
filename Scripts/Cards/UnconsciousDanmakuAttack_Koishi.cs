@@ -17,6 +17,7 @@ using KomeijiKoishi.Enums;
 using KomeijiKoishi.Utils_Koishi; 
 using KomeijiKoishi.Cards.Danmaku;
 using MegaCrit.Sts2.Core.HoverTips; 
+using KomeijiKoishi.Powers;
 
 namespace KomeijiKoishi.Cards
 {
@@ -50,6 +51,8 @@ namespace KomeijiKoishi.Cards
                 await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
 
                 int count = base.DynamicVars.Cards.IntValue;
+
+                SelflessLovePower.IsBatchGenerating = true;
 
                 for (int i = 0; i < count; i++)
                 {

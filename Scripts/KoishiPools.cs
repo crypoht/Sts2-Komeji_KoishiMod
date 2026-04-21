@@ -26,6 +26,8 @@ namespace KomeijiKoishi.Pools
         public override string? TextEnergyIconPath => "res://mods/Komeiji_Koishi/images/energy_koishi_small.png";
         
         public override string? BigEnergyIconPath => "res://mods/Komeiji_Koishi/images/energy_koishi_big.png";
+
+        
     }
 
 

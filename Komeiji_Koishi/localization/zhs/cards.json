@@ -168,7 +168,7 @@
   "KOMEIJIKOISHI-REIMU_HELP_KOISHI.description": "每当你抽到 [gold]阴阳玉弹幕[/gold] 时，自动打出它。\n生成 {Orbs:diff()} 张 [gold]阴阳玉弹幕[/gold] 到抽牌堆。\n所有的[gold]阴阳玉弹幕[/gold]伤害提高20%",
 
   "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.title": "蔷薇护身",
-  "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.description": "处于[gold]闭眼[/gold]姿态时，获得的格挡值额外提高{Rose:diff()}%。",
+  "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.description": "处于[gold]闭合[/gold]姿态时，获得的格挡值额外提高{Rose:diff()}%。",
 
   "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.title": "\"空\"袭",
   "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.description": "造成{Damage:diff()}点伤害。每当你打出一张[gold]无意识[/gold]牌时，如果这张牌不在消耗堆中，将其加入你的手牌。",
@@ -202,7 +202,7 @@
   "KOMEIJIKOISHI-UNINTENTIONAL_HARVEST_KOISHI.description": "抽 {Cards:diff()} 张牌。",
 
   "KOMEIJIKOISHI-SPIRITUAL_DESTRUCTION_KOISHI.title": "灵力破坏",
-  "KOMEIJIKOISHI-SPIRITUAL_DESTRUCTION_KOISHI.description": "自动生成并打出X张{IfUpgraded:show:[gold]升级过[/gold]的}[gold]阴阳玉弹幕[/gold]。\n生成4x张[gold]意识溢出[/gold]到抽牌堆",
+  "KOMEIJIKOISHI-SPIRITUAL_DESTRUCTION_KOISHI.description": "自动生成并打出X张{IfUpgraded:show:[gold]升级过[/gold]的}[gold]阴阳玉弹幕[/gold]。\n生成2x张[gold]意识溢出[/gold]到抽牌堆",
 
   "KOMEIJIKOISHI-KOMEIJI_DASH_KOISHI.title": "古明地大冲刺",
   "KOMEIJIKOISHI-KOMEIJI_DASH_KOISHI.description": "对所有敌人造成{Damage:diff()}点伤害。",
@@ -226,5 +226,8 @@
   "KOMEIJIKOISHI-CONSCIOUSNESS_ROTATION_KOISHI.description": " 切换当前姿态。 \n本场战斗中，此牌耗能增加 1。\n打出后会回到手中",
 
   "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.title": "被厌恶者的哲学",
-  "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.description": "每当你进入 [gold]闭合姿态[/gold] 时，自动打出手中 1 张 [gold]无意识[/gold] 牌。"
+  "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.description": "每当你进入 [gold]闭合姿态[/gold] 时，自动打出手中 1 张 [gold]无意识[/gold] 牌。",
+
+  "KOMEIJIKOISHI-SELFLESS_LOVE_KOISHI.title": "心符「没我之爱」",
+  "KOMEIJIKOISHI-SELFLESS_LOVE_KOISHI.description": "每当你生成 4 张弹幕牌时，抽 1 张牌。"
 }

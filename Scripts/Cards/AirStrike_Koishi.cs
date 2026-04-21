@@ -51,12 +51,15 @@ namespace KomeijiKoishi.Cards
             {
                 if (cardPlay.Card != this && KoishiExtensions.IsTrulyUnconscious(cardPlay.Card))
                 {
+                    if (!MegaCrit.Sts2.Core.Combat.CombatManager.Instance.IsInProgress)
+                    {
+                        return; 
+                    }
+
                     var pile = base.Pile;
-                    
                     if (pile != null && pile.Type != PileType.Exhaust && pile.Type != PileType.Hand)
                     {
-                        await Cmd.Wait(0.05f, false);
-
+                        await Cmd.Wait(0.05f, true);
                         if (base.Pile != null && base.Pile.Type != PileType.Exhaust && base.Pile.Type != PileType.Hand)
                         {
                             await CardPileCmd.Add(this, PileType.Hand, CardPilePosition.Bottom, null, false);

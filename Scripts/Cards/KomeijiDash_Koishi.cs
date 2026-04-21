@@ -20,7 +20,7 @@ namespace KomeijiKoishi.Cards
     public sealed class KomeijiDash_Koishi : CustomCardModel
     {
         public KomeijiDash_Koishi() 
-            : base(3, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies, true)
+            : base(4, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies, true)
         {
         }
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
@@ -31,7 +31,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(31m, ValueProp.Move) 
+            new DamageVar(30m, ValueProp.Move) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -50,7 +50,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(10m);
+            base.DynamicVars.Damage.UpgradeValueBy(9m);
         }
     }
 }
