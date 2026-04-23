@@ -3,7 +3,7 @@
   "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.smartDescription": "当由你自己打出牌时，自动打出手牌中等于层数张数的无意识牌。打出无意识牌时，抽 1 张牌。",
 
   "KOMEIJIKOISHI-BLOOM_STANCE_POWER.title": "盛开",
-  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 {BlockReduction}%。进入该状态时,获得{Amount:energyIcons()}",
+  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌基础伤害的伤害。获得的[gold]格挡[/gold]减少 {BlockReduction}%。进入该状态时,获得{Amount:energyIcons()}",
   "KOMEIJIKOISHI-BLOOM_STANCE_POWER.description":"打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 70%。进入该状态时,获得{energyPrefix:energyIcons(1)}",
 
   "KOMEIJIKOISHI-CLOSED_STANCE_POWER.title": "闭合",
@@ -60,6 +60,13 @@
   "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_POWER.smartDescription": "每当你进入 [gold]闭合姿态[/gold] 时，自动打出手中 {Amount} 张 [gold]无意识[/gold] 牌。",
 
   "KOMEIJIKOISHI-SELFLESS_LOVE_POWER.title": "没我之爱",
-  "KOMEIJIKOISHI-SELFLESS_LOVE_POWER.smartDescription": "每当你生成 4 张弹幕牌时，抽 {Amount} 张牌。"
+  "KOMEIJIKOISHI-SELFLESS_LOVE_POWER.smartDescription": "每当你生成 4 张弹幕牌时，抽 {Amount} 张牌。",
+
+  "KOMEIJIKOISHI-FLAWOFDNA_KOISHI.title": "记忆「DNA的瑕疵」",
+  "KOMEIJIKOISHI-FLAWOFDNA_KOISHI.description": "你所有的攻击牌耗能变为0 ，且打出后[gold]消耗[/gold]。",
+  "KOMEIJIKOISHI-FLAWOFDNA_KOISHI.smartDescription":"你所有的攻击牌耗能变为0 ，且打出后[gold]消耗[/gold]。",
+
+  "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_KOISHI.title": "「带刺的蔷薇园」",
+  "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_KOISHI.description": "在你的回合开始时，你身上的 [gold]荆棘[/gold] 层数提升 {Percent}% 。"
 
 }

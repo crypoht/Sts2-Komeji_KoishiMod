@@ -156,13 +156,13 @@
   "KOMEIJIKOISHI-HIDDEN_CONSCIOUSNESS_KOISHI.title": "意识潜藏",
   "KOMEIJIKOISHI-HIDDEN_CONSCIOUSNESS_KOISHI.description": "获得 {Block:diff()} 点格挡。\n生成 5 张随机 [gold]弹幕[/gold] 牌并放入[gold]消耗牌堆[/gold]。\n随机打出[gold]消耗牌堆[/gold]中的 {Cards:diff()} 张 [gold]弹幕[/gold] 牌。",
   "KOMEIJIKOISHI-BIG_HUG_KOISHI.title": "古明地大抱抱",
-  "KOMEIJIKOISHI-BIG_HUG_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n如果你上一张打出的牌是 [gold]无意识[/gold] 牌，耗能减少 1 点。",
+  "KOMEIJIKOISHI-BIG_HUG_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n如果本回合内你上一张打出的牌是 [gold]无意识[/gold] 牌，耗能减少 1 点。",
 
   "KOMEIJIKOISHI-SELF_OVERFLOW_KOISHI.title":"自我的流动",
   "KOMEIJIKOISHI-SELF_OVERFLOW_KOISHI.description":"获得{Energy:energyIcons()}，生成{Cards:diff()}张[gold]意识溢出[/gold]",
 
   "KOMEIJIKOISHI-CONSCIOUS_OVERFLOW_KOISHI.title":"意识溢出",
-  "KOMEIJIKOISHI-CONSCIOUS_OVERFLOW_KOISHI.description":"想的太多了哦~ \n{IfUpgraded:show:想的也太多了~}",
+  "KOMEIJIKOISHI-CONSCIOUS_OVERFLOW_KOISHI.description":"[sine]想的太多了哦~[/sine] \n[sine]{IfUpgraded:show:想的也太多了~}[/sine]",
 
   "KOMEIJIKOISHI-REIMU_HELP_KOISHI.title":"灵梦小姐的帮助",
   "KOMEIJIKOISHI-REIMU_HELP_KOISHI.description": "每当你抽到 [gold]阴阳玉弹幕[/gold] 时，自动打出它。\n生成 {Orbs:diff()} 张 [gold]阴阳玉弹幕[/gold] 到抽牌堆。\n所有的[gold]阴阳玉弹幕[/gold]伤害提高20%",
@@ -174,13 +174,13 @@
   "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.description": "造成{Damage:diff()}点伤害。每当你打出一张[gold]无意识[/gold]牌时，如果这张牌不在消耗堆中，将其加入你的手牌。",
 
   "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.title": "空我打击",
-  "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n所有0{energyPrefix:energyIcons(1)}费攻击卡增加{Kuuga:diff()}点伤害\n每次切换姿态时,且没有被[gold]消耗[/gold],回到手中",
+  "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n所有0{energyPrefix:energyIcons(1)}费攻击卡增加{Kuuga:diff()}点伤害\n每次切换[gold]姿态[/gold]时,且没有被[gold]消耗[/gold],回到手中",
   
   "KOMEIJIKOISHI-DANMAKU_ENDLESS_MIRACLE_KOISHI.title": "弹幕永续奇迹",
-  "KOMEIJIKOISHI-DANMAKU_ENDLESS_MIRACLE_KOISHI.description": "本回合内,打出的弹幕会再打出一次",
+  "KOMEIJIKOISHI-DANMAKU_ENDLESS_MIRACLE_KOISHI.description": "本回合内,打出的[gold]弹幕[/gold]会再打出一次",
 
   "KOMEIJIKOISHI-SECOND_NEED_KOISHI.title": "本能「第二需求」",
-  "KOMEIJIKOISHI-SECOND_NEED_KOISHI.description": "每当你切换姿态时，获得 {Block:diff()} 点格挡。",
+  "KOMEIJIKOISHI-SECOND_NEED_KOISHI.description": "每当你切换[gold]姿态[/gold]时，获得{BlockAmount:diff()}点格挡。",
 
   "KOMEIJIKOISHI-ATTACHMENT_SAFE_HAVEN_UNCONSCIOUS_KOISHI.title": "依恋「回忆避风港」",
   "KOMEIJIKOISHI-ATTACHMENT_SAFE_HAVEN_UNCONSCIOUS_KOISHI.description": "获得 {Block:diff()} 点格挡。",
@@ -199,7 +199,7 @@
   "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.selectionScreenPrompt": "选择{Cards:diff()}至多张牌赋予无意识并丢弃",
 
   "KOMEIJIKOISHI-UNINTENTIONAL_HARVEST_KOISHI.title": "无意的收获",
-  "KOMEIJIKOISHI-UNINTENTIONAL_HARVEST_KOISHI.description": "抽 {Cards:diff()} 张牌。",
+  "KOMEIJIKOISHI-UNINTENTIONAL_HARVEST_KOISHI.description": "抽 {Cards:diff()} 张牌。\n本回合[gold]保留[/gold]你的手牌",
 
   "KOMEIJIKOISHI-SPIRITUAL_DESTRUCTION_KOISHI.title": "灵力破坏",
   "KOMEIJIKOISHI-SPIRITUAL_DESTRUCTION_KOISHI.description": "自动生成并打出X张{IfUpgraded:show:[gold]升级过[/gold]的}[gold]阴阳玉弹幕[/gold]。\n生成2x张[gold]意识溢出[/gold]到抽牌堆",
@@ -208,7 +208,7 @@
   "KOMEIJIKOISHI-KOMEIJI_DASH_KOISHI.description": "对所有敌人造成{Damage:diff()}点伤害。",
 
   "KOMEIJIKOISHI-SUPER_REACTIVE_PERCEPTION_KOISHI.title": "超反应知觉",
-  "KOMEIJIKOISHI-SUPER_REACTIVE_PERCEPTION_KOISHI.description": "对所有敌人造成{Damage:diff()}点伤害。随机打出1张手牌中的[gold]无意识[/gold]牌。",
+  "KOMEIJIKOISHI-SUPER_REACTIVE_PERCEPTION_KOISHI.description": "对所有敌人造成{Damage:diff()}点伤害。\n随机打出1张手牌中的[gold]无意识[/gold]牌。",
 
   "KOMEIJIKOISHI-CASUAL_GAME_KOISHI.title": "随意的游戏",
   "KOMEIJIKOISHI-CASUAL_GAME_KOISHI.description": "抽 {Cards:diff()} 张牌。\n随机打出手牌中的1张 [gold]无意识[/gold] 牌。",
@@ -223,11 +223,42 @@
   "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_KOISHI.description": "你的回合开始时，将1张 [gold]意识的回转[/gold] 加入手牌。",
 
   "KOMEIJIKOISHI-CONSCIOUSNESS_ROTATION_KOISHI.title": "意识的回转",
-  "KOMEIJIKOISHI-CONSCIOUSNESS_ROTATION_KOISHI.description": " 切换当前姿态。 \n本场战斗中，此牌耗能增加 1。\n打出后会回到手中",
+  "KOMEIJIKOISHI-CONSCIOUSNESS_ROTATION_KOISHI.description": " 切换当前[gold]姿态[/gold]。 \n本场战斗中，此牌耗能增加 1。\n打出后会回到手中",
 
   "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.title": "被厌恶者的哲学",
   "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.description": "每当你进入 [gold]闭合姿态[/gold] 时，自动打出手中 1 张 [gold]无意识[/gold] 牌。",
 
   "KOMEIJIKOISHI-SELFLESS_LOVE_KOISHI.title": "心符「没我之爱」",
-  "KOMEIJIKOISHI-SELFLESS_LOVE_KOISHI.description": "每当你生成 4 张弹幕牌时，抽 1 张牌。"
+  "KOMEIJIKOISHI-SELFLESS_LOVE_KOISHI.description": "每当你生成 4 张[gold]弹幕[/gold]牌时，抽 1 张牌。",
+
+  "KOMEIJIKOISHI-FLAW_OF_DN_A_KOISHI.title": "记忆「DNA的瑕疵」",
+  "KOMEIJIKOISHI-FLAW_OF_DN_A_KOISHI.description": "你所有的攻击牌耗能变为0 ，且打出后[gold]消耗[/gold]。",
+
+  "KOMEIJIKOISHI-ANCESTORS_WATCHING_KOISHI.title": "梦符「先祖大人在看着你」",
+  "KOMEIJIKOISHI-ANCESTORS_WATCHING_KOISHI.description": "你的消耗牌堆每有2张牌，所有0{energyPrefix:energyIcons(1)}费攻击卡增加1点伤害。",
+
+  "KOMEIJIKOISHI-SPRINKLE_STAR_HEART_KOISHI.title": "星恋符「星星心心洒」",
+  "KOMEIJIKOISHI-SPRINKLE_STAR_HEART_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n生成 1 张 [gold]星星弹幕[/gold] 和 1 张 [green]心形弹幕[/green] 放入消耗牌堆。 \n打出所有牌堆中的[gold]星星弹幕[/gold]和[green]心形弹幕[/green]。",
+
+  "KOMEIJIKOISHI-ROSE_RHAPSODY_PUNCH_KOISHI.title": "恋拳符「蔷薇狂想曲怪云拳」",
+  "KOMEIJIKOISHI-ROSE_RHAPSODY_PUNCH_KOISHI.description": "造成 {Damage:diff()} 点伤害。 \n如果你的手牌中有至少3张[gold]无意识[/gold]牌，则额外造成一次该伤害。",
+
+  "KOMEIJIKOISHI-MALLET_LOVE_SIGN_KOISHI.title": "槌恋符「大判小判叮叮当心」",
+  "KOMEIJIKOISHI-MALLET_LOVE_SIGN_KOISHI.description": "造成 {Damage:diff()} 点伤害 {Repeat:diff()} 次。 \n每造成一次未被[gold]格挡[/gold]的伤害，获得{Energy:energyIcons()}。",
+
+  "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_KOISHI.title": "「带刺的蔷薇园」",
+  "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_KOISHI.description": "获得 {ThornsPower:diff()} 层[gold]荆棘[/gold] 。\n在你的回合开始时，将你身上的[gold]荆棘[/gold]层数翻倍。",
+
+  "KOMEIJIKOISHI-FREUDIAN_KOISHI.title": "本能「弗洛伊德学说」",
+  "KOMEIJIKOISHI-FREUDIAN_KOISHI.description": "手牌中每有一张[gold]无意识[/gold]牌，就获得{Block:diff()}点[gold]格挡[/gold] 。",
+
+  "KOMEIJIKOISHI-CONFINED_INNOCENT_KOISHI.title": "茨符「狭隘的天真」",
+  "KOMEIJIKOISHI-CONFINED_INNOCENT_KOISHI.description": "获得 {Block:diff()} 点 [gold]格挡[/gold] 。\n每次你切换[gold]姿态[/gold]时，本张牌在本场战斗中的 [gold]格挡[/gold] 值提高 {Magic:diff()} 点。",
+
+  "KOMEIJIKOISHI-HEARTWARD_STRIKE_KOISHI.title": "归心打击",
+  "KOMEIJIKOISHI-HEARTWARD_STRIKE_KOISHI.description": "造成 {Damage:diff()} 点伤害。 \n进入 [gold]闭合[/gold] 。 \n将弃牌堆中 1 张 [gold]无意识[/gold] 牌放入抽牌堆顶。",
+  "KOMEIJIKOISHI-HEARTWARD_STRIKE_KOISHI.selectionScreenPrompt":"选择一张无意识牌放回抽牌堆顶",
+
+  "KOMEIJIKOISHI-DEATH_DRIVE_KOISHI.title": "灭符「死本能」",
+  "KOMEIJIKOISHI-DEATH_DRIVE_KOISHI.description": "造成 {Damage:diff()} 点伤害 {Repeat:diff()} 次。\n每次你切换[gold]姿态[/gold]时，本张牌在本场战斗中的攻击次数增加 1 次。"
 }

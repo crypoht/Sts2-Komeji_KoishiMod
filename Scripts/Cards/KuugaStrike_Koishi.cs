@@ -16,6 +16,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using KomeijiKoishi.Cards.Danmaku;
+using KomeijiKoishi.Enums;
 
 namespace KomeijiKoishi.Cards
 {
@@ -36,6 +37,12 @@ namespace KomeijiKoishi.Cards
             new DamageVar(1m, ValueProp.Move),
             new KuugaVar(1m) 
         };
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Stance) 
+        };
+
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {

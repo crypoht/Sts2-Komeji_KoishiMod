@@ -16,6 +16,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models; 
 using MegaCrit.Sts2.Core.Models.Powers; 
 using MegaCrit.Sts2.Core.ValueProps;
+using MegaCrit.Sts2.Core.HoverTips; 
 
 namespace KomeijiKoishi.Cards.Danmaku
 {
@@ -30,6 +31,12 @@ namespace KomeijiKoishi.Cards.Danmaku
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal };
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Stance) 
+        };
+
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {

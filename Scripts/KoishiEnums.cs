@@ -15,6 +15,9 @@ namespace KomeijiKoishi.Enums
 
         [CustomEnum]
         public static CardTag Danmaku;
+
+        [CustomEnum]
+        public static CardTag Stance;
     }
 
     public class KoishiKeywords
@@ -31,5 +34,8 @@ namespace KomeijiKoishi.Enums
 
         [CustomEnum("DANMAKU")] 
         public static CardKeyword Danmaku;
+
+        [CustomEnum("STANCE")] 
+        public static CardKeyword Stance;
     }
 }

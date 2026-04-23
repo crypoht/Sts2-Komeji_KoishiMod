@@ -9,5 +9,8 @@
   "KOMEIJIKOISHI-CLOSED.description": "获得的[gold]格挡[/gold]提升 20%。进入该状态时抽取一张牌",
 
   "KOMEIJIKOISHI-DANMAKU.title": "弹幕",
-  "KOMEIJIKOISHI-DANMAKU.description": "拥有不同效果的衍生卡"
+  "KOMEIJIKOISHI-DANMAKU.description": "拥有不同效果的衍生卡",
+
+  "KOMEIJIKOISHI-STANCE.title": "姿态",
+  "KOMEIJIKOISHI-STANCE.description": "闭合姿态和盛开姿态,切换时有特殊效果"
 }

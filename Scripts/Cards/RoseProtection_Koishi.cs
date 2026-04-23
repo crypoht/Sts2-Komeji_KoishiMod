@@ -15,7 +15,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers; 
-
+using MegaCrit.Sts2.Core.HoverTips;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
@@ -27,6 +27,11 @@ namespace KomeijiKoishi.Cards
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
         private class RoseVar : DynamicVar { public RoseVar(decimal val) : base("Rose", val) { } }
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Closed) 
+        };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 

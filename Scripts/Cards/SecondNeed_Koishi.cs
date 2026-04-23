@@ -16,6 +16,7 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.HoverTips; 
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Cards.Danmaku;
+using KomeijiKoishi.Enums;
 
 namespace KomeijiKoishi.Cards
 {
@@ -29,7 +30,12 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new BlockVar(3m, ValueProp.Move), 
+            new DynamicVar("BlockAmount", 3m) 
+        };
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Stance) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -39,14 +45,14 @@ namespace KomeijiKoishi.Cards
 
             await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
 
-            decimal amount = base.DynamicVars.Block.BaseValue;
-            
+            decimal amount = base.DynamicVars["BlockAmount"].BaseValue;
+
             await PowerCmd.Apply<SecondNeedPower>(player.Creature, amount, player.Creature, this, false);
         }
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Block.UpgradeValueBy(2m);
+            base.DynamicVars["BlockAmount"].UpgradeValueBy(2m);
         }
     }
 }

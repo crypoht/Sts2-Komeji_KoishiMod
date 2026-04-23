@@ -18,6 +18,7 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers; 
 using KomeijiKoishi.Powers; 
+using MegaCrit.Sts2.Core.HoverTips;
 
 
 namespace KomeijiKoishi.Cards
@@ -40,6 +41,11 @@ namespace KomeijiKoishi.Cards
         {
             new DamageVar(24m, ValueProp.Move), 
             new ReductionVar(2m)               
+        };
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

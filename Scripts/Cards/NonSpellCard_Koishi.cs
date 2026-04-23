@@ -16,7 +16,6 @@ using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Cards.Danmaku; 
 using MegaCrit.Sts2.Core.HoverTips;
-
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
@@ -27,9 +26,9 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
-                protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku) 
         };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new CardsVar(2) };

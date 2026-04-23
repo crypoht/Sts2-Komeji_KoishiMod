@@ -15,6 +15,8 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.HoverTips; 
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Cards.Danmaku;
+using KomeijiKoishi.Enums;
+
 
 namespace KomeijiKoishi.Cards
 {
@@ -26,21 +28,24 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku) 
+        };
+
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
             if (player == null) return;
 
-            // 播放施法动画
+
             await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
             
-            // 给自己施加 1 层“没我之爱”能力（代表每次触发抽 1 张牌）
             await PowerCmd.Apply<SelflessLovePower>(player.Creature, 1m, player.Creature, this, false);
         }
 
         protected override void OnUpgrade()
         {
-            // 🌟 升级效果：费用从 1 降为 0
             base.EnergyCost.UpgradeBy(-1);
         }
     }

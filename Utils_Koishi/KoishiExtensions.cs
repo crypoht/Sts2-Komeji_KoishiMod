@@ -9,6 +9,14 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using System.Collections.Generic;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+
+
 namespace KomeijiKoishi.Utils_Koishi
 {
     public static class KoishiExtensions
@@ -57,5 +65,65 @@ namespace KomeijiKoishi.Utils_Koishi
         }
 
         public static HashSet<CardModel> AutoPlayedByUnconsciousCards = new HashSet<CardModel>();
+
+         public static class UnconsciousPlayHelper
+    {
+        public static async Task SafeAutoPlayCard(PlayerChoiceContext choiceContext, Player player, CardModel targetCard)
+        {
+            if (targetCard == null || player.Creature.CombatState == null) return;
+
+            try
+            {
+                Creature? targetCreature = null;
+                var combatState = player.Creature.CombatState;
+
+
+                switch (targetCard.TargetType)
+                {
+                    case TargetType.AnyEnemy:
+                        var validEnemies = combatState.HittableEnemies.Where(e => !e.IsDead).ToList();
+                        if (validEnemies.Count > 0)
+                        {
+                            targetCreature = player.RunState.Rng.Shuffle.NextItem(validEnemies);
+                        }
+                        break;
+                    
+                    case TargetType.Self:
+                        targetCreature = player.Creature;
+                        break;
+
+                    case TargetType.AnyAlly:
+                        var validAllies = combatState.GetTeammatesOf(player.Creature).Where(c => !c.IsDead).ToList();
+                        if (validAllies.Count > 0)
+                        {
+                            targetCreature = player.RunState.Rng.Shuffle.NextItem(validAllies);
+                        }
+                        else
+                        {
+                            targetCreature = player.Creature; 
+                        }
+                        break;
+
+                    case TargetType.AllAllies:
+                    case TargetType.AllEnemies:
+                    case TargetType.None:
+                        targetCreature = null; 
+                        break;
+                }
+
+                KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
+
+                await CardCmd.AutoPlay(choiceContext, targetCard, targetCreature, AutoPlayType.Default, true, false);
+            }
+            catch (Exception e)
+            {
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[UnconsciousPlayHelper] 自动打出卡牌失败: {targetCard.Id.Entry} | Error: {e}");
+            }
+            finally
+            {
+                KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(targetCard);
+            }
+        }
+    }
     }
 }

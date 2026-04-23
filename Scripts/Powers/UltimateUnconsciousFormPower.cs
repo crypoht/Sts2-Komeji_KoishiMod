@@ -31,81 +31,88 @@ namespace KomeijiKoishi.Powers
             try 
             {
                 if (base.CombatState == null || base.CombatState.HittableEnemies.All(e => e.IsDead)) return;
+                if (cardPlay?.Card == null || cardPlay.Card.Owner != base.Owner.Player) return;
 
-                if (cardPlay?.Card != null && cardPlay.Card.Owner == base.Owner.Player)
+                FormPowerData data = base.GetInternalData<FormPowerData>();
+
+                if (KoishiExtensions.IsTrulyUnconscious(cardPlay.Card))
                 {
-                    if (KoishiExtensions.IsTrulyUnconscious(cardPlay.Card))
-                    {
-                        this.Flash();
-                        await CardPileCmd.Draw(context, 1, base.Owner.Player, false); 
-                    }
+                    data.pendingDraws++;
+                }
 
-                    if (KoishiExtensions.AutoPlayedByUnconsciousCards.Contains(cardPlay.Card))
+                if (!KoishiExtensions.AutoPlayedByUnconsciousCards.Contains(cardPlay.Card) && !data.isAutoPlaying)
+                {
+                    try 
                     {
-                        return; 
-                    }
+                        data.isAutoPlaying = true; 
+                        var handPile = PileType.Hand.GetPile(base.Owner.Player);
+                        
+                        var unconsciousCards = handPile.Cards
+                            .Where(c => KoishiExtensions.IsTrulyUnconscious(c) && 
+                                        (c.Keywords == null || !c.Keywords.Contains(CardKeyword.Unplayable)) && 
+                                        c != cardPlay.Card)
+                            .ToList();
 
-                    FormPowerData data = base.GetInternalData<FormPowerData>();
-                    if (!data.isAutoPlaying)
-                    {
-                        try 
+                        int cardsToPlay = Math.Min((int)base.Amount, unconsciousCards.Count);
+
+                        for (int i = 0; i < cardsToPlay; i++)
                         {
-                            data.isAutoPlaying = true; 
-                            var handPile = PileType.Hand.GetPile(base.Owner.Player);
-                            
-                            var unconsciousCards = handPile.Cards
-                                .Where(c => KoishiExtensions.IsTrulyUnconscious(c) && 
-                                            (c.Keywords == null || !c.Keywords.Contains(CardKeyword.Unplayable)) && 
-                                            c != cardPlay.Card)
-                                .ToList();
+                            if (base.CombatState.HittableEnemies.All(e => e.IsDead)) break; 
 
-                            int cardsToPlay = Math.Min((int)base.Amount, unconsciousCards.Count);
-
-                            for (int i = 0; i < cardsToPlay; i++)
+                            var targetCard = base.Owner.Player.RunState.Rng.Shuffle.NextItem(unconsciousCards);
+                            if (targetCard != null)
                             {
-                                if (base.CombatState.HittableEnemies.All(e => e.IsDead)) break; 
-
-                                var targetCard = base.Owner.Player.RunState.Rng.Shuffle.NextItem(unconsciousCards);
-                                if (targetCard != null)
+                                unconsciousCards.Remove(targetCard); 
+                                
+                                Creature? targetCreature = null;
+                                if (targetCard.TargetType == TargetType.AnyEnemy)
                                 {
-                                    unconsciousCards.Remove(targetCard); 
-                                    
-                                    Creature? targetCreature = null;
-
-                                    if (targetCard.TargetType == TargetType.AnyEnemy)
+                                    var validEnemies = base.CombatState.HittableEnemies.Where(e => !e.IsDead).ToList();
+                                    if (validEnemies.Count > 0)
                                     {
-                                        var validEnemies = base.CombatState.HittableEnemies.Where(e => !e.IsDead).ToList();
-                                        if (validEnemies.Count > 0)
-                                        {
-                                            targetCreature = base.Owner.Player.RunState.Rng.Shuffle.NextItem(validEnemies);
-                                        }
+                                        targetCreature = base.Owner.Player.RunState.Rng.Shuffle.NextItem(validEnemies);
                                     }
-
-                                    KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
-                                    this.Flash();
-                                    
-                                    await CardCmd.AutoPlay(context, targetCard, targetCreature, AutoPlayType.Default, true, false);
-                                    
-                                    KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(targetCard);
                                 }
+                                else if (targetCard.TargetType == TargetType.Self)
+                                {
+                                    targetCreature = base.Owner;
+                                }
+
+                                KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
+                                
+                                await CardCmd.AutoPlay(context, targetCard, targetCreature, AutoPlayType.Default, true, false);
+                                
+                                KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(targetCard);
                             }
                         }
-                        finally
-                        {
-                            data.isAutoPlaying = false; 
-                        }
                     }
+                    finally
+                    {
+                        data.isAutoPlaying = false; 
+                    }
+                }
+
+ 
+                if (!data.isAutoPlaying && data.pendingDraws > 0)
+                {
+                    int draws = data.pendingDraws;
+                    data.pendingDraws = 0; 
+                    
+                    this.Flash(); 
+                    await CardPileCmd.Draw(context, draws, base.Owner.Player, false); 
                 }
             } 
             catch (Exception e) 
             {
-                MegaCrit.Sts2.Core.Logging.Log.Error($"[UltimateUnconsciousForm] Softlock Prevented: {e}");
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[UltimateUnconsciousForm] Error Prevented: {e}");
             }
         }
+
 
         private class FormPowerData 
         { 
             public bool isAutoPlaying; 
+            public int pendingDraws = 0; 
         }
     }
 }

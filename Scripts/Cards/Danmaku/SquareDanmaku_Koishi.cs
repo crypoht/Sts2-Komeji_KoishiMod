@@ -15,6 +15,7 @@ using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Powers; 
 using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.HoverTips; 
 
 namespace KomeijiKoishi.Cards.Danmaku
 {
@@ -40,6 +41,11 @@ namespace KomeijiKoishi.Cards.Danmaku
         { 
             new DamageVar(4m, ValueProp.Move),
             new PowerVar<TracingPower>(1m) 
+        };
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromPower<TracingPower>() 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

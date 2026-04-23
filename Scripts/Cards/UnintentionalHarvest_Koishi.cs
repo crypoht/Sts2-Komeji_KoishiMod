@@ -15,8 +15,7 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Players; 
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.ValueProps;
-
-
+using MegaCrit.Sts2.Core.Models.Powers; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -36,7 +35,8 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip> 
         { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious),
+            HoverTipFactory.FromKeyword(CardKeyword.Retain)
         };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
@@ -49,9 +49,11 @@ namespace KomeijiKoishi.Cards
             var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
             if (player == null) return;
 
-            await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
+            await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
 
             await CardPileCmd.Draw(choiceContext, base.DynamicVars.Cards.BaseValue, player, false);
+            
+            await PowerCmd.Apply<RetainHandPower>(player.Creature, 1m, player.Creature, this, false);
         }
 
         protected override void OnUpgrade()

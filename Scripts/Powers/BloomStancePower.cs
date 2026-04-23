@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
@@ -6,74 +7,84 @@ using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
-using MegaCrit.Sts2.Core.Entities.Players; 
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace KomeijiKoishi.Powers
 {
     public sealed class BloomStancePower : KoishiStancePower
     {
-        public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/BloomStancePower.png";
-        public override string? CustomBigIconPath => "res://mods/Komeiji_Koishi/images/powers/BloomStancePower.png";
+        public override string? CustomPackedIconPath =>
+            "res://mods/Komeiji_Koishi/images/powers/BloomStancePower.png";
+        public override string? CustomBigIconPath =>
+            "res://mods/Komeiji_Koishi/images/powers/BloomStancePower.png";
+
         public static int BloomEnergyGainAmount = 1;
 
-        // 🌟 1. 官方合规的内部数据
-        private class Data
-        {
-            public CardModel? cardToIgnore;
-            public bool isExecuting;
-        }
+        // ──────────────────────────────────────────────────
+        // 直接用实例字段存状态，避免 GetInternalData 多实例问题
+        // ──────────────────────────────────────────────────
+        private CardModel? _cardToIgnore;
+        private AttackCommand? _commandToDouble;
 
-        protected override object InitInternalData() => new Data();
+        // 硬防重入：用实例字段而非 Data 类，保证 await gap 期间也能正确读到
+        private bool _isExecutingBloom = false;
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
-            HoverTipFactory.ForEnergy(this) 
-        };
+        protected override object InitInternalData() => new object();
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
-        { 
-            new DynamicVar("BlockReduction", 70m) 
-        };
+        protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+            new[] { HoverTipFactory.ForEnergy(this) };
+
+        protected override IEnumerable<DynamicVar> CanonicalVars =>
+            new List<DynamicVar> { new DynamicVar("BlockReduction", 70m) };
 
         public decimal BlockReduction => 70m;
 
-        public override decimal ModifyBlockMultiplicative(Creature target, decimal block, ValueProp props, CardModel? cardSource, CardPlay? cardPlay)
+        // ──────────────────────────────────────────────────
+        // 格挡减益
+        // ──────────────────────────────────────────────────
+        public override decimal ModifyBlockMultiplicative(
+            Creature target, decimal block, ValueProp props,
+            CardModel? cardSource, CardPlay? cardPlay)
         {
-            if (target == base.Owner) return 1m - (BlockReduction / 100m); 
-            return 1m; 
+            if (target == base.Owner) return 1m - (BlockReduction / 100m);
+            return 1m;
         }
 
-        public static async Task EnterThisStance(PlayerChoiceContext context, Player player, CardModel sourceCard)
+        // ──────────────────────────────────────────────────
+        // 进入盛开
+        // ──────────────────────────────────────────────────
+        public static async Task EnterThisStance(
+            PlayerChoiceContext context, Player player, CardModel sourceCard)
         {
-            try 
+            try
             {
                 if (player.Creature.GetPower<BloomStancePower>() != null) return;
 
-                await ClearOldStances(player); 
-                
+                await ClearOldStances(player);
+
                 int bonusEnergy = 0;
                 var superego = player.Creature.Powers.FirstOrDefault(p => p is SuperegoPower);
                 if (superego != null) bonusEnergy = (int)superego.Amount;
 
                 int totalEnergyGain = BloomEnergyGainAmount + bonusEnergy;
-                if (totalEnergyGain > 0) await PlayerCmd.GainEnergy(totalEnergyGain, player);
-                
-                await PowerCmd.Apply<BloomStancePower>(player.Creature, 1m, player.Creature, sourceCard, false);
-                
+                if (totalEnergyGain > 0)
+                    await PlayerCmd.GainEnergy(totalEnergyGain, player);
+
+                await PowerCmd.Apply<BloomStancePower>(
+                    player.Creature, 1m, player.Creature, sourceCard, false);
+
+                // 直接拿实例写 _cardToIgnore
                 var powerInstance = player.Creature.GetPower<BloomStancePower>();
                 if (powerInstance != null)
-                {
-                    // 记录源卡牌，防止无限自循环
-                    powerInstance.GetInternalData<Data>().cardToIgnore = sourceCard;
-                }
-                
-                await NotifyAllCardsStanceChanged(player, "Bloom"); 
+                    powerInstance._cardToIgnore = sourceCard;
+
+                await NotifyAllCardsStanceChanged(player, "Bloom");
                 await NotifyAllPowersStanceChanged(context, player, "Bloom", sourceCard);
             }
             catch (Exception e)
@@ -82,105 +93,149 @@ namespace KomeijiKoishi.Powers
             }
         }
 
-        // ========================================================
-        // 🌟 2. 改造钩子：瞬间退出，绝不挂起！
-        // ========================================================
-        public override Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
+        // ──────────────────────────────────────────────────
+        // BeforeAttack
+        // ──────────────────────────────────────────────────
+        public override Task BeforeAttack(AttackCommand command)
         {
-            if (cardPlay?.Card == null || cardPlay.Card.Type != CardType.Attack || cardPlay.Card.Owner != base.Owner.Player) 
-                return Task.CompletedTask; // 瞬间退出
-
-            Data data = GetInternalData<Data>();
-
-            if (cardPlay.Card == data.cardToIgnore)
+            // 硬防重入：盛开攻击执行期间屏蔽所有新登记
+            if (_isExecutingBloom)
             {
-                data.cardToIgnore = null;
-                return Task.CompletedTask; // 瞬间退出
+                MegaCrit.Sts2.Core.Logging.Log.Info("[BloomStance] BeforeAttack: blocked by isExecutingBloom");
+                return Task.CompletedTask;
             }
 
-            if (data.isExecuting) return Task.CompletedTask;
+            if (command.ModelSource is not CardModel cardModel)
+                return Task.CompletedTask;
 
-            // 🌟 核心魔法：启动后台影子任务打伤害，用 _ = 告诉编译器不需要等待它！
-            _ = RunBloomAttacksAsync(context, cardPlay, data);
+            if (cardModel.Owner.Creature != base.Owner)
+                return Task.CompletedTask;
 
-            // 🌟 绝杀：直接返回完成！引擎会立刻安全地 Pop 掉盛开和卡牌，绝不卡死！
-            return Task.CompletedTask; 
+            if (cardModel.Type != CardType.Attack)
+                return Task.CompletedTask;
+
+            if (!command.DamageProps.IsPoweredAttack())
+                return Task.CompletedTask;
+
+            // 跳过触发进入盛开的源卡牌（只跳过一次）
+            if (cardModel == _cardToIgnore)
+            {
+                _cardToIgnore = null;
+                return Task.CompletedTask;
+            }
+
+            if (_commandToDouble != null)
+                return Task.CompletedTask;
+
+            _commandToDouble = command;
+            MegaCrit.Sts2.Core.Logging.Log.Info($"[BloomStance] BeforeAttack: registered command for {cardModel.Id}");
+            return Task.CompletedTask;
         }
 
-        // ========================================================
-        // 🌟 3. 后台影子任务：脱离了堆栈束缚，想怎么打怎么打
-        // ========================================================
-        // ========================================================
-        // 🌟 3. 后台影子任务：完全消灭 CS8602 空引用警告版
-        // ========================================================
-        private async Task RunBloomAttacksAsync(PlayerChoiceContext context, CardPlay cardPlay, Data data)
+        // ──────────────────────────────────────────────────
+        // AfterAttack
+        // ──────────────────────────────────────────────────
+        public override async Task AfterAttack(AttackCommand command)
         {
-            data.isExecuting = true;
-            try 
-            {
-                // 提前安全拦截
-                if (base.CombatState == null || cardPlay.Card == null) return;
+            if (command != _commandToDouble) return;
 
-                AttackContext attackContext = await AttackCommand.CreateContextAsync(base.CombatState, cardPlay.Card); 
+            _commandToDouble = null;
+            MegaCrit.Sts2.Core.Logging.Log.Info("[BloomStance] AfterAttack: launching bloom attacks");
+            await RunBloomAttacksAsync(command);
+        }
+
+        // ──────────────────────────────────────────────────
+        // 盛开翻倍伤害逻辑
+        // ──────────────────────────────────────────────────
+        private async Task RunBloomAttacksAsync(AttackCommand originalCommand)
+        {
+            _isExecutingBloom = true;
+            try
+            {
+                if (!IsCombatActive()) return;
+                if (originalCommand.ModelSource is not CardModel cardModel) return;
+                if (base.CombatState == null) return;
+
+                AttackContext attackContext =
+                    await AttackCommand.CreateContextAsync(base.CombatState, cardModel);
 
                 try
                 {
-                    decimal dmgValue = cardPlay.Card.DynamicVars.Damage.BaseValue;
+                    decimal dmgValue = cardModel.DynamicVars.Damage.BaseValue;
+
                     int repeat = 1;
-                    try { repeat = (int)cardPlay.Card.DynamicVars["Repeat"].BaseValue; } catch { repeat = 1; }
+                    try { repeat = (int)cardModel.DynamicVars["Repeat"].BaseValue; }
+                    catch { }
+
+                    MegaCrit.Sts2.Core.Logging.Log.Info(
+                        $"[BloomStance] RunBloom: dmg={dmgValue} repeat={repeat}");
 
                     this.Flash();
 
-                    for (int i = 0; i < repeat; i++) 
+                    var bloomContext = new BlockingPlayerChoiceContext();
+
+                    // 用 GetOpponentsOf 而非 HittableEnemies，确保拿到正确的敌人列表
+                    var opponents = base.CombatState.GetOpponentsOf(base.Owner);
+
+                    for (int i = 0; i < repeat; i++)
                     {
-                        // 🌟 防线 1：加入对 CombatManager.Instance 的 null 检查
-                        if (MegaCrit.Sts2.Core.Combat.CombatManager.Instance == null || !MegaCrit.Sts2.Core.Combat.CombatManager.Instance.IsInProgress || base.CombatState == null) break;
-                        
-                        // 🌟 防线 2：加入对 HittableEnemies 的 ? 检查
-                        var validEnemies = base.CombatState.HittableEnemies?.Where(e => e != null && !e.IsDead).ToList();
-                        if (validEnemies == null || validEnemies.Count == 0) break; 
-                        
-                        // 🌟 防线 3：加入对 Player, RunState, Rng 的连环 ? 检查
-                        var randomTarget = base.Owner.Player?.RunState?.Rng?.Shuffle?.NextItem(validEnemies);
-                        
-                        if (randomTarget != null)
+                        if (!IsCombatActive()) break;
+
+                        var validEnemies = opponents
+                            .Where(e => e is { IsDead: false })
+                            .ToList();
+
+                        if (validEnemies.Count == 0)
                         {
-                            var results = await CreatureCmd.Damage(
-                                context,                
-                                randomTarget,          
-                                dmgValue,             
-                                ValueProp.Unpowered,    
-                                base.Owner,             
-                                null                    
-                            );
-                            attackContext.AddHit(results);
+                            MegaCrit.Sts2.Core.Logging.Log.Info("[BloomStance] RunBloom: no valid enemies");
+                            break;
                         }
+
+                        var randomTarget = base.Owner.Player?
+                            .RunState?.Rng?.CombatTargets?.NextItem(validEnemies);
+
+                        if (randomTarget == null) continue;
+
+                        MegaCrit.Sts2.Core.Logging.Log.Info(
+                            $"[BloomStance] RunBloom: hit {i + 1}/{repeat} → {randomTarget.GetType().Name} dmg={dmgValue}");
+
+                        var results = await CreatureCmd.Damage(
+                            bloomContext,
+                            randomTarget,
+                            dmgValue,
+                            ValueProp.Unpowered,
+                            base.Owner,
+                            cardModel 
+                        );
+
+                        attackContext.AddHit(results);
+
+                        if (!IsCombatActive()) break;
                     }
                 }
                 finally
                 {
-                    if (attackContext != null) await attackContext.DisposeAsync();
+                    await attackContext.DisposeAsync();
                 }
             }
-            catch (OperationCanceledException) 
-            { 
-                // 战斗结束取消，安全吞噬
-            } 
+            catch (OperationCanceledException) { }
             catch (Exception e)
             {
-                MegaCrit.Sts2.Core.Logging.Log.Error($"[BloomStance] Async Error: {e}");
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[BloomStance] RunBloom Error: {e}");
             }
             finally
             {
-                // 🌟 防线 4：finally 里的全面 ? 检查
-                var aliveEnemies = base.CombatState?.HittableEnemies?.Where(e => e != null && !e.IsDead).ToList();
-                if (aliveEnemies == null || aliveEnemies.Count == 0 || MegaCrit.Sts2.Core.Combat.CombatManager.Instance == null || !MegaCrit.Sts2.Core.Combat.CombatManager.Instance.IsInProgress)
-                {
-                    await Cmd.Wait(0.1f, true); 
-                }
-
-                data.isExecuting = false;
+                _isExecutingBloom = false;
             }
+        }
+
+        // ──────────────────────────────────────────────────
+        // 辅助
+        // ──────────────────────────────────────────────────
+        private bool IsCombatActive()
+        {
+            var mgr = CombatManager.Instance;
+            return mgr != null && mgr.IsInProgress && base.CombatState != null;
         }
     }
 }

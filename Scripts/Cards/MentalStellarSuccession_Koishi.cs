@@ -11,7 +11,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Powers;
-
+using MegaCrit.Sts2.Core.HoverTips;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
@@ -24,7 +24,12 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DynamicVar("Multiplier", 75m) 
+            new DynamicVar("Multiplier", 100m) 
+        };
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromPower<TracingPower>() 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -50,7 +55,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars["Multiplier"].UpgradeValueBy(25m);
+            base.DynamicVars["Multiplier"].UpgradeValueBy(50m);
         }
     }
 }

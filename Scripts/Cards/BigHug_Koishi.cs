@@ -67,16 +67,33 @@ namespace KomeijiKoishi.Cards
             base.DynamicVars.Damage.UpgradeValueBy(9m);
         }
 
+        private CardModel? GetEffectiveLastPlayedCard()
+        {
+            if (base.CombatState == null) return null;
+            
+            var history = CombatManager.Instance.History.CardPlaysFinished
+                .Where(e => e.CardPlay.Card.Owner == base.Owner && e.HappenedThisTurn(base.CombatState))
+                .ToList();
+            
+            if (history.Count == 0) return null;
+            
+            var last = history.Last();
+            
+            if (!last.CardPlay.IsAutoPlay && history.Count >= 2)
+            {
+                var prev = history[history.Count - 2];
+                if (prev.CardPlay.IsAutoPlay) return prev.CardPlay.Card;
+            }
+            
+            return last.CardPlay.Card;
+        }
+
         protected override bool ShouldGlowGoldInternal
         {
             get
             {
-                if (base.CombatState == null) return false;
-                
-                var lastPlay = CombatManager.Instance.History.CardPlaysFinished
-                    .LastOrDefault(e => e.CardPlay.Card.Owner == base.Owner && e.HappenedThisTurn(base.CombatState));
-                
-                return lastPlay != null && KoishiExtensions.IsTrulyUnconscious(lastPlay.CardPlay.Card);
+                var effectiveLast = GetEffectiveLastPlayedCard();
+                return effectiveLast != null && KoishiExtensions.IsTrulyUnconscious(effectiveLast);
             }
         }
 
@@ -87,10 +104,7 @@ namespace KomeijiKoishi.Cards
 
             _currentReduction = 0; 
             
-            var lastPlayThisTurn = CombatManager.Instance.History.CardPlaysFinished
-                .LastOrDefault(e => e.CardPlay.Card.Owner == base.Owner && e.HappenedThisTurn(base.CombatState));
-                
-            UpdateCostReduction(lastPlayThisTurn?.CardPlay.Card, false);
+            UpdateCostReduction(GetEffectiveLastPlayedCard(), false);
             
             return Task.CompletedTask;
         }
@@ -104,7 +118,20 @@ namespace KomeijiKoishi.Cards
 
             bool isFirstPlayOfTurn = previousPlay == null || !previousPlay.HappenedThisTurn(base.CombatState);
 
-            UpdateCostReduction(cardPlay.Card, isFirstPlayOfTurn);
+
+            CardModel effectiveCard = cardPlay.Card;
+            
+
+            if (!cardPlay.IsAutoPlay && previousPlay != null && previousPlay.HappenedThisTurn(base.CombatState))
+            {
+                if (previousPlay.CardPlay.IsAutoPlay)
+                {
+                    effectiveCard = previousPlay.CardPlay.Card; 
+                }
+            }
+
+
+            UpdateCostReduction(effectiveCard, isFirstPlayOfTurn);
             
             return Task.CompletedTask;
         }

@@ -17,6 +17,10 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.CommonUi; 
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Combat; 
+using MegaCrit.Sts2.Core.Context;
+using MegaCrit.Sts2.Core.Nodes;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
+
 
 namespace KomeijiKoishi.Cards
 {
@@ -63,12 +67,10 @@ namespace KomeijiKoishi.Cards
 
            if (shouldTriggerFatal && attackCommand.Results.Any(r => r.WasTargetKilled))
             {
-
-                CardCmd.Upgrade(this, CardPreviewStyle.HorizontalLayout);
-
+                this.UpgradeInternal();
+                this.FinalizeUpgradeInternal();
 
                 if (base.IsClone) return;
-
 
                 var masterDeckPile = PileType.Deck.GetPile(player);
                 if (masterDeckPile != null && masterDeckPile.Cards != null)
@@ -77,20 +79,20 @@ namespace KomeijiKoishi.Cards
                     if (originalKnife != null)
                     {
 
-                        if (base.CombatState?.HittableEnemies?.All(e => e.IsDead) == true)
-                        {
+                        player.RunState.CurrentMapPointHistoryEntry?.GetEntry(player.NetId).UpgradedCards.Add(originalKnife.Id);
 
-                            CardCmd.Upgrade(originalKnife, CardPreviewStyle.None);
-                        }
-                        else
+                        originalKnife.UpgradeInternal();
+                        originalKnife.FinalizeUpgradeInternal();
+
+   
+                        if (LocalContext.IsMe(player) && base.CombatState?.HittableEnemies?.All(e => e.IsDead) != true)
                         {
-                            CardCmd.Upgrade(originalKnife, CardPreviewStyle.HorizontalLayout);
+                            NRun.Instance?.GlobalUi.CardPreviewContainer.AddChild(NCardSmithVfx.Create([originalKnife])!);
                         }
                     }
                 }
             }
         }
-
         protected override void OnUpgrade()
         {
             decimal rawIncrease = base.DynamicVars.Damage.BaseValue * 0.4m;

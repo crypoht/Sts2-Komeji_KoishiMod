@@ -43,18 +43,16 @@ namespace KomeijiKoishi.Cards
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
+            var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
+            if (player == null || base.CombatState == null) return;
+
             try
             {
-                var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
-                if (player == null || base.CombatState == null) return;
-
                 await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
 
-                int count = base.DynamicVars.Cards.IntValue;
+                int danmakuCount = base.DynamicVars.Cards.IntValue;
 
-                SelflessLovePower.IsBatchGenerating = true;
-
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < danmakuCount; i++)
                 {
                     var generatedDanmaku = await DanmakuPool.CreateRandomDanmakuInHand(player, base.CombatState);
                     
@@ -70,16 +68,19 @@ namespace KomeijiKoishi.Cards
                         }
 
                         KoishiExtensions.AutoPlayedByUnconsciousCards.Add(generatedDanmaku);
+                        
                         await CardCmd.AutoPlay(choiceContext, generatedDanmaku, targetCreature, AutoPlayType.Default, true, false);
+                        
                         KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(generatedDanmaku);
-
-                        await Cmd.Wait(0.15f, false);
                     }
                 }
             }
             catch (Exception e)
             {
                 MegaCrit.Sts2.Core.Logging.Log.Error($"[UnconsciousDanmakuAttack] ERROR: {e}");
+            }
+            finally
+            {
             }
         }
 

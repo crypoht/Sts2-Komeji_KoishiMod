@@ -9,7 +9,6 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Cards.Danmaku; 
-using System;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models.Cards;
@@ -46,39 +45,51 @@ namespace KomeijiKoishi.Cards
             var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
             if (player == null || base.CombatState == null) return;
 
-            await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
 
-            
-
-            int xValue = base.ResolveEnergyXValue();
-            if (xValue <= 0) return;
-
-
-            for (int i = 0; i < xValue; i++)
+            try
             {
-                var orbCard = base.CombatState.CreateCard<YinYangOrbDanmaku_Koishi>(player);
-                
-                if (base.IsUpgraded)
+                await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
+
+                int xValue = base.ResolveEnergyXValue();
+                if (xValue <= 0) return;
+
+
+                for (int i = 0; i < xValue; i++)
                 {
-                    CardCmd.Upgrade(orbCard, CardPreviewStyle.None);
+                    var orbCard = base.CombatState.CreateCard<YinYangOrbDanmaku_Koishi>(player);
+                    
+                    if (base.IsUpgraded)
+                    {
+                        CardCmd.Upgrade(orbCard, CardPreviewStyle.None);
+                    }
+
+                    KoishiExtensions.AutoPlayedByUnconsciousCards.Add(orbCard);
+
+                    await CardCmd.AutoPlay(choiceContext, orbCard, null, AutoPlayType.Default, false, false);
+
+                    KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(orbCard);
+
+                    await Cmd.Wait(0.1f, false);
                 }
 
-                KoishiExtensions.AutoPlayedByUnconsciousCards.Add(orbCard);
+                int overflowCount = xValue * 2;
+                var overflowCards = new List<CardModel>();
+                
+                for (int i = 0; i < overflowCount; i++)
+                {
+                    overflowCards.Add(base.CombatState.CreateCard<ConsciousOverflow_Koishi>(player));
+                }
 
-                await CardCmd.AutoPlay(choiceContext, orbCard, null, AutoPlayType.Default, false, false);
-
-                KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(orbCard);
+                await CardPileCmd.AddGeneratedCardsToCombat(overflowCards, PileType.Draw, true, CardPilePosition.Random);
             }
-
-            int overflowCount = xValue * 2;
-            var overflowCards = new List<CardModel>();
-            
-            for (int i = 0; i < overflowCount; i++)
+            catch (Exception e)
             {
-                overflowCards.Add(base.CombatState.CreateCard<ConsciousOverflow_Koishi>(player));
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[SpiritualDestruction] ERROR: {e}");
             }
+            finally
+            {
 
-            await CardPileCmd.AddGeneratedCardsToCombat(overflowCards, PileType.Draw, true, CardPilePosition.Random);
+            }
         }
     }
 }
