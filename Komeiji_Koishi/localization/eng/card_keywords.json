@@ -1,0 +1,16 @@
+{
+  "KOMEIJIKOISHI-UNCONSCIOUS.title": "Unconscious",
+  "KOMEIJIKOISHI-UNCONSCIOUS.description": "Cards with this tag can be automatically played.",
+
+  "KOMEIJIKOISHI-BLOOM.title": "Bloom",
+  "KOMEIJIKOISHI-BLOOM.description": "When you play an Attack, deal damage equal to that card's damage to a random enemy. Block gained is reduced by 70%. Gain 1 Energy upon entering.",
+
+  "KOMEIJIKOISHI-CLOSED.title": "Closed",
+  "KOMEIJIKOISHI-CLOSED.description": "Block gained is increased by 20%. Draw 1 card upon entering this stance.",
+
+  "KOMEIJIKOISHI-DANMAKU.title": "Danmaku",
+  "KOMEIJIKOISHI-DANMAKU.description": "Token cards with various effects.",
+
+  "KOMEIJIKOISHI-STANCE.title": "Stance",
+  "KOMEIJIKOISHI-STANCE.description": "Closed and Bloom stances each have special effects when switching between them."
+}
