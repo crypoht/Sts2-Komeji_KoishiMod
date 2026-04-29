@@ -1,0 +1,265 @@
+{
+  "KOMEIJIKOISHI-STRIKE_KOISHI.title": "Strike",
+  "KOMEIJIKOISHI-STRIKE_KOISHI.description": "Deal {Damage:diff()} damage.",
+
+  "KOMEIJIKOISHI-DEFEND_KOISHI.title": "Defend",
+  "KOMEIJIKOISHI-DEFEND_KOISHI.description": "Gain {Block:diff()} [gold]Block[/gold].",
+
+  "KOMEIJIKOISHI-INSTINCTIVE_STAB_KOISHI.title": "Instinctive Stab",
+  "KOMEIJIKOISHI-INSTINCTIVE_STAB_KOISHI.description": "Deal {Damage:diff()} damage {Repeat:diff()} times.",
+
+  "KOMEIJIKOISHI-ROAMING_KOISHI.title": "Roaming",
+  "KOMEIJIKOISHI-ROAMING_KOISHI.description": "Gain {Block:diff()} [gold]Block[/gold].\nRandomly grant {Amount:diff()} cards in hand [gold]Unconscious[/gold].",
+  "CARD.KOMEIJIKOISHI-ROAMING_KOISHI.prompt": "Choose a card to grant Unconscious.",
+
+  "KOMEIJIKOISHI-ARTWORK_KOISHI.title": "Artwork",
+  "KOMEIJIKOISHI-ARTWORK_KOISHI.description": "Deal {Damage:diff()} damage.\nGain {Block:diff()} [gold]Block[/gold].",
+  "KOMEIJIKOISHI-ARTWORK_KOISHI.flavor": "A masterpiece combining offense and defense.",
+
+  "KOMEIJIKOISHI-COMPLETE_UNCONSCIOUS_KOISHI.title": "Complete Unconscious",
+  "KOMEIJIKOISHI-COMPLETE_UNCONSCIOUS_KOISHI.description": "Gain {IntangiblePower:diff()} [gold]Intangible[/gold].",
+  "KOMEIJIKOISHI-COMPLETE_UNCONSCIOUS_KOISHI.flavor": "Fully unconscious \u2014 no one knows what will happen.",
+
+  "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_KOISHI.title": "Ultimate Unconscious Form",
+  "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_KOISHI.description": "Whenever you play a card yourself, automatically play {FormAmount:diff()} [gold]Unconscious[/gold] cards from hand. Whenever you play an [gold]Unconscious[/gold] card, draw 1 card.",
+  "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_KOISHI.flavor": "Seal your conscious mind and let instinct control every battle.",
+
+  "KOMEIJIKOISHI-ROSE_BLOOM_KOISHI.title": "Rose Bloom",
+  "KOMEIJIKOISHI-ROSE_BLOOM_KOISHI.description": "Deal {Damage:diff()} damage.\nEnter [gold]Bloom[/gold] stance.",
+
+  "KOMEIJIKOISHI-HEART_CLOSED_KOISHI.title": "Heart's Closing",
+  "KOMEIJIKOISHI-HEART_CLOSED_KOISHI.description": "Gain {Block:diff()} [gold]Block[/gold].\nEnter [gold]Closed[/gold] stance.",
+
+  "KOMEIJIKOISHI-KOMEIJI_SPIN_KOISHI.title": "Komeiji Spin",
+  "KOMEIJIKOISHI-KOMEIJI_SPIN_KOISHI.description": "Deal {Damage:diff()} damage to ALL enemies {Repeat:diff()} times.",
+
+  "KOMEIJIKOISHI-FETUS_DREAM_KOISHI.title": "Fetus Dream",
+  "KOMEIJIKOISHI-FETUS_DREAM_KOISHI.description": "For this combat, cards with 'Unconscious' in their name are also treated as [gold]Unconscious[/gold].",
+
+  "KOMEIJIKOISHI-HEART_DANMAKU_KOISHI.title": "Heart Danmaku",
+  "KOMEIJIKOISHI-HEART_DANMAKU_KOISHI.description": "Deal {Damage:diff()} damage. Apply {WeakPower:diff()} [gold]Weak[/gold].",
+
+  "KOMEIJIKOISHI-STAR_DANMAKU_KOISHI.title": "Star Danmaku",
+  "KOMEIJIKOISHI-STAR_DANMAKU_KOISHI.description": "Deal {Damage:diff()} damage.",
+
+  "KOMEIJIKOISHI-YIN_YANG_ORB_DANMAKU_KOISHI.title": "Yin-Yang Orb Danmaku",
+  "KOMEIJIKOISHI-YIN_YANG_ORB_DANMAKU_KOISHI.description": "Deal {Damage:diff()} damage.",
+
+  "KOMEIJIKOISHI-RICE_DANMAKU_KOISHI.title": "Rice Danmaku",
+  "KOMEIJIKOISHI-RICE_DANMAKU_KOISHI.description": "Deal {Damage:diff()} damage. Add a copy of this card to the Exhaust pile.",
+
+  "KOMEIJIKOISHI-SMALL_ORB_DANMAKU_KOISHI.title": "Small Orb Danmaku",
+  "KOMEIJIKOISHI-SMALL_ORB_DANMAKU_KOISHI.description": "Deal {Damage:diff()} damage {Repeat:diff()} times.",
+
+  "KOMEIJIKOISHI-LARGE_ORB_DANMAKU_KOISHI.title": "Large Orb Danmaku",
+  "KOMEIJIKOISHI-LARGE_ORB_DANMAKU_KOISHI.description": "Deal {Damage:diff()} damage. Apply {VulnerablePower:diff()} [gold]Vulnerable[/gold].",
+
+  "KOMEIJIKOISHI-ARROW_DANMAKU_KOISHI.title": "Arrow Danmaku",
+  "KOMEIJIKOISHI-ARROW_DANMAKU_KOISHI.description": "Deal {Damage:diff()} damage to ALL enemies.",
+
+  "KOMEIJIKOISHI-SQUARE_DANMAKU_KOISHI.title": "Square Danmaku",
+  "KOMEIJIKOISHI-SQUARE_DANMAKU_KOISHI.description": "Deal {Damage:diff()} damage. Apply {TracingPower:diff()} [gold]Traced[/gold].",
+
+  "KOMEIJIKOISHI-NON_SPELL_CARD_KOISHI.title": "Non-Spell",
+  "KOMEIJIKOISHI-NON_SPELL_CARD_KOISHI.description": "Add {Cards:diff()} random [gold]Danmaku[/gold] cards to your hand.",
+
+  "KOMEIJIKOISHI-UNCONSCIOUS_DANMAKU_ATTACK_KOISHI.title": "Unconscious Danmaku Attack",
+  "KOMEIJIKOISHI-UNCONSCIOUS_DANMAKU_ATTACK_KOISHI.description": "Randomly generate and automatically play {Cards:diff()} [gold]Danmaku[/gold] cards.",
+  "KOMEIJIKOISHI-UNCONSCIOUS_DANMAKU_ATTACK_KOISHI.flavor": "Danmaku duels should begin with mutual consent \u2014 but these bullets fly without thought.",
+
+  "KOMEIJIKOISHI-SUBCONSCIOUS_RELEASE_KOISHI.title": "Subconscious Release",
+  "KOMEIJIKOISHI-SUBCONSCIOUS_RELEASE_KOISHI.description": "Randomly play {Cards:diff()} [gold]Danmaku[/gold] cards from your Exhaust pile.",
+
+  "KOMEIJIKOISHI-REACTION_YOUKAI_POLYGRAPH_KOISHI.title": "Reaction: Youkai Polygraph",
+  "KOMEIJIKOISHI-REACTION_YOUKAI_POLYGRAPH_KOISHI.description": "Enter [gold]Bloom[/gold] stance.\nIf the target enemy intends to attack, draw {Draw:diff()} cards.",
+
+  "KOMEIJIKOISHI-ENTER_DREAM_KOISHI.selectionScreenPrompt": "Choose 1 card to take into hand.",
+  "KOMEIJIKOISHI-ENTER_DREAM_KOISHI.title": "Enter Dream",
+  "KOMEIJIKOISHI-ENTER_DREAM_KOISHI.description": "Enter [gold]Closed[/gold] stance. Choose 1 card from your discard pile and put it into your hand.",
+
+  "KOMEIJIKOISHI-HEART_ANGER_KOISHI.title": "Heart's Wrath",
+  "KOMEIJIKOISHI-HEART_ANGER_KOISHI.description": "Deal {Damage:diff()} damage. Enter [gold]Bloom[/gold] stance. If in [gold]Closed[/gold] stance, this costs 1.",
+
+  "KOMEIJIKOISHI-UNCONSCIOUS_PASSAGE_KOISHI.title": "Unconscious Passage",
+  "KOMEIJIKOISHI-UNCONSCIOUS_PASSAGE_KOISHI.description": "Gain {Blur:diff()} [gold]Blur[/gold]. Enter [gold]Closed[/gold] stance.",
+
+  "KOMEIJIKOISHI-DANMAKU_PARANOIA_KOISHI.title": "Phenomenon: Danmaku Paranoia",
+  "KOMEIJIKOISHI-DANMAKU_PARANOIA_KOISHI.description": "Exhaust all non-[gold]Unconscious[/gold] cards in hand. For each card Exhausted, add a random [gold]Danmaku[/gold] card to your hand.",
+
+  "KOMEIJIKOISHI-DANMAKU_ART_KOISHI.title": "Danmaku Art",
+  "KOMEIJIKOISHI-DANMAKU_ART_KOISHI.description": "Whenever you play a [gold]Danmaku[/gold] card, gain {ArtAmount:diff()} [gold]Block[/gold].",
+
+  "KOMEIJIKOISHI-DANMAKU_RORSCHACH_KOISHI.title": "Unconscious: Danmaku Rorschach Test",
+  "KOMEIJIKOISHI-DANMAKU_RORSCHACH_KOISHI.description": "Play all [gold]Danmaku[/gold] cards from your hand, draw pile, discard pile, and exhaust pile.",
+
+  "KOMEIJIKOISHI-RECOGNIZED_GENIUS_KOISHI.title": "Deviation: Recognized Genius",
+  "KOMEIJIKOISHI-RECOGNIZED_GENIUS_KOISHI.description": "All [gold]Danmaku[/gold] cards are upgraded.\nAll 0{energyPrefix:energyIcons(1)} Attack cards deal {KuugaPower:diff()} more damage.",
+
+  "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.title": "Phenomenon: Ancestors' Dream",
+  "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.description": "Copy all cards in your Exhaust pile and add the copies to your Exhaust pile.",
+
+  "KOMEIJIKOISHI-SUPEREGO_KOISHI.title": "Inhibition: Superego",
+  "KOMEIJIKOISHI-SUPEREGO_KOISHI.description": "When entering [gold]Closed[/gold], draw 1 extra card. When entering [gold]Bloom[/gold], gain {Energy:energyIcons()} extra energy.",
+
+  "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.title": "Rekindled: Koishi's Buried Flame",
+  "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.description": "Deal {Damage:diff()} damage.\nPlay and [gold]Exhaust[/gold] all cards in your discard pile. For each card played this way, apply {Tracing:diff()} [gold]Traced[/gold] to all enemies.",
+
+  "KOMEIJIKOISHI-STINGING_MIND_KOISHI.title": "Piercing Consciousness",
+  "KOMEIJIKOISHI-STINGING_MIND_KOISHI.description": "Deal {Damage:diff()} damage.\nRandomly play 1 [gold]Unconscious[/gold] card from hand.",
+
+  "KOMEIJIKOISHI-PAINFUL_GROWTH_KOISHI.title": "Painful Growth",
+  "KOMEIJIKOISHI-PAINFUL_GROWTH_KOISHI.description": "Randomly play {Amount:diff()} [gold]Unconscious[/gold] card(s) from hand.",
+
+  "KOMEIJIKOISHI-ROSE_DANMAKU_KOISHI.title": "Rose Danmaku",
+  "KOMEIJIKOISHI-ROSE_DANMAKU_KOISHI.description": "Deal {Damage:diff()} damage.\nGain {Thorns:diff()} [gold]Thorns[/gold].",
+
+  "KOMEIJIKOISHI-ROSE_HELL_KOISHI.title": "Rose Hell",
+  "KOMEIJIKOISHI-ROSE_HELL_KOISHI.description": "For every {Threshold:diff()} cards in your Exhaust pile, add 1 [gold]Rose Danmaku[/gold] to your hand.",
+
+  "KOMEIJIKOISHI-EMPTY_HEAD_KOISHI.title": "Empty Head",
+  "KOMEIJIKOISHI-EMPTY_HEAD_KOISHI.description": "Gain {Block:diff()} Block.\nRandomly grant 1 card in hand [gold]Unconscious[/gold].",
+
+  "KOMEIJIKOISHI-UNINTENTIONAL_DANMAKU_KOISHI.title": "Accidental Danmaku",
+  "KOMEIJIKOISHI-UNINTENTIONAL_DANMAKU_KOISHI.description": "Gain {Block:diff()} Block.\nAdd {Amount:diff()} random [gold]Danmaku[/gold] cards to your hand.",
+
+  "KOMEIJIKOISHI-LOVE_TRAIN_KOISHI.title": "Love Train",
+  "KOMEIJIKOISHI-LOVE_TRAIN_KOISHI.description": "Gain {Block:diff()} Block.\nAdd 1 [gold]Yin-Yang Orb Danmaku[/gold] to your hand.",
+
+  "KOMEIJIKOISHI-STARE_KOISHI.title": "Stare",
+  "KOMEIJIKOISHI-STARE_KOISHI.description": "Deal {Damage:diff()} damage.\nApply 1 [gold]Traced[/gold].\nDraw {Cards:diff()} cards.",
+
+  "KOMEIJIKOISHI-INNER_AIM_KOISHI.title": "Inner Aim",
+  "KOMEIJIKOISHI-INNER_AIM_KOISHI.description": "Apply {Tracing:diff()} [gold]Traced[/gold].\nAll 0{energyPrefix:energyIcons(1)} Attack cards deal {KuugaPower:diff()} more damage.",
+
+  "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_KOISHI.title": "Earth Spirit Sign: Mental Stellar Succession",
+  "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_KOISHI.description": "For this combat, [gold]Traced[/gold]'s damage bonus is increased by {Multiplier:diff()}%.",
+
+  "KOMEIJIKOISHI-TURN_AROUND_DODGE_KOISHI.title": "Turn-Around Dodge",
+  "KOMEIJIKOISHI-TURN_AROUND_DODGE_KOISHI.description": "Gain {Block:diff()} Block.\nRandomly play 1 [gold]Unconscious[/gold] card from hand.",
+
+  "KOMEIJIKOISHI-DISINTEGRATING_CONSCIOUSNESS_CAPTURE_KOISHI.title": "Disintegrating Consciousness Capture",
+  "KOMEIJIKOISHI-DISINTEGRATING_CONSCIOUSNESS_CAPTURE_KOISHI.description": "Deal {Damage:diff()} damage.\nIf your discard pile has an [gold]Unconscious[/gold] card, gain {Energy:energyIcons()}.",
+
+  "KOMEIJIKOISHI-JOYFUL_DANCE_KOISHI.title": "Joyful Dance",
+  "KOMEIJIKOISHI-JOYFUL_DANCE_KOISHI.description": "Gain {Block:diff()} [gold]Block[/gold].\nEnter [gold]Bloom[/gold] stance.\nDraw {Cards:diff()} cards.",
+
+  "KOMEIJIKOISHI-KOISHI_KOKORO_AND_UNCONSCIOUS_KOISHI.title": "Koishi, Kokoro, and Unconscious",
+  "KOMEIJIKOISHI-KOISHI_KOKORO_AND_UNCONSCIOUS_KOISHI.description": "When you switch stances, randomly gain one effect:\n[gold]Joy[/gold]: Next {JoyMaskPower:diff()} cards cost 0.\n[gold]Anger[/gold]: Gain {StrengthPower:diff()} [gold]Strength[/gold].\n[gold]Sorrow[/gold]: Gain {DexterityPower:diff()} [gold]Dexterity[/gold].\n[gold]Pleasure[/gold]: Draw {Cards:diff()} cards.",
+
+  "KOMEIJIKOISHI-ID_LIBERATION_KOISHI.title": "Instinct: Id Liberation",
+  "KOMEIJIKOISHI-ID_LIBERATION_KOISHI.description": "Deal {Damage:diff()} damage {Repeat:diff()} times.\nPlay all [gold]Unconscious[/gold] cards in hand.",
+
+  "KOMEIJIKOISHI-INSTINCT_STRIKE_KOISHI.title": "Instinct Strike",
+  "KOMEIJIKOISHI-INSTINCT_STRIKE_KOISHI.description": "Deal {Damage:diff()} damage. Choose 1 card in hand and grant it [gold]Unconscious[/gold].",
+  "KOMEIJIKOISHI-INSTINCT_STRIKE_KOISHI.selectionScreenPrompt": "Choose a card to grant Unconscious.",
+
+  "KOMEIJIKOISHI-HIDDEN_CONSCIOUSNESS_KOISHI.title": "Hidden Consciousness",
+  "KOMEIJIKOISHI-HIDDEN_CONSCIOUSNESS_KOISHI.description": "Gain {Block:diff()} Block.\nGenerate 5 random [gold]Danmaku[/gold] cards and place them in your Exhaust pile.\nRandomly play {Cards:diff()} [gold]Danmaku[/gold] cards from your Exhaust pile.",
+
+  "KOMEIJIKOISHI-BIG_HUG_KOISHI.title": "Komeiji Big Hug",
+  "KOMEIJIKOISHI-BIG_HUG_KOISHI.description": "Deal {Damage:diff()} damage.\nIf the last card you played this turn was an [gold]Unconscious[/gold] card, this costs 1 less.",
+
+  "KOMEIJIKOISHI-SELF_OVERFLOW_KOISHI.title": "Ego Flow",
+  "KOMEIJIKOISHI-SELF_OVERFLOW_KOISHI.description": "Gain {Energy:energyIcons()}. Generate {Cards:diff()} [gold]Consciousness Overflow[/gold] cards.",
+
+  "KOMEIJIKOISHI-CONSCIOUS_OVERFLOW_KOISHI.title": "Consciousness Overflow",
+  "KOMEIJIKOISHI-CONSCIOUS_OVERFLOW_KOISHI.description": "[sine]Thinking way too much~[/sine] \n[sine]{IfUpgraded:show:Really, truly thinking way too much~}[/sine]",
+
+  "KOMEIJIKOISHI-REIMU_HELP_KOISHI.title": "Reimu's Help",
+  "KOMEIJIKOISHI-REIMU_HELP_KOISHI.description": "Whenever you draw a [gold]Yin-Yang Orb Danmaku[/gold], automatically play it.\nGenerate {Orbs:diff()} [gold]Yin-Yang Orb Danmaku[/gold] into your draw pile.\nAll [gold]Yin-Yang Orb Danmaku[/gold] deal 20% more damage.",
+
+  "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.title": "Rose Protection",
+  "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.description": "While in [gold]Closed[/gold] stance, Block gained is increased by {Rose:diff()}%.",
+
+  "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.title": "Void Strike",
+  "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.description": "Deal {Damage:diff()} damage. Whenever you play an [gold]Unconscious[/gold] card, if it is not in the Exhaust pile, add it to your hand.",
+
+  "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.title": "Kuuga Strike",
+  "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.description": "Deal {Damage:diff()} damage.\nAll 0{energyPrefix:energyIcons(1)} Attack cards deal {Kuuga:diff()} more damage.\nReturns to hand each time you switch [gold]Stance[/gold], unless [gold]Exhausted[/gold].",
+
+  "KOMEIJIKOISHI-DANMAKU_ENDLESS_MIRACLE_KOISHI.title": "Danmaku Endless Miracle",
+  "KOMEIJIKOISHI-DANMAKU_ENDLESS_MIRACLE_KOISHI.description": "This turn, every [gold]Danmaku[/gold] card played is played again.",
+
+  "KOMEIJIKOISHI-SECOND_NEED_KOISHI.title": "Instinct: Second Need",
+  "KOMEIJIKOISHI-SECOND_NEED_KOISHI.description": "Whenever you switch [gold]Stance[/gold], gain {BlockAmount:diff()} Block.",
+
+  "KOMEIJIKOISHI-ATTACHMENT_SAFE_HAVEN_UNCONSCIOUS_KOISHI.title": "Attachment: Memory's Safe Haven",
+  "KOMEIJIKOISHI-ATTACHMENT_SAFE_HAVEN_UNCONSCIOUS_KOISHI.description": "Gain {Block:diff()} Block.",
+
+  "KOMEIJIKOISHI-UNCONSCIOUS_GENE_KOISHI.title": "Deep: Unconscious Gene",
+  "KOMEIJIKOISHI-UNCONSCIOUS_GENE_KOISHI.description": "Deal {Damage:diff()} damage.\nGrant all cards in hand [gold]Unconscious[/gold].\nFor each [gold]Unconscious[/gold] card you play, this card costs {Reduction:diff()} less this combat.",
+
+  "KOMEIJIKOISHI-LOOKING_GLASS_SELF_KOISHI.title": "Cognition: Looking Glass Self",
+  "KOMEIJIKOISHI-LOOKING_GLASS_SELF_KOISHI.description": "For each card in your Exhaust pile, gain 1 [gold]Block[/gold].",
+
+  "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.title": "Koishi's Knife",
+  "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.description": "Deal {Damage:diff()} damage.\nCan be upgraded infinitely.\nUpgrades itself on [gold]Kill[/gold].",
+
+  "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.title": "In Freedom~",
+  "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.description": "Choose up to {Cards:diff()} cards to grant [gold]Unconscious[/gold] and discard.",
+  "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.selectionScreenPrompt": "Choose up to {Cards:diff()} cards to grant Unconscious and discard.",
+
+  "KOMEIJIKOISHI-UNINTENTIONAL_HARVEST_KOISHI.title": "Accidental Harvest",
+  "KOMEIJIKOISHI-UNINTENTIONAL_HARVEST_KOISHI.description": "Draw {Cards:diff()} cards.\n[gold]Retain[/gold] your hand this turn.",
+
+  "KOMEIJIKOISHI-SPIRITUAL_DESTRUCTION_KOISHI.title": "Spirit Power Destruction",
+  "KOMEIJIKOISHI-SPIRITUAL_DESTRUCTION_KOISHI.description": "Automatically generate and play X {IfUpgraded:show:[gold]Upgraded[/gold]} [gold]Yin-Yang Orb Danmaku[/gold].\nGenerate 2X [gold]Consciousness Overflow[/gold] into your draw pile.",
+
+  "KOMEIJIKOISHI-KOMEIJI_DASH_KOISHI.title": "Komeiji Dash",
+  "KOMEIJIKOISHI-KOMEIJI_DASH_KOISHI.description": "Deal {Damage:diff()} damage to ALL enemies.",
+
+  "KOMEIJIKOISHI-SUPER_REACTIVE_PERCEPTION_KOISHI.title": "Super Reactive Perception",
+  "KOMEIJIKOISHI-SUPER_REACTIVE_PERCEPTION_KOISHI.description": "Deal {Damage:diff()} damage to ALL enemies.\nRandomly play 1 [gold]Unconscious[/gold] card from hand.",
+
+  "KOMEIJIKOISHI-CASUAL_GAME_KOISHI.title": "Casual Play",
+  "KOMEIJIKOISHI-CASUAL_GAME_KOISHI.description": "Draw {Cards:diff()} cards.\nRandomly play 1 [gold]Unconscious[/gold] card from hand.",
+
+  "KOMEIJIKOISHI-CONSCIOUS_COLLECTION_KOISHI.title": "Consciousness Collection",
+  "KOMEIJIKOISHI-CONSCIOUS_COLLECTION_KOISHI.description": "Draw {Cards:diff()} cards.\nAdd 1 [gold]Consciousness Overflow[/gold] to your hand.",
+
+  "KOMEIJIKOISHI-UNDERGROUND_ROSE_KOISHI.title": "Underground Rose",
+  "KOMEIJIKOISHI-UNDERGROUND_ROSE_KOISHI.description": "Whenever you switch stances, generate and automatically play 1 [gold]Rose Danmaku[/gold].",
+
+  "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_KOISHI.title": "Consciousness Spiral",
+  "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_KOISHI.description": "At the start of your turn, add 1 [gold]Consciousness Rotation[/gold] to your hand.",
+
+  "KOMEIJIKOISHI-CONSCIOUSNESS_ROTATION_KOISHI.title": "Consciousness Rotation",
+  "KOMEIJIKOISHI-CONSCIOUSNESS_ROTATION_KOISHI.description": "Switch your current [gold]Stance[/gold].\nThis card costs 1 more each time it is played this combat.\nReturns to hand after being played.",
+
+  "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.title": "Philosophy of the Despised",
+  "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.description": "Whenever you enter [gold]Closed[/gold] stance, automatically play 1 [gold]Unconscious[/gold] card from hand.",
+
+  "KOMEIJIKOISHI-SELFLESS_LOVE_KOISHI.title": "Heart Sign: Selfless Love",
+  "KOMEIJIKOISHI-SELFLESS_LOVE_KOISHI.description": "For every 4 [gold]Danmaku[/gold] cards generated, draw 1 card.",
+
+  "KOMEIJIKOISHI-FLAW_OF_DN_A_KOISHI.title": "Memory: Flaw of DNA",
+  "KOMEIJIKOISHI-FLAW_OF_DN_A_KOISHI.description": "All your Attack cards cost 0 and are [gold]Exhausted[/gold] after being played.",
+
+  "KOMEIJIKOISHI-ANCESTORS_WATCHING_KOISHI.title": "Dream Sign: Ancestors Are Watching",
+  "KOMEIJIKOISHI-ANCESTORS_WATCHING_KOISHI.description": "For every 2 cards in your Exhaust pile, all 0{energyPrefix:energyIcons(1)} Attack cards deal 1 more damage.",
+
+  "KOMEIJIKOISHI-SPRINKLE_STAR_HEART_KOISHI.title": "Star Love Sign: Star-Heart Sprinkle",
+  "KOMEIJIKOISHI-SPRINKLE_STAR_HEART_KOISHI.description": "Deal {Damage:diff()} damage.\nGenerate 1 [gold]Star Danmaku[/gold] and 1 [green]Heart Danmaku[/green] into the Exhaust pile.\nPlay all [gold]Star Danmaku[/gold] and [green]Heart Danmaku[/green] from all piles.",
+
+  "KOMEIJIKOISHI-ROSE_RHAPSODY_PUNCH_KOISHI.title": "Love Fist Sign: Rose Rhapsody Punch",
+  "KOMEIJIKOISHI-ROSE_RHAPSODY_PUNCH_KOISHI.description": "Deal {Damage:diff()} damage.\nIf you have at least 3 [gold]Unconscious[/gold] cards in hand, deal this damage again.",
+
+  "KOMEIJIKOISHI-MALLET_LOVE_SIGN_KOISHI.title": "Mallet Love Sign: Gold Coins Clink",
+  "KOMEIJIKOISHI-MALLET_LOVE_SIGN_KOISHI.description": "Deal {Damage:diff()} damage {Repeat:diff()} times.\nFor each unblocked hit, gain {Energy:energyIcons()}.",
+
+  "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_KOISHI.title": "Brambly Rose Garden",
+  "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_KOISHI.description": "Gain {ThornsPower:diff()} [gold]Thorns[/gold].\nAt the start of your turn, double your [gold]Thorns[/gold].",
+
+  "KOMEIJIKOISHI-FREUDIAN_KOISHI.title": "Instinct: Freudian Theory",
+  "KOMEIJIKOISHI-FREUDIAN_KOISHI.description": "For each [gold]Unconscious[/gold] card in hand, gain {Block:diff()} [gold]Block[/gold].",
+
+  "KOMEIJIKOISHI-CONFINED_INNOCENT_KOISHI.title": "Thorn Sign: Confined Innocence",
+  "KOMEIJIKOISHI-CONFINED_INNOCENT_KOISHI.description": "Gain {Block:diff()} [gold]Block[/gold].\nEach time you switch [gold]Stance[/gold], this card's [gold]Block[/gold] increases by {Magic:diff()} for this combat.",
+
+  "KOMEIJIKOISHI-HEARTWARD_STRIKE_KOISHI.title": "Heartward Strike",
+  "KOMEIJIKOISHI-HEARTWARD_STRIKE_KOISHI.description": "Deal {Damage:diff()} damage.\nEnter [gold]Closed[/gold] stance.\nMove 1 [gold]Unconscious[/gold] card from your discard pile to the top of your draw pile.",
+  "KOMEIJIKOISHI-HEARTWARD_STRIKE_KOISHI.selectionScreenPrompt": "Choose an Unconscious card to put on top of your draw pile.",
+
+  "KOMEIJIKOISHI-DEATH_DRIVE_KOISHI.title": "Destruction Sign: Death Drive",
+  "KOMEIJIKOISHI-DEATH_DRIVE_KOISHI.description": "Deal {Damage:diff()} damage {Repeat:diff()} times.\nEach time you switch [gold]Stance[/gold], this card attacks 1 additional time this combat."
+}

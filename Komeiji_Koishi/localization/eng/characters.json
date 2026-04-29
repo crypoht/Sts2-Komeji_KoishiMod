@@ -1,0 +1,17 @@
+{
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.aromaPrinciple": "[sine][blue]I feel like someone was staring at me like that before...[/blue][/sine]",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.banter.alive.endTurnPing": "Koishi is waiting~",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.banter.dead.endTurnPing": "Zzz",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.cardsModifierDescription": "Komeiji Koishi's cards can now appear in rewards and shops.",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.cardsModifierTitle": "Komeiji Koishi Cards",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.description": "An unconscious satori youkai who wandered to the Spire, beginning her adventure.",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.eventDeathPrevention": "If I fall, I can't continue my adventure!",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.goldMonologue": "[sine]So many shiny things! Okuu seems to love collecting these~[/sine]",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.possessiveAdjective": "her",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.pronounObject": "her",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.pronounPossessive": "her",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.pronounSubject": "she",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.title": "Komeiji Koishi",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.titleObject": "Komeiji Koishi",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.unlockText": "Play a run with [pink]{Prerequisite}[/pink] to unlock this character."
+}

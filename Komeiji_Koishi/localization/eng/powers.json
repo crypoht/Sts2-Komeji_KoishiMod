@@ -1,0 +1,71 @@
+{
+  "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.title": "Ultimate Unconscious Form",
+  "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.smartDescription": "Whenever you play a card yourself, automatically play [gold]Unconscious[/gold] cards from hand equal to the stack count. Whenever you play an [gold]Unconscious[/gold] card, draw 1 card.",
+
+  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.title": "Bloom",
+  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "When you play an Attack, deal damage equal to that card's base damage to a random enemy. [gold]Block[/gold] gained is reduced by {BlockReduction}%. Upon entering this stance, gain {Amount:energyIcons()}.",
+  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.description": "When you play an Attack, deal damage equal to that card's damage to a random enemy. [gold]Block[/gold] gained is reduced by 70%. Upon entering, gain {energyPrefix:energyIcons(1)}.",
+
+  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.title": "Closed",
+  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.smartDescription": "[gold]Block[/gold] gained is increased by {BlockBonus}%. Draw 1 card upon entering this stance.",
+  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.description": "[gold]Block[/gold] gained is increased by 20%. Draw 1 card upon entering this stance.",
+
+  "KOMEIJIKOISHI-FETUS_DREAM_POWER.title": "Fetus Dream",
+  "KOMEIJIKOISHI-FETUS_DREAM_POWER.smartDescription": "[gold]Unconscious[/gold] has been expanded!",
+
+  "KOMEIJIKOISHI-TRACING_POWER.title": "Traced",
+  "KOMEIJIKOISHI-TRACING_POWER.smartDescription": "Incoming [gold]Danmaku[/gold] attack damage is increased by 50%.",
+  "KOMEIJIKOISHI-TRACING_POWER.description": "Incoming [gold]Danmaku[/gold] attack damage is increased by 50%.",
+
+  "KOMEIJIKOISHI-DANMAKU_ART_POWER.title": "Danmaku Art",
+  "KOMEIJIKOISHI-DANMAKU_ART_POWER.smartDescription": "Whenever you play a [gold]Danmaku[/gold] card, gain {Amount} [gold]Block[/gold].",
+
+  "KOMEIJIKOISHI-RECOGNIZED_GENIUS_POWER.title": "Deviation: Recognized Genius",
+  "KOMEIJIKOISHI-RECOGNIZED_GENIUS_POWER.smartDescription": "All [gold]Danmaku[/gold] cards generated during combat are automatically upgraded.",
+
+  "KOMEIJIKOISHI-SUPEREGO_POWER.title": "Superego",
+  "KOMEIJIKOISHI-SUPEREGO_POWER.smartDescription": "Upon entering [gold]Closed[/gold] stance, draw {Amount} extra cards. Upon entering [gold]Bloom[/gold] stance, gain {Amount:energyIcons()} extra energy.",
+
+  "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.title": "Earth Spirit Sign: Mental Stellar Succession",
+  "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.smartDescription": "For this combat, [gold]Traced[/gold]'s damage bonus is increased by {Amount}%.",
+
+  "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.title": "Kokoro's Mask",
+  "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.smartDescription": "When switching stances, trigger a random emotion.",
+
+  "KOMEIJIKOISHI-JOY_MASK_POWER.title": "Joy Mask",
+  "KOMEIJIKOISHI-JOY_MASK_POWER.smartDescription": "Your next {Amount} cards cost 0.",
+
+  "KOMEIJIKOISHI-REIMU_HELP_POWER.title": "Reimu's Help",
+  "KOMEIJIKOISHI-REIMU_HELP_POWER.smartDescription": "Whenever you draw a [gold]Yin-Yang Orb Danmaku[/gold], automatically play it. [gold]Yin-Yang Orb Danmaku[/gold] deals {Amount}% more damage.",
+
+  "KOMEIJIKOISHI-ROSE_PROTECTION_POWER.title": "Rose Protection",
+  "KOMEIJIKOISHI-ROSE_PROTECTION_POWER.smartDescription": "While in [gold]Closed[/gold] stance, Block gained is increased by {Amount}%.",
+
+  "KOMEIJIKOISHI-MIRACLE_POWER.title": "Miracle",
+  "KOMEIJIKOISHI-MIRACLE_POWER.smartDescription": "Whenever you play a [gold]Danmaku[/gold] card, play it {Amount} more time(s).",
+
+  "KOMEIJIKOISHI-KUUGA_POWER.title": "Kuuga",
+  "KOMEIJIKOISHI-KUUGA_POWER.smartDescription": "All 0-cost Attack cards deal {Amount} more damage.",
+
+  "KOMEIJIKOISHI-SECOND_NEED_POWER.title": "Second Need",
+  "KOMEIJIKOISHI-SECOND_NEED_POWER.smartDescription": "Whenever you switch stances, gain {Amount} Block.",
+
+  "KOMEIJIKOISHI-UNDERGROUND_ROSE_POWER.title": "Underground Rose",
+  "KOMEIJIKOISHI-UNDERGROUND_ROSE_POWER.smartDescription": "Whenever you switch stances, generate and automatically play {Amount} [gold]Rose Danmaku[/gold].",
+
+  "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_POWER.title": "Consciousness Spiral",
+  "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_POWER.smartDescription": "At the start of your turn, add {Amount} [gold]Consciousness Rotation[/gold] to your hand.",
+
+  "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_POWER.title": "Philosophy of the Despised",
+  "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_POWER.smartDescription": "Whenever you enter [gold]Closed[/gold] stance, automatically play {Amount} [gold]Unconscious[/gold] card(s) from hand.",
+
+  "KOMEIJIKOISHI-SELFLESS_LOVE_POWER.title": "Heart Sign: Selfless Love",
+  "KOMEIJIKOISHI-SELFLESS_LOVE_POWER.smartDescription": "For every 4 [gold]Danmaku[/gold] cards generated, draw {Amount} card(s).",
+
+  "KOMEIJIKOISHI-FLAWOFDNA_KOISHI.title": "Memory: Flaw of DNA",
+  "KOMEIJIKOISHI-FLAWOFDNA_KOISHI.description": "All your Attack cards cost 0 and are [gold]Exhausted[/gold] after being played.",
+  "KOMEIJIKOISHI-FLAWOFDNA_KOISHI.smartDescription": "All your Attack cards cost 0 and are [gold]Exhausted[/gold] after being played.",
+
+  "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_KOISHI.title": "Brambly Rose Garden",
+  "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_KOISHI.description": "At the start of your turn, [gold]Thorns[/gold] is increased by {Percent}%."
+}
