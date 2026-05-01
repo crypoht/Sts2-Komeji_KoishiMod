@@ -26,6 +26,8 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
+        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal };
+
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromCard<ConsciousnessRotation_Koishi>(false)

@@ -20,7 +20,9 @@ namespace KomeijiKoishi.Characters
 		public override int StartingHp => 64; 
 		
 		public override Color NameColor => new(0.3f, 0.7f, 0.3f); 
-		public override Color EnergyLabelOutlineColor => new(0.1f, 0.4f, 0.1f); 
+		public override Color EnergyLabelOutlineColor => new(0.624f, 0.271f, 0.463f);
+
+		public override Color MapDrawingColor => new(0.486f, 0.988f, 0f);
 		
 		public override CharacterGender Gender => CharacterGender.Feminine;
 

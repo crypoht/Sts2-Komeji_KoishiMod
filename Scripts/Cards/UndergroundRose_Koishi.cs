@@ -29,7 +29,8 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromCard<RoseDanmaku_Koishi>(false)
+            HoverTipFactory.FromCard<RoseDanmaku_Koishi>(false),
+            HoverTipFactory.FromKeyword(KoishiKeywords.Stance) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

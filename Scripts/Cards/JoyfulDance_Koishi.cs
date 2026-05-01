@@ -32,7 +32,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new BlockVar(6m, ValueProp.Move),
+            new BlockVar(8m, ValueProp.Move),
             new CardsVar(1)
         };
 
@@ -57,7 +57,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Block.UpgradeValueBy(4m);
+            base.DynamicVars.Block.UpgradeValueBy(3m);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace KomeijiKoishi.Cards
         };
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DynamicVar("Amount", 3m) 
+            new DynamicVar("Amount", 4m) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

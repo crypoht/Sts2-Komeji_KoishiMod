@@ -48,7 +48,7 @@ namespace KomeijiKoishi.Cards.Danmaku
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(2m); 
+            base.DynamicVars.Damage.UpgradeValueBy(1m); 
         }
     }
 }

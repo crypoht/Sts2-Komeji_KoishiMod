@@ -16,14 +16,13 @@ using KomeijiKoishi.Utils_Koishi;
 using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.HoverTips;
 
-
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
     public sealed class StingingMind_Koishi : CustomCardModel
     {
         public StingingMind_Koishi() 
-            : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, true) { }
+            : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
@@ -49,7 +48,6 @@ namespace KomeijiKoishi.Cards
                     .WithHitFx("vfx/vfx_attack_slash") 
                     .Execute(choiceContext);
 
-
                 var handPile = PileType.Hand.GetPile(player);
                 
                 var unconsciousCardsInHand = handPile.Cards.Where(c => 
@@ -58,12 +56,18 @@ namespace KomeijiKoishi.Cards
                     c != this 
                 ).ToList();
 
-                if (unconsciousCardsInHand.Count > 0)
+
+                int playCount = Math.Min(2, unconsciousCardsInHand.Count);
+
+                for (int i = 0; i < playCount; i++)
                 {
+
                     var targetCard = player.RunState.Rng.Shuffle.NextItem(unconsciousCardsInHand);
 
                     if (targetCard != null)
                     {
+                        unconsciousCardsInHand.Remove(targetCard);
+
                         var validEnemies = base.CombatState!.HittableEnemies.Where(e => !e.IsDead).ToList();
                         Creature? autoTarget = validEnemies.Count > 0 ? player.RunState.Rng.Shuffle.NextItem(validEnemies) : null;
 
@@ -72,6 +76,8 @@ namespace KomeijiKoishi.Cards
                         await CardCmd.AutoPlay(choiceContext, targetCard, autoTarget, AutoPlayType.Default, true, false);
                         
                         KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(targetCard);
+                        
+                        await Cmd.Wait(0.1f, false);
                     }
                 }
             }

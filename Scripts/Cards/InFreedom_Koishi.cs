@@ -43,7 +43,11 @@ namespace KomeijiKoishi.Cards
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
-            if (player == null) return;
+            if (player == null || base.CombatState == null) return;
+
+            await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
+
+            await CardPileCmd.Draw(choiceContext, 1m, player, false);
 
             int maxCards = base.DynamicVars.Cards.IntValue;
 

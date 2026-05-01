@@ -17,6 +17,7 @@
 *.import
 *.cfg
 *.sln
+*.exe
 
 # 确保不忽略 cs 和 json
 !*.cs

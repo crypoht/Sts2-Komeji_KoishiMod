@@ -41,9 +41,9 @@ namespace KomeijiKoishi.Powers
             new[] { HoverTipFactory.ForEnergy(this) };
 
         protected override IEnumerable<DynamicVar> CanonicalVars =>
-            new List<DynamicVar> { new DynamicVar("BlockReduction", 70m) };
+            new List<DynamicVar> { new DynamicVar("BlockReduction", 60m) };
 
-        public decimal BlockReduction => 70m;
+        public decimal BlockReduction => 60m;
 
         // ──────────────────────────────────────────────────
         // 格挡减益

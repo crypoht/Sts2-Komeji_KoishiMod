@@ -30,7 +30,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DynamicVar("BlockAmount", 3m) 
+            new DynamicVar("BlockAmount", 7m) 
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
@@ -52,7 +52,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars["BlockAmount"].UpgradeValueBy(2m);
+            base.DynamicVars["BlockAmount"].UpgradeValueBy(6m);
         }
     }
 }

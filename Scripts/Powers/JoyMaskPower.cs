@@ -39,8 +39,14 @@ namespace KomeijiKoishi.Powers
 
         public override bool TryModifyEnergyCostInCombat(CardModel card, decimal originalCost, out decimal modifiedCost)
         {
-            modifiedCost = 0m;
-            return true;
+            if (card.Owner != null && card.Owner.Creature == base.Owner)
+            {
+                modifiedCost = 0m;
+                return true;
+            }
+            
+            modifiedCost = originalCost;
+            return false;
         }
 
         public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)

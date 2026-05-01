@@ -16,6 +16,7 @@ using MegaCrit.Sts2.Core.Models.Relics;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums; 
 using KomeijiKoishi.Utils_Koishi; 
+using KomeijiKoishi.Cards;
 
 namespace KomeijiKoishi.Relics
 {
@@ -29,14 +30,24 @@ namespace KomeijiKoishi.Relics
 
         protected override string BigIconPath => $"res://mods/Komeiji_Koishi/images/relics/{Id.Entry.ToLowerInvariant()}.png";
         public override RelicModel? GetUpgradeReplacement() => ModelDb.Relic<KoishiAnicentRelic>();
+
+        public override bool TryModifyEnergyCostInCombat(CardModel card, decimal originalCost, out decimal modifiedCost)
+        {
+            if (card is CompleteUnconscious_Koishi)
+            {
+                modifiedCost = 514m;
+                return true; 
+            }
+            
+            modifiedCost = originalCost;
+            return false;
+        }
+
         public override async Task BeforeTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
         {
             try
             {
-                if (side != base.Owner.Creature.Side)
-                {
-                    return;
-                }
+                if (side != base.Owner.Creature.Side) return;
 
                 var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
                 if (player == null) return;
@@ -65,10 +76,9 @@ namespace KomeijiKoishi.Relics
                                 targetCreature = player.RunState.Rng.Shuffle.NextItem(validEnemies);
                             }
                         }
-                        KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
-                        
-                        await CardCmd.AutoPlay(choiceContext, targetCard, targetCreature, AutoPlayType.Default, true, false);
 
+                        KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
+                        await CardCmd.AutoPlay(choiceContext, targetCard, targetCreature, AutoPlayType.Default, true, false);
                         KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(targetCard);
                     }
                 }

@@ -17,6 +17,8 @@ using KomeijiKoishi.Utils_Koishi;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Models;
 using KomeijiKoishi.Enums;
+// 🌟 新增：用于显示“无意识”关键词的悬浮提示
+using MegaCrit.Sts2.Core.HoverTips; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -30,19 +32,26 @@ namespace KomeijiKoishi.Cards
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike };
 
-        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Closed, KoishiKeywords.Unconscious };
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
+        };
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(5m, ValueProp.Move)
+            new DamageVar(6m, ValueProp.Move),
+
+            new CardsVar(2)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             var player = base.Owner as Player;
             if (player == null) return;
+
 
             if (cardPlay.Target != null)
             {
@@ -53,27 +62,25 @@ namespace KomeijiKoishi.Cards
                     .Execute(choiceContext);
             }
 
-
-            await ClosedStancePower.EnterThisStance(choiceContext, player, this);
-
             CardPile discardPile = PileType.Discard.GetPile(player);
-            
             var unconsciousCardsInDiscard = discardPile.Cards.Where(c => KoishiExtensions.IsTrulyUnconscious(c)).ToList();
 
             if (unconsciousCardsInDiscard.Any())
             {
-                CardSelectorPrefs prefs = new CardSelectorPrefs(base.SelectionScreenPrompt, 1);
+
+                CardSelectorPrefs prefs = new CardSelectorPrefs(base.SelectionScreenPrompt, 0, base.DynamicVars.Cards.IntValue);
                 
                 IEnumerable<CardModel> selectedCards = await CardSelectCmd.FromSimpleGrid(choiceContext, unconsciousCardsInDiscard, player, prefs);
-                
 
-                CardModel? selectedCard = selectedCards.FirstOrDefault();
 
-                if (selectedCard != null)
+                if (selectedCards != null)
                 {
-                    if (selectedCard.Pile?.Type == PileType.Discard || selectedCard.Pile?.Type == PileType.Draw)
+                    foreach (var selectedCard in selectedCards)
                     {
-                        await CardPileCmd.Add(selectedCard, PileType.Draw, CardPilePosition.Top, null, false);
+                        if (selectedCard.Pile?.Type == PileType.Discard || selectedCard.Pile?.Type == PileType.Draw)
+                        {
+                            await CardPileCmd.Add(selectedCard, PileType.Draw, CardPilePosition.Top, null, false);
+                        }
                     }
                 }
             }

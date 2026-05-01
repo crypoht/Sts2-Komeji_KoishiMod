@@ -30,8 +30,9 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new BlockVar(14m, ValueProp.Move),
-            new CardsVar(2)
+            new BlockVar(11m, ValueProp.Move),
+            new CardsVar(2),
+            new DynamicVar("Magic", 3m) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -43,7 +44,8 @@ namespace KomeijiKoishi.Cards
 
                 await CreatureCmd.GainBlock(player.Creature, base.DynamicVars.Block.BaseValue, ValueProp.Move, cardPlay, false);
 
-                for (int i = 0; i < 3; i++)
+                int generateCount = (int)base.DynamicVars["Magic"].BaseValue;
+                for (int i = 0; i < generateCount; i++)
                 {
                     await DanmakuPool.CreateRandomDanmakuInExhaust(player, base.CombatState);
                 }
@@ -106,6 +108,7 @@ namespace KomeijiKoishi.Cards
         protected override void OnUpgrade()
         {
             base.DynamicVars.Block.UpgradeValueBy(4m);
+            base.DynamicVars["Magic"].UpgradeValueBy(1m);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace KomeijiKoishi.Cards
     public sealed class SprinkleStarHeart_Koishi : CustomCardModel
     {
         public SprinkleStarHeart_Koishi()
-            : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) 
+            : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) 
         { 
         }
 

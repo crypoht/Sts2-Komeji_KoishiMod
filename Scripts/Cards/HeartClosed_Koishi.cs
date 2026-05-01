@@ -30,7 +30,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new BlockVar(6m, ValueProp.Move) 
+            new BlockVar(9m, ValueProp.Move) 
         };
 
        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

@@ -50,7 +50,7 @@ namespace KomeijiKoishi.Powers
             get 
             {
                 decimal bonus = 20m; 
-                var rosePower = base.Owner?.GetPower<RoseProtectionPower>();
+                var rosePower = base.Owner?.GetPower<RoseProtectionPower>(); 
                 if (rosePower != null)
                 {
                     bonus += rosePower.Amount;

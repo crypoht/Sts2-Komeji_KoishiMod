@@ -34,7 +34,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new BlockVar(6m, ValueProp.Move), 
+            new BlockVar(7m, ValueProp.Move), 
             new DynamicVar("Amount", 1m)     
         };
 

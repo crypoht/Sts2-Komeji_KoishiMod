@@ -34,7 +34,7 @@ namespace KomeijiKoishi.Cards
 
             await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
             
-            await PowerCmd.Apply<PhilosophyOfTheHatedPower>(player.Creature, 1m, player.Creature, this, false);
+            await PowerCmd.Apply<PhilosophyOfTheHatedPower>(player.Creature, 2m, player.Creature, this, false);
         }
 
         protected override void OnUpgrade()

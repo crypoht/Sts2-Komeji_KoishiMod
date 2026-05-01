@@ -33,7 +33,7 @@ namespace KomeijiKoishi.Powers
 
         private class Data
         {
-            public int cardsLeft = 4;
+            public int cardsLeft = 6;
             public int pendingDraws = 0; 
         }
 
@@ -43,7 +43,7 @@ namespace KomeijiKoishi.Powers
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new DynamicVar("BaseCards", 4m)
+            new DynamicVar("BaseCards", 6m)
         };
 
         public override async Task AfterCardGeneratedForCombat(CardModel card, bool addedByPlayer)
@@ -58,12 +58,11 @@ namespace KomeijiKoishi.Powers
 
                     if (data.cardsLeft <= 0)
                     {
-                        data.cardsLeft = 4; // 瞬间重置防止变成负数
+                        data.cardsLeft = 6; 
                         base.InvokeDisplayAmountChanged(); 
 
                         base.Flash();
                         
-                        // 🌟 只记账，不抽牌。Amount 是能力层数
                         data.pendingDraws += (int)base.Amount; 
                     }
                 }
@@ -71,22 +70,19 @@ namespace KomeijiKoishi.Powers
             await Task.CompletedTask;
         }
 
-        // 🌟 2. 结算阶段：等所有的 AutoPlay 和循环都跑完了再抽牌
         public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
-            // 确保是自己打出的牌触发的后续结算
             if (cardPlay.Card.Owner == base.Owner.Player)
             {
                 Data data = GetInternalData<Data>();
                 if (data.pendingDraws > 0)
                 {
                     int amountToDraw = data.pendingDraws;
-                    data.pendingDraws = 0; // 先清空账本，防止并发
+                    data.pendingDraws = 0; 
 
                     var player = base.Owner?.Player;
                     if (player != null)
                     {
-                        // 🌟 此时抽牌极其安全，且带有真实的 choiceContext
                         await CardPileCmd.Draw(choiceContext, amountToDraw, player, false);
                     }
                 }

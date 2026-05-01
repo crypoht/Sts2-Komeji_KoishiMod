@@ -30,9 +30,7 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DamageVar(1m, ValueProp.Move),
-            // 🌟 修复 1：参考本能刺击，使用标准的 RepeatVar
-            new RepeatVar(4),
-            // 🌟 修复 2：补上之前缺失的能量变量，否则执行时会报错
+            new RepeatVar(3),
             new EnergyVar(1) 
         };
 
@@ -41,35 +39,25 @@ namespace KomeijiKoishi.Cards
             var player = base.Owner as Player;
             if (player == null || cardPlay.Target == null) return;
 
-            // 🌟 修改：使用官方标准的 Repeat 属性
-            int hits = base.DynamicVars.Repeat.IntValue;
-            int energyToGain = 0;
+  
+            var attackCommandResult = await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
+                .WithHitCount(base.DynamicVars.Repeat.IntValue) 
+                .FromCard(this)
+                .Targeting(cardPlay.Target)
+                .WithHitFx("vfx/vfx_attack_blunt", null, null) 
+                .Execute(choiceContext);
 
-            for (int i = 0; i < hits; i++)
-            {
-                var attackCommand = await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                    .FromCard(this)
-                    .Targeting(cardPlay.Target)
-                    .WithHitFx("vfx/vfx_attack_blunt", null, null) 
-                    .Execute(choiceContext);
-
-                if (attackCommand.Results.Any(r => r.TotalDamage > 0))
-                {
-                    energyToGain++;
-                }
-            }
+            int energyToGain = attackCommandResult.Results.Count(r => r.UnblockedDamage > 0);
 
             if (energyToGain > 0)
             {
-                // 🌟 此时读取 base.DynamicVars.Energy 才是安全的
                 await PlayerCmd.GainEnergy(energyToGain, player);
             }
         }
 
         protected override void OnUpgrade()
         {
-            // 🌟 修改：升级时对应的变量名也要改
-            base.DynamicVars.Repeat.UpgradeValueBy(2m);
+            base.DynamicVars.Repeat.UpgradeValueBy(1m);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new BlockVar(17m, ValueProp.Move)
+            new BlockVar(18m, ValueProp.Move)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -59,7 +59,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Block.UpgradeValueBy(3m);
+            base.DynamicVars.Block.UpgradeValueBy(4m);
         }
     }
 }

@@ -18,6 +18,12 @@ namespace KomeijiKoishi.Enums
 
         [CustomEnum]
         public static CardTag Stance;
+
+        [CustomEnum]
+        public static CardTag Fumo;
+
+        [CustomEnum]
+        public static CardTag LostInFlowerField;
     }
 
     public class KoishiKeywords
@@ -37,5 +43,12 @@ namespace KomeijiKoishi.Enums
 
         [CustomEnum("STANCE")] 
         public static CardKeyword Stance;
+
+        [CustomEnum("FUMO")] 
+        public static CardKeyword Fumo;
+
+        [CustomEnum("LOST_IN_FLOWER_FIELD")] 
+        [KeywordProperties(AutoKeywordPosition.Before)]
+        public static CardKeyword LostInFlowerField;
     }
 }

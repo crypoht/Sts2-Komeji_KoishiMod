@@ -18,24 +18,36 @@ using KomeijiKoishi.Utils_Koishi;
 using MegaCrit.Sts2.Core.Entities.Relics; 
 using MegaCrit.Sts2.Core.HoverTips; 
 using MegaCrit.Sts2.Core.Models.Powers;
-
-
+using KomeijiKoishi.Cards; 
 
 namespace KomeijiKoishi.Relics
 {
     [Pool(typeof(KoishiRelicPool))]
     public sealed class KoishiAnicentRelic : CustomRelicModel
     {
+
         public override RelicRarity Rarity => RelicRarity.Starter;
 
         public override string PackedIconPath => "res://mods/Komeiji_Koishi/images/relics/koishi_anicent_relic.png";
         protected override string PackedIconOutlinePath => "res://mods/Komeiji_Koishi/images/relics/koishi_anicent_relic.png";
-         protected override string BigIconPath => "res://mods/Komeiji_Koishi/images/relics/koishi_anicent_relic.png";
+        protected override string BigIconPath => "res://mods/Komeiji_Koishi/images/relics/koishi_anicent_relic.png";
         
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip>
         {
             HoverTipFactory.FromPower<ThornsPower>()
         };
+
+        public override bool TryModifyEnergyCostInCombat(CardModel card, decimal originalCost, out decimal modifiedCost)
+        {
+            if (card is CompleteUnconscious_Koishi)
+            {
+                modifiedCost = 514m;
+                return true; 
+            }
+            
+            modifiedCost = originalCost;
+            return false;
+        }
 
         public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
         {
@@ -47,6 +59,7 @@ namespace KomeijiKoishi.Relics
 
             await PowerCmd.Apply<ThornsPower>(base.Owner.Creature, 1m, base.Owner.Creature, null, false);
         }
+
         public override async Task BeforeTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
         {
             try
@@ -81,7 +94,10 @@ namespace KomeijiKoishi.Relics
                             }
                         }
 
+  
+                        KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
                         await CardCmd.AutoPlay(choiceContext, targetCard, targetCreature, AutoPlayType.Default, true, false);
+                        KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(targetCard);
                     }
                 }
             }
@@ -90,6 +106,5 @@ namespace KomeijiKoishi.Relics
                 MegaCrit.Sts2.Core.Logging.Log.Error($"[Relic] KoishiAnicentRelic Error: {e.Message}");
             }
         }
-
     }
 }

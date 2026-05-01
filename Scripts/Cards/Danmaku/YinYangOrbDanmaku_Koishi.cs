@@ -33,7 +33,7 @@ namespace KomeijiKoishi.Cards.Danmaku
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(22m, ValueProp.Move)
+            new DamageVar(20m, ValueProp.Move)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -48,7 +48,7 @@ namespace KomeijiKoishi.Cards.Danmaku
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(10m);
+            base.DynamicVars.Damage.UpgradeValueBy(9m);
         }
     }
 }

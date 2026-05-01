@@ -27,6 +27,8 @@ namespace KomeijiKoishi.Powers
 
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/ConsciousnessSpiralPower.png";
 
+        public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/ConsciousnessSpiralPower.png";
+
         public override async Task BeforeHandDraw(Player player, PlayerChoiceContext choiceContext, CombatState combatState)
         {
             if (player == base.Owner?.Player)

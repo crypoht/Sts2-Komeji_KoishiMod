@@ -11,7 +11,6 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
-using KomeijiKoishi.Powers; 
 using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers; 
@@ -29,14 +28,15 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(4m, ValueProp.Move),    
+            new DamageVar(6m, ValueProp.Move),    
             new CardsVar(1),                       
-            new DynamicVar("Tracing", 1m)         
+            new PowerVar<VulnerablePower>(1m)         
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromPower<TracingPower>() 
+
+            HoverTipFactory.FromPower<VulnerablePower>() 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -46,19 +46,22 @@ namespace KomeijiKoishi.Cards
                 var player = base.Owner as Player;
                 if (player == null || cardPlay.Target == null) return;
 
+
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                     .FromCard(this)
                     .Targeting(cardPlay.Target)
                     .WithHitFx("vfx/vfx_attack_blunt") 
                     .Execute(choiceContext);
 
-                await PowerCmd.Apply<TracingPower>(
+    
+                await PowerCmd.Apply<VulnerablePower>(
                     cardPlay.Target, 
-                    base.DynamicVars["Tracing"].BaseValue, 
+                    base.DynamicVars.Vulnerable.BaseValue, 
                     player.Creature, 
                     this, 
                     false
                 );
+
 
                 await CardPileCmd.Draw(choiceContext, base.DynamicVars.Cards.BaseValue, player, false);
             }

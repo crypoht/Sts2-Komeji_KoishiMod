@@ -12,6 +12,7 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using System;
 using System.Linq;
 using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Combat; 
 
 namespace KomeijiKoishi.Powers
 {
@@ -59,6 +60,14 @@ namespace KomeijiKoishi.Powers
                 {
                     _isDuplicating = false;
                 }
+            }
+        }
+
+        public override async Task BeforeTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
+        {
+            if (side == base.Owner.Side)
+            {
+                await PowerCmd.Remove(this);
             }
         }
     }

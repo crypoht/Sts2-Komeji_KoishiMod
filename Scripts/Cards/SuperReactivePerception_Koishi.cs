@@ -23,7 +23,7 @@ namespace KomeijiKoishi.Cards
     public sealed class SuperReactivePerception_Koishi : CustomCardModel
     {
         public SuperReactivePerception_Koishi() 
-            : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies, true)
+            : base(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies, true)
         {
         }
 
@@ -36,7 +36,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(9m, ValueProp.Move) 
+            new DamageVar(7m, ValueProp.Move) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -87,7 +87,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(5m);
+            base.DynamicVars.Damage.UpgradeValueBy(3m);
         }
     }
 }

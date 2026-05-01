@@ -39,7 +39,7 @@ namespace KomeijiKoishi.Cards.Danmaku
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(4m, ValueProp.Move),
+            new DamageVar(3m, ValueProp.Move),
             new PowerVar<TracingPower>(1m) 
         };
 

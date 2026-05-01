@@ -21,7 +21,7 @@ namespace KomeijiKoishi.Cards
     public sealed class DanmakuArt_Koishi : CustomCardModel
     {
         public DanmakuArt_Koishi() 
-            : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self, true) { }
+            : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
@@ -32,7 +32,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DynamicVar("ArtAmount", 2m) 
+            new DynamicVar("ArtAmount", 3m) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

@@ -36,7 +36,7 @@ namespace KomeijiKoishi.Cards.Danmaku
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(8m, ValueProp.Move),
+            new DamageVar(5m, ValueProp.Move),
             new PowerVar<VulnerablePower>(1m) 
         };
 
@@ -60,7 +60,7 @@ namespace KomeijiKoishi.Cards.Danmaku
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars["VulnerablePower"].UpgradeValueBy(1m); // 易伤 1(2)
+            base.DynamicVars["VulnerablePower"].UpgradeValueBy(1m); 
         }
     }
 }

@@ -29,7 +29,6 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku),
-            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious)
         };
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };

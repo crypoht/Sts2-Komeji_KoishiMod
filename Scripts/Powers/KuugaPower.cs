@@ -24,6 +24,8 @@ namespace KomeijiKoishi.Powers
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/KuugaPower.png";
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/KuugaPower.png";
 
+        public override bool AllowNegative => true;
+
         public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? card)
         {
             if (base.Owner != dealer || card == null || card.Type != CardType.Attack)

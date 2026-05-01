@@ -23,7 +23,7 @@ namespace KomeijiKoishi.Cards
     {
 
         public ConfinedInnocent_Koishi() 
-            : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) 
+            : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) 
         { 
         }
 

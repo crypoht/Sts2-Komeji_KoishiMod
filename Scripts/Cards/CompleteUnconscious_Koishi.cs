@@ -23,8 +23,11 @@ namespace KomeijiKoishi.Cards
         public CompleteUnconscious_Koishi() : base(514, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
-      public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal };
+        
+        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal };
+        
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip> { HoverTipFactory.FromPower<IntangiblePower>() };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new PowerVar<IntangiblePower>(1m) };
