@@ -5,7 +5,7 @@
 🐛 测试与反馈 (Feedback & Bug Reports)
 测试时发现与部分mod不兼容,发现bug请先尝试卸载与恋恋无关的mod
 
-本mod使用baselib库,目前使用3.0.8版本
+本mod使用baselib库,目前使用3.0.8版本--https://github.com/Alchyr/BaseLib-StS2
 
 联系邮箱： 179669710@qq.com
 
