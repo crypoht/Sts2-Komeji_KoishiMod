@@ -26,19 +26,22 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
-         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
+         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious, KoishiTags.Stance };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
         {
             HoverTipFactory.FromPower<StrengthPower>(),
-            HoverTipFactory.FromPower<DexterityPower>()
+            HoverTipFactory.FromPower<DexterityPower>(),
+            HoverTipFactory.FromPower<BloomStancePower>(),
+            HoverTipFactory.FromPower<ClosedStancePower>(),
+            HoverTipFactory.FromKeyword(KoishiKeywords.Stance)
         };
 
 protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
             new PowerVar<JoyMaskPower>(1m),
-            new PowerVar<StrengthPower>(2m),
-            new PowerVar<DexterityPower>(2m), 
+            new PowerVar<StrengthPower>(3m),
+            new PowerVar<DexterityPower>(3m), 
             new CardsVar(1)
         };
 

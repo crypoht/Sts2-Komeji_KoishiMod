@@ -37,7 +37,9 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Stance) 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Stance),
+            HoverTipFactory.FromPower<BloomStancePower>(),
+            HoverTipFactory.FromPower<ClosedStancePower>() 
         };
 
         public Task OnStanceChanged(bool isClosedStance, bool isBloomStance)

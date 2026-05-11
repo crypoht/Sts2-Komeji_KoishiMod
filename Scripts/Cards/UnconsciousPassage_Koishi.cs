@@ -13,6 +13,8 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using KomeijiKoishi.Pools; 
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Powers; 
+using MegaCrit.Sts2.Core.HoverTips; 
+
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
@@ -23,7 +25,10 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
-        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Closed };
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromPower<ClosedStancePower>() 
+        };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 

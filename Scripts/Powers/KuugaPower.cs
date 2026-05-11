@@ -33,6 +33,11 @@ namespace KomeijiKoishi.Powers
                 return 0m;
             }
             
+            if (!props.IsPoweredAttack())
+            {
+                return 0m;
+            }
+            
             try 
             {
                 if (card.EnergyCost.GetWithModifiers(CostModifiers.All) == 0 && !card.EnergyCost.CostsX)

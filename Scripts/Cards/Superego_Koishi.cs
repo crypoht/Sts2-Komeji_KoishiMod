@@ -25,11 +25,13 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
-        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal ,KoishiKeywords.Closed , KoishiKeywords.Bloom };
+        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal };
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new EnergyVar(1) };
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            base.EnergyHoverTip 
+            base.EnergyHoverTip,
+            HoverTipFactory.FromPower<BloomStancePower>(),
+            HoverTipFactory.FromPower<ClosedStancePower>() 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -43,7 +45,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.EnergyCost.UpgradeBy(-1); 
+            base.RemoveKeyword(CardKeyword.Ethereal);
         }
     }
 }

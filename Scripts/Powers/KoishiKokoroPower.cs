@@ -88,7 +88,7 @@ namespace KomeijiKoishi.Powers
         private class Data
         {
             public decimal FreeCount = 1m;
-            public decimal BuffAmount = 2m;
+            public decimal BuffAmount = 3m;
             public decimal DrawAmount = 1m;
         }
     }

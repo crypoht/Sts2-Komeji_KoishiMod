@@ -27,7 +27,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Bloom)
+            HoverTipFactory.FromPower<BloomStancePower>() 
         };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 

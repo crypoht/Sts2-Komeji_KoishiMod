@@ -30,7 +30,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new BlockVar(11m, ValueProp.Move),
+            new BlockVar(9m, ValueProp.Move),
             new CardsVar(2),
             new DynamicVar("Magic", 3m) 
         };

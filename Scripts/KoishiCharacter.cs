@@ -80,13 +80,6 @@ namespace KomeijiKoishi.Characters
 			PackedIconPath: "res://mods/Komeiji_Koishi/images/relics/cookie_koishi.png",
 			PackedIconOutlinePath: "res://mods/Komeiji_Koishi/images/relics/cookie_koishi.png"
 		);
-
-		public override MegaCrit.Sts2.Core.Animation.CreatureAnimator GenerateAnimator(MegaCrit.Sts2.Core.Bindings.MegaSpine.MegaSprite controller)
-		{
-			return null!; 
-		}
-
-
 		public override List<string> GetArchitectAttackVfx() => new List<string>
 		{
 			"vfx/vfx_attack_blunt",

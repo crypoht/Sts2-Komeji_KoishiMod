@@ -18,7 +18,7 @@ namespace KomeijiKoishi.Cards
     public sealed class MentalStellarSuccession_Koishi : CustomCardModel
     {
         public MentalStellarSuccession_Koishi() 
-            : base(3, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }
+            : base(2, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 

@@ -51,7 +51,7 @@ namespace KomeijiKoishi.Cards
                 var handPile = PileType.Hand.GetPile(player);
                 
                 var unconsciousCardsInHand = handPile.Cards.Where(c => 
-                    KoishiExtensions.IsTrulyUnconscious(c) && 
+                    KoishiExtensions.IsTrulyUnconscious(c) &&  //这里用到了判定是否为无意识的方法
                     (c.Keywords == null || !c.Keywords.Contains(CardKeyword.Unplayable)) &&
                     c != this 
                 ).ToList();

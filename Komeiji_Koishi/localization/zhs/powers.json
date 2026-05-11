@@ -3,12 +3,12 @@
   "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.smartDescription": "当由你自己打出牌时，自动打出手牌中{Amount}张数的无意识牌。打出无意识牌时，抽 1 张牌。",
 
   "KOMEIJIKOISHI-BLOOM_STANCE_POWER.title": "盛开",
-  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌基础伤害的伤害。获得的[gold]格挡[/gold]减少 {BlockReduction}%。进入该状态时,获得{Amount:energyIcons()}",
+  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 {BlockReduction}%。进入该状态时,获得{Amount:energyIcons()}",
   "KOMEIJIKOISHI-BLOOM_STANCE_POWER.description":"打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 70%。进入该状态时,获得{energyPrefix:energyIcons(1)}",
 
   "KOMEIJIKOISHI-CLOSED_STANCE_POWER.title": "闭合",
-  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.smartDescription": "获得的[gold]格挡[/gold]提升 {BlockBonus}%。进入该状态时抽取一张牌",
-  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.description":"获得的[gold]格挡[/gold]提升 20%。进入该状态时抽取一张牌",
+  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.smartDescription": "获得的[gold]格挡[/gold]提升{BlockBonus}%。进入该状态时抽取一张牌",
+  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.description":"获得的[gold]格挡[/gold]提升20%。进入该状态时抽取一张牌",
 
   "KOMEIJIKOISHI-FETUS_DREAM_POWER.title": "胎儿之梦",
   "KOMEIJIKOISHI-FETUS_DREAM_POWER.smartDescription": "[gold]无意识[/gold]得到了扩张!",
@@ -62,9 +62,8 @@
   "KOMEIJIKOISHI-SELFLESS_LOVE_POWER.title": "没我之爱",
   "KOMEIJIKOISHI-SELFLESS_LOVE_POWER.smartDescription": "每当你生成 6 张弹幕牌时，抽 {Amount} 张牌。",
 
-  "KOMEIJIKOISHI-FLAWOFDNA_POWER.title": "记忆「DNA的瑕疵」",
-  "KOMEIJIKOISHI-FLAWOFDNA_POWER.description": "你所有的攻击牌耗能变为0 ，且打出后[gold]消耗[/gold]。",
-  "KOMEIJIKOISHI-FLAWOFDNA_POWER.smartDescription":"你所有的攻击牌耗能变为0 ，且打出后[gold]消耗[/gold]。",
+  "KOMEIJIKOISHI-FLAW_OF_DN_A_POWER.title": "记忆「DNA的瑕疵」",
+  "KOMEIJIKOISHI-FLAW_OF_DN_A_POWER.smartDescription":"你所有的攻击牌耗能变为0 ，且打出后[gold]消耗[/gold]。",
 
   "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_POWER.title": "「带刺的蔷薇园」",
   "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_POWER.smartDescription": "在你的回合开始时，你身上的 [gold]荆棘[/gold] 层数提升 {Percent}% 。",
@@ -74,6 +73,9 @@
 
   "KOMEIJIKOISHI-PERFECT_MIND_CONTROL_POWER.title": "精神控制",
   "KOMEIJIKOISHI-PERFECT_MIND_CONTROL_POWER.smartDescription": "你接下来抽到的 {Amount} 张 [gold]无意识[/gold] 牌将被自动打出。",
+
+  "KOMEIJIKOISHI-FLAW_POWER.title": "缺陷",
+  "KOMEIJIKOISHI-FLAW_POWER.smartDescription": "回合开始时，所有耗能为0的攻击牌伤害减少 {Amount} 点。",
 
   "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD_POWER.title": "恋野迷踪",
   "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD_POWER.smartDescription": "在你的回合开始时，从消耗牌堆中随机将 {Amount} 张由 [gold]花田中,恋迷踪[/gold] 生成的牌拿回手中。"

@@ -22,7 +22,7 @@ namespace KomeijiKoishi.Utils_Koishi
     public static class KoishiExtensions
     {
 
-        public static bool IsTrulyUnconscious(CardModel card)
+        public static bool IsTrulyUnconscious(CardModel card) //判断是否有无意识标签,返回值为bool
         {
             if (card == null) return false;
 
@@ -57,17 +57,17 @@ namespace KomeijiKoishi.Utils_Koishi
             return false;
         }
 
-        public static void ApplyUnconsciousToCard(CardModel card)
+        public static void ApplyUnconsciousToCard(CardModel card)  //添加无意识标签的方法
         {
             if (card == null) return;
 
             CardCmd.ApplyKeyword(card, new CardKeyword[] { KoishiKeywords.Unconscious });
         }
 
-        public static HashSet<CardModel> AutoPlayedByUnconsciousCards = new HashSet<CardModel>();
+        public static HashSet<CardModel> AutoPlayedByUnconsciousCards = new HashSet<CardModel>(); //这个不用管
 
-         public static class UnconsciousPlayHelper
-    {
+         public static class UnconsciousPlayHelper  //这是一个优化后的自动打出,可以精准的识别目标(没有使用,因为发现没必要)
+       {
         public static async Task SafeAutoPlayCard(PlayerChoiceContext choiceContext, Player player, CardModel targetCard)
         {
             if (targetCard == null || player.Creature.CombatState == null) return;

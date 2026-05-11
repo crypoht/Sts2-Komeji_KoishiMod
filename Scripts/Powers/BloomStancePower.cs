@@ -161,10 +161,10 @@ namespace KomeijiKoishi.Powers
 
                 try
                 {
-                    decimal dmgValue = cardModel.DynamicVars.Damage.BaseValue;
+                    decimal dmgValue = cardModel.DynamicVars.Damage.PreviewValue;
 
                     int repeat = 1;
-                    try { repeat = (int)cardModel.DynamicVars["Repeat"].BaseValue; }
+                    try { repeat = (int)cardModel.DynamicVars["Repeat"].PreviewValue; }
                     catch { }
 
                     MegaCrit.Sts2.Core.Logging.Log.Info(

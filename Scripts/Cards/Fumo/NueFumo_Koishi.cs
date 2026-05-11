@@ -8,7 +8,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Nodes.Cards; // 🌟 引入 NCard 以播放 UI 动画
+using MegaCrit.Sts2.Core.Nodes.Cards; 
 using KomeijiKoishi.Pools;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using BaseLib.Utils;
@@ -18,7 +18,6 @@ namespace KomeijiKoishi.Cards.Fumo
     [Pool(typeof(TokenCardPool))]
     public sealed class NueFumo_Koishi : CustomCardModel
     {
-        // 0费，技能牌，消耗
         public NueFumo_Koishi() 
             : base(0, CardType.Skill, CardRarity.Token, TargetType.Self, true) 
         { 
@@ -39,7 +38,16 @@ namespace KomeijiKoishi.Cards.Fumo
             {
                 if (cardModel.EnergyCost.GetWithModifiers(CostModifiers.None) >= 0)
                 {
-                    int randomCost = player.RunState.Rng.CombatEnergyCosts.NextInt(4);
+                    int randomCost;
+
+                    if (base.IsUpgraded)
+                    {
+                        randomCost = player.RunState.Rng.CombatEnergyCosts.NextInt(515);
+                    }
+                    else
+                    {
+                        randomCost = player.RunState.Rng.CombatEnergyCosts.NextInt(4);
+                    }
 
                     cardModel.EnergyCost.SetThisTurnOrUntilPlayed(randomCost, false);
 
@@ -56,7 +64,6 @@ namespace KomeijiKoishi.Cards.Fumo
 
         protected override void OnUpgrade()
         {
-            base.EnergyCost.UpgradeBy(+385);
         }
     }
 }

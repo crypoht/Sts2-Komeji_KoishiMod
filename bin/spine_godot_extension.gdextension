@@ -38,3 +38,13 @@ web.debug.threads.wasm32 = "web/libspine_godot.web.template_debug.wasm32.wasm"
 web.release.threads.wasm32 = "web/libspine_godot.web.template_release.wasm32.wasm"
 web.debug.wasm32 = "web/libspine_godot.web.template_debug.wasm32.nothreads.wasm"
 web.release.wasm32 = "web/libspine_godot.web.template_release.wasm32.nothreads.wasm"
+
+[icons]
+SpineAnimationTrack = "res://bin/icons/icon_spine_animation_track.svg"
+SpineAtlasResource = "res://bin/icons/icon_spine_atlas_resource.svg"
+SpineBoneNode = "res://bin/icons/icon_spine_bone_node.svg"
+SpineSkeletonDataResource = "res://bin/icons/icon_spine_skeleton_data_resource.svg"
+SpineSkeletonFileResource = "res://bin/icons/icon_spine_skeleton_file_resource.svg"
+SpineSlotNode = "res://bin/icons/icon_spine_slot_node.svg"
+SpineSprite = "res://bin/icons/icon_spine_sprite.svg"
+SpineMesh2D = "res://bin/icons/icon_spine_sprite.svg"

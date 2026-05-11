@@ -13,6 +13,7 @@ using System;
 using BaseLib.Utils;    
 using MegaCrit.Sts2.Core.Models; 
 using KomeijiKoishi.Utils_Koishi; 
+using MegaCrit.Sts2.Core.HoverTips; 
 
 
 namespace KomeijiKoishi.Cards
@@ -23,7 +24,11 @@ namespace KomeijiKoishi.Cards
         public PhilosophyOfTheHated_Koishi() 
             : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self, true) { }
 
-        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Closed };
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromPower<ClosedStancePower>(),
+            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
+        };
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 

@@ -34,6 +34,8 @@ namespace KomeijiKoishi.Cards
 
         public override int MaxUpgradeLevel => 514114514;
 
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Shiv };
+
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.Static(StaticHoverTip.Fatal, Array.Empty<DynamicVar>())

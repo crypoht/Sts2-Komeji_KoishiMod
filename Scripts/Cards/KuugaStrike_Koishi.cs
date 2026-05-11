@@ -40,7 +40,9 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Stance) 
+            HoverTipFactory.FromKeyword(KoishiKeywords.Stance),
+            HoverTipFactory.FromPower<BloomStancePower>(),
+            HoverTipFactory.FromPower<ClosedStancePower>() 
         };
 
 

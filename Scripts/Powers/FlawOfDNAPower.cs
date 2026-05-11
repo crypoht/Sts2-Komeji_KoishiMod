@@ -36,6 +36,7 @@ namespace KomeijiKoishi.Powers
             HoverTipFactory.FromKeyword(CardKeyword.Exhaust)
         };
 
+
         public override bool TryModifyEnergyCostInCombat(CardModel card, decimal originalCost, out decimal modifiedCost)
         {
             if (card.Owner?.Creature != base.Owner || card.Type != CardType.Attack)

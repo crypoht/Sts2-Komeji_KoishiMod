@@ -13,6 +13,7 @@ using KomeijiKoishi.Pools;
 using KomeijiKoishi.Powers;
 using KomeijiKoishi.Enums;
 using BaseLib.Utils;
+using MegaCrit.Sts2.Core.HoverTips; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -28,7 +29,10 @@ namespace KomeijiKoishi.Cards
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
 
-        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Closed };
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromPower<ClosedStancePower>() 
+        };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 

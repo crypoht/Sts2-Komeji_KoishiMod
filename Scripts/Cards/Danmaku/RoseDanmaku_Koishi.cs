@@ -34,7 +34,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(11m, ValueProp.Move),
+            new DamageVar(10m, ValueProp.Move),
             new DynamicVar("Thorns", 1m)       
         };
 

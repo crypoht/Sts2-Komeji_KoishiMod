@@ -14,6 +14,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using KomeijiKoishi.Pools; 
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Powers; 
+using MegaCrit.Sts2.Core.HoverTips; 
 
 namespace KomeijiKoishi.Cards
 {
@@ -25,7 +26,10 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
-        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Bloom };
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromPower<BloomStancePower>() 
+        };
 
         protected override bool ShouldGlowGoldInternal
         {

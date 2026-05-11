@@ -20,7 +20,7 @@ namespace KomeijiKoishi.Cards
     public sealed class FlawOfDNA_Koishi : CustomCardModel
     {
         public FlawOfDNA_Koishi()
-            : base(4, CardType.Power, CardRarity.Rare, TargetType.Self, true)
+            : base(3, CardType.Power, CardRarity.Rare, TargetType.Self, true)
         {
         }
 
@@ -28,7 +28,8 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DynamicVar("Power", 1m) 
+            new DynamicVar("Power", 1m),
+            new DynamicVar("Flaw", 2m)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip>
@@ -45,6 +46,7 @@ namespace KomeijiKoishi.Cards
             await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
             
             await PowerCmd.Apply<FlawOfDNAPower>(player.Creature, base.DynamicVars["Power"].BaseValue, player.Creature, this, false);
+            await PowerCmd.Apply<FlawPower>(player.Creature, base.DynamicVars["Flaw"].BaseValue, player.Creature, this, false);
         }
 
         protected override void OnUpgrade()

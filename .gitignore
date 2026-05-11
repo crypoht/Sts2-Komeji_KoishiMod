@@ -18,6 +18,11 @@
 *.cfg
 *.sln
 *.exe
+*.skel
+*.atlas
+*.tres
+*.mp3
+*.wav
 
 # 确保不忽略 cs 和 json
 !*.cs

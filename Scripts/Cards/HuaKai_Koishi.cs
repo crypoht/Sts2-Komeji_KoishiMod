@@ -10,6 +10,8 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Powers; 
 using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using System.Linq;
 
 namespace KomeijiKoishi.Cards
 {
@@ -41,9 +43,15 @@ namespace KomeijiKoishi.Cards
 
             switch (randomPowerIndex)
             {
-                case 0: await PowerCmd.Apply<BloomStancePower>(target, 1m, player.Creature, this, false); break;
+                case 0: 
+                    await ClearStancesLocally(target);
+                    await PowerCmd.Apply<BloomStancePower>(target, 1m, player.Creature, this, false); 
+                    break;
                 case 1: await PowerCmd.Apply<BramblyRoseGardenPower>(target, 100m, player.Creature, this, false); break;
-                case 2: await PowerCmd.Apply<ClosedStancePower>(target, 1m, player.Creature, this, false); break;
+                case 2: 
+                    await ClearStancesLocally(target);
+                    await PowerCmd.Apply<ClosedStancePower>(target, 1m, player.Creature, this, false); 
+                    break;
                 case 3: await PowerCmd.Apply<ConsciousnessSpiralPower>(target, 1m, player.Creature, this, false); break;
                 case 4: await PowerCmd.Apply<DanmakuArtPower>(target, 2m, player.Creature, this, false); break;
                 case 5: await PowerCmd.Apply<FetusDreamPower>(target, 1m, player.Creature, this, false); break;
@@ -63,12 +71,23 @@ namespace KomeijiKoishi.Cards
                 case 19: await PowerCmd.Apply<SecondNeedPower>(target, 9m, player.Creature, this, false); break;
                 case 20: await PowerCmd.Apply<SelflessLovePower>(target, 1m, player.Creature, this, false); break;
                 case 21: await PowerCmd.Apply<SuperegoPower>(target, 1m, player.Creature, this, false); break;
-                case 22: await PowerCmd.Apply<TracingPower>(target, 1m, player.Creature, this, false); break;
+                case 22: await PowerCmd.Apply<TracingPower>(target, 514m, player.Creature, this, false); break;
                 case 23: await PowerCmd.Apply<UltimateUnconsciousFormPower>(target, 1m, player.Creature, this, false); break;
                 case 24: await PowerCmd.Apply<UndergroundRosePower>(target, 1m, player.Creature, this, false); break;
             }
         }
 
+        private async Task ClearStancesLocally(Creature targetCreature)
+        {
+            var powersToRemove = targetCreature.Powers
+                .Where(p => p is BloomStancePower || p is ClosedStancePower)
+                .ToList();
+
+            foreach (var power in powersToRemove)
+            {
+                await PowerCmd.Remove(power); 
+            }
+        }
         protected override void OnUpgrade()
         {
             base.EnergyCost.UpgradeBy(-1); 

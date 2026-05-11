@@ -30,8 +30,9 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new BlockVar(12m, ValueProp.Move) 
+            new BlockVar(11m, ValueProp.Move) 
         };
+        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Unconscious };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
@@ -69,7 +70,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Block.UpgradeValueBy(8m);
+            base.DynamicVars.Block.UpgradeValueBy(6m);
         }
     }
 }
