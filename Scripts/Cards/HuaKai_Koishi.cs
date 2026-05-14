@@ -47,7 +47,7 @@ namespace KomeijiKoishi.Cards
                     await ClearStancesLocally(target);
                     await PowerCmd.Apply<BloomStancePower>(target, 1m, player.Creature, this, false); 
                     break;
-                case 1: await PowerCmd.Apply<BramblyRoseGardenPower>(target, 100m, player.Creature, this, false); break;
+                case 1: await PowerCmd.Apply<BramblyRoseGardenPower>(target, 1m, player.Creature, this, false); break;
                 case 2: 
                     await ClearStancesLocally(target);
                     await PowerCmd.Apply<ClosedStancePower>(target, 1m, player.Creature, this, false); 

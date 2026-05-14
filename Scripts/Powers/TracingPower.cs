@@ -44,6 +44,11 @@ namespace KomeijiKoishi.Powers
                 return 1m;
             }
 
+             if (!props.IsPoweredAttack())
+            {
+                return 1m;
+            }
+
             if (cardSource?.Tags?.Contains(KoishiTags.Danmaku) == true)
             {
                 if (dealer != null)

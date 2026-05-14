@@ -19,7 +19,7 @@ namespace KomeijiKoishi.Cards
     public sealed class IdsShikigami_Koishi : CustomCardModel
     {
         public IdsShikigami_Koishi() 
-            : base(-1, CardType.Skill, CardRarity.Rare, TargetType.Self, true)
+            : base(514, CardType.Skill, CardRarity.Rare, TargetType.Self, true)
         {
         }
 

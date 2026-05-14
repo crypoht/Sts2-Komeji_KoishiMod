@@ -34,6 +34,8 @@ namespace KomeijiKoishi.Cards
             new RepeatVar(1)
         };
 
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
+
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromKeyword(KoishiKeywords.Stance),

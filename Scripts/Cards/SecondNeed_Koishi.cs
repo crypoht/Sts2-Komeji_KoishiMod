@@ -33,6 +33,8 @@ namespace KomeijiKoishi.Cards
             new DynamicVar("BlockAmount", 7m) 
         };
 
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
+
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromKeyword(KoishiKeywords.Stance),

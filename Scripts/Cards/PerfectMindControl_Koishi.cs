@@ -17,7 +17,7 @@ namespace KomeijiKoishi.Cards
     public sealed class PerfectMindControl_Koishi : CustomCardModel
     {
         public PerfectMindControl_Koishi() 
-            : base(-1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
+            : base(514, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 

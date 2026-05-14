@@ -31,12 +31,6 @@ namespace KomeijiKoishi.Powers
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/BramblyRoseGardenPower.png";
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/BramblyRoseGardenPower.png";
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
-        {
-            new DynamicVar("Percent", base.Amount * 100m)
-        };
-
-
         public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
         {
 
@@ -49,8 +43,6 @@ namespace KomeijiKoishi.Powers
                 {
                     base.Flash();
                     
-
-
                     decimal amountToAdd = thornsPower.Amount * base.Amount;
                     
                     await PowerCmd.Apply<ThornsPower>(base.Owner, amountToAdd, base.Owner, null, false);

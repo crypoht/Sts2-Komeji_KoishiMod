@@ -27,7 +27,7 @@
  "KOMEIJIKOISHI-SUPEREGO_POWER.smartDescription": "进入 [gold]闭合[/gold] 姿态时，额外抽取 {Amount} 张牌。进入 [gold]盛开[/gold] 姿态时，额外获得 {Amount:energyIcons()}。",
 
  "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.title": "地灵符「精神恒星接替」",
- "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.smartDescription": "在本场战斗中，[gold]追踪[/gold] 的伤害加成效果提高 {Amount}%。",
+ "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.smartDescription": "在本场战斗中[gold]追踪[/gold]的伤害加成效果提高{Amount}%。",
 
  "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.title": "秦心之面",
   "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.smartDescription": "切换姿态时，随机触发一种[red]情[/red][orange]绪[/orange]。",
@@ -66,7 +66,7 @@
   "KOMEIJIKOISHI-FLAW_OF_DN_A_POWER.smartDescription":"你所有的攻击牌耗能变为0 ，且打出后[gold]消耗[/gold]。",
 
   "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_POWER.title": "「带刺的蔷薇园」",
-  "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_POWER.smartDescription": "在你的回合开始时，你身上的 [gold]荆棘[/gold] 层数提升 {Percent}% 。",
+  "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_POWER.smartDescription": "在你的回合开始时，你身上的 [gold]荆棘[/gold] 层数提升{Amount}00%。",
 
   "KOMEIJIKOISHI-INSTINCTIVE_FORM_POWER.title": "本能的形态",
   "KOMEIJIKOISHI-INSTINCTIVE_FORM_POWER.smartDescription": "在你的回合结束时，随机打出手牌中{Amount}张[gold]无意识[/gold]牌。",

@@ -2,8 +2,8 @@
   "id": "Komeiji_Koishi",
   "name": "Komeiji Koishi",
   "author": "UINYA",
-  "description": "古明地恋",
-  "version": "0.5.0",
+  "description": "喂喂?听得到吗?我在你身后哦",
+  "version": "0.5.14",
   "has_pck": true,
   "has_dll": true,
   "dependencies": [

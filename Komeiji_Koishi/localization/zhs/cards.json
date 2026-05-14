@@ -34,7 +34,7 @@
   "KOMEIJIKOISHI-KOMEIJI_SPIN_KOISHI.description": "对所有敌人造成 {Damage:diff()} 点伤害 {Repeat:diff()} 次。",
 
   "KOMEIJIKOISHI-FETUS_DREAM_KOISHI.title": "「胎儿之梦」",
-  "KOMEIJIKOISHI-FETUS_DREAM_KOISHI.description": "在本场战斗中，卡牌名字中的无意识也会被视为[gold]无意识[/gold]。",
+  "KOMEIJIKOISHI-FETUS_DREAM_KOISHI.description": "在本场战斗中，卡牌名字中的无意识以及本能也会被视为[gold]无意识[/gold]。",
 
   "KOMEIJIKOISHI-HEART_DANMAKU_KOISHI.title": "心形弹幕",
   "KOMEIJIKOISHI-HEART_DANMAKU_KOISHI.description": "造成 {Damage:diff()} 点伤害。给予 {WeakPower:diff()} 层[gold]虚弱[/gold]。",
@@ -137,7 +137,7 @@
   "KOMEIJIKOISHI-TURN_AROUND_DODGE_KOISHI.title": "转身闪躲",
   "KOMEIJIKOISHI-TURN_AROUND_DODGE_KOISHI.description": "获得 {Block:diff()} 点格挡。\n随机打出手牌中的一张[gold]无意识[/gold]牌。",
 
-  "KOMEIJIKOISHI-DISINTEGRATING_CONSCIOUSNESS_CAPTURE_KOISHI.title": "崩解意识捕获",
+  "KOMEIJIKOISHI-DISINTEGRATING_CONSCIOUSNESS_CAPTURE_KOISHI.title": "无意识捕获",
   "KOMEIJIKOISHI-DISINTEGRATING_CONSCIOUSNESS_CAPTURE_KOISHI.description": "造成 {Damage:diff()} 点伤害。\n如果你的弃牌堆中有[gold]无意识[/gold]牌，获得 {Energy:energyIcons()} 。",
 
   "KOMEIJIKOISHI-JOYFUL_DANCE_KOISHI.title": "欢乐舞步",

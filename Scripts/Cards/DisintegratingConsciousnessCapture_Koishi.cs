@@ -27,6 +27,8 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
+
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious),

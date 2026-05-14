@@ -26,7 +26,7 @@ namespace KomeijiKoishi.Cards
     public sealed class SpiritualDestruction_Koishi : CustomCardModel
     {
         public SpiritualDestruction_Koishi() 
-            : base(-1, CardType.Skill, CardRarity.Rare, TargetType.Self, true)
+            : base(514, CardType.Skill, CardRarity.Rare, TargetType.Self, true)
         {
         }
 

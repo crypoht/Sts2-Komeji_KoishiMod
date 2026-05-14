@@ -22,6 +22,7 @@ using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Vfx;
 
 
+
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
@@ -36,6 +37,26 @@ namespace KomeijiKoishi.Cards
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Shiv };
 
+        public override TargetType TargetType
+        {
+            get
+            {
+                return HasAoECondition ? TargetType.AllEnemies : TargetType.AnyEnemy;
+            }
+        }
+
+        private bool HasAoECondition
+        {
+            get
+            {
+                return CombatManager.Instance != null && 
+                       CombatManager.Instance.IsInProgress && 
+                       base.Owner != null && 
+                       base.Owner.Creature.HasPower<FanOfKnivesPower>(); 
+            }
+        }
+
+
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.Static(StaticHoverTip.Fatal, Array.Empty<DynamicVar>())
@@ -48,23 +69,39 @@ namespace KomeijiKoishi.Cards
 
        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
-            ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
-            
             var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
-            if (player == null) return; 
+            var combatState = base.CombatState; 
+            if (player == null || combatState == null) return; 
 
             if (player.Character != null)
             {
                 await CreatureCmd.TriggerAnim(player.Creature, "Attack", player.Character.AttackAnimDelay);
             }
 
-            bool shouldTriggerFatal = cardPlay.Target.Powers.All((PowerModel p) => p.ShouldOwnerDeathTriggerFatal());
+            var attackCommand = DamageCmd.Attack(base.DynamicVars.Damage.BaseValue).FromCard(this);
+            bool shouldTriggerFatal = false; 
 
-            var attackCommand = await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                .FromCard(this)
-                .Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash", null, "knife_attack.mp3") 
-                .Execute(choiceContext);
+            if (HasAoECondition)
+            {
+                attackCommand = attackCommand.TargetingAllOpponents(combatState)
+                    .WithHitFx("vfx/vfx_attack_slash", null, "knife_attack.mp3");
+                
+                if (combatState.HittableEnemies != null)
+                {
+                    shouldTriggerFatal = combatState.HittableEnemies.All(e => e.Powers.All(p => p.ShouldOwnerDeathTriggerFatal()));
+                }
+            }
+            else
+            {
+                ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
+
+                attackCommand = attackCommand.Targeting(cardPlay.Target)
+                    .WithHitFx("vfx/vfx_attack_slash", null, "knife_attack.mp3");
+                
+                shouldTriggerFatal = cardPlay.Target.Powers.All(p => p.ShouldOwnerDeathTriggerFatal());
+            }
+
+            var result = await attackCommand.Execute(choiceContext);
 
 
            if (shouldTriggerFatal && attackCommand.Results.Any(r => r.WasTargetKilled))
@@ -80,13 +117,10 @@ namespace KomeijiKoishi.Cards
                     var originalKnife = masterDeckPile.Cards.FirstOrDefault(c => c is KoishisKnife_Koishi);
                     if (originalKnife != null)
                     {
-
                         player.RunState.CurrentMapPointHistoryEntry?.GetEntry(player.NetId).UpgradedCards.Add(originalKnife.Id);
-
                         originalKnife.UpgradeInternal();
                         originalKnife.FinalizeUpgradeInternal();
 
-   
                         if (LocalContext.IsMe(player) && base.CombatState?.HittableEnemies?.All(e => e.IsDead) != true)
                         {
                             NRun.Instance?.GlobalUi.CardPreviewContainer.AddChild(NCardSmithVfx.Create([originalKnife])!);

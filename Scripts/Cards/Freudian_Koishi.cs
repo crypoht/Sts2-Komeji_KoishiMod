@@ -32,7 +32,8 @@ namespace KomeijiKoishi.Cards
         { 
             new BlockVar(11m, ValueProp.Move) 
         };
-        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Unconscious };
+
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious, KoishiTags.Unconscious};
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 

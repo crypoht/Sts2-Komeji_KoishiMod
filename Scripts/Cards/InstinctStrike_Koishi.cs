@@ -36,7 +36,7 @@ namespace KomeijiKoishi.Cards
             HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious)
         };
 
-        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike };
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike,KoishiTags.Subconscious };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {

@@ -24,6 +24,8 @@ namespace KomeijiKoishi.Cards
         {
         }
 
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
+
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
