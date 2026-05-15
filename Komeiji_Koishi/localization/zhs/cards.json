@@ -34,7 +34,7 @@
   "KOMEIJIKOISHI-KOMEIJI_SPIN_KOISHI.description": "对所有敌人造成 {Damage:diff()} 点伤害 {Repeat:diff()} 次。",
 
   "KOMEIJIKOISHI-FETUS_DREAM_KOISHI.title": "「胎儿之梦」",
-  "KOMEIJIKOISHI-FETUS_DREAM_KOISHI.description": "在本场战斗中，卡牌名字中的无意识以及本能也会被视为[gold]无意识[/gold]。",
+  "KOMEIJIKOISHI-FETUS_DREAM_KOISHI.description": "在本场战斗中，卡牌名字中的'无意识'以及'本能'也会被视为[gold]无意识[/gold]。",
 
   "KOMEIJIKOISHI-HEART_DANMAKU_KOISHI.title": "心形弹幕",
   "KOMEIJIKOISHI-HEART_DANMAKU_KOISHI.description": "造成 {Damage:diff()} 点伤害。给予 {WeakPower:diff()} 层[gold]虚弱[/gold]。",
