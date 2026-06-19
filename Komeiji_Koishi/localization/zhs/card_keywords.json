@@ -1,0 +1,22 @@
+{
+  "KOMEIJIKOISHI-UNCONSCIOUS.title": "无意识",
+  "KOMEIJIKOISHI-UNCONSCIOUS.description": "带有此标记的牌会被无意识的打出。",
+
+  "KOMEIJIKOISHI-BLOOM.title": "盛开",
+  "KOMEIJIKOISHI-BLOOM.description": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少60%。进入该状态时,获得能量",
+
+  "KOMEIJIKOISHI-CLOSED.title": "闭合",
+  "KOMEIJIKOISHI-CLOSED.description": "获得的[gold]格挡[/gold]提升20%。进入该状态时抽取一张牌",
+
+  "KOMEIJIKOISHI-DANMAKU.title": "弹幕",
+  "KOMEIJIKOISHI-DANMAKU.description": "拥有不同效果的衍生卡",
+
+  "KOMEIJIKOISHI-STANCE.title": "姿态",
+  "KOMEIJIKOISHI-STANCE.description": "[blue]闭合姿态[/blue]和[red]盛开姿态[/red],进入时有特殊效果",
+
+  "KOMEIJIKOISHI-FUMO.title": "Fumo",
+  "KOMEIJIKOISHI-FUMO.description": "世界的支配者,拥有着不可思议的力量",
+
+  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD.title": "恋野迷踪",
+  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD.description": "[green]恋恋[/green]冒险中,花田[purple]紫[/purple][blue]蓝[/blue][red]红[/red],放轻松,[thinky_dots]脑袋空空[/thinky_dots]"
+}

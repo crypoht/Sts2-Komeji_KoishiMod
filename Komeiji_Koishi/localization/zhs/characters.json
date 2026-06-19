@@ -1,0 +1,17 @@
+{
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.aromaPrinciple": "[sine][blue]以前好像被别人这么盯着过呢[/blue][/sine]",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.banter.alive.endTurnPing": "恋恋在等着哦~",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.banter.dead.endTurnPing": "Zzz",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.cardsModifierDescription": "古明地恋的卡牌现在会出现在奖励和商店中。",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.cardsModifierTitle": "古明地恋卡牌",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.description": "无意识的觉妖怪,无意来到高塔,开始了她的冒险",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.eventDeathPrevention": "倒下的话就不能继续冒险了哦",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.goldMonologue": "[sine]好多亮晶晶!阿空好像有收集这些的爱好呢[/sine]",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.possessiveAdjective": "她的",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.pronounObject": "她",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.pronounPossessive": "她的",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.pronounSubject": "她",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.title": "古明地恋",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.titleObject": "古明地恋",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.unlockText": "用[pink]{Prerequisite}[/pink]进行一局游戏来解锁这个角色。"
+}

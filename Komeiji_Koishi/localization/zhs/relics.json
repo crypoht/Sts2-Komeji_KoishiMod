@@ -1,0 +1,48 @@
+{
+  "KOMEIJIKOISHI-KOISHI_STARTER_RELIC.title": "帽子先生",
+  "KOMEIJIKOISHI-KOISHI_STARTER_RELIC.description": "在你的回合结束时，随机打出手牌中一张带有[gold]无意识[/gold]的牌。",
+  "KOMEIJIKOISHI-KOISHI_STARTER_RELIC.flavor": "帽子先生是我的好朋友",
+
+  "KOMEIJIKOISHI-KOISHI_ANICENT_RELIC.title": "带蔷薇花的帽子先生",
+  "KOMEIJIKOISHI-KOISHI_ANICENT_RELIC.description": "在你的回合结束时，随机打出手牌中一张带有 [gold]无意识[/gold] 的牌。打出带有[gold]无意识[/gold]的牌时,获得1点[gold]荆棘[/gold]",
+  "KOMEIJIKOISHI-KOISHI_ANICENT_RELIC.flavor":"好朋友带了些花给帽子先生",
+
+  "SEA_GLASS.KOMEIJIKOISHI-KOISHI_CHARACTER.title":"七彩咕咕嘎嘎石",
+
+  "KOMEIJIKOISHI-LING_YI_DIAN_HUA_RELIC.title": "灵异电话",
+  "KOMEIJIKOISHI-LING_YI_DIAN_HUA_RELIC.description": "拾起时，选择牌组中的 {Cards} 张牌，给予它们 [gold]自在[/gold] 附魔。",
+  "KOMEIJIKOISHI-LING_YI_DIAN_HUA_RELIC.flavor": "“喂喂，这里是恋恋！我现在在你的身后哦~”",
+
+  "KOMEIJIKOISHI-SATORI_BERET_KOISHI.title": "姐姐的贝雷帽",
+  "KOMEIJIKOISHI-SATORI_BERET_KOISHI.description": "每场战斗中，你第一次进入 [gold]盛开[/gold] 时，额外抽取 {Cards} 张牌并获得{Energy:energyIcons()}。",
+  "KOMEIJIKOISHI-SATORI_BERET_KOISHI.flavor": "上面散发着迷之自信",
+
+  "KOMEIJIKOISHI-RINS_CART_KOISHI.title": "阿磷的小车",
+  "KOMEIJIKOISHI-RINS_CART_KOISHI.description": "每当有生物死亡时，抽{Cards}张牌。",
+  "KOMEIJIKOISHI-RINS_CART_KOISHI.flavor": "阿磷很喜欢收集尸体并玩弄,之前还被八云家的蓝大人投诉过",
+
+  "KOMEIJIKOISHI-OKUUS_SECRET_EYE_KOISHI.title": "阿空的秘眼",
+  "KOMEIJIKOISHI-OKUUS_SECRET_EYE_KOISHI.description": "每花费{Energy}{energyPrefix:energyIcons(1)}，对一名随机敌人造成 [blue]{Damage}[/blue] 点伤害。",
+  "KOMEIJIKOISHI-OKUUS_SECRET_EYE_KOISHI.flavor": "地狱鸦能完美的掌握这股力量,理论上是个极度危险的家伙,不过好在是个笨蛋",
+
+  "KOMEIJIKOISHI-MASK_OF_HOPE_RELIC.title": "希望之面",
+  "KOMEIJIKOISHI-MASK_OF_HOPE_RELIC.description": "在每场战斗开始时，你打出的第一张牌耗能变为0。",
+  "KOMEIJIKOISHI-MASK_OF_HOPE_RELIC.flavor": "这是俺拾滴",
+
+  "KOMEIJIKOISHI-FUMO_CARD_RELIC_KOISHI.title": "Fumo卡片",
+  "KOMEIJIKOISHI-FUMO_CARD_RELIC_KOISHI.description": "在每场战斗开始时，将{Cards}张随机的 [gold]Fumo[/gold] 牌加入你的手牌。",
+  "KOMEIJIKOISHI-FUMO_CARD_RELIC_KOISHI.flavor": "外界最流行的卡片!据说已经被买爆了!",
+
+  "KOMEIJIKOISHI-ROSE_BOUQUET_KOISHI.title": "蔷薇花束",
+  "KOMEIJIKOISHI-ROSE_BOUQUET_KOISHI.description": "每场战斗开始时，所有0{energyPrefix:energyIcons(1)}牌提高[blue]{Damage}[/blue]点伤害。",
+  "KOMEIJIKOISHI-ROSE_BOUQUET_KOISHI.flavor": "如果你想要,就要自己来拿",
+
+  "KOMEIJIKOISHI-IDOLS_MICROPHONE_KOISHI.title": "偶像的麦克风",
+  "KOMEIJIKOISHI-IDOLS_MICROPHONE_KOISHI.description": "每回合你打出的第一张[gold]无意识[/gold]牌会返回你的手牌。",
+  "KOMEIJIKOISHI-IDOLS_MICROPHONE_KOISHI.flavor": "其实恋恋很有做偶像的潜质呢",
+
+  "KOMEIJIKOISHI-DIM_LIGHT_CANDLE_KOISHI.title": "虚光蜡烛",
+  "KOMEIJIKOISHI-DIM_LIGHT_CANDLE_KOISHI.description": "每当有一张牌被 [gold]消耗[/gold] 时，回复 {Heal} 点生命。每场战斗最多触发 [blue]6[/blue] 次。",
+  "KOMEIJIKOISHI-DIM_LIGHT_CANDLE_KOISHI.flavor": "似乎可以放在帽子先生上......"
+
+}

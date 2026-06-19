@@ -1,0 +1,99 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BaseLib.Utils; 
+using BaseLib.Abstracts; 
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps; 
+using MegaCrit.Sts2.Core.GameActions.Multiplayer; 
+using KomeijiKoishi.Pools; 
+using KomeijiKoishi.Enums;
+using KomeijiKoishi.Powers; 
+using MegaCrit.Sts2.Core.HoverTips; 
+
+namespace KomeijiKoishi.Cards
+{
+    [Pool(typeof(KoishiCardPool))]
+    public sealed class HeartAnger_Koishi : CustomCardModel, IStanceListenerCard
+    {
+        public HeartAnger_Koishi() 
+            : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) { }
+
+        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromPower<BloomStancePower>(),
+            HoverTipFactory.FromPower<ClosedStancePower>()
+        };
+
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
+        { 
+            new DamageVar(16m, ValueProp.Move)
+        };
+
+        private bool _isCostModified = false;
+
+        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+        {
+            try
+            {
+                if (cardPlay.Target == null) return;
+                var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
+                if (player == null) return;
+
+                if (player.Character != null)
+                {
+                    await CreatureCmd.TriggerAnim(player.Creature, "Attack", player.Character.CastAnimDelay);
+                }
+
+                await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
+                    .FromCard(this)
+                    .Targeting(cardPlay.Target)
+                    .WithHitFx("vfx/vfx_attack_blunt", null, "blunt_heavy.mp3")
+                    .Execute(choiceContext);
+
+                await Cmd.Wait(0.2f, false);
+
+                await BloomStancePower.EnterThisStance(choiceContext, player, this);
+
+                await this.OnStanceChanged(false, true);
+            }
+            catch (Exception ex)
+            {
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[HeartAnger] Error: {ex.Message}");
+            }
+        }
+
+        protected override void OnUpgrade()
+        {
+            base.DynamicVars.Damage.UpgradeValueBy(6m);
+        }
+
+       public Task OnStanceChanged(bool isClosedStance, bool isBloomStance)
+        {
+            bool shouldReduceCost = isClosedStance;
+
+            if (shouldReduceCost != _isCostModified)
+            {
+                if (shouldReduceCost)
+                {
+                    base.EnergyCost.AddThisCombat(-1, false);
+                    _isCostModified = true;
+                }
+                else
+                {
+                    base.EnergyCost.AddThisCombat(1, false);
+                    _isCostModified = false;
+                }
+            }
+            
+            return Task.CompletedTask;
+        }
+    }
+}

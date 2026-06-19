@@ -1,0 +1,147 @@
+using System;
+using System.Collections.Generic;
+using System.Linq; 
+using System.Threading.Tasks;
+using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.ValueProps;
+using KomeijiKoishi.Pools;
+using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Models;  
+using KomeijiKoishi.Enums;
+using MegaCrit.Sts2.Core.HoverTips; 
+using MegaCrit.Sts2.Core.Nodes.CommonUi; 
+using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Combat; 
+using MegaCrit.Sts2.Core.Context;
+using MegaCrit.Sts2.Core.Nodes;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+
+
+
+namespace KomeijiKoishi.Cards
+{
+    [Pool(typeof(KoishiCardPool))]
+    public sealed class KoishisKnife_Koishi : CustomCardModel
+    {
+        public KoishisKnife_Koishi() 
+            : base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) { }
+
+        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+
+        public override int MaxUpgradeLevel => 514114514;
+
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Shiv };
+
+        public override TargetType TargetType
+        {
+            get
+            {
+                return HasAoECondition ? TargetType.AllEnemies : TargetType.AnyEnemy;
+            }
+        }
+
+        private bool HasAoECondition
+        {
+            get
+            {
+                if (!base.IsMutable) return false;
+                
+                return CombatManager.Instance != null && 
+                       CombatManager.Instance.IsInProgress && 
+                       base.Owner != null && 
+                       base.Owner.Creature.HasPower<FanOfKnivesPower>(); 
+            }
+        }
+
+
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.Static(StaticHoverTip.Fatal, Array.Empty<DynamicVar>())
+        };
+
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
+        { 
+            new DamageVar(3m, ValueProp.Move) 
+        };
+
+       protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+        {
+            var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
+            var combatState = base.CombatState; 
+            if (player == null || combatState == null) return; 
+
+            if (player.Character != null)
+            {
+                await CreatureCmd.TriggerAnim(player.Creature, "Attack", player.Character.AttackAnimDelay);
+            }
+
+            var attackCommand = DamageCmd.Attack(base.DynamicVars.Damage.BaseValue).FromCard(this);
+            bool shouldTriggerFatal = false; 
+
+            if (HasAoECondition)
+            {
+                attackCommand = attackCommand.TargetingAllOpponents(combatState)
+                    .WithHitFx("vfx/vfx_attack_slash", null, "knife_attack.mp3");
+                
+                if (combatState.HittableEnemies != null)
+                {
+                    shouldTriggerFatal = combatState.HittableEnemies.All(e => e.Powers.All(p => p.ShouldOwnerDeathTriggerFatal()));
+                }
+            }
+            else
+            {
+                ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
+
+                attackCommand = attackCommand.Targeting(cardPlay.Target)
+                    .WithHitFx("vfx/vfx_attack_slash", null, "knife_attack.mp3");
+                
+                shouldTriggerFatal = cardPlay.Target.Powers.All(p => p.ShouldOwnerDeathTriggerFatal());
+            }
+
+            var result = await attackCommand.Execute(choiceContext);
+
+
+           if (shouldTriggerFatal && attackCommand.Results.SelectMany((List<DamageResult> r) => r).Any((DamageResult r) => r.WasTargetKilled))
+            {
+                this.UpgradeInternal();
+                this.FinalizeUpgradeInternal();
+
+                if (base.IsClone) return;
+
+                var masterDeckPile = PileType.Deck.GetPile(player);
+                if (masterDeckPile != null && masterDeckPile.Cards != null)
+                {
+                    var originalKnife = masterDeckPile.Cards.FirstOrDefault(c => c is KoishisKnife_Koishi);
+                    if (originalKnife != null)
+                    {
+                        player.RunState.CurrentMapPointHistoryEntry?.GetEntry(player.NetId).UpgradedCards.Add(originalKnife.Id);
+                        originalKnife.UpgradeInternal();
+                        originalKnife.FinalizeUpgradeInternal();
+
+                        if (LocalContext.IsMe(player) && base.CombatState?.HittableEnemies?.All(e => e.IsDead) != true)
+                        {
+                            NRun.Instance?.GlobalUi.CardPreviewContainer.AddChild(NCardSmithVfx.Create([originalKnife])!);
+                        }
+                    }
+                }
+            }
+        }
+        protected override void OnUpgrade()
+        {
+            decimal rawIncrease = base.DynamicVars.Damage.BaseValue * 0.4m;
+            
+            decimal finalIncrease = Math.Floor(rawIncrease);
+            if (finalIncrease < 1m) 
+            {
+                finalIncrease = 1m;
+            }
+            base.DynamicVars.Damage.UpgradeValueBy(finalIncrease);
+        }
+    }
+}

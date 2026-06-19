@@ -1,0 +1,29 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+# 忽略所有的 png 图片
+*.png
+
+# 忽略所有的 tscn 场景文件
+*.tscn
+
+# (可选) 忽略 Godot 导入文件，如果不忽略会导致多余文件
+*.import
+
+# (可选) 忽略构建输出的 dll 或 pck
+*.dll
+*.pck
+*.uid
+*.import
+*.cfg
+*.sln
+*.exe
+*.skel
+*.atlas
+*.tres
+*.mp3
+*.wav
+
+# 确保不忽略 cs 和 json
+!*.cs
+!*.json
