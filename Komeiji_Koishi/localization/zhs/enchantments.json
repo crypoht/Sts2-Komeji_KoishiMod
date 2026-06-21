@@ -1,5 +1,13 @@
 {
   "KOMEIJIKOISHI-ZI_ZAI_ENCHANTMENT.title": "自在",
   "KOMEIJIKOISHI-ZI_ZAI_ENCHANTMENT.extraCardText": "战斗开始时，获得[gold]无意识[/gold]。",
-  "KOMEIJIKOISHI-ZI_ZAI_ENCHANTMENT.description": "在战斗的第一回合开始时，这张牌获得[gold]无意识[/gold]。"
+  "KOMEIJIKOISHI-ZI_ZAI_ENCHANTMENT.description": "在战斗的第一回合开始时，这张牌获得[gold]无意识[/gold]。",
+
+  "KOMEIJIKOISHI-MIRACLE_ENCHANTMENT.title": "奇迹",
+  "KOMEIJIKOISHI-MIRACLE_ENCHANTMENT.extraCardText": "打出时，获得 {Energy:energyIcons()}，然后[gold]消耗[/gold]。",
+  "KOMEIJIKOISHI-MIRACLE_ENCHANTMENT.description": "打出这张牌时，获得 {Energy:energyIcons()}，然后[gold]消耗[/gold]。",
+
+  "KOMEIJIKOISHI-FLYING_ENCHANTMENT.title": "飞翔",
+  "KOMEIJIKOISHI-FLYING_ENCHANTMENT.extraCardText": "打出时，本回合受到的伤害减少50%。",
+  "KOMEIJIKOISHI-FLYING_ENCHANTMENT.description": "打出这张牌时，本回合受到的伤害减少50%。"
 }

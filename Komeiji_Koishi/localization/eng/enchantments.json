@@ -1,0 +1,11 @@
+{
+  "KOMEIJIKOISHI-ZI_ZAI_ENCHANTMENT.title": "At Ease",
+  "KOMEIJIKOISHI-ZI_ZAI_ENCHANTMENT.extraCardText": "At the start of combat, gain [gold]Unconscious[/gold].",
+  "KOMEIJIKOISHI-ZI_ZAI_ENCHANTMENT.description": "At the start of the first turn of combat, this card gains [gold]Unconscious[/gold].",
+  "KOMEIJIKOISHI-MIRACLE_ENCHANTMENT.title": "Miracle",
+  "KOMEIJIKOISHI-MIRACLE_ENCHANTMENT.extraCardText": "When played, gain {Energy:energyIcons()}, then [gold]Exhaust[/gold].",
+  "KOMEIJIKOISHI-MIRACLE_ENCHANTMENT.description": "When you play this card, gain {Energy:energyIcons()}, then [gold]Exhaust[/gold].",
+  "KOMEIJIKOISHI-FLYING_ENCHANTMENT.title": "Flying",
+  "KOMEIJIKOISHI-FLYING_ENCHANTMENT.extraCardText": "When played, reduce damage taken this turn by 50%.",
+  "KOMEIJIKOISHI-FLYING_ENCHANTMENT.description": "When you play this card, reduce damage taken this turn by 50%."
+}

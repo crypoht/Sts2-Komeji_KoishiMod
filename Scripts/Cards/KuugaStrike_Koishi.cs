@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Cards
     public sealed class KuugaStrike_Koishi : CustomCardModel, IStanceListenerCard
     {
         public KuugaStrike_Koishi() 
-            : base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) { }
+            : base(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) { }
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike };
 
@@ -35,7 +35,7 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DamageVar(1m, ValueProp.Move),
-            new KuugaVar(1m) 
+            new KuugaVar(2m) 
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 

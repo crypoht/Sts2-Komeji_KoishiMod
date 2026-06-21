@@ -1,0 +1,89 @@
+WARN] Asset not cached: res://scenes/screens/compendium_submenu.tscn
+[WARN] Asset not cached: res://images/enchantments/glam.png
+[WARN] Asset not cached: res://images/atlases/ui_atlas.sprites/card/energy_colorless.tres
+[WARN] Asset not cached: res://images/enchantments/imbued.png
+[WARN] Asset not cached: res://images/enchantments/goopy.png
+[WARN] Asset not cached: res://images/enchantments/clone.png
+[WARN] Asset not cached: res://images/enchantments/tezcataras_ember.png
+[WARN] Asset not cached: res://images/enchantments/swift.png
+[WARN] Asset not cached: res://images/atlases/intent_atlas.sprites/intent_stun.tres
+[WARN] Asset not cached: res://images/enchantments/instinct.png
+[WARN] Asset not cached: res://mods/Komeiji_Koishi/images/enchantments/FlyingEnchantment.png
+[WARN] Asset not cached: res://mods/Komeiji_Koishi/images/enchantments/MiracleEnchantment.png
+[WARN] No energy prefix found for EnergyIconsFormatter! Using colorless as a fallback.
+[WARN] Asset not cached: res://images/atlases/ui_atlas.sprites/card/energy_relic_pool∴komeijikoishi-koishi_shared_relic_pool.tres
+[WARN] AtlasResourceLoader: Missing sprite 'card/energy_relic_pool∴komeijikoishi-koishi_shared_relic_pool' in ui_atlas (requested: res://images/atlases/ui_atlas.sprites/card/energy_relic_pool∴komeijikoishi-koishi_shared_relic_pool.tres)
+[INFO] [BaseLib] Using custom ancient room path
+[WARN] No energy prefix found for EnergyIconsFormatter! Using colorless as a fallback.
+[INFO] [BaseLib] Using custom ancient room path
+[ERROR] Error occurred [Error]: No loader found for resource: res://images/packed/sprite_fonts/RELIC_POOL∴KOMEIJIKOISHI-KOISHI_SHARED_RELIC_POOL_energy_icon.png (expected type: Texture2D)
+Method/function failed. Returning: Ref<Resource>()
+core/io/resource_loader.cpp:328 @ _load()
+C# backtrace (most recent call first):
+    [0] void MegaCrit.Sts2.addons.mega_text.MegaRichTextLabel.SetTextAutoSize(string)
+    [1] void MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet.Init(Godot.Control, System.Collections.Generic.IEnumerable`1[MegaCrit.Sts2.Core.HoverTips.IHoverTip])
+    [2] MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet.CreateAndShow(Godot.Control, System.Collections.Generic.IEnumerable`1[MegaCrit.Sts2.Core.HoverTips.IHoverTip], MegaCrit.Sts2.Core.HoverTips.HoverTipAlignment)
+    [3] void MegaCrit.Sts2.Core.Nodes.Screens.RelicCollection.NRelicCollectionEntry.OnFocus()
+    [4] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.RefreshFocus()
+    [5] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.OnHoverHandler()
+    [6] void Godot.Callable.<From>g__Trampoline|1_0(object, Godot.NativeInterop.NativeVariantPtrArgs, Godot.NativeInterop.godot_variant&)
+    [7] void Godot.DelegateUtils.InvokeWithVariantArgs(nint, System.Void*, Godot.NativeInterop.godot_variant**, int, Godot.NativeInterop.godot_variant*)[ERROR] Error occurred [Error]: No loader found for resource: res://images/packed/sprite_fonts/RELIC_POOL∴KOMEIJIKOISHI-KOISHI_SHARED_RELIC_POOL_energy_icon.png (expected type: Texture2D)
+Method/function failed. Returning: Ref<Resource>()
+core/io/resource_loader.cpp:328 @ _load()
+C# backtrace (most recent call first):
+    [0] void MegaCrit.Sts2.addons.mega_text.MegaRichTextLabel.SetTextAutoSize(string)
+    [1] void MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet.Init(Godot.Control, System.Collections.Generic.IEnumerable`1[MegaCrit.Sts2.Core.HoverTips.IHoverTip])
+    [2] MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet.CreateAndShow(Godot.Control, System.Collections.Generic.IEnumerable`1[MegaCrit.Sts2.Core.HoverTips.IHoverTip], MegaCrit.Sts2.Core.HoverTips.HoverTipAlignment)
+    [3] void MegaCrit.Sts2.Core.Nodes.Screens.RelicCollection.NRelicCollectionEntry.OnFocus()
+    [4] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.RefreshFocus()
+    [5] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.OnHoverHandler()
+    [6] void Godot.Callable.<From>g__Trampoline|1_0(object, Godot.NativeInterop.NativeVariantPtrArgs, Godot.NativeInterop.godot_variant&)
+    [7] void Godot.DelegateUtils.InvokeWithVariantArgs(nint, System.Void*, Godot.NativeInterop.godot_variant**, int, Godot.NativeInterop.godot_variant*)[INFO] Inspecting Relic: LocString table relics entry KOMEIJIKOISHI-MOUNTAIN_GODS_BLESSING_KOISHI.title
+[ERROR] Error occurred [Error]: No loader found for resource: res://images/packed/sprite_fonts/RELIC_POOL∴KOMEIJIKOISHI-KOISHI_SHARED_RELIC_POOL_energy_icon.png (expected type: Texture2D)
+Method/function failed. Returning: Ref<Resource>()
+core/io/resource_loader.cpp:328 @ _load()
+C# backtrace (most recent call first):
+    [0] void MegaCrit.Sts2.addons.mega_text.MegaRichTextLabel.SetTextAutoSize(string)
+    [1] void MegaCrit.Sts2.Core.Nodes.Screens.InspectScreens.NInspectRelicScreen.UpdateRelicDisplay()
+    [2] void MegaCrit.Sts2.Core.Nodes.Screens.InspectScreens.NInspectRelicScreen.SetRelic(int)
+    [3] void MegaCrit.Sts2.Core.Nodes.Screens.InspectScreens.NInspectRelicScreen.Open(System.Collections.Generic.IReadOnlyList`1[MegaCrit.Sts2.Core.Models.RelicModel], MegaCrit.Sts2.Core.Models.RelicModel)
+    [4] void MegaCrit.Sts2.Core.Nodes.Screens.RelicCollection.NRelicCollectionCategory.OnRelicEntryPressed(MegaCrit.Sts2.Core.Nodes.Screens.RelicCollection.NRelicCollectionEntry)
+    [5] void Godot.Callable.<From>g__Trampoline|2_0<T0>(object, Godot.NativeInterop.NativeVariantPtrArgs, Godot.NativeInterop.godot_variant&)
+    [6] void Godot.DelegateUtils.InvokeWithVariantArgs(nint, System.Void*, Godot.NativeInterop.godot_variant**, int, Godot.NativeInterop.godot_variant*)
+    [7] int Godot.NativeCalls.godot_icall_2_873(nint, nint, Godot.NativeInterop.godot_string_name, System.ReadOnlySpan`1[Godot.Variant], Godot.NativeInterop.godot_string_name)
+    [8] Godot.Error Godot.GodotObject.EmitSignal(Godot.StringName, Godot.Variant[])
+    [9] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.OnReleaseHandler()
+    [10] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.HandleMouseRelease(Godot.InputEvent)
+    [11] void Godot.Callable.<From>g__Trampoline|2_0<T0>(object, Godot.NativeInterop.NativeVariantPtrArgs, Godot.NativeInterop.godot_variant&)
+    [12] void Godot.DelegateUtils.InvokeWithVariantArgs(nint, System.Void*, Godot.NativeInterop.godot_variant**, int, Godot.NativeInterop.godot_variant*)
+    [13] int Godot.NativeCalls.godot_icall_2_873(nint, nint, Godot.NativeInterop.godot_string_name, System.ReadOnlySpan`1[Godot.Variant], Godot.NativeInterop.godot_string_name)
+    [14] Godot.Error Godot.GodotObject.EmitSignal(Godot.StringName, Godot.Variant[])
+    [15] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl._GuiInput(Godot.InputEvent)
+    [16] bool Godot.Control.InvokeGodotClassMethod(Godot.NativeInterop.godot_string_name&, Godot.NativeInterop.NativeVariantPtrArgs, Godot.NativeInterop.godot_variant&)
+    [17] bool MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.InvokeGodotClassMethod(Godot.NativeInterop.godot_string_name&, Godot.NativeInterop.NativeVariantPtrArgs, Godot.NativeInterop.godot_variant&)
+    [18] bool MegaCrit.Sts2.Core.Nodes.GodotExtensions.NButton.InvokeGodotClassMethod(Godot.NativeInterop.godot_string_name&, Godot.NativeInterop.NativeVariantPtrArgs, Godot.NativeInterop.godot_variant&)
+    [19] bool MegaCrit.Sts2.Core.Nodes.Screens.RelicCollection.NRelicCollectionEntry.InvokeGodotClassMethod(Godot.NativeInterop.godot_string_name&, Godot.NativeInterop.NativeVariantPtrArgs, Godot.NativeInterop.godot_variant&)
+    [20] Godot.NativeInterop.godot_bool Godot.Bridge.CSharpInstanceBridge.Call(nint, Godot.NativeInterop.godot_string_name*, Godot.NativeInterop.godot_variant**, int, Godot.NativeInterop.godot_variant_call_error*, Godot.NativeInterop.godot_variant*)[WARN] Asset not cached: res://mods/Komeiji_Koishi/images/relics/MountainGodsBlessing_Koishi.png
+[ERROR] Error occurred [Error]: No loader found for resource: res://images/packed/sprite_fonts/RELIC_POOL∴KOMEIJIKOISHI-KOISHI_SHARED_RELIC_POOL_energy_icon.png (expected type: Texture2D)
+Method/function failed. Returning: Ref<Resource>()
+core/io/resource_loader.cpp:328 @ _load()
+C# backtrace (most recent call first):
+    [0] void MegaCrit.Sts2.addons.mega_text.MegaRichTextLabel.SetTextAutoSize(string)
+    [1] void MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet.Init(Godot.Control, System.Collections.Generic.IEnumerable`1[MegaCrit.Sts2.Core.HoverTips.IHoverTip])
+    [2] MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet.CreateAndShow(Godot.Control, System.Collections.Generic.IEnumerable`1[MegaCrit.Sts2.Core.HoverTips.IHoverTip], MegaCrit.Sts2.Core.HoverTips.HoverTipAlignment)
+    [3] void MegaCrit.Sts2.Core.Nodes.Screens.RelicCollection.NRelicCollectionEntry.OnFocus()
+    [4] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.RefreshFocus()
+    [5] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.OnHoverHandler()
+    [6] void Godot.Callable.<From>g__Trampoline|1_0(object, Godot.NativeInterop.NativeVariantPtrArgs, Godot.NativeInterop.godot_variant&)
+    [7] void Godot.DelegateUtils.InvokeWithVariantArgs(nint, System.Void*, Godot.NativeInterop.godot_variant**, int, Godot.NativeInterop.godot_variant*)[ERROR] Error occurred [Error]: No loader found for resource: res://images/packed/sprite_fonts/RELIC_POOL∴KOMEIJIKOISHI-KOISHI_SHARED_RELIC_POOL_energy_icon.png (expected type: Texture2D)
+Method/function failed. Returning: Ref<Resource>()
+core/io/resource_loader.cpp:328 @ _load()
+C# backtrace (most recent call first):
+    [0] void MegaCrit.Sts2.addons.mega_text.MegaRichTextLabel.SetTextAutoSize(string)
+    [1] void MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet.Init(Godot.Control, System.Collections.Generic.IEnumerable`1[MegaCrit.Sts2.Core.HoverTips.IHoverTip])
+    [2] MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet MegaCrit.Sts2.Core.Nodes.HoverTips.NHoverTipSet.CreateAndShow(Godot.Control, System.Collections.Generic.IEnumerable`1[MegaCrit.Sts2.Core.HoverTips.IHoverTip], MegaCrit.Sts2.Core.HoverTips.HoverTipAlignment)
+    [3] void MegaCrit.Sts2.Core.Nodes.Screens.RelicCollection.NRelicCollectionEntry.OnFocus()
+    [4] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.RefreshFocus()
+    [5] void MegaCrit.Sts2.Core.Nodes.GodotExtensions.NClickableControl.OnHoverHandler()
+    [6] void Godot.Callable.<From>g__Trampoline|1_0(object, Godot.NativeInterop.NativeVariantPtrArgs, Godot.NativeInterop.godot_variant&)
+    [7] void Godot.DelegateUtils.InvokeWithVariantArgs(nint, System.Void*, Godot.NativeInterop.godot_variant**, int, Godot.NativeInterop.godot_variant*)[WARN] Asset not cached: res://scenes/ui/card_hover_tip.tscn

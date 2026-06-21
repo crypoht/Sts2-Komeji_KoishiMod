@@ -20,7 +20,7 @@ namespace KomeijiKoishi.Cards
     public sealed class BramblyRoseGarden_Koishi : CustomCardModel
     {
         public BramblyRoseGarden_Koishi()
-            : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self, true)
+            : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self, true)
         {
         }
 

@@ -56,7 +56,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars["BlockAmount"].UpgradeValueBy(6m);
+            base.DynamicVars["BlockAmount"].UpgradeValueBy(4m);
         }
     }
 }

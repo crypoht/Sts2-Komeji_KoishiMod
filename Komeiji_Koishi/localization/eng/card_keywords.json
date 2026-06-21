@@ -1,0 +1,16 @@
+{
+  "KOMEIJIKOISHI-UNCONSCIOUS.title": "Unconscious",
+  "KOMEIJIKOISHI-UNCONSCIOUS.description": "Cards with this tag can be played by unconscious effects.",
+  "KOMEIJIKOISHI-BLOOM.title": "Bloom",
+  "KOMEIJIKOISHI-BLOOM.description": "When you play an Attack, deal extra damage equal to that card's damage to a random enemy. [gold]Block[/gold] you gain is reduced by 60%. Gain energy when entering this stance.",
+  "KOMEIJIKOISHI-CLOSED.title": "Closed",
+  "KOMEIJIKOISHI-CLOSED.description": "[gold]Block[/gold] you gain is increased by 20%. Draw 1 card when entering this stance.",
+  "KOMEIJIKOISHI-DANMAKU.title": "Danmaku",
+  "KOMEIJIKOISHI-DANMAKU.description": "Generated cards with various effects.",
+  "KOMEIJIKOISHI-STANCE.title": "Stance",
+  "KOMEIJIKOISHI-STANCE.description": "[blue]Closed[/blue] and [red]Bloom[/red] stances have special effects when entered.",
+  "KOMEIJIKOISHI-FUMO.title": "Fumo",
+  "KOMEIJIKOISHI-FUMO.description": "Rulers of the world with mysterious powers.",
+  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD.title": "Lost in the Flower Field",
+  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD.description": "[green]Koishi[/green] is on an adventure. The flower field is [purple]purple[/purple], [blue]blue[/blue], and [red]red[/red]. Relax. [thinky_dots]Empty your head[/thinky_dots]."
+}

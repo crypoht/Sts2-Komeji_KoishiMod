@@ -27,7 +27,7 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DynamicVar("Tracing", 4m),
-            new PowerVar<KuugaPower>(2m)
+            new PowerVar<KuugaPower>(1m)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 

@@ -20,7 +20,7 @@ namespace KomeijiKoishi.Cards
     public sealed class VoidExpansion_Koishi : CustomCardModel
     {
         public VoidExpansion_Koishi() 
-            : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true)
+            : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true)
         {
         }
 
@@ -33,7 +33,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DynamicVar("Magic", 3m) 
+            new DynamicVar("Magic", 2m) 
         };
 
         protected override bool ShouldGlowGoldInternal

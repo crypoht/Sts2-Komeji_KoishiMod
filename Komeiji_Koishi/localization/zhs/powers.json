@@ -46,6 +46,7 @@
 
   "KOMEIJIKOISHI-KUUGA_POWER.title": "空我",
   "KOMEIJIKOISHI-KUUGA_POWER.smartDescription": "你所有耗能为 0 的攻击牌造成的伤害{Amount:cond:<0?减少|增加} [blue]{Amount:abs()}[/blue] 点。",
+  "KOMEIJIKOISHI-KUUGA_POWER.description": "你所有耗能为 0 的攻击牌造成的伤害{Amount:cond:<0?减少|增加} [blue]{Amount:abs()}[/blue] 点。",
 
   "KOMEIJIKOISHI-SECOND_NEED_POWER.title": "第二需求",
   "KOMEIJIKOISHI-SECOND_NEED_POWER.smartDescription": "每当你切换姿态时，获得 {Amount} 点格挡。",
@@ -78,6 +79,18 @@
   "KOMEIJIKOISHI-FLAW_POWER.smartDescription": "回合开始时，所有耗能为0的攻击牌伤害减少 {Amount} 点。",
 
   "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD_POWER.title": "恋野迷踪",
-  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD_POWER.smartDescription": "在你的回合开始时，从消耗牌堆中随机将 {Amount} 张由 [gold]花田中,恋迷踪[/gold] 生成的牌拿回手中。"
+  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD_POWER.smartDescription": "在你的回合开始时，从消耗牌堆中随机将 {Amount} 张由 [gold]花田中,恋迷踪[/gold] 生成的牌拿回手中。",
+
+  "KOMEIJIKOISHI-JIASUI_POWER.title": "邪祟",
+  "KOMEIJIKOISHI-JIASUI_POWER.smartDescription": "被触发时，失去等同于层数的生命，并使其他敌人获得等同层数的[gold]邪祟[/gold]。",
+  "KOMEIJIKOISHI-JIASUI_POWER.description": "被触发时，失去等同于层数的生命，并使其他敌人获得等同层数的[gold]邪祟[/gold]。",
+
+  "KOMEIJIKOISHI-FLYING_DAMAGE_REDUCTION_POWER.title": "飞翔",
+  "KOMEIJIKOISHI-FLYING_DAMAGE_REDUCTION_POWER.smartDescription": "本回合受到的伤害减少50%。",
+  "KOMEIJIKOISHI-FLYING_DAMAGE_REDUCTION_POWER.description": "本回合受到的伤害减少50%。",
+
+  "KOMEIJIKOISHI-GUARDIAN_POWER.title": "守护",
+  "KOMEIJIKOISHI-GUARDIAN_POWER.smartDescription": "不会被施加负面效果。每回合开始时，失去1层。",
+  "KOMEIJIKOISHI-GUARDIAN_POWER.description": "不会被施加负面效果。每回合开始时，失去1层。"
 
 }

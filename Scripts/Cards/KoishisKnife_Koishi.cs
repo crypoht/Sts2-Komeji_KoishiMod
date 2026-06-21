@@ -134,7 +134,7 @@ namespace KomeijiKoishi.Cards
         }
         protected override void OnUpgrade()
         {
-            decimal rawIncrease = base.DynamicVars.Damage.BaseValue * 0.4m;
+            decimal rawIncrease = base.DynamicVars.Damage.BaseValue * 0.37m;
             
             decimal finalIncrease = Math.Floor(rawIncrease);
             if (finalIncrease < 1m) 
