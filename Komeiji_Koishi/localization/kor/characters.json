@@ -1,0 +1,17 @@
+{
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.aromaPrinciple": "[sine][blue]예전에도 누군가가 이렇게 빤히 바라본 적이 있었던 것 같아[/blue][/sine]",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.banter.alive.endTurnPing": "코이시에等着~",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.banter.dead.endTurnPing": "Zzz",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.cardsModifierDescription": "이제 보상과 상점에 코메이지 코이시의 카드가 등장합니다.",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.cardsModifierTitle": "코메이지 코이시 카드",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.description": "무의식의 사토리 요괴. 무심코 탑에 들어와 그녀의 모험을 시작했습니다.",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.eventDeathPrevention": "쓰러지면 모험을 계속할 수 없어요.",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.goldMonologue": "[sine]반짝반짝한 게 잔뜩! 오쿠가 이런 걸 모으는 취미가 있었던 것 같은데[/sine]",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.possessiveAdjective": "그녀의",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.pronounObject": "그녀",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.pronounPossessive": "그녀의",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.pronounSubject": "그녀",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.title": "코메이지 코이시",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.titleObject": "코메이지 코이시",
+  "KOMEIJIKOISHI-KOISHI_CHARACTER.unlockText": "[pink]{Prerequisite}[/pink]로 한 판 플레이하면 이 캐릭터가 해금됩니다."
+}

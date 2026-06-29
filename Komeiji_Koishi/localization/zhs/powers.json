@@ -1,96 +1,67 @@
 {
   "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.title": "最终的无意识",
   "KOMEIJIKOISHI-ULTIMATE_UNCONSCIOUS_FORM_POWER.smartDescription": "当由你自己打出牌时，自动打出手牌中{Amount}张数的无意识牌。打出无意识牌时，抽 1 张牌。",
-
   "KOMEIJIKOISHI-BLOOM_STANCE_POWER.title": "盛开",
-  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 {BlockReduction}%。进入该状态时,获得{Amount:energyIcons()}",
-  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.description":"打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 70%。进入该状态时,获得{energyPrefix:energyIcons(1)}",
-
+  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.smartDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 {BlockReduction}%。进入该状态时,获得{Amount:energyIcons()}。只有古明地恋才能完全掌握这个姿态。",
+  "KOMEIJIKOISHI-BLOOM_STANCE_POWER.description": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 70%。进入该状态时,获得{energyPrefix:energyIcons(1)}。只有古明地恋才能完全掌握这个姿态。",
   "KOMEIJIKOISHI-CLOSED_STANCE_POWER.title": "闭合",
   "KOMEIJIKOISHI-CLOSED_STANCE_POWER.smartDescription": "获得的[gold]格挡[/gold]提升{BlockBonus}%。进入该状态时抽取一张牌",
-  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.description":"获得的[gold]格挡[/gold]提升20%。进入该状态时抽取一张牌",
-
+  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.description": "获得的[gold]格挡[/gold]提升20%。进入该状态时抽取一张牌",
   "KOMEIJIKOISHI-FETUS_DREAM_POWER.title": "胎儿之梦",
   "KOMEIJIKOISHI-FETUS_DREAM_POWER.smartDescription": "[gold]无意识[/gold]得到了扩张!",
-
   "KOMEIJIKOISHI-TRACING_POWER.title": "追踪",
   "KOMEIJIKOISHI-TRACING_POWER.smartDescription": "受到的 [gold]弹幕[/gold] 攻击伤害提升 50%。",
-  "KOMEIJIKOISHI-TRACING_POWER.description":"受到的 [gold]弹幕[/gold] 攻击伤害提升 50%",
-
+  "KOMEIJIKOISHI-TRACING_POWER.description": "受到的 [gold]弹幕[/gold] 攻击伤害提升 50%",
   "KOMEIJIKOISHI-DANMAKU_ART_POWER.title": "弹幕艺术",
   "KOMEIJIKOISHI-DANMAKU_ART_POWER.smartDescription": "每当打出一张[gold]弹幕[/gold]牌时，获得 {Amount} 点[gold]格挡[/gold]。",
-
- "KOMEIJIKOISHI-RECOGNIZED_GENIUS_POWER.title": "偏差「被认知的天才」",
- "KOMEIJIKOISHI-RECOGNIZED_GENIUS_POWER.smartDescription": "你在战斗中生成的[gold]弹幕[/gold]牌会被自动升级。",
-
- "KOMEIJIKOISHI-SUPEREGO_POWER.title": "超我",
- "KOMEIJIKOISHI-SUPEREGO_POWER.smartDescription": "进入 [gold]闭合[/gold] 姿态时，额外抽取 {Amount} 张牌。进入 [gold]盛开[/gold] 姿态时，额外获得 {Amount:energyIcons()}。",
-
- "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.title": "地灵符「精神恒星接替」",
- "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.smartDescription": "在本场战斗中[gold]追踪[/gold]的伤害加成效果提高{Amount}%。",
-
- "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.title": "秦心之面",
+  "KOMEIJIKOISHI-RECOGNIZED_GENIUS_POWER.title": "偏差「被认知的天才」",
+  "KOMEIJIKOISHI-RECOGNIZED_GENIUS_POWER.smartDescription": "你在战斗中生成的[gold]弹幕[/gold]牌会被自动升级。",
+  "KOMEIJIKOISHI-SUPEREGO_POWER.title": "超我",
+  "KOMEIJIKOISHI-SUPEREGO_POWER.smartDescription": "进入 [gold]闭合[/gold] 姿态时，额外抽取 {Amount} 张牌。进入 [gold]盛开[/gold] 姿态时，额外获得 {Amount:energyIcons()}。",
+  "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.title": "地灵符「精神恒星接替」",
+  "KOMEIJIKOISHI-MENTAL_STELLAR_SUCCESSION_POWER.smartDescription": "在本场战斗中[gold]追踪[/gold]的伤害加成效果提高{Amount}%。",
+  "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.title": "秦心之面",
   "KOMEIJIKOISHI-KOISHI_KOKORO_POWER.smartDescription": "切换姿态时，随机触发一种[red]情[/red][orange]绪[/orange]。",
-  
   "KOMEIJIKOISHI-JOY_MASK_POWER.title": "喜之面具",
   "KOMEIJIKOISHI-JOY_MASK_POWER.smartDescription": "你的下 {Amount} 张牌耗能为 0。",
-
   "KOMEIJIKOISHI-REIMU_HELP_POWER.title": "灵梦小姐的帮助",
   "KOMEIJIKOISHI-REIMU_HELP_POWER.smartDescription": "每当你抽到[gold]阴阳玉弹幕[/gold]时，自动打出它。[gold]阴阳玉弹幕[/gold]弹幕伤害提高{Amount}%",
-
   "KOMEIJIKOISHI-ROSE_PROTECTION_POWER.title": "蔷薇护身",
   "KOMEIJIKOISHI-ROSE_PROTECTION_POWER.smartDescription": "处于[gold]闭合[/gold]姿态时，获得的格挡值额外提高 {Amount} %。",
-
   "KOMEIJIKOISHI-MIRACLE_POWER.title": "奇迹",
   "KOMEIJIKOISHI-MIRACLE_POWER.smartDescription": "每当你打出一张[gold]弹幕[/gold]牌，再打出该牌 {Amount} 次。",
-
   "KOMEIJIKOISHI-KUUGA_POWER.title": "空我",
   "KOMEIJIKOISHI-KUUGA_POWER.smartDescription": "你所有耗能为 0 的攻击牌造成的伤害{Amount:cond:<0?减少|增加} [blue]{Amount:abs()}[/blue] 点。",
   "KOMEIJIKOISHI-KUUGA_POWER.description": "你所有耗能为 0 的攻击牌造成的伤害{Amount:cond:<0?减少|增加} [blue]{Amount:abs()}[/blue] 点。",
-
   "KOMEIJIKOISHI-SECOND_NEED_POWER.title": "第二需求",
   "KOMEIJIKOISHI-SECOND_NEED_POWER.smartDescription": "每当你切换姿态时，获得 {Amount} 点格挡。",
-
   "KOMEIJIKOISHI-UNDERGROUND_ROSE_POWER.title": "地底蔷薇",
   "KOMEIJIKOISHI-UNDERGROUND_ROSE_POWER.smartDescription": "每当你切换姿态时，生成并自动打出 {Amount} 张 [gold]蔷薇弹幕[/gold] 。",
-
   "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_POWER.title": "意识的螺旋",
   "KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_POWER.smartDescription": "你的回合开始时，将 {Amount} 张 [gold]意识的回转[/gold] 加入手牌。",
-
   "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_POWER.title": "被厌恶者的哲学",
   "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_POWER.smartDescription": "每当你进入 [gold]闭合姿态[/gold] 时，自动打出手中 {Amount} 张 [gold]无意识[/gold] 牌。",
-
   "KOMEIJIKOISHI-SELFLESS_LOVE_POWER.title": "没我之爱",
   "KOMEIJIKOISHI-SELFLESS_LOVE_POWER.smartDescription": "每当你生成 6 张弹幕牌时，抽 {Amount} 张牌。",
-
   "KOMEIJIKOISHI-FLAW_OF_DN_A_POWER.title": "记忆「DNA的瑕疵」",
-  "KOMEIJIKOISHI-FLAW_OF_DN_A_POWER.smartDescription":"你所有的攻击牌耗能变为0 ，且打出后[gold]消耗[/gold]。",
-
+  "KOMEIJIKOISHI-FLAW_OF_DN_A_POWER.smartDescription": "你所有的攻击牌耗能变为0 ，且打出后[gold]消耗[/gold]。",
   "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_POWER.title": "「带刺的蔷薇园」",
   "KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_POWER.smartDescription": "在你的回合开始时，你身上的 [gold]荆棘[/gold] 层数提升{Amount}00%。",
-
   "KOMEIJIKOISHI-INSTINCTIVE_FORM_POWER.title": "本能的形态",
   "KOMEIJIKOISHI-INSTINCTIVE_FORM_POWER.smartDescription": "在你的回合结束时，随机打出手牌中{Amount}张[gold]无意识[/gold]牌。",
-
   "KOMEIJIKOISHI-PERFECT_MIND_CONTROL_POWER.title": "精神控制",
   "KOMEIJIKOISHI-PERFECT_MIND_CONTROL_POWER.smartDescription": "你接下来抽到的 {Amount} 张 [gold]无意识[/gold] 牌将被自动打出。",
-
   "KOMEIJIKOISHI-FLAW_POWER.title": "缺陷",
   "KOMEIJIKOISHI-FLAW_POWER.smartDescription": "回合开始时，所有耗能为0的攻击牌伤害减少 {Amount} 点。",
-
   "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD_POWER.title": "恋野迷踪",
-  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD_POWER.smartDescription": "在你的回合开始时，从消耗牌堆中随机将 {Amount} 张由 [gold]花田中,恋迷踪[/gold] 生成的牌拿回手中。",
-
+  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD_POWER.smartDescription": "在你的回合开始时，从消耗牌堆中随机将 {Amount} 张由 [gold]花田中,恋迷踪[/gold] 生成的牌拿回手中。没有可拿回的牌时不会消失。",
   "KOMEIJIKOISHI-JIASUI_POWER.title": "邪祟",
   "KOMEIJIKOISHI-JIASUI_POWER.smartDescription": "被触发时，失去等同于层数的生命，并使其他敌人获得等同层数的[gold]邪祟[/gold]。",
   "KOMEIJIKOISHI-JIASUI_POWER.description": "被触发时，失去等同于层数的生命，并使其他敌人获得等同层数的[gold]邪祟[/gold]。",
-
   "KOMEIJIKOISHI-FLYING_DAMAGE_REDUCTION_POWER.title": "飞翔",
   "KOMEIJIKOISHI-FLYING_DAMAGE_REDUCTION_POWER.smartDescription": "本回合受到的伤害减少50%。",
   "KOMEIJIKOISHI-FLYING_DAMAGE_REDUCTION_POWER.description": "本回合受到的伤害减少50%。",
-
   "KOMEIJIKOISHI-GUARDIAN_POWER.title": "守护",
   "KOMEIJIKOISHI-GUARDIAN_POWER.smartDescription": "不会被施加负面效果。每回合开始时，失去1层。",
   "KOMEIJIKOISHI-GUARDIAN_POWER.description": "不会被施加负面效果。每回合开始时，失去1层。"
-
 }

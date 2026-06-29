@@ -10,6 +10,7 @@
 
     <Sts2Dir>D:\SteamLibrary\steamapps\common\Slay the Spire 2</Sts2Dir>
     <Sts2DataDir>$(Sts2Dir)\data_sts2_windows_x86_64</Sts2DataDir>
+    <ModCopyDir>$(Sts2Dir)\$(MSBuildProjectName)</ModCopyDir>
     <BaseLibDir>D:\SteamLibrary\steamapps\workshop\content\2868840\3737335127\BaseLib</BaseLibDir>
   </PropertyGroup>
 
@@ -32,8 +33,8 @@
 
   <Target Name="Copy Mod" AfterTargets="PostBuildEvent">
     <Message Text="正在将 Mod 复制到杀戮尖塔2 目录..." Importance="high" />
-    <MakeDir Directories="$(Sts2Dir)\mods\$(MSBuildProjectName)\" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(Sts2Dir)\mods\$(MSBuildProjectName)\" />
-    <Copy SourceFiles="$(MSBuildProjectName).json" DestinationFolder="$(Sts2Dir)\mods\$(MSBuildProjectName)\" />
+    <MakeDir Directories="$(ModCopyDir)\" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModCopyDir)\" />
+    <Copy SourceFiles="$(MSBuildProjectName).json" DestinationFolder="$(ModCopyDir)\" />
   </Target>
 </Project>

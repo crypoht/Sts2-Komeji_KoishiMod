@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Combat;
@@ -34,6 +35,9 @@ namespace KomeijiKoishi.Powers
 
         // 硬防重入：用实例字段而非 Data 类，保证 await gap 期间也能正确读到
         private bool _isExecutingBloom = false;
+
+        private static readonly AccessTools.FieldRef<AttackCommand, Creature?> SingleTargetRef =
+            AccessTools.FieldRefAccess<AttackCommand, Creature?>("_singleTarget");
 
         protected override object InitInternalData() => new object();
 
@@ -162,14 +166,13 @@ namespace KomeijiKoishi.Powers
 
                 try
                 {
-                    decimal dmgValue = cardModel.DynamicVars.Damage.PreviewValue;
+                    Creature? originalTarget = GetSingleTarget(originalCommand);
+                    decimal dmgValue = GetBloomDamageValue(cardModel, originalTarget);
 
-                    int repeat = 1;
-                    try { repeat = (int)cardModel.DynamicVars["Repeat"].PreviewValue; }
-                    catch { }
+                    int repeat = GetBloomRepeatCount(cardModel);
 
                     MegaCrit.Sts2.Core.Logging.Log.Info(
-                        $"[BloomStance] RunBloom: dmg={dmgValue} repeat={repeat}");
+                        $"[BloomStance] RunBloom: dmg={dmgValue} repeat={repeat} originalTarget={originalTarget?.GetType().Name ?? "null"}");
 
                     this.Flash();
 
@@ -237,6 +240,44 @@ namespace KomeijiKoishi.Powers
         {
             var mgr = CombatManager.Instance;
             return mgr != null && mgr.IsInProgress && base.CombatState != null;
+        }
+
+        private static Creature? GetSingleTarget(AttackCommand command)
+        {
+            try
+            {
+                return SingleTargetRef(command);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static decimal GetBloomDamageValue(CardModel cardModel, Creature? target)
+        {
+            if (cardModel.DynamicVars.ContainsKey("CalculatedDamage"))
+            {
+                return cardModel.DynamicVars.CalculatedDamage.Calculate(target);
+            }
+
+            return cardModel.DynamicVars.Damage.PreviewValue;
+        }
+
+        private static int GetBloomRepeatCount(CardModel cardModel)
+        {
+            int repeat = 1;
+
+            if (cardModel.DynamicVars.ContainsKey("Repeat"))
+            {
+                repeat = Math.Max(1, cardModel.DynamicVars["Repeat"].IntValue);
+            }
+            else if (cardModel.DynamicVars.ContainsKey("Hits"))
+            {
+                repeat = Math.Max(1, cardModel.DynamicVars["Hits"].IntValue);
+            }
+
+            return repeat;
         }
     }
 }

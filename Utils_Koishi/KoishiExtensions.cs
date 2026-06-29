@@ -66,6 +66,15 @@ namespace KomeijiKoishi.Utils_Koishi
 
         public static HashSet<CardModel> AutoPlayedByUnconsciousCards = new HashSet<CardModel>(); //这个不用管
 
+        public static bool HasWineFoxPlanningExpertInTeam(Player player)
+        {
+            if (player?.Creature?.CombatState == null) return false;
+
+            return player.Creature.CombatState.Players.Any(p =>
+                p?.Creature?.Powers.Any(power =>
+                    power.GetType().FullName == "STS2_WineFox.Powers.PlanningExpertPower") == true);
+        }
+
         public static async Task SafeAutoPlayCard(PlayerChoiceContext choiceContext, Player player, CardModel targetCard)
         {
             if (targetCard == null) return;

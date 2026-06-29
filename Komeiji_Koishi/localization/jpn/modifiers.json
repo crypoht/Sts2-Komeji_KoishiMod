@@ -1,0 +1,8 @@
+{
+  "KOISHI_ANCIENT_WEIGHTS_MODIFIER.title": "先古設定",
+  "KOISHI_ANCIENT_WEIGHTS_MODIFIER.description": "結界の力で塔に変化が起きた。\n次の層の先古出現率：\n{NextAncientProbabilities}",
+  "DISABLE_KOISHI_ANCIENTS_MODIFIER.title": "こいし先古を無効化",
+  "DISABLE_KOISHI_ANCIENTS_MODIFIER.description": "このランでは、このMODで追加された先古の民が出現しません。",
+  "DISABLE_KOISHI_ANCIENT_WEIGHTS_MODIFIER.title": "先古重みプール無効",
+  "DISABLE_KOISHI_ANCIENT_WEIGHTS_MODIFIER.description": "このランではゲーム本来の先古生成ルールを使用します。"
+}

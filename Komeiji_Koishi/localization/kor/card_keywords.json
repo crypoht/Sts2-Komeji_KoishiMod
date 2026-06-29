@@ -1,0 +1,16 @@
+{
+  "KOMEIJIKOISHI-UNCONSCIOUS.title": "무의식",
+  "KOMEIJIKOISHI-UNCONSCIOUS.description": "이 표식이 있는 카드는 무의식적으로 사용됩니다.",
+  "KOMEIJIKOISHI-BLOOM.title": "개화",
+  "KOMEIJIKOISHI-BLOOM.description": "공격 카드를 사용할 때, 무작위 적에게 그 카드의 피해와 같은 추가 피해를 줍니다. 얻는 [gold]방어도[/gold]가 60% 감소합니다. 이 태세에 들어갈 때 에너지를 얻습니다.",
+  "KOMEIJIKOISHI-CLOSED.title": "폐쇄",
+  "KOMEIJIKOISHI-CLOSED.description": "얻는 [gold]방어도[/gold]가 20% 증가합니다. 이 태세에 들어갈 때 카드를 1장 뽑습니다.",
+  "KOMEIJIKOISHI-DANMAKU.title": "탄막",
+  "KOMEIJIKOISHI-DANMAKU.description": "다양한 효과를 가진 생성 카드입니다. 생성될 때 생성한 카드의 강화 효과를 계승합니다.",
+  "KOMEIJIKOISHI-STANCE.title": "태세",
+  "KOMEIJIKOISHI-STANCE.description": "[blue]폐쇄 태세[/blue]와 [red]개화 태세[/red]입니다. 들어갈 때 특별한 효과가 있습니다.",
+  "KOMEIJIKOISHI-FUMO.title": "Fumo",
+  "KOMEIJIKOISHI-FUMO.description": "세계를 지배하는 자. 불가사의한 힘을 지녔습니다.",
+  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD.title": "코이시野迷踪",
+  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD.description": "[green]코이시[/green]모험 안,꽃田[purple]보라[/purple][blue]푸른[/blue][red]붉은[/red],放轻松,[thinky_dots]脑袋空空[/thinky_dots]"
+}

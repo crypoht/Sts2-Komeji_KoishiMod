@@ -23,7 +23,7 @@ namespace KomeijiKoishi.Cards
         public Superego_Koishi() 
             : base(4, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal };
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new EnergyVar(1) };

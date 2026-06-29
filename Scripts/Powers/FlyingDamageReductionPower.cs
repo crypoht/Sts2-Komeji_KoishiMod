@@ -19,7 +19,7 @@ namespace KomeijiKoishi.Powers
 
         public override PowerType Type => PowerType.Buff;
 
-        public override PowerStackType StackType => PowerStackType.Counter;
+        public override PowerStackType StackType => PowerStackType.None;
 
         public override string? CustomPackedIconPath => "res://mods/Komeiji_Koishi/images/powers/FlyingDamageReductionPower.png";
 
@@ -51,11 +51,11 @@ namespace KomeijiKoishi.Powers
             return base.DynamicVars[DamageDecreaseKey].BaseValue;
         }
 
-        public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
+        public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
         {
             if (side == CombatSide.Enemy)
             {
-                await PowerCmd.Remove(this);
+                await PowerCmd.Decrement(this);
             }
         }
     }

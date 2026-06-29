@@ -16,10 +16,12 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class AncestorsDream_Koishi : CustomCardModel
     {
+        private const int MaxPreviewCards = 20;
+
         public AncestorsDream_Koishi() 
             : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
@@ -34,6 +36,7 @@ namespace KomeijiKoishi.Cards
                 if (exhaustPile == null || !exhaustPile.Cards.Any()) return;
 
                 List<CardModel> snapshot = exhaustPile.Cards.ToList();
+                List<CardPileAddResult> addResults = new List<CardPileAddResult>();
 
                 foreach (CardModel originalCard in snapshot)
                 {
@@ -46,9 +49,12 @@ namespace KomeijiKoishi.Cards
                         CardPilePosition.Bottom
                     );
 
-                    CardCmd.PreviewCardPileAdd(result, 2.2f, CardPreviewStyle.HorizontalLayout);
+                    addResults.Add(result);
+                }
 
-                    await Cmd.Wait(0.05f, false);
+                if (addResults.Count > 0)
+                {
+                    CardCmd.PreviewCardPileAdd(addResults.Take(MaxPreviewCards).ToList(), 2.2f, CardPreviewStyle.HorizontalLayout);
                 }
             }
             catch (Exception e)

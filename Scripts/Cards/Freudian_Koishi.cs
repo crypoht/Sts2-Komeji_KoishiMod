@@ -26,7 +26,7 @@ namespace KomeijiKoishi.Cards
         { 
         }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
@@ -49,7 +49,7 @@ namespace KomeijiKoishi.Cards
                 var player = base.Owner as Player;
                 if (player == null) return false;
                 var hand = PileType.Hand.GetPile(player);
-                return hand != null && hand.Cards.Any(c => c != this && KoishiExtensions.IsTrulyUnconscious(c));
+                return hand != null && CountUnconsciousCardsIncludingSelf(hand) > 0;
             }
         }
 
@@ -61,7 +61,7 @@ namespace KomeijiKoishi.Cards
             await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
 
             var handPile = PileType.Hand.GetPile(player);
-            int count = handPile.Cards.Count(c => KoishiExtensions.IsTrulyUnconscious(c));
+            int count = CountUnconsciousCardsIncludingSelf(handPile);
 
             if (count > 0)
             {
@@ -69,6 +69,18 @@ namespace KomeijiKoishi.Cards
 
                 await CreatureCmd.GainBlock(player.Creature, totalBlock, ValueProp.Move, null, false);
             }
+        }
+
+        private int CountUnconsciousCardsIncludingSelf(CardPile handPile)
+        {
+            int count = handPile.Cards.Count(c => KoishiExtensions.IsTrulyUnconscious(c));
+
+            if (!handPile.Cards.Contains(this) && KoishiExtensions.IsTrulyUnconscious(this))
+            {
+                count++;
+            }
+
+            return count;
         }
 
         protected override void OnUpgrade()

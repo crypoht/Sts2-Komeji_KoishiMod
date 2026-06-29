@@ -31,11 +31,12 @@ namespace KomeijiKoishi.Cards
         { 
         }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new DamageVar(4m, ValueProp.Move)
+            new DamageVar(4m, ValueProp.Move),
+            new DynamicVar("HeartAmount", 1m)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip>
@@ -61,13 +62,19 @@ namespace KomeijiKoishi.Cards
             {
 
                 var starCard = base.CombatState.CreateCard<StarDanmaku_Koishi>(player);
-                var heartCard = base.CombatState.CreateCard<HeartDanmaku_Koishi>(player);
+                DanmakuPool.InheritEnchantment(this, starCard);
 
     
                 if (starCard != null) 
-                    await CardPileCmd.Add(starCard, PileType.Exhaust, CardPilePosition.Bottom, null, false);
-                if (heartCard != null) 
-                    await CardPileCmd.Add(heartCard, PileType.Exhaust, CardPilePosition.Bottom, null, false);
+                    await CardPileCmd.AddGeneratedCardToCombat(starCard, PileType.Exhaust, player, CardPilePosition.Bottom);
+
+                for (int i = 0; i < base.DynamicVars["HeartAmount"].IntValue; i++)
+                {
+                    var heartCard = base.CombatState.CreateCard<HeartDanmaku_Koishi>(player);
+                    DanmakuPool.InheritEnchantment(this, heartCard);
+                    if (heartCard != null)
+                        await CardPileCmd.AddGeneratedCardToCombat(heartCard, PileType.Exhaust, player, CardPilePosition.Bottom);
+                }
 
       
                 await Cmd.Wait(0.1f, false);
@@ -118,7 +125,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(3m); 
+            base.DynamicVars["HeartAmount"].UpgradeValueBy(1m); 
         }
     }
 }

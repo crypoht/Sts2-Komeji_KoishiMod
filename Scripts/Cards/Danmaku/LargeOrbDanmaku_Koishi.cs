@@ -25,7 +25,7 @@ namespace KomeijiKoishi.Cards.Danmaku
         { 
         }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
@@ -43,6 +43,8 @@ namespace KomeijiKoishi.Cards.Danmaku
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             if (cardPlay.Target == null) return;
+
+            DanmakuProjectileHelper.AddToCombat(base.Owner.Creature, cardPlay.Target, "largeorb");
 
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                 .FromCard(this)

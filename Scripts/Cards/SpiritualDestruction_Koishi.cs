@@ -30,7 +30,7 @@ namespace KomeijiKoishi.Cards
         {
         }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override bool HasEnergyCostX => true;
 
@@ -57,11 +57,14 @@ namespace KomeijiKoishi.Cards
                 for (int i = 0; i < xValue; i++)
                 {
                     var orbCard = base.CombatState.CreateCard<YinYangOrbDanmaku_Koishi>(player);
+                    DanmakuPool.InheritEnchantment(this, orbCard);
                     
                     if (base.IsUpgraded)
                     {
                         CardCmd.Upgrade(orbCard, CardPreviewStyle.None);
                     }
+
+                    await CardPileCmd.AddGeneratedCardToCombat(orbCard, PileType.Exhaust, player, CardPilePosition.Bottom);
 
                     KoishiExtensions.AutoPlayedByUnconsciousCards.Add(orbCard);
 

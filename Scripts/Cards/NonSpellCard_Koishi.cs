@@ -25,7 +25,7 @@ namespace KomeijiKoishi.Cards
         public NonSpellCard_Koishi() 
             : base(1, CardType.Skill, CardRarity.Common, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
@@ -47,7 +47,7 @@ namespace KomeijiKoishi.Cards
                 int count = base.DynamicVars.Cards.IntValue;
                 for (int i = 0; i < count; i++)
                 {
-                    await DanmakuPool.CreateRandomDanmakuInHand(player, combatState);
+                    await DanmakuPool.CreateRandomDanmakuInHand(player, combatState, this);
                     await Cmd.Wait(0.1f, false);
                 }
             }

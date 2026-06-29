@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Cards
         public ConsciousnessSpiral_Koishi() 
             : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Ethereal };
 

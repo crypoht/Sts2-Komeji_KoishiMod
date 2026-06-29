@@ -16,6 +16,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Pools;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using KomeijiKoishi.Cards.Danmaku;
 
 namespace KomeijiKoishi.Cards
 {
@@ -30,7 +31,7 @@ namespace KomeijiKoishi.Cards
         
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
@@ -44,6 +45,8 @@ namespace KomeijiKoishi.Cards
             {
                 var player = base.Owner as Player;
                 if (player == null || cardPlay.Target == null) return;
+
+                DanmakuProjectileHelper.AddToCombat(base.Owner.Creature, cardPlay.Target, "rose");
 
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                     .FromCard(this)
@@ -64,14 +67,16 @@ namespace KomeijiKoishi.Cards
             base.DynamicVars.Damage.UpgradeValueBy(4m);
         }
 
-        public static async Task CreateInHand(Player owner, int count, CombatState combatState)
+        public static async Task CreateInHand(Player owner, int count, CombatState combatState, CardModel? sourceCard = null)
         {
             if (count <= 0 || CombatManager.Instance.IsOverOrEnding) return;
 
             List<CardModel> roses = new List<CardModel>();
             for (int i = 0; i < count; i++)
             {
-                roses.Add(combatState.CreateCard<RoseDanmaku_Koishi>(owner));
+                CardModel rose = combatState.CreateCard<RoseDanmaku_Koishi>(owner);
+                DanmakuPool.InheritEnchantment(sourceCard, rose);
+                roses.Add(rose);
             }
             
             await CardPileCmd.AddGeneratedCardsToCombat(roses, PileType.Hand, owner, CardPilePosition.Bottom);

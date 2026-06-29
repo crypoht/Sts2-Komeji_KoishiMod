@@ -1,0 +1,11 @@
+{
+  "KOMEIJIKOISHI-ZI_ZAI_ENCHANTMENT.title": "自在",
+  "KOMEIJIKOISHI-ZI_ZAI_ENCHANTMENT.extraCardText": "戦闘開始時、，得る[gold]無意識[/gold]。",
+  "KOMEIJIKOISHI-ZI_ZAI_ENCHANTMENT.description": "在战斗の第一ターン开始时，这枚カード得る[gold]無意識[/gold]。",
+  "KOMEIJIKOISHI-MIRACLE_ENCHANTMENT.title": "奇跡",
+  "KOMEIJIKOISHI-MIRACLE_ENCHANTMENT.extraCardText": "使用时，得る {Energy:energyIcons()}，然后[gold]廃棄[/gold]。",
+  "KOMEIJIKOISHI-MIRACLE_ENCHANTMENT.description": "使用这枚カード时，得る {Energy:energyIcons()}，然后[gold]廃棄[/gold]。",
+  "KOMEIJIKOISHI-FLYING_ENCHANTMENT.title": "飛翔",
+  "KOMEIJIKOISHI-FLYING_ENCHANTMENT.extraCardText": "使用时，本ターン受到のダメージ减少50%。",
+  "KOMEIJIKOISHI-FLYING_ENCHANTMENT.description": "使用这枚カード时，本ターン受到のダメージ减少50%。"
+}

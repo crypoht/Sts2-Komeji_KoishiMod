@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Cards
         public SelfOverflow_Koishi() 
             : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 

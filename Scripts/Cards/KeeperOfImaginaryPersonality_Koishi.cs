@@ -19,14 +19,12 @@ namespace KomeijiKoishi.Cards
     {
         private const string ExhaustCardsKey = "ExhaustCards";
 
-        private bool shouldExhaustThisPlay;
-
         public KeeperOfImaginaryPersonality_Koishi()
             : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self, true)
         {
         }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
@@ -37,8 +35,6 @@ namespace KomeijiKoishi.Cards
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
-            this.shouldExhaustThisPlay = false;
-
             if (base.Owner is not Player player)
             {
                 return;
@@ -76,17 +72,21 @@ namespace KomeijiKoishi.Cards
                 await PlayerCmd.GainEnergy(base.DynamicVars.Energy.IntValue, player);
                 await CardPileCmd.Draw(choiceContext, base.DynamicVars.Cards.BaseValue, player, false);
             }
-            else
-            {
-                this.shouldExhaustThisPlay = true;
-            }
         }
 
         protected override PileType GetResultPileTypeForCardPlay()
         {
-            if (this.shouldExhaustThisPlay)
+            if (base.Owner is Player player)
             {
-                return PileType.Exhaust;
+                PileType[] pileTypes = { PileType.Hand, PileType.Draw, PileType.Discard };
+                int availableCards = pileTypes
+                    .SelectMany(pileType => pileType.GetPile(player).Cards)
+                    .Count(card => card != this);
+
+                if (availableCards < base.DynamicVars[ExhaustCardsKey].IntValue)
+                {
+                    return PileType.Exhaust;
+                }
             }
 
             return base.GetResultPileTypeForCardPlay();

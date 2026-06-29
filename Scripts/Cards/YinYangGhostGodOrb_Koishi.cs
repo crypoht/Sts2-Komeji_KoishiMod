@@ -11,7 +11,11 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
+using KomeijiKoishi.Enums;
+using KomeijiKoishi.Vfx;
+using MegaCrit.Sts2.Core.Helpers;
 
 namespace KomeijiKoishi.Cards
 {
@@ -26,7 +30,12 @@ namespace KomeijiKoishi.Cards
         {
         }
 
-        public override string PortraitPath => "res://mods/Komeiji_Koishi/images/cards/YinYangGhostGodOrb_Koishi.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
+
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag>
+        {
+            KoishiTags.Danmaku
+        };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
@@ -59,6 +68,18 @@ namespace KomeijiKoishi.Cards
             {
                 damage *= base.DynamicVars[LoneEnemyMultiplierKey].BaseValue;
                 hitCount = 1;
+            }
+
+            NYinYangGhostGodOrbAttackVfx? vfx = NYinYangGhostGodOrbAttackVfx.Create(base.Owner.Creature, cardPlay.Target);
+            if (vfx != null)
+            {
+                NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);
+                float totalVfxDuration =
+                    NYinYangGhostGodOrbAttackVfx.FanSpreadDuration +
+                    NYinYangGhostGodOrbAttackVfx.FanHoldDuration +
+                    NYinYangGhostGodOrbAttackVfx.FanReturnDurationPerOrb * NYinYangGhostGodOrbAttackVfx.FanOrbCount +
+                    NYinYangGhostGodOrbAttackVfx.FinalProjectileDuration;
+                await Cmd.Wait(totalVfxDuration, false);
             }
 
             for (int i = 0; i < hitCount; i++)

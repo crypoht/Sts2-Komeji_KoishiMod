@@ -1,0 +1,8 @@
+{
+  "KOISHI_ANCIENT_WEIGHTS_MODIFIER.title": "先古设置",
+  "KOISHI_ANCIENT_WEIGHTS_MODIFIER.description": "借助结界的力量让尖塔发生了变化。\n下一层先古出现概率：\n{NextAncientProbabilities}",
+  "DISABLE_KOISHI_ANCIENTS_MODIFIER.title": "禁用恋恋先古",
+  "DISABLE_KOISHI_ANCIENTS_MODIFIER.description": "本局不会出现恋恋模组新增的先古之民。",
+  "DISABLE_KOISHI_ANCIENT_WEIGHTS_MODIFIER.title": "禁用先古权重池",
+  "DISABLE_KOISHI_ANCIENT_WEIGHTS_MODIFIER.description": "本局使用游戏原本的先古之民生成规则。"
+}

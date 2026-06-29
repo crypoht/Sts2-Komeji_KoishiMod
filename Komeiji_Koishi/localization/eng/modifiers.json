@@ -1,0 +1,8 @@
+{
+  "KOISHI_ANCIENT_WEIGHTS_MODIFIER.title": "Ancient Settings",
+  "KOISHI_ANCIENT_WEIGHTS_MODIFIER.description": "The power of the barrier has changed the Spire.\nNext act Ancient appearance chance:\n{NextAncientProbabilities}",
+  "DISABLE_KOISHI_ANCIENTS_MODIFIER.title": "Koishi Ancients Disabled",
+  "DISABLE_KOISHI_ANCIENTS_MODIFIER.description": "Prevents this mod's added Ancients from appearing during this run.",
+  "DISABLE_KOISHI_ANCIENT_WEIGHTS_MODIFIER.title": "Ancient Weight Pool Disabled",
+  "DISABLE_KOISHI_ANCIENT_WEIGHTS_MODIFIER.description": "This run uses the game's normal Ancient generation rules."
+}

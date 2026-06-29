@@ -1,10 +1,10 @@
 {
   "KOMEIJIKOISHI-KOISHI_STARTER_RELIC.title": "帽子先生",
-  "KOMEIJIKOISHI-KOISHI_STARTER_RELIC.description": "在你的回合结束时，随机打出手牌中一张带有[gold]无意识[/gold]的牌。",
+  "KOMEIJIKOISHI-KOISHI_STARTER_RELIC.description": "在你的回合结束时，随机打出手牌中一张带有[gold]无意识[/gold]的牌。右键查看恋恋的衍生卡牌。",
   "KOMEIJIKOISHI-KOISHI_STARTER_RELIC.flavor": "帽子先生是我的好朋友",
 
   "KOMEIJIKOISHI-KOISHI_ANICENT_RELIC.title": "带蔷薇花的帽子先生",
-  "KOMEIJIKOISHI-KOISHI_ANICENT_RELIC.description": "在你的回合结束时，随机打出手牌中一张带有 [gold]无意识[/gold] 的牌。打出带有[gold]无意识[/gold]的牌时,获得1点[gold]荆棘[/gold]",
+  "KOMEIJIKOISHI-KOISHI_ANICENT_RELIC.description": "在你的回合结束时，随机打出手牌中一张带有 [gold]无意识[/gold] 的牌。打出带有[gold]无意识[/gold]的牌时,获得1点[gold]荆棘[/gold]。右键查看恋恋的衍生卡牌。",
   "KOMEIJIKOISHI-KOISHI_ANICENT_RELIC.flavor":"好朋友带了些花给帽子先生",
 
   "SEA_GLASS.KOMEIJIKOISHI-KOISHI_CHARACTER.title":"七彩咕咕嘎嘎石",
@@ -120,6 +120,10 @@
 
   "KOMEIJIKOISHI-KOMAINU_STONE_CARVING_KOISHI.title": "狛犬的石雕",
   "KOMEIJIKOISHI-KOMAINU_STONE_CARVING_KOISHI.description": "战斗开始时，获得[blue]{GuardianPower}[/blue]层[gold]守护[/gold]。",
-  "KOMEIJIKOISHI-KOMAINU_STONE_CARVING_KOISHI.flavor": "她会一直守护着。"
+  "KOMEIJIKOISHI-KOMAINU_STONE_CARVING_KOISHI.flavor": "她会一直守护着。",
+
+  "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.title": "夜雀的羽翼",
+  "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.description": "击杀敌人时，回复[blue]{Heal}[/blue]点生命。",
+  "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.flavor": "小小的翅膀，承载着美味（划掉）伟大的梦想。"
 
 }

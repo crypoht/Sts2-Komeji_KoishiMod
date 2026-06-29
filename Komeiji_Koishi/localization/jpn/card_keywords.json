@@ -1,0 +1,16 @@
+{
+  "KOMEIJIKOISHI-UNCONSCIOUS.title": "無意識",
+  "KOMEIJIKOISHI-UNCONSCIOUS.description": "带有此标记のカード会被無意識の使用。",
+  "KOMEIJIKOISHI-BLOOM.title": "開花",
+  "KOMEIJIKOISHI-BLOOM.description": "使用アタック时，额外对ランダム敵造成等同于该カードダメージのダメージ。得るの[gold]ブロック[/gold]减少60%。入る该状态时,得る能量",
+  "KOMEIJIKOISHI-CLOSED.title": "閉合",
+  "KOMEIJIKOISHI-CLOSED.description": "得るの[gold]ブロック[/gold]提升20%。入る该状态时引く取一枚カード",
+  "KOMEIJIKOISHI-DANMAKU.title": "弾幕",
+  "KOMEIJIKOISHI-DANMAKU.description": "さまざまな効果を持つ生成カード。生成時、生成元のカードのエンチャントを継承する。",
+  "KOMEIJIKOISHI-STANCE.title": "スタンス",
+  "KOMEIJIKOISHI-STANCE.description": "[blue]閉合スタンス[/blue]和[red]開花スタンス[/red],入る时有特殊效果",
+  "KOMEIJIKOISHI-FUMO.title": "Fumo",
+  "KOMEIJIKOISHI-FUMO.description": "世界の支配者,拥有着不可思议の筋力",
+  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD.title": "こいし野迷踪",
+  "KOMEIJIKOISHI-LOST_IN_FLOWER_FIELD.description": "[green]こいし[/green]冒险中,花田[purple]紫[/purple][blue]蓝[/blue][red]红[/red],放轻松,[thinky_dots]脑袋空空[/thinky_dots]"
+}

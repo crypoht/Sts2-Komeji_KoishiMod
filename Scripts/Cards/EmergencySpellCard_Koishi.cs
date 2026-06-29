@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Cards
         public EmergencySpellCard_Koishi() 
             : base(1, CardType.Skill, CardRarity.Common, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
@@ -54,7 +54,7 @@ namespace KomeijiKoishi.Cards
                 for (int i = 0; i < count; i++)
                 {
                     // 👇 传入转换好的 combatState
-                    await DanmakuPool.CreateRandomDanmakuInHand(player, combatState);
+                    await DanmakuPool.CreateRandomDanmakuInHand(player, combatState, this);
                     await Cmd.Wait(0.1f, false);
                 }
 

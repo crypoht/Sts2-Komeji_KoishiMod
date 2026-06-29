@@ -1,0 +1,8 @@
+{
+  "KOISHI_ANCIENT_WEIGHTS_MODIFIER.title": "선고 설정",
+  "KOISHI_ANCIENT_WEIGHTS_MODIFIER.description": "결계의 힘으로 첨탑에 변화가 일어났습니다.\n다음 층 선고 출현 확률:\n{NextAncientProbabilities}",
+  "DISABLE_KOISHI_ANCIENTS_MODIFIER.title": "코이시 선고 비활성화",
+  "DISABLE_KOISHI_ANCIENTS_MODIFIER.description": "이번 런에서는 이 모드가 추가한 선고의 민이 등장하지 않습니다.",
+  "DISABLE_KOISHI_ANCIENT_WEIGHTS_MODIFIER.title": "선고 가중치 풀 비활성화",
+  "DISABLE_KOISHI_ANCIENT_WEIGHTS_MODIFIER.description": "이번 런에서는 게임의 기본 선고 생성 규칙을 사용합니다."
+}

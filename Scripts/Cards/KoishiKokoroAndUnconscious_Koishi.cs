@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Cards
         public KoishiKokoroAndUnconscious_Koishi()
             : base(3, CardType.Power, CardRarity.Ancient, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
          protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious, KoishiTags.Stance };
 

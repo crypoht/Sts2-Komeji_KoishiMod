@@ -112,6 +112,13 @@
   "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.ANY.2-0.ancient": "你问山上面那个是什么？哦，那是核能设备",
   "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.ANY.2-0.ancient.speaker": "Kanako",
 
+  "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.firstVisitEver.0-0.ancient": "参拜客？",
+  "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.firstVisitEver.0-0.next": "继续",
+  "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.firstVisitEver.0-0.ancient.speaker": "Kanako",
+  "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.firstVisitEver.0-1.ancient": "我还以为早苗回来了",
+  "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.firstVisitEver.0-1.next": "继续",
+  "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.firstVisitEver.0-1.ancient.speaker": "Suwako",
+
   "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.KOMEIJIKOISHI-KOISHI_CHARACTER.0-0.ancient": "这不是地灵殿的恋吗？怎么过来了?",
   "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.KOMEIJIKOISHI-KOISHI_CHARACTER.0-0.next": "回答",
   "KOMEIJIKOISHI-MORIYA_TWO_GODS_KOISHI.talk.KOMEIJIKOISHI-KOISHI_CHARACTER.0-0.ancient.speaker": "Suwako",
@@ -241,6 +248,8 @@
   "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.ANY.1-0r.ancient": "我？最近幻想乡很多人都误入这座塔，我是来调查的",
   "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.ANY.2-0.ancient": "先要我祝福你？起码先往塞钱箱里投点钱吧",
 
+  "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.firstVisitEver.0-0.ancient": "喂，那里的家伙停一下，有事要问你",
+
   "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.KOMEIJIKOISHI-KOISHI_CHARACTER.0-0.char": "灵梦小姐！灵梦小姐！",
   "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.KOMEIJIKOISHI-KOISHI_CHARACTER.0-0.next": "继续",
   "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.KOMEIJIKOISHI-KOISHI_CHARACTER.0-1.ancient": "你是谁啊？",
@@ -255,7 +264,7 @@
 
   "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.IRONCLAD.0-0.ancient": "你这家伙，身上真是不详",
   "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.IRONCLAD.1-0r.ancient": "一言不合就打架，你这家伙很幻想乡呢。拿好，这个会帮到你",
-  "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.IRONCLAD.2-0.ancient": "你跟那个欠揍恶魔联系不浅，可惜它给的诅咒我也没办法去除",
+  "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.IRONCLAD.2-0.ancient": "你跟那个欠揍恶魔联系不浅，可惜它给的诅咒我也没办法拔除",
 
   "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.SILENT.0-0.ancient": "（飞翔地看着静默猎手偷袭杀死猎物）",
   "KOMEIJIKOISHI-HAKUREI_REIMU_KOISHI.talk.SILENT.0-0.next": "继续",

@@ -69,6 +69,33 @@ namespace KomeijiKoishi.Relics
                 var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
                 if (player == null) return;
 
+                if (KoishiExtensions.HasWineFoxPlanningExpertInTeam(player)) return;
+
+                await AutoPlayUnconsciousCard(choiceContext, player);
+            }
+            catch (Exception e)
+            {
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[Relic] KoishiAnicentRelic Error: {e.Message}");
+            }
+        }
+
+        public override async Task BeforeFlushLate(PlayerChoiceContext choiceContext, Player player)
+        {
+            try
+            {
+                if (player != base.Owner) return;
+                if (!KoishiExtensions.HasWineFoxPlanningExpertInTeam(player)) return;
+
+                await AutoPlayUnconsciousCard(choiceContext, player);
+            }
+            catch (Exception e)
+            {
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[Relic] KoishiAnicentRelic WineFox compat Error: {e.Message}");
+            }
+        }
+
+        private async Task AutoPlayUnconsciousCard(PlayerChoiceContext choiceContext, Player player)
+        {
                 var list = PileType.Hand.GetPile(player).Cards.Where(c => 
                     KoishiExtensions.IsTrulyUnconscious(c) && 
                     (c.Keywords == null || !c.Keywords.Contains(CardKeyword.Unplayable))
@@ -89,11 +116,6 @@ namespace KomeijiKoishi.Relics
                         );
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                MegaCrit.Sts2.Core.Logging.Log.Error($"[Relic] KoishiStarterRelic Error: {e.Message}");
-            }
         }
     }
 }

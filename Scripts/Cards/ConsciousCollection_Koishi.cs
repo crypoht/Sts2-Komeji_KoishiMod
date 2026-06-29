@@ -26,7 +26,7 @@ namespace KomeijiKoishi.Cards
         public ConsciousCollection_Koishi() 
             : base(0, CardType.Skill, CardRarity.Common, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromCard<ConsciousOverflow_Koishi>(false)

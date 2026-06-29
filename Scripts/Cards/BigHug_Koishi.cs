@@ -25,14 +25,14 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class BigHug_Koishi : CustomCardModel
     {
-        private int _currentReduction = 0;
+        private const int MaxEnergyGain = 4;
 
         public BigHug_Koishi()
             : base(3, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true)
         {
         }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip>
         {
@@ -49,12 +49,20 @@ namespace KomeijiKoishi.Cards
             try
             {
                 ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
+                var player = base.Owner as Player;
+                if (player == null) return;
                 
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                     .FromCard(this)
                     .Targeting(cardPlay.Target)
                     .WithHitFx("vfx/vfx_attack_blunt") 
                     .Execute(choiceContext);
+
+                int energyGain = Math.Min(MaxEnergyGain, CountUnconsciousCardsInDiscard(player));
+                if (energyGain > 0)
+                {
+                    await PlayerCmd.GainEnergy(energyGain, player);
+                }
             }
             catch (Exception e)
             {
@@ -67,92 +75,18 @@ namespace KomeijiKoishi.Cards
             base.DynamicVars.Damage.UpgradeValueBy(10m);
         }
 
-        private CardModel? GetEffectiveLastPlayedCard()
-        {
-            if (base.CombatState == null) return null;
-            
-            var history = CombatManager.Instance.History.CardPlaysFinished
-                .Where(e => e.CardPlay.Card.Owner == base.Owner && e.HappenedThisTurn(base.CombatState))
-                .ToList();
-            
-            if (history.Count == 0) return null;
-            
-            var last = history.Last();
-            
-            if (!last.CardPlay.IsAutoPlay && history.Count >= 2)
-            {
-                var prev = history[history.Count - 2];
-                if (prev.CardPlay.IsAutoPlay) return prev.CardPlay.Card;
-            }
-            
-            return last.CardPlay.Card;
-        }
-
         protected override bool ShouldGlowGoldInternal
         {
             get
             {
-                var effectiveLast = GetEffectiveLastPlayedCard();
-                return effectiveLast != null && KoishiExtensions.IsTrulyUnconscious(effectiveLast);
+                return base.Owner is Player player && CountUnconsciousCardsInDiscard(player) > 0;
             }
         }
 
-        public override Task AfterCardEnteredCombat(CardModel card)
+        private static int CountUnconsciousCardsInDiscard(Player player)
         {
-            if (card != this) return Task.CompletedTask;
-            if (base.IsClone) return Task.CompletedTask;
-
-            _currentReduction = 0; 
-            
-            UpdateCostReduction(GetEffectiveLastPlayedCard(), false);
-            
-            return Task.CompletedTask;
-        }
-
-        public override Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
-        {
-            if (cardPlay.Card.Owner != base.Owner) return Task.CompletedTask;
-
-            var previousPlay = CombatManager.Instance.History.CardPlaysFinished
-                .LastOrDefault(e => e.CardPlay.Card.Owner == base.Owner && e.CardPlay != cardPlay);
-
-            bool isFirstPlayOfTurn = previousPlay == null || !previousPlay.HappenedThisTurn(base.CombatState);
-
-
-            CardModel effectiveCard = cardPlay.Card;
-            
-
-            if (!cardPlay.IsAutoPlay && previousPlay != null && previousPlay.HappenedThisTurn(base.CombatState))
-            {
-                if (previousPlay.CardPlay.IsAutoPlay)
-                {
-                    effectiveCard = previousPlay.CardPlay.Card; 
-                }
-            }
-
-
-            UpdateCostReduction(effectiveCard, isFirstPlayOfTurn);
-            
-            return Task.CompletedTask;
-        }
-
-        private void UpdateCostReduction(CardModel? lastPlayedCard, bool isFirstPlayOfTurn)
-        {
-            if (isFirstPlayOfTurn)
-            {
-                _currentReduction = 0;
-            }
-
-            bool shouldReduce = lastPlayedCard != null && KoishiExtensions.IsTrulyUnconscious(lastPlayedCard);
-            
-            int targetReduction = shouldReduce ? 1 : 0;
-            int diff = targetReduction - _currentReduction;
-            
-            if (diff != 0)
-            {
-                base.EnergyCost.AddThisTurn(-diff, false);
-                _currentReduction = targetReduction;
-            }
+            var discardPile = PileType.Discard.GetPile(player);
+            return discardPile?.Cards.Count(c => KoishiExtensions.IsTrulyUnconscious(c)) ?? 0;
         }
     }
 }

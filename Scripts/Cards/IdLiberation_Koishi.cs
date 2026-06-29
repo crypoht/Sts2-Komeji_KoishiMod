@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums;
@@ -29,7 +30,7 @@ namespace KomeijiKoishi.Cards
         {
         }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Unconscious,KoishiTags.Subconscious};
 
@@ -51,6 +52,7 @@ namespace KomeijiKoishi.Cards
                 .WithHitCount(base.DynamicVars.Repeat.IntValue) 
                 .FromCard(this)
                 .Targeting(cardPlay.Target)
+                .WithHitVfxNode((Creature target) => NGrandFinaleImpactVfx.Create(target))
                 .Execute(choiceContext);
 
             var hand = PileType.Hand.GetPile(player);

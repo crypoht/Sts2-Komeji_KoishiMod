@@ -19,7 +19,7 @@ namespace KomeijiKoishi.Cards
         public PerfectMindControl_Koishi() 
             : base(514, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override bool HasEnergyCostX => true;
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Utils; 
 using BaseLib.Abstracts; 
@@ -25,7 +26,7 @@ namespace KomeijiKoishi.Cards.Danmaku
         { 
         }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> 
@@ -40,6 +41,11 @@ namespace KomeijiKoishi.Cards.Danmaku
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
+            foreach (var target in base.CombatState!.HittableEnemies.Where(enemy => enemy.IsAlive))
+            {
+                DanmakuProjectileHelper.AddToCombat(base.Owner.Creature, target, "arrow");
+            }
+
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                 .FromCard(this)
                 .TargetingAllOpponents(base.CombatState!)

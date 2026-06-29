@@ -1,11 +1,17 @@
+using Godot;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using KomeijiKoishi.Pools;
 using MegaCrit.Sts2.Core.Models.CardPools;
@@ -31,12 +37,23 @@ namespace KomeijiKoishi.Cards.Fumo
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             if (cardPlay.Target == null) return;
-            await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                    .WithHitCount(base.DynamicVars.Repeat.IntValue)
-                    .FromCard(this)
-                    .Targeting(cardPlay.Target)
-                    .WithHitFx("vfx/vfx_attack_blunt") 
-                    .Execute(choiceContext);
+
+            NGrandFinaleVfx? grandFinaleVfx = NGrandFinaleVfx.Create(base.Owner.Creature);
+            if (grandFinaleVfx != null)
+            {
+                NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(grandFinaleVfx);
+                await Cmd.Wait(NGrandFinaleVfx.totalAnticipationDuration, false);
+            }
+
+            AttackCommand attackCommand = DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
+                .WithHitCount(base.DynamicVars.Repeat.IntValue)
+                .FromCard(this)
+                .Targeting(cardPlay.Target);
+
+            await attackCommand
+                .WithHitVfxNode((Creature target) => NGrandFinaleImpactVfx.Create(target))
+                .WithHitFx(null, null, "blunt_attack.mp3")
+                .Execute(choiceContext);
         }
 
         protected override void OnUpgrade()

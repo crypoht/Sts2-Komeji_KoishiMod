@@ -26,7 +26,7 @@ namespace KomeijiKoishi.Cards
         public ReimuHelp_Koishi() 
             : base(3, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
@@ -56,7 +56,9 @@ namespace KomeijiKoishi.Cards
 
                 for (int i = 0; i < count; i++)
                 {
-                    drawTokens.Add(base.CombatState.CreateCard<YinYangOrbDanmaku_Koishi>(player));
+                    CardModel token = base.CombatState.CreateCard<YinYangOrbDanmaku_Koishi>(player);
+                    DanmakuPool.InheritEnchantment(this, token);
+                    drawTokens.Add(token);
                 }
                 
                 await CardPileCmd.AddGeneratedCardsToCombat(drawTokens, PileType.Draw, player, CardPilePosition.Random);

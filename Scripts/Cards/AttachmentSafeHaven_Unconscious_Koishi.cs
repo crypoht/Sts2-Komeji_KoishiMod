@@ -23,7 +23,7 @@ namespace KomeijiKoishi.Cards
         public AttachmentSafeHaven_Unconscious_Koishi() 
             : base(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Unconscious };
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Unconscious };

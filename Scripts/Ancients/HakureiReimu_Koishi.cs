@@ -2,6 +2,7 @@ using BaseLib.Abstracts;
 using BaseLib.Extensions;
 using BaseLib.Utils;
 using Godot;
+using KomeijiKoishi;
 using KomeijiKoishi.Relics;
 using MegaCrit.Sts2.Core.Models;
 
@@ -23,7 +24,7 @@ namespace KomeijiKoishi.Ancients
 
         public override Color DialogueColor => new(0.72f, 0.12f, 0.12f);
 
-        public override bool IsValidForAct(ActModel act) => act.ActNumber() == 3;
+        public override bool IsValidForAct(ActModel act) => KoishiModConfig.ActiveRunAncientsEnabled && act.ActNumber() == 3;
 
         protected override OptionPools MakeOptionPools { get; } = new OptionPools(
             MakePool(

@@ -38,7 +38,8 @@ namespace KomeijiKoishi.Powers
                 for (int i = 0; i < playCount; i++)
                 {
                     var rose = base.Owner.CombatState.CreateCard<RoseDanmaku_Koishi>(base.Owner.Player);
-                    
+                    DanmakuPool.InheritEnchantment(sourceCard, rose);
+                    await CardPileCmd.AddGeneratedCardToCombat(rose, PileType.Exhaust, base.Owner.Player, CardPilePosition.Bottom);
 
                     await CardCmd.AutoPlay(context, rose, null, AutoPlayType.Default, true, false);
                     

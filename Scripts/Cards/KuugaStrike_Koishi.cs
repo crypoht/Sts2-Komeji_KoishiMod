@@ -28,7 +28,7 @@ namespace KomeijiKoishi.Cards
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike };
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         private class KuugaVar : DynamicVar { public KuugaVar(decimal val) : base("Kuuga", val) { } }
 

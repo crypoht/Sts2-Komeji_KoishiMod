@@ -20,7 +20,7 @@ namespace KomeijiKoishi.Cards.Danmaku
 {
     public static class DanmakuPool
     {
-        public static async Task<CardModel?> CreateRandomDanmakuInHand(Player owner, CombatState combatState)
+        public static async Task<CardModel?> CreateRandomDanmakuInHand(Player owner, CombatState combatState, CardModel? sourceCard = null)
         {
             if (combatState == null) return null;
 
@@ -44,13 +44,14 @@ namespace KomeijiKoishi.Cards.Danmaku
    
             if (generatedCard != null)
             {
+                InheritEnchantment(sourceCard, generatedCard);
                 await CardPileCmd.AddGeneratedCardToCombat(generatedCard, PileType.Hand, owner, CardPilePosition.Bottom);
             }
             
             return generatedCard;
         }
 
-        public static async Task<CardModel?> CreateRandomDanmakuInExhaust(Player owner, CombatState combatState)
+        public static async Task<CardModel?> CreateRandomDanmakuInExhaust(Player owner, CombatState combatState, CardModel? sourceCard = null)
         {
             if (combatState == null) return null;
 
@@ -74,10 +75,34 @@ namespace KomeijiKoishi.Cards.Danmaku
    
             if (generatedCard != null)
             {
+                InheritEnchantment(sourceCard, generatedCard);
                 await CardPileCmd.AddGeneratedCardToCombat(generatedCard, PileType.Exhaust, owner, CardPilePosition.Bottom);
             }
             
             return generatedCard;
+        }
+
+        public static void InheritEnchantment(CardModel? sourceCard, CardModel generatedCard)
+        {
+            if (sourceCard?.Enchantment == null || generatedCard.Enchantment != null)
+            {
+                return;
+            }
+
+            try
+            {
+                EnchantmentModel inherited = sourceCard.Enchantment.CanonicalInstance.ToMutable();
+                if (!inherited.CanEnchant(generatedCard))
+                {
+                    return;
+                }
+
+                CardCmd.Enchant(inherited, generatedCard, sourceCard.Enchantment.Amount);
+            }
+            catch (Exception e)
+            {
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[DanmakuPool] Failed to inherit enchantment from {sourceCard.Id.Entry} to {generatedCard.Id.Entry}: {e.Message}");
+            }
         }
     }
 }

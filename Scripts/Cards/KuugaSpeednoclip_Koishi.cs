@@ -6,7 +6,7 @@ using KomeijiKoishi.Pools;
 using KomeijiKoishi.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -16,22 +16,21 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class KuugaQuickSwap_Koishi : CustomCardModel
+    public sealed class KuugaSpeednoclip_Koishi : CustomCardModel
     {
-        private const string KuugaDamageBonusKey = "KuugaDamageBonus";
-
-        public KuugaQuickSwap_Koishi()
+        public KuugaSpeednoclip_Koishi()
             : base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true)
         {
         }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new DamageVar(0m, ValueProp.Move),
-            new RepeatVar(3),
-            new DynamicVar(KuugaDamageBonusKey, 1m)
+            new CalculationBaseVar(0m),
+            new ExtraDamageVar(1m),
+            new CalculatedDamageVar(ValueProp.Move).WithMultiplier(GetPositiveKuugaStacks),
+            new RepeatVar(3)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
@@ -41,15 +40,12 @@ namespace KomeijiKoishi.Cards
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
-            if (cardPlay.Target == null || base.Owner is not Player player)
+            if (cardPlay.Target == null)
             {
                 return;
             }
 
-            decimal kuugaAmount = player.Creature.GetPower<KuugaPower>()?.Amount ?? 0m;
-            decimal kuugaDamageBonus = decimal.Max(0m, kuugaAmount) * base.DynamicVars[KuugaDamageBonusKey].BaseValue;
-
-            await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue + kuugaDamageBonus)
+            await DamageCmd.Attack(base.DynamicVars.CalculatedDamage)
                 .WithHitCount(base.DynamicVars.Repeat.IntValue)
                 .FromCard(this)
                 .Targeting(cardPlay.Target)
@@ -57,9 +53,15 @@ namespace KomeijiKoishi.Cards
                 .Execute(choiceContext);
         }
 
+        private static decimal GetPositiveKuugaStacks(MegaCrit.Sts2.Core.Models.CardModel card, Creature? _)
+        {
+            decimal kuugaAmount = card.Owner?.Creature.GetPower<KuugaPower>()?.Amount ?? 0m;
+            return decimal.Max(0m, kuugaAmount);
+        }
+
         protected override void OnUpgrade()
         {
-            base.DynamicVars[KuugaDamageBonusKey].UpgradeValueBy(1m);
+            base.DynamicVars.ExtraDamage.UpgradeValueBy(1m);
         }
     }
 }

@@ -16,12 +16,12 @@ using System.Linq;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class HuaKai_Koishi : CustomCardModel
+        public sealed class HuaKai_Koishi : CustomCardModel
     {
         public HuaKai_Koishi() 
-            : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly, true) { }
+            : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         public override CardMultiplayerConstraint MultiplayerConstraint
         {
@@ -32,12 +32,24 @@ namespace KomeijiKoishi.Cards
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             var player = base.Owner as Player;
-            var target = cardPlay.Target; 
             
-            if (player == null || target == null) return;
+            if (player == null || base.CombatState == null) return;
 
             await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
 
+            var teammates = base.CombatState.Players
+                .Where(p => p != null && p != player && p.Creature != null && !p.Creature.IsDead && p.Creature.Side == player.Creature.Side)
+                .ToList();
+
+            foreach (var teammate in teammates)
+            {
+                await ApplyRandomKoishiPower(choiceContext, player, teammate.Creature);
+                await AutoPlayRandomTeammateCard(choiceContext, teammate);
+            }
+        }
+
+        private async Task ApplyRandomKoishiPower(PlayerChoiceContext choiceContext, Player player, Creature target)
+        {
             List<int> powerPool = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 };
             int randomPowerIndex = player.RunState.Rng.Shuffle.NextItem(powerPool);
 
@@ -88,6 +100,24 @@ namespace KomeijiKoishi.Cards
                 await PowerCmd.Remove(power); 
             }
         }
+
+        private async Task AutoPlayRandomTeammateCard(PlayerChoiceContext choiceContext, Player teammate)
+        {
+            var handPile = PileType.Hand.GetPile(teammate);
+            if (handPile == null || handPile.Cards.Count == 0) return;
+
+            var playableCards = handPile.Cards
+                .Where(card => card.Keywords == null || !card.Keywords.Contains(CardKeyword.Unplayable))
+                .ToList();
+
+            if (playableCards.Count == 0) return;
+
+            CardModel? targetCard = teammate.RunState.Rng.CombatCardSelection.NextItem(playableCards);
+            if (targetCard == null) return;
+
+            await KomeijiKoishi.Utils_Koishi.KoishiExtensions.SafeAutoPlayCard(choiceContext, teammate, targetCard);
+        }
+
         protected override void OnUpgrade()
         {
             base.EnergyCost.UpgradeBy(-1); 

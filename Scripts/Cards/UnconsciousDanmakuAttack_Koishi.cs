@@ -28,7 +28,7 @@ namespace KomeijiKoishi.Cards
         public UnconsciousDanmakuAttack_Koishi() 
             : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
         
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
 
@@ -56,7 +56,7 @@ namespace KomeijiKoishi.Cards
 
                 for (int i = 0; i < danmakuCount; i++)
                 {
-                    var generatedDanmaku = await DanmakuPool.CreateRandomDanmakuInHand(player, combatState);
+                    var generatedDanmaku = await DanmakuPool.CreateRandomDanmakuInExhaust(player, combatState, this);
                     
                     if (generatedDanmaku != null)
                     {

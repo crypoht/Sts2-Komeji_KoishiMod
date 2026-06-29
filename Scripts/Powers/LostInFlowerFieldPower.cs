@@ -42,23 +42,20 @@ namespace KomeijiKoishi.Powers
 
                 var validCards = exhaustPile.Cards.Where(c => c.Keywords != null && c.Keywords.Contains(KoishiKeywords.LostInFlowerField)).ToList();
 
-                if (validCards.Count > 0)
+                if (validCards.Count <= 0 || this.Amount <= 0)
                 {
-                    base.Flash(); 
-
-                    int pullCount = Math.Min(this.Amount, validCards.Count);
-
-                    IEnumerable<CardModel> cardsToPull = validCards.TakeRandom(pullCount, player.RunState.Rng.CombatCardSelection);
-
-                    foreach (var card in cardsToPull)
-                    {
-                        await CardPileCmd.Add(card, PileType.Hand, CardPilePosition.Bottom, null, false);
-                    }
+                    return;
                 }
 
-                if (validCards.Count == 0)
+                base.Flash(); 
+
+                int pullCount = Math.Min(this.Amount, validCards.Count);
+
+                IEnumerable<CardModel> cardsToPull = validCards.TakeRandom(pullCount, player.RunState.Rng.CombatCardSelection);
+
+                foreach (var card in cardsToPull)
                 {
-                    await PowerCmd.Remove(this);
+                    await CardPileCmd.Add(card, PileType.Hand, CardPilePosition.Bottom, null, false);
                 }
             }
         }

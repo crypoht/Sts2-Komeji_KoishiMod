@@ -23,7 +23,7 @@ namespace KomeijiKoishi.Cards
         public RoseHell_Koishi() 
             : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
@@ -50,7 +50,7 @@ namespace KomeijiKoishi.Cards
 
                 if (cardsToAdd > 0 && combatState != null)
                 {
-                    await RoseDanmaku_Koishi.CreateInHand(player, cardsToAdd, combatState);
+                    await RoseDanmaku_Koishi.CreateInHand(player, cardsToAdd, combatState, this);
                 }
             }
             catch (Exception e)

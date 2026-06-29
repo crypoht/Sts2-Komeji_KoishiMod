@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Cards
         public ReactionYoukaiPolygraph_Koishi() 
             : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 

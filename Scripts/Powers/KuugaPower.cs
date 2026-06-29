@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using System;
+using KomeijiKoishi.Cards;
 using KomeijiKoishi.Pools;
 using System.Linq;
 using MegaCrit.Sts2.Core.Entities.Players; 
@@ -34,6 +35,11 @@ namespace KomeijiKoishi.Powers
             }
             
             if (!props.IsPoweredAttack())
+            {
+                return 0m;
+            }
+
+            if (card is KuugaSpeednoclip_Koishi)
             {
                 return 0m;
             }

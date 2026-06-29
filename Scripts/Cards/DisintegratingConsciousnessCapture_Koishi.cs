@@ -25,7 +25,7 @@ namespace KomeijiKoishi.Cards
         public DisintegratingConsciousnessCapture_Koishi() 
             : base(3, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
 
@@ -37,8 +37,7 @@ namespace KomeijiKoishi.Cards
 
        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(25m, ValueProp.Move),
-            new EnergyVar(1) 
+            new DamageVar(25m, ValueProp.Move)
         };
 
         protected override bool ShouldGlowGoldInternal
@@ -74,16 +73,30 @@ namespace KomeijiKoishi.Cards
                     .WithHitFx("vfx/vfx_attack_blunt") 
                     .Execute(choiceContext);
 
-                var discardPile = PileType.Discard.GetPile(player);
-                if (discardPile != null && discardPile.Cards.Any(c => KoishiExtensions.IsTrulyUnconscious(c)))
-                {
-                    await PlayerCmd.GainEnergy(1, player);
-                }
             }
             catch (Exception e)
             {
                 MegaCrit.Sts2.Core.Logging.Log.Error($"[DisintegratingConsciousnessCapture_Koishi] Error: {e.Message}");
             }
+        }
+
+        public override bool TryModifyEnergyCostInCombat(MegaCrit.Sts2.Core.Models.CardModel card, decimal originalCost, out decimal modifiedCost)
+        {
+            if (card != this || base.Owner is not Player player)
+            {
+                modifiedCost = originalCost;
+                return false;
+            }
+
+            int unconsciousCount = CountUnconsciousCardsInDiscard(player);
+            modifiedCost = decimal.Max(0m, originalCost - unconsciousCount);
+            return unconsciousCount > 0;
+        }
+
+        private static int CountUnconsciousCardsInDiscard(Player player)
+        {
+            var discardPile = PileType.Discard.GetPile(player);
+            return discardPile?.Cards.Count(c => KoishiExtensions.IsTrulyUnconscious(c)) ?? 0;
         }
 
         protected override void OnUpgrade()

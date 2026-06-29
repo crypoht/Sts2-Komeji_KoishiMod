@@ -32,7 +32,7 @@ namespace KomeijiKoishi.Cards
         public KoishisKnife_Koishi() 
             : base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         public override int MaxUpgradeLevel => 514114514;
 
@@ -124,7 +124,7 @@ namespace KomeijiKoishi.Cards
                         originalKnife.UpgradeInternal();
                         originalKnife.FinalizeUpgradeInternal();
 
-                        if (LocalContext.IsMe(player) && base.CombatState?.HittableEnemies?.All(e => e.IsDead) != true)
+                        if (LocalContext.IsMe(player))
                         {
                             NRun.Instance?.GlobalUi.CardPreviewContainer.AddChild(NCardSmithVfx.Create([originalKnife])!);
                         }

@@ -28,7 +28,7 @@ namespace KomeijiKoishi.Cards
         public DanmakuParanoia_Koishi() 
             : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
@@ -42,11 +42,14 @@ namespace KomeijiKoishi.Cards
             {
                 var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
                 var combatState = base.CombatState as MegaCrit.Sts2.Core.Combat.CombatState;
-                if (cardPlay.Target == null || cardPlay.Target.Player == null || combatState == null) return;
+                if (player == null || combatState == null) return;
 
                 await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
 
-                List<CardModel> handCards = PileType.Hand.GetPile(player).Cards.ToList();
+                var handPile = PileType.Hand.GetPile(player);
+                if (handPile == null) return;
+
+                List<CardModel> handCards = handPile.Cards.ToList();
                 int exhaustedCount = 0;
 
                 foreach (CardModel card in handCards)
@@ -62,7 +65,7 @@ namespace KomeijiKoishi.Cards
                                         (card.Keywords != null && card.Keywords.Contains(KoishiKeywords.Unconscious));
                     }
 
-                    if (!isUnconscious && card != this)
+                    if (!isUnconscious && card != this && card != cardPlay.Card)
                     {
                         await CardCmd.Exhaust(choiceContext, card, false, false);
                         exhaustedCount++;
@@ -73,7 +76,7 @@ namespace KomeijiKoishi.Cards
                 {
                     for (int i = 0; i < exhaustedCount; i++)
                     {
-                        await DanmakuPool.CreateRandomDanmakuInHand(player, combatState);
+                        await DanmakuPool.CreateRandomDanmakuInHand(player, combatState, this);
                     }
                 }
             }

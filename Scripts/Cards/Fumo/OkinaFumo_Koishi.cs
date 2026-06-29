@@ -19,6 +19,8 @@ namespace KomeijiKoishi.Cards.Fumo
     [Pool(typeof(TokenCardPool))]
     public sealed class OkinaFumo_Koishi : CustomCardModel
     {
+        private const int HandLimit = 10;
+
         public OkinaFumo_Koishi() 
             : base(0, CardType.Skill, CardRarity.Token, TargetType.Self, true) { }
 
@@ -37,11 +39,7 @@ namespace KomeijiKoishi.Cards.Fumo
                 var player = base.Owner as Player;
                 if (player != null)
                 {
-                    int currentHandCount = PileType.Hand.GetPile(player).Cards.Count;
-                    
-                    int freeSpace = Math.Max(0, 10 - currentHandCount);
-
-                    base.DynamicVars["FreeSpace"].BaseValue = freeSpace;
+                    base.DynamicVars["FreeSpace"].BaseValue = GetAvailableHandSpaceAfterPlaying(player);
                 }
                 
                 return base.IsPlayable; 
@@ -53,7 +51,7 @@ namespace KomeijiKoishi.Cards.Fumo
             var player = base.Owner as Player;
             if (player == null) return;
 
-            int maxSelect = (int)base.DynamicVars["FreeSpace"].BaseValue;
+            int maxSelect = GetAvailableHandSpaceAfterPlaying(player);
             
             var exhaustPileCards = PileType.Exhaust.GetPile(player).Cards.ToList();
 
@@ -75,6 +73,12 @@ namespace KomeijiKoishi.Cards.Fumo
         protected override void OnUpgrade()
         {
             base.EnergyCost.UpgradeBy(+385); 
+        }
+
+        private int GetAvailableHandSpaceAfterPlaying(Player player)
+        {
+            int currentHandCount = PileType.Hand.GetPile(player).Cards.Count;
+            return Math.Max(0, HandLimit - currentHandCount + 1);
         }
     }
 }

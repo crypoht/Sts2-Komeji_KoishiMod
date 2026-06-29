@@ -25,7 +25,7 @@ namespace KomeijiKoishi.Cards.Danmaku
         { 
         }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> 
         { 
             KoishiTags.Danmaku 
@@ -39,6 +39,8 @@ namespace KomeijiKoishi.Cards.Danmaku
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             if (cardPlay.Target == null) return;
+
+            DanmakuProjectileHelper.AddToCombat(base.Owner.Creature, cardPlay.Target, "yinyangorb");
 
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                 .FromCard(this)

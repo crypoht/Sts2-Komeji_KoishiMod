@@ -2,6 +2,7 @@ using BaseLib.Abstracts;
 using BaseLib.Extensions;
 using BaseLib.Utils;
 using Godot;
+using KomeijiKoishi;
 using KomeijiKoishi.Relics;
 using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Entities.Ancients;
@@ -34,7 +35,7 @@ namespace KomeijiKoishi.Ancients
 
         public override Color DialogueColor => new(0.15f, 0.42f, 0.32f);
 
-        public override bool IsValidForAct(ActModel act) => act.ActNumber() == 2;
+        public override bool IsValidForAct(ActModel act) => KoishiModConfig.ActiveRunAncientsEnabled && act.ActNumber() == 2;
 
         public Texture2D? GetDialogueIcon(AncientDialogueLine line)
         {

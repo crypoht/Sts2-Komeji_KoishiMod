@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Cards
         public HeartAnger_Koishi() 
             : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
@@ -34,7 +34,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(16m, ValueProp.Move)
+            new DamageVar(14m, ValueProp.Move)
         };
 
         private bool _isCostModified = false;
@@ -72,7 +72,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(6m);
+            base.DynamicVars.Damage.UpgradeValueBy(4m);
         }
 
        public Task OnStanceChanged(bool isClosedStance, bool isBloomStance)

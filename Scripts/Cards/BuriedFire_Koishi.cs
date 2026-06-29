@@ -29,7 +29,7 @@ namespace KomeijiKoishi.Cards
         public BuriedFire_Koishi() 
             : base(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 

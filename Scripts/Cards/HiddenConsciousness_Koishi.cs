@@ -27,7 +27,7 @@ namespace KomeijiKoishi.Cards
         public HiddenConsciousness_Koishi() 
             : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
@@ -49,7 +49,7 @@ namespace KomeijiKoishi.Cards
                 int generateCount = (int)base.DynamicVars["Magic"].BaseValue;
                 for (int i = 0; i < generateCount; i++)
                 {
-                    await DanmakuPool.CreateRandomDanmakuInExhaust(player, CombatState);
+                    await DanmakuPool.CreateRandomDanmakuInExhaust(player, CombatState, this);
                 }
 
                 await Cmd.Wait(0.1f, false);

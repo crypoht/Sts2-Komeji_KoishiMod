@@ -16,13 +16,13 @@ using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.Models.CardPools;
 namespace KomeijiKoishi.Cards.Danmaku
 {
-    [Pool(typeof(TokenCardPool))]
+    [Pool(typeof(StatusCardPool))]
     public sealed class ConsciousOverflow_Koishi : CustomCardModel
     {
         public ConsciousOverflow_Koishi() 
-            : base(514, CardType.Status, CardRarity.Token, TargetType.None, true) { }
+            : base(514, CardType.Status, CardRarity.Status, TargetType.None, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Unconscious };
 

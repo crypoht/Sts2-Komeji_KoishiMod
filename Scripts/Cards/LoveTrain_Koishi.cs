@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Cards
         public LoveTrain_Koishi() 
             : base(2, CardType.Skill, CardRarity.Common, TargetType.Self, true) { }
 
-        public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/{GetType().Name}.png";
+        public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
@@ -48,6 +48,7 @@ namespace KomeijiKoishi.Cards
                 if (base.CombatState != null)
                 {
                     var token = base.CombatState.CreateCard<YinYangOrbDanmaku_Koishi>(player);
+                    DanmakuPool.InheritEnchantment(this, token);
                     await CardPileCmd.AddGeneratedCardsToCombat(new List<CardModel> { token }, PileType.Hand, player, CardPilePosition.Bottom);
                 }
             }
