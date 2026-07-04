@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Relics
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new DynamicVar(BonusPercentKey, 30m)
+            new DynamicVar(BonusPercentKey, 40m)
         };
 
         public override string PackedIconPath => "res://mods/Komeiji_Koishi/images/relics/MiniSaisenBox_Koishi.png";
@@ -53,9 +53,31 @@ namespace KomeijiKoishi.Relics
             return Task.CompletedTask;
         }
 
+#if STS2_BETA
+        public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
+        {
+            return ModifyDamageMultiplicativeCore(target, props, dealer, cardSource);
+        }
+#else
         public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
         {
-            if (dealer != base.Owner.Creature)
+            return ModifyDamageMultiplicativeCore(target, props, dealer, cardSource);
+        }
+#endif
+
+        private decimal ModifyDamageMultiplicativeCore(Creature? target, ValueProp props, Creature? dealer, CardModel? cardSource)
+        {
+            if (dealer != base.Owner.Creature || target == null || target.Side == dealer.Side)
+            {
+                return 1m;
+            }
+
+            if (cardSource == null || cardSource.Type == CardType.Curse || cardSource.Type == CardType.Status)
+            {
+                return 1m;
+            }
+
+            if (!props.IsPoweredAttack())
             {
                 return 1m;
             }

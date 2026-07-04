@@ -30,6 +30,9 @@ namespace KomeijiKoishi.Cards
 
         private static bool _isDanceVideoPlaying;
         private static readonly Queue<string> QueuedDanceVideos = new();
+        private static bool _isPlaybackBlockedForRun;
+        private static Control? _activeOverlay;
+        private static VideoStreamPlayer? _activePlayer;
 
         public MoriyaDance_Koishi()
             : base(-1, CardType.Curse, CardRarity.Curse, TargetType.None, true)
@@ -50,10 +53,10 @@ namespace KomeijiKoishi.Cards
 
         public override Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
         {
-            if (card == this)
+            if (card == this && !_isPlaybackBlockedForRun)
             {
                 string? videoPath = base.Owner.RunState.Rng.Shuffle.NextItem(DanceVideoPaths);
-                if (videoPath != null && (KoishiModConfig.PlayMoriyaDanceForAllPlayers || LocalContext.IsMine(this)))
+                if (videoPath != null && (KoishiModConfig.ActiveRunPlayMoriyaDanceForAllPlayers || LocalContext.IsMine(this)))
                 {
                     PlayDanceVideo(videoPath);
                 }
@@ -62,8 +65,35 @@ namespace KomeijiKoishi.Cards
             return Task.CompletedTask;
         }
 
+        public static void ResetLocalPlaybackBlockerForNewRun()
+        {
+            _isPlaybackBlockedForRun = false;
+            QueuedDanceVideos.Clear();
+        }
+
+        public static void BlockPlaybackForCurrentRun()
+        {
+            _isPlaybackBlockedForRun = true;
+            QueuedDanceVideos.Clear();
+            StopActiveVideo();
+        }
+
+        private static void StopActiveVideo()
+        {
+            _activePlayer?.Stop();
+            _activeOverlay?.QueueFree();
+            _activePlayer = null;
+            _activeOverlay = null;
+            _isDanceVideoPlaying = false;
+        }
+
         private static void PlayDanceVideo(string videoPath)
         {
+            if (_isPlaybackBlockedForRun)
+            {
+                return;
+            }
+
             if (_isDanceVideoPlaying)
             {
                 QueuedDanceVideos.Enqueue(videoPath);
@@ -86,8 +116,6 @@ namespace KomeijiKoishi.Cards
             {
                 return;
             }
-
-            _isDanceVideoPlaying = true;
 
             Control overlay = new Control
             {
@@ -118,12 +146,21 @@ namespace KomeijiKoishi.Cards
                 OffsetBottom = 270f
             };
 
+            _isDanceVideoPlaying = true;
+            _activeOverlay = overlay;
+            _activePlayer = player;
+
             player.Finished += () =>
             {
                 overlay.QueueFree();
                 _isDanceVideoPlaying = false;
+                if (_activeOverlay == overlay)
+                {
+                    _activeOverlay = null;
+                    _activePlayer = null;
+                }
 
-                if (QueuedDanceVideos.Count > 0)
+                if (!_isPlaybackBlockedForRun && QueuedDanceVideos.Count > 0)
                 {
                     string nextVideoPath = QueuedDanceVideos.Dequeue();
                     PlayDanceVideo(nextVideoPath);

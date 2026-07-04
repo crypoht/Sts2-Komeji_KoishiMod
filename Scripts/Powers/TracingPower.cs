@@ -36,7 +36,19 @@ namespace KomeijiKoishi.Powers
             }
         }
 
+#if STS2_BETA
+        public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
+        {
+            return ModifyDamageMultiplicativeCore(target, props, dealer, cardSource);
+        }
+#else
         public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+        {
+            return ModifyDamageMultiplicativeCore(target, props, dealer, cardSource);
+        }
+#endif
+
+        private decimal ModifyDamageMultiplicativeCore(Creature? target, ValueProp props, Creature? dealer, CardModel? cardSource)
         {
 
             if (target == null || target != base.Owner)

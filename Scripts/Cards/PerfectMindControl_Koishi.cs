@@ -10,6 +10,10 @@ using KomeijiKoishi.Powers;
 using BaseLib.Utils;
 using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.HoverTips;
+using System.Collections.Generic;
+using System.Linq;
+using KomeijiKoishi.Utils_Koishi;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 
 namespace KomeijiKoishi.Cards
 {
@@ -38,24 +42,70 @@ namespace KomeijiKoishi.Cards
             await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
 
             int xValue = base.ResolveEnergyXValue();
-
-
             int amount = xValue + (base.IsUpgraded ? 1 : 0);
+            if (amount <= 0) return;
 
-            if (amount > 0)
+            var handCards = PileType.Hand.GetPile(player)?.Cards?.ToList() ?? new List<CardModel>();
+            if (handCards.Count == 0) return;
+
+            var selectedCards = SelectCardsByPriority(player, handCards, amount);
+
+            foreach (var card in selectedCards)
             {
-                await PowerCmd.Apply<PerfectMindControlPower>(
-                    choiceContext,
-                    player.Creature, 
-                    amount, 
-                    player.Creature, 
-                    this
-                );
+                KoishiExtensions.ApplyUnconsciousToCard(card);
+                await KoishiExtensions.SafeAutoPlayCard(choiceContext, player, card);
             }
         }
 
         protected override void OnUpgrade()
         {
+        }
+
+        private static List<CardModel> SelectCardsByPriority(Player player, List<CardModel> cards, int amount)
+        {
+            var result = new List<CardModel>();
+            var remaining = new List<CardModel>(cards);
+            AddCardsByPrimaryTypes(player, remaining, result, amount);
+
+            while (result.Count < amount && remaining.Count > 0)
+            {
+                var selected = player.RunState.Rng.Shuffle.NextItem(remaining);
+                if (selected == null) break;
+
+                result.Add(selected);
+                remaining.Remove(selected);
+            }
+
+            return result;
+        }
+
+        private static void AddCardsByPrimaryTypes(
+            Player player,
+            List<CardModel> remaining,
+            List<CardModel> result,
+            int amount)
+        {
+            while (result.Count < amount)
+            {
+                var group = remaining
+                    .Where(c => c.Type == CardType.Skill
+                             || c.Type == CardType.Attack
+                             || c.Type == CardType.Power)
+                    .ToList();
+                if (group.Count == 0)
+                {
+                    return;
+                }
+
+                var selected = player.RunState.Rng.Shuffle.NextItem(group);
+                if (selected == null)
+                {
+                    return;
+                }
+
+                result.Add(selected);
+                remaining.Remove(selected);
+            }
         }
     }
 }

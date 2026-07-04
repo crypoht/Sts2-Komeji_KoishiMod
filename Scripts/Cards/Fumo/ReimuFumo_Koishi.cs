@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
@@ -59,7 +59,7 @@ namespace KomeijiKoishi.Cards.Fumo
   
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                     .WithHitCount(base.DynamicVars.Repeat.IntValue)
-                    .FromCard(this)
+                    .FromCard(this, cardPlay)
                     .Targeting(cardPlay.Target)
                     .WithHitFx("vfx/vfx_attack_blunt") 
                     .Execute(choiceContext);
@@ -74,16 +74,24 @@ namespace KomeijiKoishi.Cards.Fumo
             }
         }
 
+        private static PileType KeepInHandIfDiscard(PileType resultPileType)
+        {
+            return resultPileType == PileType.Discard ? PileType.Hand : resultPileType;
+        }
+
+#if STS2_BETA
+        protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
+        {
+            (PileType resultPileType, CardPilePosition position) = base.GetResultPileTypeAndPositionForCardPlay();
+            return (KeepInHandIfDiscard(resultPileType), position);
+        }
+#else
         protected override PileType GetResultPileTypeForCardPlay()
         {
             PileType resultPileType = base.GetResultPileTypeForCardPlay();
-            
-            if (resultPileType != PileType.Discard)
-            {
-                return resultPileType;
-            }
-            return PileType.Hand;
+            return KeepInHandIfDiscard(resultPileType);
         }
+#endif
 
         protected override void OnUpgrade()
         {

@@ -25,6 +25,8 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
+        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Retain };
+
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 

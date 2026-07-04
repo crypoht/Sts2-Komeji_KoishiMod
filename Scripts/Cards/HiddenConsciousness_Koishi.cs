@@ -92,11 +92,7 @@ namespace KomeijiKoishi.Cards
                             }
                         }
                     }
-                    KoishiExtensions.AutoPlayedByUnconsciousCards.Add(cardModel);
-
-                    await CardCmd.AutoPlay(choiceContext, cardModel, targetCreature, AutoPlayType.Default, true, false);
-
-                    KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(cardModel);
+                    await KoishiExtensions.SafeAutoPlayCard(choiceContext, player, cardModel, targetCreature, AutoPlayType.Default, true, false);
                     
                     await Cmd.Wait(0.1f, false);
                 }

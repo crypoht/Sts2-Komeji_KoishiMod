@@ -34,7 +34,7 @@
   "KOMEIJIKOISHI-DIM_LIGHT_CANDLE_KOISHI.description": "Whenever a card is [gold]Exhausted[/gold], heal [green]{Heal}[/green] HP. Triggers up to [blue]6[/blue] times each combat.",
   "KOMEIJIKOISHI-DIM_LIGHT_CANDLE_KOISHI.flavor": "It seems like it could sit on Mr. Hat...",
   "KOMEIJIKOISHI-SUWAKOS_HAT_KOISHI.title": "Suwako's Hat",
-  "KOMEIJIKOISHI-SUWAKOS_HAT_KOISHI.description": "Cards you draw have their costs randomized. At the start of each turn, choose [blue]{Cards}[/blue] card(s) from your draw pile and add them to your hand.",
+  "KOMEIJIKOISHI-SUWAKOS_HAT_KOISHI.description": "Cards you draw have their costs randomized. At the start of each turn, choose [blue]{Cards}[/blue] card(s) from your draw pile and add them to your hand. They can be played for free this turn.",
   "KOMEIJIKOISHI-SUWAKOS_HAT_KOISHI.selectionScreenPrompt": "Choose a card to add to your hand.",
   "KOMEIJIKOISHI-SUWAKOS_HAT_KOISHI.flavor": "The moment she sees you, she puts a hat on you.",
   "KOMEIJIKOISHI-ONBASHIRA_KOISHI.title": "Onbashira",
@@ -74,10 +74,10 @@
   "KOMEIJIKOISHI-YIN_YANG_GHOST_GOD_ORB_RELIC_KOISHI.description": "On pickup, add an upgraded [gold]Yin-Yang Ghost God Orb[/gold] to your deck.",
   "KOMEIJIKOISHI-YIN_YANG_GHOST_GOD_ORB_RELIC_KOISHI.flavor": "Danmaku that is almost impossible to withstand!",
   "KOMEIJIKOISHI-MINI_SAISEN_BOX_KOISHI.title": "Mini Offering Box",
-  "KOMEIJIKOISHI-MINI_SAISEN_BOX_KOISHI.description": "No longer gain Gold. Damage you deal and Block you gain are increased by [blue]{BonusPercent}[/blue]%.",
+  "KOMEIJIKOISHI-MINI_SAISEN_BOX_KOISHI.description": "No longer gain Gold. Damage you deal to enemies with Attack cards and Block you gain are increased by [blue]{BonusPercent}[/blue]%.",
   "KOMEIJIKOISHI-MINI_SAISEN_BOX_KOISHI.flavor": "She gave it to you so you could ask others to put money in it.",
   "KOMEIJIKOISHI-RED_TIE_KOISHI.title": "Red Tie",
-  "KOMEIJIKOISHI-RED_TIE_KOISHI.description": "On pickup, transform all Attack cards in your deck into [gold]Yin-Yang Orb Danmaku[/gold] and enchant them with [gold]Miracle[/gold].",
+  "KOMEIJIKOISHI-RED_TIE_KOISHI.description": "At the start of each turn, all 0{energyPrefix:energyIcons(1)} Attack cards deal 3 more damage. The first Attack each turn can be played for free.",
   "KOMEIJIKOISHI-RED_TIE_KOISHI.flavor": "Something Reimu always keeps with her. Please protect it well.",
   "KOMEIJIKOISHI-EXORCISM_AMULET_KOISHI.title": "Exorcism Amulet",
   "KOMEIJIKOISHI-EXORCISM_AMULET_KOISHI.description": "When you draw a [green]Status[/green] or [red]Curse[/red], exhaust it and draw [blue]{Cards}[/blue] card(s).",
@@ -93,5 +93,8 @@
   "KOMEIJIKOISHI-KOMAINU_STONE_CARVING_KOISHI.flavor": "She will always protect you.",
   "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.title": "Night Sparrow's Wings",
   "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.description": "Whenever you kill an enemy, heal [blue]{Heal}[/blue] HP.",
-  "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.flavor": "Tiny wings bearing a delicious (crossed out) grand dream."
+  "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.flavor": "Tiny wings bearing a delicious (crossed out) grand dream.",
+  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.title": "Magic Potion Bottle",
+  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.description": "Every [blue]{Kills}[/blue] enemies killed, obtain a random potion.",
+  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.flavor": "Once it is empty, surely it is fine to fill it with something else."
 }

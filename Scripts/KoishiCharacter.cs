@@ -17,7 +17,7 @@ namespace KomeijiKoishi.Characters
 {
 	public class KoishiCharacter : PlaceholderCharacterModel
 	{
-		public override int StartingHp => 64; 
+		public override int StartingHp => 67; 
 		
 		public override Color NameColor => new(0.3f, 0.7f, 0.3f); 
 		public override Color EnergyLabelOutlineColor => new(0.624f, 0.271f, 0.463f);

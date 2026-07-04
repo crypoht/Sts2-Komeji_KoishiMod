@@ -25,7 +25,7 @@ namespace KomeijiKoishi.Relics
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new CardsVar(4)
+            new CardsVar(3)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => HoverTipFactory.FromEnchantment<MiracleEnchantment>(2);

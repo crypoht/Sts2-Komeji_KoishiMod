@@ -58,17 +58,24 @@ namespace KomeijiKoishi.Cards.Danmaku
             base.EnergyCost.AddThisCombat(1, false);
         }
 
+        private static PileType KeepInHandIfDiscard(PileType resultPileType)
+        {
+            return resultPileType == PileType.Discard ? PileType.Hand : resultPileType;
+        }
+
+#if STS2_BETA
+        protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
+        {
+            (PileType resultPileType, CardPilePosition position) = base.GetResultPileTypeAndPositionForCardPlay();
+            return (KeepInHandIfDiscard(resultPileType), position);
+        }
+#else
         protected override PileType GetResultPileTypeForCardPlay()
         {
             PileType resultPileType = base.GetResultPileTypeForCardPlay();
-            
-            if (resultPileType == PileType.Discard)
-            {
-                return PileType.Hand;
-            }
-            
-            return resultPileType;
+            return KeepInHandIfDiscard(resultPileType);
         }
+#endif
 
         protected override void OnUpgrade()
         {

@@ -63,5 +63,17 @@
   "KOMEIJIKOISHI-FLYING_DAMAGE_REDUCTION_POWER.description": "이번 턴받습니다의피해감소50%.",
   "KOMEIJIKOISHI-GUARDIAN_POWER.title": "수호",
   "KOMEIJIKOISHI-GUARDIAN_POWER.smartDescription": "하지 않는다施加负面효과.턴 시작 시, 잃습니다1중첩.",
-  "KOMEIJIKOISHI-GUARDIAN_POWER.description": "하지 않는다施加负面효과.턴 시작 시, 잃습니다1중첩."
+  "KOMEIJIKOISHI-GUARDIAN_POWER.description": "하지 않는다施加负面효과.턴 시작 시, 잃습니다1중첩.",
+  "KOMEIJIKOISHI-HUA_KAI_BLOOM_HARMONY_POWER.title": "개화 조화",
+  "KOMEIJIKOISHI-HUA_KAI_BLOOM_HARMONY_POWER.smartDescription": "[gold]개화[/gold]의 방어도 획득량 감소를 무효화합니다. 턴 종료 시 [gold]폐쇄[/gold]에 들어갑니다.",
+  "KOMEIJIKOISHI-HUA_KAI_BLOOM_HARMONY_POWER.description": "[gold]개화[/gold]의 방어도 획득량 감소를 무효화합니다. 턴 종료 시 [gold]폐쇄[/gold]에 들어갑니다.",
+  "KOMEIJIKOISHI-HARDMANS_YOUKAI_GIRL_POWER.title": "하르트만의 요괴소녀",
+  "KOMEIJIKOISHI-HARDMANS_YOUKAI_GIRL_POWER.smartDescription": "이번 턴, 당신이 공격 카드를 사용할 때마다 [gold]탄막[/gold] 카드 {Amount}장을 생성해 자동으로 사용합니다.",
+  "KOMEIJIKOISHI-HARDMANS_YOUKAI_GIRL_POWER.description": "이번 턴, 당신이 공격 카드를 사용할 때마다 [gold]탄막[/gold] 카드 {Amount}장을 생성해 자동으로 사용합니다.",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THIS_SIDE_POWER.title": "전화 이쪽",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THIS_SIDE_POWER.smartDescription": "팀원들이 공격 카드를 [blue]{Amount}[/blue]장 사용할 때마다 당신은 [gold]무형[/gold]을 1 얻습니다.",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THIS_SIDE_POWER.description": "팀원들이 공격 카드를 [blue]{Amount}[/blue]장 사용할 때마다 당신은 [gold]무형[/gold]을 1 얻습니다.",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.title": "전화 저쪽",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.smartDescription": "이번 턴 공격 카드를 무료로 사용할 수 있습니다.",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "이번 턴 공격 카드를 무료로 사용할 수 있습니다."
 }

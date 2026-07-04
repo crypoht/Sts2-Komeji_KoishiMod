@@ -10,7 +10,9 @@ namespace KomeijiKoishi.Ancients
 {
     public sealed class HakureiReimu_Koishi : CustomAncientModel
     {
-        public override string? CustomScenePath => "res://mods/Komeiji_Koishi/scenes/ancients/HakureiReimu_Koishi.tscn";
+        public override string? CustomScenePath => KoishiModConfig.UseFumoCardArt
+            ? "res://mods/Komeiji_Koishi/scenes/ancients/Reimu_fumo.tscn"
+            : "res://mods/Komeiji_Koishi/scenes/ancients/HakureiReimu_Koishi.tscn";
 
         public override string? CustomMapIconPath => "res://mods/Komeiji_Koishi/images/ancients/HakureiReimu_Koishi_map_icon.png";
 

@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
+using System.Collections;
 
 namespace KomeijiKoishi.Patches
 {
@@ -74,6 +75,14 @@ namespace KomeijiKoishi.Patches
                 }
             }
 
+            foreach (AncientEventModel ancient in GetEcoLibCustomAncients())
+            {
+                if (candidates.All(a => a.Id != ancient.Id))
+                {
+                    candidates.Add(ancient);
+                }
+            }
+
             return candidates
                 .Where(a => IsValidForCurrentAct(a, act))
                 .Where(a => !WasAlreadyUsedInPreviousAct(a, act, runState))
@@ -83,7 +92,27 @@ namespace KomeijiKoishi.Patches
 
         private static bool IsValidForCurrentAct(AncientEventModel ancient, ActModel act)
         {
-            return ancient is not CustomAncientModel customAncient || customAncient.IsValidForAct(act);
+            if (ancient is CustomAncientModel customAncient)
+            {
+                return customAncient.IsValidForAct(act);
+            }
+
+            if (ancient.GetType().FullName == "Koishi.KoishiCode.Ancient.Satori")
+            {
+                return IsSatoriValidForCurrentAct(act);
+            }
+
+            return IsExternalCustomAncientValidForAct(ancient, act);
+        }
+
+        private static bool IsSatoriValidForCurrentAct(ActModel act)
+        {
+            int actNumber = act.ActNumber();
+            RunState? state = CurrentGeneratingRunState.State;
+            string? characterId = state?.Players?.FirstOrDefault()?.Character?.Id?.Entry;
+            return characterId == "KOISHI-KOISHI"
+                ? actNumber is 2 or 3
+                : actNumber == 3;
         }
 
         private static bool WasAlreadyUsedInPreviousAct(AncientEventModel ancient, ActModel currentAct, RunState runState)
@@ -133,7 +162,9 @@ namespace KomeijiKoishi.Patches
 
         private static bool HasExternalAncientConfigConflict()
         {
-            return HasKoishiAncientConfigConflict() || HasTouhouAncientsConfigConflict();
+            return HasKoishiAncientConfigConflict()
+                || HasTouhouAncientsConfigConflict()
+                || HasEcoKoishiSatoriConfigConflict();
         }
 
         private static bool HasKoishiAncientConfigConflict()
@@ -175,6 +206,35 @@ namespace KomeijiKoishi.Patches
             return false;
         }
 
+        private static bool HasEcoKoishiSatoriConfigConflict()
+        {
+            Type? configType = AccessTools.TypeByName("Koishi.KoishiCode.Config.KoishiConfig");
+            if (configType == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                bool satoriExtraTreatment = GetStaticBoolField(configType, "SatoriExtraTreatment");
+                bool satoriNonKoishiExtraTreatment = GetStaticBoolField(configType, "SatoriNonKoishiExtraTreatment");
+                float satoriAct2Chance = GetStaticFloatField(configType, "SatoriAct2Chance", 0.25f);
+                float satoriAct3Chance = GetStaticFloatField(configType, "SatoriAct3Chance", 0.45f);
+                float satoriNonKoishiAct3Chance = GetStaticFloatField(configType, "SatoriNonKoishiAct3Chance", 0.2f);
+
+                return satoriExtraTreatment
+                    || satoriNonKoishiExtraTreatment
+                    || Math.Abs(satoriAct2Chance - 0.25f) > 0.0001f
+                    || Math.Abs(satoriAct3Chance - 0.45f) > 0.0001f
+                    || Math.Abs(satoriNonKoishiAct3Chance - 0.2f) > 0.0001f;
+            }
+            catch (Exception e)
+            {
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[KoishiAncientWeights] Failed to read Koishi Satori config: {e}");
+                return true;
+            }
+        }
+
         private static bool GetStaticBoolProperty(Type type, string propertyName)
         {
             try
@@ -186,6 +246,56 @@ namespace KomeijiKoishi.Patches
             {
                 MegaCrit.Sts2.Core.Logging.Log.Error($"[KoishiAncientWeights] Failed to read {type.FullName}.{propertyName}: {e}");
                 return true;
+            }
+        }
+
+        private static bool GetStaticBoolField(Type type, string fieldName)
+        {
+            FieldInfo? field = type.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
+            return field?.FieldType == typeof(bool) && field.GetValue(null) is true;
+        }
+
+        private static float GetStaticFloatField(Type type, string fieldName, float fallback)
+        {
+            FieldInfo? field = type.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
+            return field?.FieldType == typeof(float) && field.GetValue(null) is float value
+                ? value
+                : fallback;
+        }
+
+        private static IEnumerable<AncientEventModel> GetEcoLibCustomAncients()
+        {
+            Type? dictionaryType = AccessTools.TypeByName("EcoLib.Patches.Content.CustomContentDictionary");
+            FieldInfo? customAncientsField = dictionaryType?.GetField("CustomAncients", BindingFlags.Public | BindingFlags.Static);
+            if (customAncientsField?.GetValue(null) is not IEnumerable customAncients)
+            {
+                yield break;
+            }
+
+            foreach (object? ancient in customAncients)
+            {
+                if (ancient is AncientEventModel ancientModel)
+                {
+                    yield return ancientModel;
+                }
+            }
+        }
+
+        private static bool IsExternalCustomAncientValidForAct(AncientEventModel ancient, ActModel act)
+        {
+            try
+            {
+                MethodInfo? method = ancient.GetType().GetMethod("IsValidForAct", BindingFlags.Instance | BindingFlags.Public);
+                ParameterInfo[] parameters = method?.GetParameters() ?? Array.Empty<ParameterInfo>();
+                return method?.ReturnType == typeof(bool)
+                    && parameters.Length == 1
+                    && parameters[0].ParameterType.IsAssignableFrom(typeof(ActModel))
+                    && method.Invoke(ancient, new object[] { act }) is true;
+            }
+            catch (Exception e)
+            {
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[KoishiAncientWeights] External ancient {ancient.GetType().FullName} failed IsValidForAct for {act.Id.Entry}: {e}");
+                return false;
             }
         }
 

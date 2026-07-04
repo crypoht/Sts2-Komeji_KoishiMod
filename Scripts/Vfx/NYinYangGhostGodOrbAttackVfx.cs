@@ -24,6 +24,10 @@ public sealed partial class NYinYangGhostGodOrbAttackVfx : Node2D
     public const float FanRadius = 160f;
     public const float SmallOrbVisualWidth = 80f;
     public const float FinalOrbVisualWidth = 300f;
+    public const float FanOrbAfterimageInterval = 0.025f;
+    public const float FanOrbAfterimageLifetime = 0.18f;
+    public const float FanOrbAfterimageAlpha = 0.38f;
+    public const float FanOrbAfterimageMinMoveDistance = 1.5f;
     public const float FinalProjectileOvershootDistance = 1000f;
     public const float BackgroundDimAlpha = 0.5f;
     public const float BackgroundDimFadeInDuration = 0.1f;
@@ -68,6 +72,8 @@ public sealed partial class NYinYangGhostGodOrbAttackVfx : Node2D
     private Vector2 startPosition;
     private Vector2 endPosition;
     private readonly List<Sprite2D> fanSprites = new();
+    private readonly List<float> fanAfterimageTimers = new();
+    private readonly List<Vector2> fanLastAfterimagePositions = new();
     private Sprite2D? finalSprite;
     private ColorRect? dimOverlay;
     private CancellationTokenSource? cts;
@@ -127,6 +133,7 @@ public sealed partial class NYinYangGhostGodOrbAttackVfx : Node2D
     public override void _Process(double delta)
     {
         UpdateDimOverlayRect();
+        UpdateFanOrbAfterimages((float)delta);
     }
 
     private void CreateDimOverlay()
@@ -170,6 +177,8 @@ public sealed partial class NYinYangGhostGodOrbAttackVfx : Node2D
             sprite.GlobalPosition = startPosition;
             AddChild(sprite);
             fanSprites.Add(sprite);
+            fanAfterimageTimers.Add(0f);
+            fanLastAfterimagePositions.Add(startPosition);
         }
     }
 
@@ -198,6 +207,60 @@ public sealed partial class NYinYangGhostGodOrbAttackVfx : Node2D
         }
 
         return sprite;
+    }
+
+    private void UpdateFanOrbAfterimages(float delta)
+    {
+        for (int i = 0; i < fanSprites.Count; i++)
+        {
+            Sprite2D sprite = fanSprites[i];
+            if (!sprite.Visible)
+            {
+                continue;
+            }
+
+            Vector2 position = sprite.GlobalPosition;
+            if (position.DistanceSquaredTo(fanLastAfterimagePositions[i]) < FanOrbAfterimageMinMoveDistance * FanOrbAfterimageMinMoveDistance)
+            {
+                continue;
+            }
+
+            fanAfterimageTimers[i] += delta;
+            if (fanAfterimageTimers[i] < FanOrbAfterimageInterval)
+            {
+                continue;
+            }
+
+            fanAfterimageTimers[i] = 0f;
+            fanLastAfterimagePositions[i] = position;
+            CreateFanOrbAfterimage(sprite);
+        }
+    }
+
+    private void CreateFanOrbAfterimage(Sprite2D source)
+    {
+        if (source.Texture == null)
+        {
+            return;
+        }
+
+        Sprite2D afterimage = new()
+        {
+            Texture = source.Texture,
+            Centered = true,
+            GlobalPosition = source.GlobalPosition,
+            GlobalRotation = source.GlobalRotation,
+            Scale = source.Scale,
+            ZIndex = source.ZIndex - 1,
+            Modulate = new Color(1f, 1f, 1f, FanOrbAfterimageAlpha)
+        };
+
+        AddChild(afterimage);
+
+        Tween tween = afterimage.CreateTween();
+        tween.TweenProperty(afterimage, "modulate:a", 0f, FanOrbAfterimageLifetime);
+        tween.Parallel().TweenProperty(afterimage, "scale", source.Scale * 0.72f, FanOrbAfterimageLifetime);
+        tween.TweenCallback(Callable.From(afterimage.QueueFreeSafely));
     }
 
     private async Task PlaySequence(CancellationToken token)

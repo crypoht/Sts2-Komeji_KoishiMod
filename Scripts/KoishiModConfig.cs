@@ -3,6 +3,7 @@ using BaseLib.Config.UI;
 using Godot;
 using KomeijiKoishi.Config;
 using KomeijiKoishi.Modifiers;
+using KomeijiKoishi.Multiplayer;
 using MegaCrit.Sts2.addons.mega_text;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
@@ -73,6 +74,12 @@ public sealed class KoishiModConfig : SimpleModConfig
     public static bool ActiveRunAncientsEnabled { get; private set; } = true;
 
     [ConfigIgnore]
+    public static bool ActiveRunPlayMoriyaDanceForAllPlayers { get; private set; }
+
+    [ConfigIgnore]
+    public static bool ActiveRunAncientWeightsEnabled { get; private set; }
+
+    [ConfigIgnore]
     public static AncientWeights ActiveRunAncientWeights { get; private set; } = AncientWeights.Default;
 
     [ConfigIgnore]
@@ -80,6 +87,9 @@ public sealed class KoishiModConfig : SimpleModConfig
 
     [ConfigIgnore]
     public static int ActiveRunCurrentActIndex { get; private set; }
+
+    [ConfigIgnore]
+    private static bool HasSyncedRunConfig { get; set; }
 
     public override void SetupConfigUI(Control optionContainer)
     {
@@ -105,11 +115,27 @@ public sealed class KoishiModConfig : SimpleModConfig
 
     public static void BeginRunWithHostConfig(IReadOnlyList<ModifierModel> modifiers)
     {
+        HasSyncedRunConfig = false;
+        ApplyRunConfigFromModifiers(modifiers);
+    }
+
+    public static void BeginRunWithSyncedHostModifiers(IReadOnlyList<ModifierModel> modifiers)
+    {
+        HasSyncedRunConfig = true;
+        ApplyRunConfigFromModifiers(modifiers);
+        ApplySyncedRunConfigToLocalConfig();
+    }
+
+    private static void ApplyRunConfigFromModifiers(IReadOnlyList<ModifierModel> modifiers)
+    {
         ActiveRunAncientsEnabled = !modifiers.Any(m => m is DisableKoishiAncientsModifier);
-        ActiveRunAncientWeights = modifiers.Any(m => m is DisableKoishiAncientWeightsModifier)
+        ActiveRunPlayMoriyaDanceForAllPlayers = modifiers.Any(m => m is MoriyaDanceForAllPlayersModifier);
+        ActiveRunAncientWeightsEnabled = !modifiers.Any(m => m is DisableKoishiAncientWeightsModifier)
+            && modifiers.Any(m => m is KoishiAncientWeightsModifier);
+        ActiveRunAncientWeights = !ActiveRunAncientWeightsEnabled
             ? AncientWeights.Default
             : modifiers.OfType<KoishiAncientWeightsModifier>().FirstOrDefault()?.ToAncientWeights() ?? AncientWeights.Default;
-        ActiveRunExternalAncientWeights = modifiers.Any(m => m is DisableKoishiAncientWeightsModifier)
+        ActiveRunExternalAncientWeights = !ActiveRunAncientWeightsEnabled
             ? new Dictionary<string, int>()
             : modifiers.OfType<KoishiAncientWeightsModifier>().FirstOrDefault()?.ExternalWeights ?? new Dictionary<string, int>();
         ActiveRunCurrentActIndex = 0;
@@ -117,8 +143,96 @@ public sealed class KoishiModConfig : SimpleModConfig
 
     public static void BeginRunWithHostConfig(RunState state)
     {
-        BeginRunWithHostConfig(state.Modifiers);
+        if (!HasSyncedRunConfig)
+        {
+            ApplyRunConfigFromModifiers(state.Modifiers);
+        }
+
         ActiveRunCurrentActIndex = state.CurrentActIndex;
+    }
+
+    public static KoishiRunConfigMessage CreateRunConfigMessage()
+    {
+        return new KoishiRunConfigMessage
+        {
+            AncientsEnabled = EnableAncients,
+            PlayMoriyaDanceForAllPlayers = PlayMoriyaDanceForAllPlayers,
+            AncientWeightsEnabled = EnableAncientWeights,
+            Weights = CurrentAncientWeights,
+            ExternalWeights = SerializeExternalAncientWeights(CurrentExternalAncientWeights())
+        };
+    }
+
+    public static void ApplySyncedRunConfig(KoishiRunConfigMessage message)
+    {
+        HasSyncedRunConfig = true;
+        ActiveRunAncientsEnabled = message.AncientsEnabled;
+        ActiveRunPlayMoriyaDanceForAllPlayers = message.PlayMoriyaDanceForAllPlayers;
+        ActiveRunAncientWeightsEnabled = message.AncientWeightsEnabled;
+        ActiveRunAncientWeights = ActiveRunAncientWeightsEnabled ? message.Weights : AncientWeights.Default;
+        ActiveRunExternalAncientWeights = ActiveRunAncientWeightsEnabled
+            ? ParseExternalAncientWeights(message.ExternalWeights)
+            : new Dictionary<string, int>();
+        ActiveRunCurrentActIndex = 0;
+        ApplySyncedRunConfigToLocalConfig();
+    }
+
+    private static void ApplySyncedRunConfigToLocalConfig()
+    {
+        EnableAncients = ActiveRunAncientsEnabled;
+        PlayMoriyaDanceForAllPlayers = ActiveRunPlayMoriyaDanceForAllPlayers;
+        EnableAncientWeights = ActiveRunAncientWeightsEnabled;
+        MoriyaTwoGodsWeight = ActiveRunAncientWeights.MoriyaTwoGods;
+        HakureiReimuWeight = ActiveRunAncientWeights.HakureiReimu;
+        OrobasWeight = ActiveRunAncientWeights.Orobas;
+        PaelWeight = ActiveRunAncientWeights.Pael;
+        TezcataraWeight = ActiveRunAncientWeights.Tezcatara;
+        NonupeipeWeight = ActiveRunAncientWeights.Nonupeipe;
+        TanxWeight = ActiveRunAncientWeights.Tanx;
+        VakuuWeight = ActiveRunAncientWeights.Vakuu;
+        DarvWeight = ActiveRunAncientWeights.Darv;
+        ExternalAncientWeights = SerializeExternalAncientWeights(ActiveRunExternalAncientWeights);
+    }
+
+    public static bool HasSyncedRunConfigForCurrentRun()
+    {
+        return HasSyncedRunConfig;
+    }
+
+    public static IReadOnlyList<ModifierModel> WithActiveRunAncientConfig(IReadOnlyList<ModifierModel> modifiers)
+    {
+        List<ModifierModel> result = modifiers
+            .Where(m => m is not KoishiAncientWeightsModifier and not DisableKoishiAncientWeightsModifier and not MoriyaDanceForAllPlayersModifier)
+            .ToList();
+
+        if (ActiveRunPlayMoriyaDanceForAllPlayers)
+        {
+            result.Add(ModelDb.Modifier<MoriyaDanceForAllPlayersModifier>().ToMutable());
+        }
+
+        bool hasMarker = result.Any(m => m is DisableKoishiAncientsModifier);
+        if (ActiveRunAncientsEnabled)
+        {
+            if (hasMarker)
+            {
+                result.RemoveAll(m => m is DisableKoishiAncientsModifier);
+            }
+        }
+        else if (!hasMarker)
+        {
+            result.Add(ModelDb.Modifier<DisableKoishiAncientsModifier>().ToMutable());
+        }
+
+        if (ActiveRunAncientWeightsEnabled)
+        {
+            result.Add(CreateWeightsModifier(ActiveRunAncientWeights, ActiveRunExternalAncientWeights));
+        }
+        else if (!result.Any(m => m is DisableKoishiAncientWeightsModifier))
+        {
+            result.Add(ModelDb.Modifier<DisableKoishiAncientWeightsModifier>().ToMutable());
+        }
+
+        return result;
     }
 
     public static bool HasRunAncientWeights(IRunState? runState)
@@ -130,7 +244,9 @@ public sealed class KoishiModConfig : SimpleModConfig
     {
         if (runState == null)
         {
-            return EnableAncients && EnableAncientWeights;
+            return HasSyncedRunConfig
+                ? ActiveRunAncientsEnabled && ActiveRunAncientWeightsEnabled
+                : EnableAncients && EnableAncientWeights;
         }
 
         IReadOnlyList<ModifierModel> modifiers = runState.Modifiers;
@@ -167,7 +283,15 @@ public sealed class KoishiModConfig : SimpleModConfig
 
     public static IReadOnlyList<ModifierModel> WithHostAncientConfig(IReadOnlyList<ModifierModel> modifiers)
     {
-        List<ModifierModel> result = modifiers.Where(m => m is not KoishiAncientWeightsModifier and not DisableKoishiAncientWeightsModifier).ToList();
+        List<ModifierModel> result = modifiers
+            .Where(m => m is not KoishiAncientWeightsModifier and not DisableKoishiAncientWeightsModifier and not MoriyaDanceForAllPlayersModifier)
+            .ToList();
+
+        if (PlayMoriyaDanceForAllPlayers)
+        {
+            result.Add(ModelDb.Modifier<MoriyaDanceForAllPlayersModifier>().ToMutable());
+        }
+
         bool hasMarker = result.Any(m => m is DisableKoishiAncientsModifier);
         if (EnableAncients)
         {
@@ -196,10 +320,14 @@ public sealed class KoishiModConfig : SimpleModConfig
 
     private static KoishiAncientWeightsModifier CreateWeightsModifier()
     {
+        return CreateWeightsModifier(CurrentAncientWeights, CurrentExternalAncientWeights());
+    }
+
+    private static KoishiAncientWeightsModifier CreateWeightsModifier(AncientWeights weights, IReadOnlyDictionary<string, int> externalWeights)
+    {
         KoishiAncientWeightsModifier modifier = ModelDb.Modifier<KoishiAncientWeightsModifier>().ToMutable() as KoishiAncientWeightsModifier
             ?? new KoishiAncientWeightsModifier();
-        AncientWeights weights = CurrentAncientWeights;
-        modifier.Apply(weights, CurrentExternalAncientWeights());
+        modifier.Apply(weights, externalWeights);
         return modifier;
     }
 
@@ -348,8 +476,13 @@ public sealed class KoishiModConfig : SimpleModConfig
 
     public static Dictionary<string, int> ParseExternalAncientWeights()
     {
+        return ParseExternalAncientWeights(ExternalAncientWeights);
+    }
+
+    public static Dictionary<string, int> ParseExternalAncientWeights(string serializedWeights)
+    {
         Dictionary<string, int> weights = new();
-        foreach (string entry in ExternalAncientWeights.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        foreach (string entry in serializedWeights.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
         {
             string[] parts = entry.Split('=', 2, StringSplitOptions.TrimEntries);
             if (parts.Length == 2 && int.TryParse(parts[1], out int weight))

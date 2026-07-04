@@ -78,11 +78,7 @@ namespace KomeijiKoishi.Powers
                                     targetCreature = base.Owner;
                                 }
 
-                                KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
-                                
-                                await CardCmd.AutoPlay(context, targetCard, targetCreature, AutoPlayType.Default, true, false);
-                                
-                                KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(targetCard);
+                                await KoishiExtensions.SafeAutoPlayCard(context, base.Owner.Player, targetCard, targetCreature, AutoPlayType.Default, true, false);
                             }
                         }
                     }

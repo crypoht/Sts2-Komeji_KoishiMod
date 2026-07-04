@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -49,7 +49,7 @@ namespace KomeijiKoishi.Cards
                 DanmakuProjectileHelper.AddToCombat(base.Owner.Creature, cardPlay.Target, "rose");
 
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                    .FromCard(this)
+                    .FromCard(this, cardPlay)
                     .Targeting(cardPlay.Target)
                     .WithHitFx("vfx/vfx_attack_slash")
                     .Execute(choiceContext);

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -28,7 +28,7 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
             new CalculationBaseVar(0m),
-            new ExtraDamageVar(1m),
+            new ExtraDamageVar(2m),
             new CalculatedDamageVar(ValueProp.Move).WithMultiplier(GetPositiveKuugaStacks),
             new RepeatVar(3)
         };
@@ -47,7 +47,7 @@ namespace KomeijiKoishi.Cards
 
             await DamageCmd.Attack(base.DynamicVars.CalculatedDamage)
                 .WithHitCount(base.DynamicVars.Repeat.IntValue)
-                .FromCard(this)
+                .FromCard(this, cardPlay)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_slash")
                 .Execute(choiceContext);

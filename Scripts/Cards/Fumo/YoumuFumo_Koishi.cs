@@ -1,4 +1,4 @@
-using Godot;
+﻿using Godot;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -47,7 +47,7 @@ namespace KomeijiKoishi.Cards.Fumo
 
             AttackCommand attackCommand = DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                 .WithHitCount(base.DynamicVars.Repeat.IntValue)
-                .FromCard(this)
+                .FromCard(this, cardPlay)
                 .Targeting(cardPlay.Target);
 
             await attackCommand

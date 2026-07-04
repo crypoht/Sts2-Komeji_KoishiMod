@@ -5,12 +5,17 @@
     <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Sts2Beta Condition="'$(Sts2Beta)' == ''">false</Sts2Beta>
+    <AssemblyName>Komeiji_Koishi</AssemblyName>
+    <ImplementationDllName Condition="'$(Sts2Beta)' == 'true'">Komeiji_Koishi.Beta.dll</ImplementationDllName>
+    <ImplementationDllName Condition="'$(Sts2Beta)' != 'true'">Komeiji_Koishi.Stable.dll</ImplementationDllName>
+    <DefineConstants Condition="'$(Sts2Beta)' == 'true'">$(DefineConstants);STS2_BETA</DefineConstants>
 
     <NuGetAudit>false</NuGetAudit>
 
     <Sts2Dir>D:\SteamLibrary\steamapps\common\Slay the Spire 2</Sts2Dir>
     <Sts2DataDir>$(Sts2Dir)\data_sts2_windows_x86_64</Sts2DataDir>
-    <ModCopyDir>$(Sts2Dir)\$(MSBuildProjectName)</ModCopyDir>
+    <ModCopyDir>$(Sts2Dir)\mods\Komeiji_Koishi</ModCopyDir>
     <BaseLibDir>D:\SteamLibrary\steamapps\workshop\content\2868840\3737335127\BaseLib</BaseLibDir>
   </PropertyGroup>
 
@@ -31,10 +36,14 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Scripts\Loader\**\*.cs" />
+  </ItemGroup>
+
   <Target Name="Copy Mod" AfterTargets="PostBuildEvent">
     <Message Text="正在将 Mod 复制到杀戮尖塔2 目录..." Importance="high" />
     <MakeDir Directories="$(ModCopyDir)\" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModCopyDir)\" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(ModCopyDir)\$(ImplementationDllName)" />
     <Copy SourceFiles="$(MSBuildProjectName).json" DestinationFolder="$(ModCopyDir)\" />
   </Target>
 </Project>

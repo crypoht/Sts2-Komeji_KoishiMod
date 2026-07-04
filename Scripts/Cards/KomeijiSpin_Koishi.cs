@@ -1,4 +1,4 @@
-using System; 
+﻿using System; 
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Utils;
@@ -33,7 +33,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(7m, ValueProp.Move),
+            new DamageVar(5m, ValueProp.Move),
             new RepeatVar(2)
         };
 
@@ -41,9 +41,12 @@ namespace KomeijiKoishi.Cards
         {
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                 .WithHitCount(base.DynamicVars.Repeat.IntValue) 
-                .FromCard(this)
+                .FromCard(this, cardPlay)
                 .TargetingAllOpponents(base.CombatState!)
                 .Execute(choiceContext);
+
+            base.AssertMutable();
+            base.DynamicVars.Repeat.BaseValue += 1m;
         }
 
         protected override void OnUpgrade()

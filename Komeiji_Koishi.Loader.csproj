@@ -1,0 +1,34 @@
+<Project Sdk="Godot.NET.Sdk/4.5.1">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>true</ImplicitUsings>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Komeiji_Koishi.Loader</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+
+    <NuGetAudit>false</NuGetAudit>
+
+    <Sts2Dir>D:\SteamLibrary\steamapps\common\Slay the Spire 2</Sts2Dir>
+    <Sts2DataDir>$(Sts2Dir)\data_sts2_windows_x86_64</Sts2DataDir>
+    <ModCopyDir>$(Sts2Dir)\mods\Komeiji_Koishi</ModCopyDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Scripts\Loader\KoishiLoaderEntry.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="sts2">
+      <HintPath>$(Sts2DataDir)\sts2.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="Copy Loader" AfterTargets="PostBuildEvent">
+    <Message Text="正在将恋恋 Mod 壳 DLL 复制到杀戮尖塔2 目录..." Importance="high" />
+    <MakeDir Directories="$(ModCopyDir)\" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(ModCopyDir)\Komeiji_Koishi.dll" />
+    <Copy SourceFiles="Komeiji_Koishi.json" DestinationFolder="$(ModCopyDir)\" />
+  </Target>
+</Project>

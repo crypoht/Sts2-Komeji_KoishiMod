@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Utils; 
@@ -55,7 +55,7 @@ namespace KomeijiKoishi.Cards.Danmaku
             DanmakuProjectileHelper.AddToCombat(base.Owner.Creature, cardPlay.Target, "square");
 
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                .FromCard(this)
+                .FromCard(this, cardPlay)
                 .Targeting(cardPlay.Target)
                 .Execute(choiceContext);
 

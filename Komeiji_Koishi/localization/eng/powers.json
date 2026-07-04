@@ -63,5 +63,17 @@
   "KOMEIJIKOISHI-FLYING_DAMAGE_REDUCTION_POWER.description": "Damage taken this turn is reduced by 50%.",
   "KOMEIJIKOISHI-GUARDIAN_POWER.title": "Guardian",
   "KOMEIJIKOISHI-GUARDIAN_POWER.smartDescription": "Cannot receive debuffs. Lose 1 stack at the start of each turn.",
-  "KOMEIJIKOISHI-GUARDIAN_POWER.description": "Cannot receive debuffs. Lose 1 stack at the start of each turn."
+  "KOMEIJIKOISHI-GUARDIAN_POWER.description": "Cannot receive debuffs. Lose 1 stack at the start of each turn.",
+  "KOMEIJIKOISHI-HUA_KAI_BLOOM_HARMONY_POWER.title": "Bloom Harmony",
+  "KOMEIJIKOISHI-HUA_KAI_BLOOM_HARMONY_POWER.smartDescription": "Negates [gold]Bloom[/gold]'s Block gain reduction. At end of turn, enter [gold]Closed[/gold].",
+  "KOMEIJIKOISHI-HUA_KAI_BLOOM_HARMONY_POWER.description": "Negates [gold]Bloom[/gold]'s Block gain reduction. At end of turn, enter [gold]Closed[/gold].",
+  "KOMEIJIKOISHI-HARDMANS_YOUKAI_GIRL_POWER.title": "Hardman's Youkai Girl",
+  "KOMEIJIKOISHI-HARDMANS_YOUKAI_GIRL_POWER.smartDescription": "This turn, whenever you play an Attack, generate and automatically play {Amount} [gold]Danmaku[/gold] card(s).",
+  "KOMEIJIKOISHI-HARDMANS_YOUKAI_GIRL_POWER.description": "This turn, whenever you play an Attack, generate and automatically play {Amount} [gold]Danmaku[/gold] card(s).",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THIS_SIDE_POWER.title": "This Side of the Phone",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THIS_SIDE_POWER.smartDescription": "Whenever teammates play [blue]{Amount}[/blue] Attack cards, you gain 1 [gold]Intangible[/gold].",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THIS_SIDE_POWER.description": "Whenever teammates play [blue]{Amount}[/blue] Attack cards, you gain 1 [gold]Intangible[/gold].",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.title": "That Side of the Phone",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.smartDescription": "Attack cards can be played for free this turn.",
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "Attack cards can be played for free this turn."
 }

@@ -66,11 +66,7 @@ namespace KomeijiKoishi.Cards
 
                     await CardPileCmd.AddGeneratedCardToCombat(orbCard, PileType.Exhaust, player, CardPilePosition.Bottom);
 
-                    KoishiExtensions.AutoPlayedByUnconsciousCards.Add(orbCard);
-
-                    await CardCmd.AutoPlay(choiceContext, orbCard, null, AutoPlayType.Default, false, false);
-
-                    KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(orbCard);
+                    await KoishiExtensions.SafeAutoPlayCard(choiceContext, player, orbCard, null, AutoPlayType.Default, false, false);
 
                     await Cmd.Wait(0.1f, false);
                 }

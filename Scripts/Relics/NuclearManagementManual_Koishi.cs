@@ -34,7 +34,7 @@ namespace KomeijiKoishi.Relics
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
             new CardsVar(1),
-            new DynamicVar(ExhaustThresholdKey, 10m)
+            new DynamicVar(ExhaustThresholdKey, 7m)
         };
 
         public override string PackedIconPath => $"res://mods/Komeiji_Koishi/images/relics/NuclearManagementManual_Koishi.png";

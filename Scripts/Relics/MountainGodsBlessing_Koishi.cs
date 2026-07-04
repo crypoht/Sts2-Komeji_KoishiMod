@@ -65,7 +65,7 @@ namespace KomeijiKoishi.Relics
             }
 
             base.Flash();
-            await CreatureCmd.Damage(choiceContext, base.Owner.Creature, base.DynamicVars.Damage, null, null);
+            await CreatureCmd.Damage(choiceContext, base.Owner.Creature, base.DynamicVars.Damage, null!, null!);
         }
     }
 }

@@ -43,7 +43,12 @@ namespace KomeijiKoishi.Patches
                 typeof(DanmakuEndlessMiracle_Koishi),
                 "res://mods/Komeiji_Koishi/images/cards/animated/DanmakuEndlessMiracle_Koishi_fumo/",
                 18,
-                0.07d)
+                0.07d),
+            new(
+                typeof(SilentBombardment_Koishi),
+                "res://mods/Komeiji_Koishi/images/cards/animated/SilentBombardment_Koishi_fumo/",
+                46,
+                0.1d)
         };
 
         private static readonly AccessTools.FieldRef<NCard, TextureRect> PortraitRef =

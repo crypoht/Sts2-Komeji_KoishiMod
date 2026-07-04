@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -68,7 +68,7 @@ namespace KomeijiKoishi.Cards
                 if (player == null || cardPlay.Target == null) return;
 
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                    .FromCard(this)
+                    .FromCard(this, cardPlay)
                     .Targeting(cardPlay.Target)
                     .WithHitFx("vfx/vfx_attack_blunt") 
                     .Execute(choiceContext);

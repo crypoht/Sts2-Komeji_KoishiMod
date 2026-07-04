@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -61,14 +62,19 @@ namespace KomeijiKoishi.Relics
 
             await CardPileCmd.ShuffleIfNecessary(choiceContext, player);
 
-            IEnumerable<CardModel> selectedCards = await CardSelectCmd.FromCombatPile(
+            List<CardModel> selectedCards = (await CardSelectCmd.FromCombatPile(
                 choiceContext,
                 PileType.Draw.GetPile(player),
                 player,
                 new CardSelectorPrefs(base.SelectionScreenPrompt, base.DynamicVars.Cards.IntValue)
-            );
+            )).ToList();
 
             await CardPileCmd.Add(selectedCards, PileType.Hand, CardPilePosition.Bottom, null, false);
+
+            foreach (CardModel selectedCard in selectedCards)
+            {
+                selectedCard.SetToFreeThisTurn();
+            }
         }
 
         private async Task ApplyPowers()

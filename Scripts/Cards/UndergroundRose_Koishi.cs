@@ -16,6 +16,9 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models; 
 using KomeijiKoishi.Cards.Danmaku;
+using KomeijiKoishi.Vfx;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 
 namespace KomeijiKoishi.Cards
 {
@@ -41,6 +44,11 @@ namespace KomeijiKoishi.Cards
             if (player == null) return;
 
             await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
+            NUndergroundRoseCircleVfx? vfx = NUndergroundRoseCircleVfx.Create(player.Creature);
+            if (vfx != null)
+            {
+                NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);
+            }
             
             await PowerCmd.Apply<UndergroundRosePower>(choiceContext,player.Creature, 1m, player.Creature, this, false);
         }

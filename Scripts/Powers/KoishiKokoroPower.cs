@@ -13,6 +13,9 @@ using System.Linq;
 using MegaCrit.Sts2.Core.Entities.Powers; 
 using MegaCrit.Sts2.Core.Models; 
 using MegaCrit.Sts2.Core.Models.Cards; 
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using KomeijiKoishi.Vfx;
 
 
 namespace KomeijiKoishi.Powers
@@ -70,18 +73,31 @@ namespace KomeijiKoishi.Powers
                 switch (effect)
                 {
                     case 0: 
+                        ShowEmotionBurst("xi");
                         await PowerCmd.Apply<JoyMaskPower>(context,base.Owner, data.FreeCount, base.Owner, sourceCard, false);
                         break;
                     case 1: 
+                        ShowEmotionBurst("nu");
                         await PowerCmd.Apply<StrengthPower>(context,base.Owner, data.BuffAmount, base.Owner, sourceCard, false);
                         break;
                     case 2: 
+                        ShowEmotionBurst("ai");
                         await PowerCmd.Apply<DexterityPower>(context,base.Owner, data.BuffAmount, base.Owner, sourceCard, false);
                         break;
                     case 3: 
+                        ShowEmotionBurst("le");
                         await CardPileCmd.Draw(context, data.DrawAmount, player, false);
                         break;
                 }
+            }
+        }
+
+        private void ShowEmotionBurst(string imageName)
+        {
+            NEmotionLeafBurstVfx? vfx = NEmotionLeafBurstVfx.Create(base.Owner, imageName);
+            if (vfx != null)
+            {
+                NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);
             }
         }
 

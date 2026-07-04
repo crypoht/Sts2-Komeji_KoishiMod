@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System; 
 using BaseLib.Utils;
@@ -47,7 +47,7 @@ namespace KomeijiKoishi.Cards
 
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                 .WithHitCount(base.DynamicVars.Repeat.IntValue) 
-                .FromCard(this)
+                .FromCard(this, cardPlay)
                 .Targeting(cardPlay.Target)
                 .Execute(choiceContext);
         }

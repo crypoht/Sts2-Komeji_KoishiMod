@@ -30,7 +30,7 @@ namespace KomeijiKoishi.Powers
             new DynamicVar(DamageDecreaseKey, 0.5m)
         };
 
-        public override decimal ModifyDamageMultiplicative(
+        private decimal ModifyDamageMultiplicativeCore(
             Creature? target,
             decimal amount,
             ValueProp props,
@@ -50,6 +50,31 @@ namespace KomeijiKoishi.Powers
 
             return base.DynamicVars[DamageDecreaseKey].BaseValue;
         }
+
+#if STS2_BETA
+        public override decimal ModifyDamageMultiplicative(
+            Creature? target,
+            decimal amount,
+            ValueProp props,
+            Creature? dealer,
+            CardModel? cardSource,
+            CardPlay? cardPlay
+        )
+        {
+            return ModifyDamageMultiplicativeCore(target, amount, props, dealer, cardSource);
+        }
+#else
+        public override decimal ModifyDamageMultiplicative(
+            Creature? target,
+            decimal amount,
+            ValueProp props,
+            Creature? dealer,
+            CardModel? cardSource
+        )
+        {
+            return ModifyDamageMultiplicativeCore(target, amount, props, dealer, cardSource);
+        }
+#endif
 
         public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
         {

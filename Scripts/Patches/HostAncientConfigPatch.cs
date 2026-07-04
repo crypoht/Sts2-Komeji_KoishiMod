@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Multiplayer.Game.Lobby;
+using MegaCrit.Sts2.Core.Multiplayer.Messages.Lobby;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Runs;
+using KomeijiKoishi.Multiplayer;
 
 namespace KomeijiKoishi.Patches
 {
@@ -39,9 +42,16 @@ namespace KomeijiKoishi.Patches
     [HarmonyPatch(typeof(RunManager), nameof(RunManager.SetUpNewMultiplayer))]
     public static class NewMultiplayerRunAncientConfigPatch
     {
+        private static readonly AccessTools.FieldRef<RunState, IReadOnlyList<ModifierModel>> ModifiersRef =
+            AccessTools.FieldRefAccess<RunState, IReadOnlyList<ModifierModel>>("<Modifiers>k__BackingField");
+
         public static void Prefix(RunState state)
         {
             KoishiModConfig.BeginRunWithHostConfig(state);
+            if (KoishiModConfig.HasSyncedRunConfigForCurrentRun())
+            {
+                ModifiersRef(state) = KoishiModConfig.WithActiveRunAncientConfig(state.Modifiers);
+            }
         }
     }
 
@@ -52,6 +62,35 @@ namespace KomeijiKoishi.Patches
         public static void Prefix(int currentActIndex)
         {
             KoishiModConfig.SetActiveRunCurrentActIndex(currentActIndex);
+        }
+    }
+
+    [HarmonyPatch(typeof(StartRunLobby), MethodType.Constructor, typeof(GameMode), typeof(MegaCrit.Sts2.Core.Multiplayer.Game.INetGameService), typeof(IStartRunLobbyListener), typeof(int))]
+    public static class StartRunLobbyKoishiConfigSyncPatch
+    {
+        public static void Postfix(StartRunLobby __instance)
+        {
+            KoishiRunConfigSynchronizer.Register(__instance.NetService);
+        }
+    }
+
+    [HarmonyPatch(typeof(StartRunLobby), "BeginRunForAllPlayers")]
+    public static class BeginRunForAllPlayersKoishiConfigSyncPatch
+    {
+        public static void Prefix(StartRunLobby __instance, ref List<ModifierModel> __1)
+        {
+            __1 = KoishiModConfig.WithHostAncientConfig(__1).ToList();
+            KoishiModConfig.BeginRunWithHostConfig(__1);
+            KoishiRunConfigSynchronizer.BroadcastHostConfig(__instance.NetService);
+        }
+    }
+
+    [HarmonyPatch(typeof(StartRunLobby), "HandleLobbyBeginRunMessage")]
+    public static class ReceiveLobbyBeginRunKoishiConfigSyncPatch
+    {
+        public static void Prefix(LobbyBeginRunMessage message)
+        {
+            KoishiModConfig.BeginRunWithSyncedHostModifiers(message.modifiers.Select(ModifierModel.FromSerializable).ToList());
         }
     }
 

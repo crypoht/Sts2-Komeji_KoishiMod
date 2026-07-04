@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.ValueProps;
+using KomeijiKoishi.Utils_Koishi;
 
 namespace KomeijiKoishi.Cards
 {
@@ -20,7 +21,7 @@ namespace KomeijiKoishi.Cards
     public sealed class MishagujiPillar_Koishi : CustomCardModel
     {
         public MishagujiPillar_Koishi()
-            : base(3, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy, true)
+            : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy, true)
         {
         }
 
@@ -28,7 +29,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new DamageVar(17m, ValueProp.Move)
+            new DamageVar(21m, ValueProp.Move)
         };
 
         public override async Task AfterCardDrawnEarly(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
@@ -38,13 +39,19 @@ namespace KomeijiKoishi.Cards
                 return;
             }
 
-            Creature? target = null;
-            if (base.CombatState != null && base.Owner != null)
+            var owner = base.Owner;
+            if (owner == null)
             {
-                target = base.Owner.RunState.Rng.Shuffle.NextItem(base.CombatState.HittableEnemies);
+                return;
             }
 
-            await CardCmd.AutoPlay(choiceContext, this, target, AutoPlayType.Default, true, false);
+            Creature? target = null;
+            if (base.CombatState != null)
+            {
+                target = owner.RunState.Rng.Shuffle.NextItem(base.CombatState.HittableEnemies);
+            }
+
+            await KoishiExtensions.SafeAutoPlayCard(choiceContext, owner, this, target, AutoPlayType.Default, true, false);
         }
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -52,17 +59,23 @@ namespace KomeijiKoishi.Cards
             ArgumentNullException.ThrowIfNull(cardPlay.Target);
 
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                .FromCard(this)
+                .FromCard(this, cardPlay)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_blunt")
                 .Execute(choiceContext);
 
             CardModel clone = base.CreateClone();
+            PileType targetPile = base.Owner.RunState.Rng.Shuffle.NextItem(new[]
+            {
+                PileType.Hand,
+                PileType.Draw,
+                PileType.Discard
+            });
             CardPileAddResult addResult = await CardPileCmd.AddGeneratedCardToCombat(
                 clone,
-                PileType.Hand,
+                targetPile,
                 base.Owner,
-                CardPilePosition.Bottom
+                CardPilePosition.Random
             );
             CardCmd.PreviewCardPileAdd(addResult, 1.2f, CardPreviewStyle.HorizontalLayout);
         }

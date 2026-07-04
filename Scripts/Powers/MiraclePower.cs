@@ -47,8 +47,9 @@ namespace KomeijiKoishi.Powers
                     {
                         if (base.CombatState.HittableEnemies.All(e => e.IsDead)) break;
 
-                        await CardCmd.AutoPlay(
+                        await KoishiExtensions.SafeAutoPlayCard(
                             context, 
+                            cardPlay.Card.Owner,
                             cardPlay.Card, 
                             cardPlay.Target, 
                             AutoPlayType.Default, 

@@ -21,6 +21,7 @@ namespace KomeijiKoishi.Utils_Koishi
 {
     public static class KoishiExtensions
     {
+        public static bool IsReflectingTeamDamage { get; set; }
 
         public static bool IsTrulyUnconscious(CardModel card) //判断是否有无意识标签,返回值为bool
         {
@@ -75,7 +76,19 @@ namespace KomeijiKoishi.Utils_Koishi
                     power.GetType().FullName == "STS2_WineFox.Powers.PlanningExpertPower") == true);
         }
 
-        public static async Task SafeAutoPlayCard(PlayerChoiceContext choiceContext, Player player, CardModel targetCard)
+        public static async Task SafeAutoPlayCard(PlayerChoiceContext choiceContext, Player? player, CardModel targetCard)
+        {
+            await SafeAutoPlayCard(choiceContext, player, targetCard, null, AutoPlayType.Default, true, false);
+        }
+
+        public static async Task SafeAutoPlayCard(
+            PlayerChoiceContext choiceContext,
+            Player? player,
+            CardModel targetCard,
+            Creature? target,
+            AutoPlayType autoPlayType = AutoPlayType.Default,
+            bool exhausts = true,
+            bool showInHistory = false)
         {
             if (targetCard == null) return;
 
@@ -83,11 +96,11 @@ namespace KomeijiKoishi.Utils_Koishi
             {
                 KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
 
-                await CardCmd.AutoPlay(choiceContext, targetCard, null, AutoPlayType.Default, true, false);
+                await CardCmd.AutoPlay(choiceContext, targetCard, target, autoPlayType, exhausts, showInHistory);
             }
             catch (Exception e)
             {
-                MegaCrit.Sts2.Core.Logging.Log.Error($"[UnconsciousPlayHelper] 自动打出卡牌失败: {targetCard.Id.Entry} | Error: {e}");
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[UnconsciousPlayHelper] Auto play card failed: {targetCard.Id.Entry} | Error: {e}");
             }
             finally
             {

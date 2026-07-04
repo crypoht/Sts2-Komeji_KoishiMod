@@ -35,8 +35,9 @@ namespace KomeijiKoishi.Events
         protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
         {
             new HealVar(12m),
-            new CardsVar(2),
-            new DynamicVar("Upgrades", 2m),
+            new CardsVar(3),
+            new DynamicVar("Upgrades", 4m),
+            new DynamicVar("MiracleCards", 2m),
             new DynamicVar("Miracle", 1m)
         };
 
@@ -77,14 +78,16 @@ namespace KomeijiKoishi.Events
                 .ToList();
             if (cards.Count > 0)
             {
-                CardModel card = cards.StableShuffle(Rng).First();
-                MiracleEnchantment? applied = CardCmd.Enchant<MiracleEnchantment>(card, DynamicVars["Miracle"].BaseValue);
-                if (applied != null)
+                foreach (CardModel card in cards.StableShuffle(Rng).Take(DynamicVars["MiracleCards"].IntValue))
                 {
-                    NCardEnchantVfx? enchantVfx = NCardEnchantVfx.Create(card);
-                    if (enchantVfx != null)
+                    MiracleEnchantment? applied = CardCmd.Enchant<MiracleEnchantment>(card, DynamicVars["Miracle"].BaseValue);
+                    if (applied != null)
                     {
-                        NRun.Instance?.GlobalUi.CardPreviewContainer.AddChildSafely(enchantVfx);
+                        NCardEnchantVfx? enchantVfx = NCardEnchantVfx.Create(card);
+                        if (enchantVfx != null)
+                        {
+                            NRun.Instance?.GlobalUi.CardPreviewContainer.AddChildSafely(enchantVfx);
+                        }
                     }
                 }
             }

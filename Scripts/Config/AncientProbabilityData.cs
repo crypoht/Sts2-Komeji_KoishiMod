@@ -2,10 +2,12 @@ using BaseLib.Abstracts;
 using BaseLib.Extensions;
 using BaseLib.Patches.Content;
 using Godot;
+using HarmonyLib;
 using KomeijiKoishi.Ancients;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Events;
+using System.Collections;
 using System.Reflection;
 
 namespace KomeijiKoishi.Config;
@@ -149,13 +151,14 @@ public static class AncientProbabilityData
 
     private static void RegisterExternalAncients()
     {
-        if (_registeredCustomAncientCount == CustomContentDictionary.CustomAncients.Count)
+        List<AncientEventModel> customAncients = GetRegisteredCustomAncients();
+        if (_registeredCustomAncientCount == customAncients.Count)
         {
             return;
         }
 
-        _registeredCustomAncientCount = CustomContentDictionary.CustomAncients.Count;
-        foreach (CustomAncientModel ancient in CustomContentDictionary.CustomAncients)
+        _registeredCustomAncientCount = customAncients.Count;
+        foreach (AncientEventModel ancient in customAncients)
         {
             try
             {
@@ -209,7 +212,7 @@ public static class AncientProbabilityData
         return SanitizeKey(key);
     }
 
-    private static IReadOnlySet<int> GetValidActNumbers(CustomAncientModel ancient)
+    private static IReadOnlySet<int> GetValidActNumbers(AncientEventModel ancient)
     {
         IReadOnlySet<int>? knownActNumbers = GetKnownExternalActNumbers(ancient);
         if (knownActNumbers != null)
@@ -224,12 +227,17 @@ public static class AncientProbabilityData
             .ToHashSet();
     }
 
-    private static IReadOnlySet<int>? GetKnownExternalActNumbers(CustomAncientModel ancient)
+    private static IReadOnlySet<int>? GetKnownExternalActNumbers(AncientEventModel ancient)
     {
         string? fullName = ancient.GetType().FullName;
         if (fullName == "KoishiAncient.Ancient.KomeijiKoishi")
         {
             return new HashSet<int> { 2 };
+        }
+
+        if (fullName == "Koishi.KoishiCode.Ancient.Satori")
+        {
+            return new HashSet<int> { 2, 3 };
         }
 
         if (fullName != null && fullName.StartsWith("TouhouAncients.Scripts.", StringComparison.Ordinal))
@@ -253,16 +261,61 @@ public static class AncientProbabilityData
         return null;
     }
 
-    private static bool IsValidForActSafely(CustomAncientModel ancient, ActModel act)
+    private static bool IsValidForActSafely(AncientEventModel ancient, ActModel act)
     {
         try
         {
-            return ancient.IsValidForAct(act);
+            if (ancient is CustomAncientModel baseLibAncient)
+            {
+                return baseLibAncient.IsValidForAct(act);
+            }
+
+            MethodInfo? method = ancient.GetType().GetMethod("IsValidForAct", BindingFlags.Instance | BindingFlags.Public);
+            ParameterInfo[] parameters = method?.GetParameters() ?? Array.Empty<ParameterInfo>();
+            return method?.ReturnType == typeof(bool)
+                && parameters.Length == 1
+                && parameters[0].ParameterType.IsAssignableFrom(typeof(ActModel))
+                && method.Invoke(ancient, new object[] { act }) is true;
         }
         catch (Exception e)
         {
             MegaCrit.Sts2.Core.Logging.Log.Error($"[KoishiAncientWeights] External ancient {SafeAncientDebugName(ancient)} failed IsValidForAct for {act.Id.Entry}: {e}");
             return false;
+        }
+    }
+
+    private static List<AncientEventModel> GetRegisteredCustomAncients()
+    {
+        List<AncientEventModel> ancients = CustomContentDictionary.CustomAncients
+            .Cast<AncientEventModel>()
+            .ToList();
+
+        foreach (AncientEventModel ancient in GetEcoLibCustomAncients())
+        {
+            if (ancients.All(existing => existing.Id != ancient.Id))
+            {
+                ancients.Add(ancient);
+            }
+        }
+
+        return ancients;
+    }
+
+    private static IEnumerable<AncientEventModel> GetEcoLibCustomAncients()
+    {
+        Type? dictionaryType = AccessTools.TypeByName("EcoLib.Patches.Content.CustomContentDictionary");
+        FieldInfo? customAncientsField = dictionaryType?.GetField("CustomAncients", BindingFlags.Public | BindingFlags.Static);
+        if (customAncientsField?.GetValue(null) is not IEnumerable customAncients)
+        {
+            yield break;
+        }
+
+        foreach (object? ancient in customAncients)
+        {
+            if (ancient is AncientEventModel ancientModel)
+            {
+                yield return ancientModel;
+            }
         }
     }
 

@@ -1,9 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
-using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -42,9 +41,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(6m, ValueProp.Move),
-
-            new CardsVar(2)
+            new DamageVar(6m, ValueProp.Move)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -56,7 +53,7 @@ namespace KomeijiKoishi.Cards
             if (cardPlay.Target != null)
             {
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                    .FromCard(this)
+                    .FromCard(this, cardPlay)
                     .Targeting(cardPlay.Target)
                     .WithHitFx("vfx/vfx_attack_blunt", null, null)
                     .Execute(choiceContext);
@@ -65,24 +62,9 @@ namespace KomeijiKoishi.Cards
             CardPile discardPile = PileType.Discard.GetPile(player);
             var unconsciousCardsInDiscard = discardPile.Cards.Where(c => KoishiExtensions.IsTrulyUnconscious(c)).ToList();
 
-            if (unconsciousCardsInDiscard.Any())
+            foreach (var unconsciousCard in unconsciousCardsInDiscard)
             {
-
-                CardSelectorPrefs prefs = new CardSelectorPrefs(base.SelectionScreenPrompt, 0, base.DynamicVars.Cards.IntValue);
-                
-                IEnumerable<CardModel> selectedCards = await CardSelectCmd.FromSimpleGrid(choiceContext, unconsciousCardsInDiscard, player, prefs);
-
-
-                if (selectedCards != null)
-                {
-                    foreach (var selectedCard in selectedCards)
-                    {
-                        if (selectedCard.Pile?.Type == PileType.Discard || selectedCard.Pile?.Type == PileType.Draw)
-                        {
-                            await CardPileCmd.Add(selectedCard, PileType.Draw, CardPilePosition.Top, null, false);
-                        }
-                    }
-                }
+                await CardPileCmd.Add(unconsciousCard, PileType.Draw, CardPilePosition.Random, null, false);
             }
         }
 

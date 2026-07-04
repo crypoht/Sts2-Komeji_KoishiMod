@@ -27,7 +27,19 @@ namespace KomeijiKoishi.Powers
 
         public override bool AllowNegative => true;
 
+#if STS2_BETA
+        public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? card, CardPlay? cardPlay)
+        {
+            return ModifyDamageAdditiveCore(props, dealer, card);
+        }
+#else
         public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? card)
+        {
+            return ModifyDamageAdditiveCore(props, dealer, card);
+        }
+#endif
+
+        private decimal ModifyDamageAdditiveCore(ValueProp props, Creature? dealer, CardModel? card)
         {
             if (base.Owner != dealer || card == null || card.Type != CardType.Attack)
             {

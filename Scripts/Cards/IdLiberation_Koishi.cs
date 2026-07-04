@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -50,7 +50,7 @@ namespace KomeijiKoishi.Cards
 
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                 .WithHitCount(base.DynamicVars.Repeat.IntValue) 
-                .FromCard(this)
+                .FromCard(this, cardPlay)
                 .Targeting(cardPlay.Target)
                 .WithHitVfxNode((Creature target) => NGrandFinaleImpactVfx.Create(target))
                 .Execute(choiceContext);

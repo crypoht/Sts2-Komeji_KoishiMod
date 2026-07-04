@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -85,7 +85,7 @@ namespace KomeijiKoishi.Cards
             for (int i = 0; i < hitCount; i++)
             {
                 await DamageCmd.Attack(damage)
-                    .FromCard(this)
+                    .FromCard(this, cardPlay)
                     .Targeting(cardPlay.Target)
                     .WithHitFx("vfx/vfx_attack_blunt")
                     .Execute(choiceContext);

@@ -11,6 +11,9 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using KomeijiKoishi.Vfx;
 
 namespace KomeijiKoishi.Cards
 {
@@ -29,8 +32,8 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
             new DynamicVar(ExhaustCardsKey, 10m),
-            new EnergyVar(3),
-            new CardsVar(3)
+            new EnergyVar(4),
+            new CardsVar(4)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -53,6 +56,15 @@ namespace KomeijiKoishi.Cards
 
             int cardsToExhaust = base.DynamicVars[ExhaustCardsKey].IntValue;
             int exhaustedCount = 0;
+            NKeeperExhaustVfx? keeperVfx = null;
+            if (candidates.Count > 0)
+            {
+                keeperVfx = NKeeperExhaustVfx.Create(player.Creature);
+                if (keeperVfx != null)
+                {
+                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(keeperVfx);
+                }
+            }
 
             for (int i = 0; i < cardsToExhaust && candidates.Count > 0; i++)
             {
@@ -63,8 +75,19 @@ namespace KomeijiKoishi.Cards
                 }
 
                 candidates.Remove(card);
+                if (keeperVfx != null)
+                {
+                    await keeperVfx.FlyCardToKeeperAsync(card);
+                }
+
                 await CardCmd.Exhaust(choiceContext, card, false, false);
+                keeperVfx?.OnCardExhausted();
                 exhaustedCount++;
+            }
+
+            if (keeperVfx != null)
+            {
+                await keeperVfx.FinishAsync();
             }
 
             if (exhaustedCount == cardsToExhaust)
@@ -74,7 +97,7 @@ namespace KomeijiKoishi.Cards
             }
         }
 
-        protected override PileType GetResultPileTypeForCardPlay()
+        private PileType GetKeeperResultPileType(PileType baseResultPileType)
         {
             if (base.Owner is Player player)
             {
@@ -89,8 +112,21 @@ namespace KomeijiKoishi.Cards
                 }
             }
 
-            return base.GetResultPileTypeForCardPlay();
+            return baseResultPileType;
         }
+
+#if STS2_BETA
+        protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
+        {
+            (PileType resultPileType, CardPilePosition position) = base.GetResultPileTypeAndPositionForCardPlay();
+            return (GetKeeperResultPileType(resultPileType), position);
+        }
+#else
+        protected override PileType GetResultPileTypeForCardPlay()
+        {
+            return GetKeeperResultPileType(base.GetResultPileTypeForCardPlay());
+        }
+#endif
 
         protected override void OnUpgrade()
         {

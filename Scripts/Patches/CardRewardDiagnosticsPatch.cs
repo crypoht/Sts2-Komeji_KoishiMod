@@ -29,7 +29,11 @@ namespace KomeijiKoishi.Patches
                 var pools = options.CardPools.Count > 0
                     ? string.Join(",", options.CardPools.Select(pool => pool.Id.ToString()))
                     : "<none>";
-                var customPoolCount = options.CustomCardPool?.Count() ?? 0;
+#if STS2_BETA
+                const string customPoolCount = "n/a";
+#else
+                var customPoolCount = (options.CustomCardPool?.Count() ?? 0).ToString();
+#endif
                 var cards = string.Join(" | ", __instance.Cards.Select(DescribeCard));
 
                 Log.Info(

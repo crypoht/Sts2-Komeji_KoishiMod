@@ -69,11 +69,7 @@ namespace KomeijiKoishi.Cards
                             targetCreature = player.RunState.Rng.Shuffle.NextItem(aliveEnemies);
                         }
 
-                        KoishiExtensions.AutoPlayedByUnconsciousCards.Add(generatedDanmaku);
-                        
-                        await CardCmd.AutoPlay(choiceContext, generatedDanmaku, targetCreature, AutoPlayType.Default, true, false);
-                        
-                        KoishiExtensions.AutoPlayedByUnconsciousCards.Remove(generatedDanmaku);
+                        await KoishiExtensions.SafeAutoPlayCard(choiceContext, player, generatedDanmaku, targetCreature, AutoPlayType.Default, true, false);
                     }
                 }
             }

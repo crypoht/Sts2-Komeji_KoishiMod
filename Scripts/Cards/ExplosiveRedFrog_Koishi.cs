@@ -27,7 +27,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new PowerVar<JiasuiPower>(8m)
+            new PowerVar<JiasuiPower>(11m)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
@@ -53,11 +53,13 @@ namespace KomeijiKoishi.Cards
             {
                 await power.Trigger(choiceContext, base.Owner.Creature, this);
             }
+
+            await CardPileCmd.Add(this, PileType.Draw, CardPilePosition.Random, null, false);
         }
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars["JiasuiPower"].UpgradeValueBy(3m);
+            base.DynamicVars["JiasuiPower"].UpgradeValueBy(4m);
         }
     }
 }

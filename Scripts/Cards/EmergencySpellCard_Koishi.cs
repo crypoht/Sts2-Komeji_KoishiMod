@@ -30,7 +30,7 @@ namespace KomeijiKoishi.Cards
         { 
 
             new CardsVar(4),
-            new PowerVar<KuugaPower>(2m)
+            new PowerVar<KuugaPower>(1m)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 

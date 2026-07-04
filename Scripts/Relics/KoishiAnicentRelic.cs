@@ -18,6 +18,7 @@ using KomeijiKoishi.Utils_Koishi;
 using MegaCrit.Sts2.Core.Entities.Relics; 
 using MegaCrit.Sts2.Core.HoverTips; 
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Cards; 
 
 namespace KomeijiKoishi.Relics
@@ -25,6 +26,8 @@ namespace KomeijiKoishi.Relics
     [Pool(typeof(KoishiRelicPool))]
     public sealed class KoishiAnicentRelic : CustomRelicModel
     {
+        private const decimal TeamDamageReflectionMultiplier = 10m;
+        private decimal pendingTeamDamageReflection;
 
         public override RelicRarity Rarity => RelicRarity.Starter;
 
@@ -47,6 +50,59 @@ namespace KomeijiKoishi.Relics
             
             modifiedCost = originalCost;
             return false;
+        }
+
+#if STS2_BETA
+        public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
+        {
+            return ModifyDamageMultiplicativeCore(target, amount, dealer);
+        }
+#else
+        public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+        {
+            return ModifyDamageMultiplicativeCore(target, amount, dealer);
+        }
+#endif
+
+        private decimal ModifyDamageMultiplicativeCore(Creature? target, decimal amount, Creature? dealer)
+        {
+            if (IsTeamDamageToOwner(target, dealer) && !KoishiExtensions.IsReflectingTeamDamage)
+            {
+                this.pendingTeamDamageReflection = amount;
+                return 0m;
+            }
+
+            return 1m;
+        }
+
+        public override async Task BeforeDamageReceived(PlayerChoiceContext choiceContext, Creature target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+        {
+            if (!IsTeamDamageToOwner(target, dealer) || KoishiExtensions.IsReflectingTeamDamage || this.pendingTeamDamageReflection <= 0m)
+            {
+                return;
+            }
+
+            decimal reflectedDamage = this.pendingTeamDamageReflection * TeamDamageReflectionMultiplier;
+            this.pendingTeamDamageReflection = 0m;
+            base.Flash();
+
+            KoishiExtensions.IsReflectingTeamDamage = true;
+            try
+            {
+                await CreatureCmd.Damage(choiceContext, dealer!, reflectedDamage, ValueProp.Unblockable | ValueProp.Unpowered, base.Owner.Creature);
+            }
+            finally
+            {
+                KoishiExtensions.IsReflectingTeamDamage = false;
+            }
+        }
+
+        private bool IsTeamDamageToOwner(Creature? target, Creature? dealer)
+        {
+            return target == base.Owner.Creature
+                && dealer != null
+                && dealer != base.Owner.Creature
+                && dealer.Side == base.Owner.Creature.Side;
         }
 
         public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)

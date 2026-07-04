@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
@@ -32,7 +32,7 @@ namespace KomeijiKoishi.Cards.Fumo
         {
             if (cardPlay.Target == null) return;
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                .FromCard(this)
+                .FromCard(this, cardPlay)
                 .WithHitFx("vfx/vfx_attack_blunt", null, "blunt_heavy.mp3")
                 .Targeting(cardPlay.Target)
                 .Execute(choiceContext);

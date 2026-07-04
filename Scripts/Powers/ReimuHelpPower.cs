@@ -14,6 +14,7 @@ using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.ValueProps; 
 using MegaCrit.Sts2.Core.Entities.Powers; 
 using MegaCrit.Sts2.Core.Models; 
+using KomeijiKoishi.Utils_Koishi;
 
 namespace KomeijiKoishi.Powers
 {
@@ -27,7 +28,19 @@ namespace KomeijiKoishi.Powers
         
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/ReimuHelpPower.png";
 
+#if STS2_BETA
+        public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
+        {
+            return ModifyDamageMultiplicativeCore(cardSource);
+        }
+#else
         public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+        {
+            return ModifyDamageMultiplicativeCore(cardSource);
+        }
+#endif
+
+        private decimal ModifyDamageMultiplicativeCore(CardModel? cardSource)
         {
             if (cardSource != null && cardSource is YinYangOrbDanmaku_Koishi)
             {
@@ -44,7 +57,7 @@ namespace KomeijiKoishi.Powers
                 {
                     this.Flash(); 
                     
-                    await CardCmd.AutoPlay(choiceContext, card, null, AutoPlayType.Default, true, false);
+                    await KoishiExtensions.SafeAutoPlayCard(choiceContext, card.Owner, card, null, AutoPlayType.Default, true, false);
                 }
             }
         }

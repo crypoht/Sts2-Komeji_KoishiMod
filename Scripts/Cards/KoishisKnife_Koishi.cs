@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq; 
 using System.Threading.Tasks;
@@ -81,7 +81,7 @@ namespace KomeijiKoishi.Cards
                 await CreatureCmd.TriggerAnim(player.Creature, "Attack", player.Character.AttackAnimDelay);
             }
 
-            var attackCommand = DamageCmd.Attack(base.DynamicVars.Damage.BaseValue).FromCard(this);
+            var attackCommand = DamageCmd.Attack(base.DynamicVars.Damage.BaseValue).FromCard(this, cardPlay);
             bool shouldTriggerFatal = false; 
 
             if (HasAoECondition)

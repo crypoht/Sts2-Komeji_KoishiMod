@@ -15,6 +15,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.Entities.Powers; 
 using MegaCrit.Sts2.Core.Models; 
 using KomeijiKoishi.Cards;
+using KomeijiKoishi.Utils_Koishi;
 
 
 namespace KomeijiKoishi.Powers
@@ -41,7 +42,7 @@ namespace KomeijiKoishi.Powers
                     DanmakuPool.InheritEnchantment(sourceCard, rose);
                     await CardPileCmd.AddGeneratedCardToCombat(rose, PileType.Exhaust, base.Owner.Player, CardPilePosition.Bottom);
 
-                    await CardCmd.AutoPlay(context, rose, null, AutoPlayType.Default, true, false);
+                    await KoishiExtensions.SafeAutoPlayCard(context, base.Owner.Player, rose, null, AutoPlayType.Default, true, false);
                     
                     if (i < playCount - 1)
                     {

@@ -14,6 +14,7 @@ using KomeijiKoishi.Cards.Fumo;
 using BaseLib.Utils;
 using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.Combat;
+using KomeijiKoishi.Utils_Koishi;
 
 namespace KomeijiKoishi.Cards
 {
@@ -56,7 +57,7 @@ namespace KomeijiKoishi.Cards
 
                 if (fumoCard is NueFumo_Koishi && targetAlly != base.Owner)
                 {
-                    await CardCmd.AutoPlay(choiceContext, fumoCard, null, AutoPlayType.Default, true, false); 
+                    await KoishiExtensions.SafeAutoPlayCard(choiceContext, targetAlly, fumoCard, null, AutoPlayType.Default, true, false); 
                 }
             }
         }

@@ -46,11 +46,11 @@ namespace KomeijiKoishi.Events
             Player owner = Owner!;
             EventOption setMealOption = owner.Gold >= DynamicVars["SetMealCost"].IntValue
                 ? new EventOption(this, FavoriteSetMeal, $"{Id.Entry}.pages.INITIAL.options.FAVORITE_SET_MEAL", Array.Empty<IHoverTip>())
-                : LockedOption("LOCKED", "INITIAL");
+                : new EventOption(this, null, $"{Id.Entry}.pages.INITIAL.options.LOCKED", Array.Empty<IHoverTip>());
 
             EventOption festivalOption = owner.Gold >= DynamicVars["FestivalCost"].IntValue
                 ? new EventOption(this, EdoBoatFestival, $"{Id.Entry}.pages.INITIAL.options.EDO_BOAT_FESTIVAL", Array.Empty<IHoverTip>())
-                : LockedOption("LOCKED", "INITIAL");
+                : new EventOption(this, null, $"{Id.Entry}.pages.INITIAL.options.LOCKED", Array.Empty<IHoverTip>());
 
             return new[]
             {
@@ -88,7 +88,7 @@ namespace KomeijiKoishi.Events
         private async Task EatTheOwner()
         {
             Player owner = Owner!;
-            await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), owner.Creature, DynamicVars.Damage, null, null);
+            await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), owner.Creature, DynamicVars.Damage, null!, null!);
             await RelicCmd.Obtain<NightSparrowWings_Koishi>(owner);
             SetEventFinished(PageDescription("WINGS"));
         }

@@ -161,8 +161,13 @@ namespace KomeijiKoishi.Powers
                 if (originalCommand.ModelSource is not CardModel cardModel) return;
                 if (base.CombatState == null) return;
 
+#if STS2_BETA
+                AttackContext attackContext =
+                    await AttackCommand.CreateContextAsync(base.CombatState, choiceContext, originalCommand.CardPlay!);
+#else
                 AttackContext attackContext =
                     await AttackCommand.CreateContextAsync(base.CombatState, choiceContext, cardModel);
+#endif
 
                 try
                 {
@@ -203,6 +208,17 @@ namespace KomeijiKoishi.Powers
                         MegaCrit.Sts2.Core.Logging.Log.Info(
                             $"[BloomStance] RunBloom: hit {i + 1}/{repeat} → {randomTarget.GetType().Name} dmg={dmgValue}");
 
+#if STS2_BETA
+                        var results = await CreatureCmd.Damage(
+                            bloomContext,
+                            randomTarget,
+                            dmgValue,
+                            ValueProp.Unpowered,
+                            base.Owner,
+                            cardModel,
+                            originalCommand.CardPlay
+                        );
+#else
                         var results = await CreatureCmd.Damage(
                             bloomContext,
                             randomTarget,
@@ -211,6 +227,7 @@ namespace KomeijiKoishi.Powers
                             base.Owner,
                             cardModel 
                         );
+#endif
 
                         attackContext.AddHit(results);
 

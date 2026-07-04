@@ -14,6 +14,9 @@ using KomeijiKoishi.Pools;
 using KomeijiKoishi.Powers;
 using KomeijiKoishi.Enums; 
 using BaseLib.Utils;
+using KomeijiKoishi.Vfx;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 
 namespace KomeijiKoishi.Cards
 {
@@ -39,6 +42,17 @@ namespace KomeijiKoishi.Cards
             if (player == null) return;
 
             await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
+            NLostInFlowerFieldVfx? vfx = NLostInFlowerFieldVfx.Create(player.Creature);
+            if (vfx != null)
+            {
+                NCombatRoom.Instance?.BackCombatVfxContainer.AddChildSafely(vfx);
+            }
+            await Cmd.Wait(
+                NLostInFlowerFieldVfx.SpreadDuration +
+                NLostInFlowerFieldVfx.FadeInDuration +
+                0.7f,
+                false
+            );
 
             IEnumerable<CardModel> generatedCards = CardFactory.GetForCombat(
                 base.Owner, 
