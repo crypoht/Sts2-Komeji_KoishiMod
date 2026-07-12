@@ -40,8 +40,16 @@
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.DRINK.description": "失去[red]{Damage}[/red]点生命，获得[gold]魔药瓶[/gold]。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_KNIFE.title": "杂货铺肯定要买东西啊！",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_KNIFE.description": "失去[gold]{Gold}[/gold]金币，获得[gold]恋恋的小刀[/gold]。",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_ARTWORK.title": "购买这件艺术品！",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_ARTWORK.description": "失去[gold]{ArtworkGold}[/gold]金币，获得[gold]艺术品+1[/gold]。",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK.title": "购买这件艺术品！",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK.description": "失去[gold]{ArtworkGold}[/gold]金币，获得[gold]真·艺术品+1[/gold]。",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK_LIBERATED.title": "购买这件艺术品！",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK_LIBERATED.description": "失去[gold]{ArtworkGold}[/gold]金币，获得[gold]真·艺术品·解放+1[/gold]。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_GOLD.title": "金币不足。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_GOLD.description": "你买不起这把小刀。",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_ARTWORK_GOLD.title": "金币不足。",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_ARTWORK_GOLD.description": "你买不起这件艺术品。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_CARDS.title": "牌太少了。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_CARDS.description": "你的牌组已经经不起棋局的代价了。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_LOSE.description": "你对于敌人的思路感到不解。\n也许再来一把就赢了。[jitter][/jitter]",
@@ -58,5 +66,6 @@
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_WIN_MANY.options.TAKE.description": "获得[gold]魔药瓶[/gold]和[gold]恋恋的小刀[/gold]。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_DONE.description": "你走出了杂货铺，感觉身上轻了很多……是不是少了什么东西？",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.DRINK_DONE.description": "你不顾[gold]魔法使[/gold]的劝阻，一口闷下了[jitter][red]神秘小饮料[/red][/jitter]。\n你感觉这[jitter][red]神秘小饮料[/red][/jitter]的味道就像，就像……\n再次醒来，你看到一个金发的人在斥责着[gold]魔法使[/gold]。\n原来这确实是饮料，不过是[orange]蘑菇[/orange]弄的饮料，还不小心混入了[purple]毒蘑菇[/purple]……\n你带着喝完的魔法瓶悄悄地离开了。",
-  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.KNIFE_DONE.description": "为什么这里会卖一把奇怪的小刀？\n[gold]魔法使[/gold]说这是她之前去泡温泉的时候捡的……\n捡到东西应该还给人家吧！"
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.KNIFE_DONE.description": "为什么这里会卖一把奇怪的小刀？\n[gold]魔法使[/gold]说这是她之前去泡温泉的时候捡的……\n捡到东西应该还给人家吧！",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.ARTWORK_DONE.description": "[gold]魔法使[/gold]爽快地给了你，bro懂我的[purple]艺术[/purple]。"
 }

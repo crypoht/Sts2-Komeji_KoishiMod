@@ -21,7 +21,7 @@ using KomeijiKoishi.Cards.Danmaku;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class ReimuHelp_Koishi : CustomCardModel
+    public sealed class ReimuHelp_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public ReimuHelp_Koishi() 
             : base(3, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }

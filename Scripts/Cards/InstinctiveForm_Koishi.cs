@@ -17,7 +17,7 @@ using BaseLib.Utils;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class InstinctiveForm_Koishi : CustomCardModel
+    public sealed class InstinctiveForm_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public InstinctiveForm_Koishi() 
             : base(1, CardType.Power, CardRarity.Rare, TargetType.Self, true)

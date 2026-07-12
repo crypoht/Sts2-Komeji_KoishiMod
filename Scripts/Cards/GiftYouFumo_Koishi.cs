@@ -15,6 +15,9 @@ using BaseLib.Utils;
 using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.Combat;
 using KomeijiKoishi.Utils_Koishi;
+using KomeijiKoishi.Vfx;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 
 namespace KomeijiKoishi.Cards
 {
@@ -50,6 +53,12 @@ namespace KomeijiKoishi.Cards
 
             if (fumoCard != null)
             {
+                NGiftYouFumoVfx? vfx = NGiftYouFumoVfx.Create(base.Owner.Creature, targetAlly.Creature, fumoCard);
+                if (vfx != null)
+                {
+                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);
+                }
+
                 if (base.IsUpgraded)
                 {
                     CardCmd.Upgrade(fumoCard, CardPreviewStyle.HorizontalLayout);

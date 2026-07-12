@@ -24,7 +24,7 @@ using MegaCrit.Sts2.Core.Factories;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class SprinkleStarHeart_Koishi : CustomCardModel
+    public sealed class SprinkleStarHeart_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public SprinkleStarHeart_Koishi()
             : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) 

@@ -27,12 +27,13 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DynamicVar("Tracing", 4m),
-            new PowerVar<KuugaPower>(1m)
+            new PowerVar<KuugaPower>(3m)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromPower<TracingPower>() 
+            HoverTipFactory.FromPower<TracingPower>(),
+            HoverTipFactory.FromPower<KuugaPower>()
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -50,13 +51,21 @@ namespace KomeijiKoishi.Cards
                     this, 
                     false
                 );
+                decimal kuugaAmount = base.DynamicVars["KuugaPower"].BaseValue;
                 await PowerCmd.Apply<KuugaPower>(
-                choiceContext,
-                player.Creature, 
-                base.DynamicVars["KuugaPower"].BaseValue, 
-                player.Creature, 
-                this, 
-                false);
+                    choiceContext,
+                    player.Creature,
+                    kuugaAmount,
+                    player.Creature,
+                    this,
+                    false);
+                await PowerCmd.Apply<SelfPower>(
+                    choiceContext,
+                    player.Creature,
+                    kuugaAmount,
+                    player.Creature,
+                    this,
+                    false);
             }
             catch (Exception e)
             {

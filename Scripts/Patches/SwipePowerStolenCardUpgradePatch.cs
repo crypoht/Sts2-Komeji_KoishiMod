@@ -1,7 +1,9 @@
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
 
 namespace KomeijiKoishi.Patches
 {
@@ -30,8 +32,7 @@ namespace KomeijiKoishi.Patches
 
             for (int i = 0; i < missingUpgradeLevels && deckCard.IsUpgradable; i++)
             {
-                deckCard.UpgradeInternal();
-                deckCard.FinalizeUpgradeInternal();
+                CardCmd.Upgrade(deckCard, CardPreviewStyle.None);
             }
         }
     }

@@ -40,8 +40,16 @@
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.DRINK.description": "HP를 [red]{Damage}[/red] 잃고 [gold]마법 물약병[/gold]을 얻습니다.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_KNIFE.title": "잡화점이라면 당연히 뭔가 사야지!",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_KNIFE.description": "[gold]{Gold}[/gold] 골드를 잃고 [gold]코이시의 나이프[/gold]를 얻습니다.",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_ARTWORK.title": "이 예술품을 산다!",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_ARTWORK.description": "[gold]{ArtworkGold}[/gold] 골드를 잃고 [gold]예술품+1[/gold]을 얻습니다.",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK.title": "이 예술품을 산다!",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK.description": "[gold]{ArtworkGold}[/gold] 골드를 잃고 [gold]진정한 예술품+1[/gold]을 얻습니다.",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK_LIBERATED.title": "이 예술품을 산다!",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK_LIBERATED.description": "[gold]{ArtworkGold}[/gold] 골드를 잃고 [gold]진정한 예술품・해방+1[/gold]을 얻습니다.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_GOLD.title": "골드가 부족합니다.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_GOLD.description": "이 나이프를 살 수 없습니다.",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_ARTWORK_GOLD.title": "골드가 부족합니다.",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_ARTWORK_GOLD.description": "이 예술품을 살 수 없습니다.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_CARDS.title": "카드가 너무 적습니다.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_CARDS.description": "당신의 덱은 더 이상 한 판의 대가를 감당할 수 없습니다.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_LOSE.description": "상대의 생각을 도무지 이해할 수 없다.\n한 판만 더 두면 이길지도 모른다.[jitter][/jitter]",
@@ -58,5 +66,6 @@
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_WIN_MANY.options.TAKE.description": "[gold]마법 물약병[/gold]과 [gold]코이시의 나이프[/gold]를 얻습니다.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_DONE.description": "잡화점을 나서자 몸이 많이 가벼워진 느낌이다... 뭔가 없어진 건가?",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.DRINK_DONE.description": "[gold]마법사[/gold]의 만류를 무시하고 [jitter][red]수상한 작은 음료[/red][/jitter]를 단숨에 마셨다.\n그 맛은 마치, 마치……\n다시 눈을 뜨자 금발의 사람이 [gold]마법사[/gold]를 꾸짖고 있었다.\n분명 음료는 맞았지만, [orange]버섯[/orange]으로 만든 음료였고 실수로 [purple]독버섯[/purple]이 섞였던 모양이다……\n당신은 빈 마법병을 들고 조용히 떠났다.",
-  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.KNIFE_DONE.description": "왜 이런 이상한 나이프를 팔고 있는 걸까?\n[gold]마법사[/gold]는 예전에 온천에 갔다가 주운 것이라고 말했다……\n주운 물건은 주인에게 돌려줘야 하는 거 아닌가!"
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.KNIFE_DONE.description": "왜 이런 이상한 나이프를 팔고 있는 걸까?\n[gold]마법사[/gold]는 예전에 온천에 갔다가 주운 것이라고 말했다……\n주운 물건은 주인에게 돌려줘야 하는 거 아닌가!",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.ARTWORK_DONE.description": "[gold]마법사[/gold]는 흔쾌히 그것을 건네주었다. bro는 내 [purple]예술[/purple]을 알아준다."
 }

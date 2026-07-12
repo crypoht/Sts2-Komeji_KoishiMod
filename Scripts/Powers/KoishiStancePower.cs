@@ -74,6 +74,26 @@ namespace KomeijiKoishi.Powers
                 await PowerCmd.Remove(power); 
             }
         }
+
+        protected static async Task ExitCurrentStance(PlayerChoiceContext context, Player player, CardModel? sourceCard)
+        {
+            var powersToRemove = player.Creature.Powers
+                .Where(p => p is BloomStancePower || p is ClosedStancePower)
+                .ToList();
+
+            if (powersToRemove.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var power in powersToRemove)
+            {
+                await PowerCmd.Remove(power);
+            }
+
+            await NotifyAllCardsStanceChanged(player, "None");
+            await NotifyAllPowersStanceChanged(context, player, "None", sourceCard);
+        }
     }
 
     public interface IStanceListenerCard

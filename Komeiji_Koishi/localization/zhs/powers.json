@@ -75,5 +75,8 @@
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THIS_SIDE_POWER.description": "队友每打出 [blue]{Amount}[/blue] 张攻击牌后，你获得 1 层[gold]无实体[/gold]。",
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.title": "电话那头",
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.smartDescription": "攻击牌本回合可以免费打出。",
-  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "攻击牌本回合可以免费打出。"
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "攻击牌本回合可以免费打出。",
+  "KOMEIJIKOISHI-SELF_POWER.title": "自我",
+  "KOMEIJIKOISHI-SELF_POWER.smartDescription": "敌方回合开始时，失去 [blue]{Amount}[/blue] 层[gold]空我[/gold]。",
+  "KOMEIJIKOISHI-SELF_POWER.description": "敌方回合开始时，失去 [blue]{Amount}[/blue] 层[gold]空我[/gold]。"
 }

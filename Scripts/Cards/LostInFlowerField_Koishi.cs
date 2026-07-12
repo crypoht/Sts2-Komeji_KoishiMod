@@ -21,7 +21,7 @@ using MegaCrit.Sts2.Core.Nodes.Rooms;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class LostInFlowerField_Koishi : CustomCardModel
+    public sealed class LostInFlowerField_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public LostInFlowerField_Koishi() 
             : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self, true) { }

@@ -28,6 +28,35 @@ namespace KomeijiKoishi.Powers
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/InstinctiveFormPower.png";
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/InstinctiveFormPower.png";
 
+        public override Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+        {
+            try
+            {
+                if (player != base.Owner.Player) return Task.CompletedTask;
+
+                int giveCount = (int)base.Amount;
+                for (int i = 0; i < giveCount; i++)
+                {
+                    var candidates = PileType.Hand.GetPile(player).Cards.Where(c =>
+                        !KoishiExtensions.IsTrulyUnconscious(c)
+                    ).ToList();
+
+                    if (candidates.Count <= 0) break;
+
+                    var cardToMark = player.RunState.Rng.Shuffle.NextItem<CardModel>(candidates);
+                    if (cardToMark == null) break;
+
+                    base.Flash();
+                    KoishiExtensions.ApplyUnconsciousToCard(cardToMark);
+                }
+            }
+            catch (Exception e)
+            {
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[Power] InstinctiveFormPower Start Error: {e.Message}");
+            }
+
+            return Task.CompletedTask;
+        }
 
         public override async Task BeforeSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
         {

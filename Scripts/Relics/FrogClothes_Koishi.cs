@@ -19,42 +19,62 @@ namespace KomeijiKoishi.Relics
     [Pool(typeof(KoishiSharedRelicPool))]
     public sealed class FrogClothes_Koishi : CustomRelicModel
     {
-        private int _cardsPlayedThisTurn;
+        private decimal _currentHealAmount;
 
         public override RelicRarity Rarity => RelicRarity.Ancient;
 
         public override bool ShowCounter => CombatManager.Instance.IsInProgress;
 
-        public override int DisplayAmount => this.CardsPlayedThisTurn;
+        public override int DisplayAmount => (int)this.CurrentHealAmount;
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new HealVar(4m)
+            new HealVar(12m),
+            new DynamicVar("Reduction", 3m)
         };
 
         public override string PackedIconPath => $"res://mods/Komeiji_Koishi/images/relics/FrogClothes_Koishi.png";
         protected override string PackedIconOutlinePath => $"res://mods/Komeiji_Koishi/images/relics/FrogClothes_Koishi.png";
         protected override string BigIconPath => $"res://mods/Komeiji_Koishi/images/relics/FrogClothes_Koishi.png";
 
-        public int CardsPlayedThisTurn
+        public decimal CurrentHealAmount
         {
-            get => this._cardsPlayedThisTurn;
+            get => this._currentHealAmount;
             set
             {
                 base.AssertMutable();
-                this._cardsPlayedThisTurn = value;
+                this._currentHealAmount = value;
                 this.RefreshCounter();
             }
         }
 
-        public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+        public override Task BeforeCombatStart()
         {
-            if (cardPlay.Card.Owner != base.Owner)
+            this.ResetHealAmount();
+            return Task.CompletedTask;
+        }
+
+        public override Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
+        {
+            if (participants.Contains(base.Owner.Creature))
             {
-                return Task.CompletedTask;
+                this.ResetHealAmount();
             }
 
-            this.CardsPlayedThisTurn++;
+            return Task.CompletedTask;
+        }
+
+        public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+        {
+            if (cardPlay.Card.Owner == base.Owner && this.CurrentHealAmount > 0m)
+            {
+                this.CurrentHealAmount = this.CurrentHealAmount - base.DynamicVars["Reduction"].BaseValue;
+                if (this.CurrentHealAmount < 0m)
+                {
+                    this.CurrentHealAmount = 0m;
+                }
+            }
+
             return Task.CompletedTask;
         }
 
@@ -65,26 +85,32 @@ namespace KomeijiKoishi.Relics
                 return;
             }
 
-            if (this.CardsPlayedThisTurn == 0)
+            decimal healAmount = this.CurrentHealAmount;
+            if (healAmount > 0m)
             {
                 base.Flash();
-                await CreatureCmd.Heal(base.Owner.Creature, base.DynamicVars.Heal.BaseValue, true);
+                await CreatureCmd.Heal(base.Owner.Creature, healAmount, true);
             }
 
-            this.CardsPlayedThisTurn = 0;
+            this.CurrentHealAmount = 0m;
         }
 
         public override Task AfterCombatEnd(CombatRoom _)
         {
-            this.CardsPlayedThisTurn = 0;
+            this.CurrentHealAmount = 0m;
             base.Status = RelicStatus.Normal;
             base.InvokeDisplayAmountChanged();
             return Task.CompletedTask;
         }
 
+        private void ResetHealAmount()
+        {
+            this.CurrentHealAmount = base.DynamicVars.Heal.BaseValue;
+        }
+
         private void RefreshCounter()
         {
-            base.Status = this.CardsPlayedThisTurn == 0 ? RelicStatus.Active : RelicStatus.Normal;
+            base.Status = this.CurrentHealAmount > 0m ? RelicStatus.Active : RelicStatus.Normal;
             base.InvokeDisplayAmountChanged();
         }
     }

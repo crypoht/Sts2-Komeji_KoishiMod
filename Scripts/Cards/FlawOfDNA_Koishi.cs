@@ -29,7 +29,7 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DynamicVar("Power", 1m),
-            new DynamicVar("Flaw", 2m)
+            new DynamicVar("Flaw", 1m)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip>

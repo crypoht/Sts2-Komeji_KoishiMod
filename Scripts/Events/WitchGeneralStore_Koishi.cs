@@ -32,6 +32,7 @@ namespace KomeijiKoishi.Events
             new DynamicVar("WinChance", InitialWinChance),
             new DamageVar(15m, ValueProp.Unblockable | ValueProp.Unpowered),
             new GoldVar(150),
+            new GoldVar("ArtworkGold", 250),
             new CardsVar(1)
         };
 
@@ -47,8 +48,12 @@ namespace KomeijiKoishi.Events
         {
             Player owner = Owner!;
             EventOption buyKnifeOption = owner.Gold >= DynamicVars.Gold.IntValue
-                ? new EventOption(this, BuyKnife, $"{Id.Entry}.pages.INITIAL.options.BUY_KNIFE", HoverTipFactory.FromCardWithCardHoverTips<KoishisKnife_Koishi>(false))
+                ? new EventOption(this, BuyKnife, $"{Id.Entry}.pages.INITIAL.options.BUY_KNIFE", GetKnifeHoverTips(owner.RunState.CurrentActIndex))
                 : new EventOption(this, null, $"{Id.Entry}.pages.INITIAL.options.LOCKED_GOLD", Array.Empty<IHoverTip>());
+
+            EventOption buyArtworkOption = owner.Gold >= DynamicVars["ArtworkGold"].IntValue
+                ? new EventOption(this, BuyArtwork, $"{Id.Entry}.pages.INITIAL.options.{GetArtworkOptionKey(owner.RunState.CurrentActIndex)}", GetArtworkHoverTips(owner.RunState.CurrentActIndex))
+                : new EventOption(this, null, $"{Id.Entry}.pages.INITIAL.options.LOCKED_ARTWORK_GOLD", Array.Empty<IHoverTip>());
 
             EventOption chessOption = PileType.Deck.GetPile(owner).Cards.Count > 1
                 ? new EventOption(this, PlayChess, $"{Id.Entry}.pages.INITIAL.options.PLAY_CHESS", Array.Empty<IHoverTip>())
@@ -58,7 +63,8 @@ namespace KomeijiKoishi.Events
             {
                 chessOption,
                 new EventOption(this, DrinkMysteryBottle, $"{Id.Entry}.pages.INITIAL.options.DRINK", HoverTipFactory.FromRelic<MagicPotionBottle_Koishi>()).ThatDoesDamage(DynamicVars.Damage.BaseValue),
-                buyKnifeOption
+                buyKnifeOption,
+                buyArtworkOption
             };
         }
 
@@ -163,7 +169,7 @@ namespace KomeijiKoishi.Events
 
             SetEventState(PageDescription(page), new[]
             {
-                new EventOption(this, TakeChessRewards, $"{Id.Entry}.pages.{page}.options.TAKE", HoverTipFactory.FromRelic<MagicPotionBottle_Koishi>().Concat(HoverTipFactory.FromCardWithCardHoverTips<KoishisKnife_Koishi>(false)))
+                new EventOption(this, TakeChessRewards, $"{Id.Entry}.pages.{page}.options.TAKE", HoverTipFactory.FromRelic<MagicPotionBottle_Koishi>().Concat(GetKnifeHoverTips(Owner!.RunState.CurrentActIndex)))
             });
         }
 
@@ -191,6 +197,14 @@ namespace KomeijiKoishi.Events
             SetEventFinished(PageDescription("KNIFE_DONE"));
         }
 
+        private async Task BuyArtwork()
+        {
+            Player owner = Owner!;
+            await PlayerCmd.LoseGold(DynamicVars["ArtworkGold"].BaseValue, owner, GoldLossType.Spent);
+            await AddArtworkToDeck(owner);
+            SetEventFinished(PageDescription("ARTWORK_DONE"));
+        }
+
         private async Task AddKnifeToDeck(Player owner)
         {
             CardModel knife = owner.RunState.CreateCard(ModelDb.Card<KoishisKnife_Koishi>(), owner);
@@ -209,9 +223,61 @@ namespace KomeijiKoishi.Events
             return actIndex switch
             {
                 <= 0 => 0,
-                1 => 6,
-                _ => 10
+                1 => 8,
+                _ => 12
             };
+        }
+
+        private async Task AddArtworkToDeck(Player owner)
+        {
+            CardModel artwork = owner.RunState.CreateCard(GetArtworkRewardModel(owner.RunState.CurrentActIndex), owner);
+            CardCmd.Upgrade(artwork, CardPreviewStyle.None);
+
+            CardPileAddResult result = await CardPileCmd.Add(artwork, PileType.Deck, CardPilePosition.Bottom, null, false);
+            CardCmd.PreviewCardPileAdd(result, 2f, CardPreviewStyle.HorizontalLayout);
+        }
+
+        private static CardModel GetArtworkRewardModel(int actIndex)
+        {
+            return actIndex switch
+            {
+                <= 0 => ModelDb.Card<Artwork_Koishi>(),
+                1 => ModelDb.Card<TrueArtwork_Koishi>(),
+                _ => ModelDb.Card<TrueArtworkLiberated_Koishi>()
+            };
+        }
+
+        private static IEnumerable<IHoverTip> GetArtworkHoverTips(int actIndex)
+        {
+            return actIndex switch
+            {
+                <= 0 => HoverTipFactory.FromCardWithCardHoverTips<Artwork_Koishi>(true),
+                1 => HoverTipFactory.FromCardWithCardHoverTips<TrueArtwork_Koishi>(true),
+                _ => HoverTipFactory.FromCardWithCardHoverTips<TrueArtworkLiberated_Koishi>(true)
+            };
+        }
+
+        private static string GetArtworkOptionKey(int actIndex)
+        {
+            return actIndex switch
+            {
+                <= 0 => "BUY_ARTWORK",
+                1 => "BUY_TRUE_ARTWORK",
+                _ => "BUY_TRUE_ARTWORK_LIBERATED"
+            };
+        }
+
+        private static IEnumerable<IHoverTip> GetKnifeHoverTips(int actIndex)
+        {
+            CardModel knife = (CardModel)ModelDb.Card<KoishisKnife_Koishi>().MutableClone();
+            int upgradeCount = GetKnifeUpgradeCount(actIndex);
+            for (int i = 0; i < upgradeCount; i++)
+            {
+                knife.UpgradeInternal();
+                knife.FinalizeUpgradeInternal();
+            }
+
+            return new[] { HoverTipFactory.FromCard(knife, false) }.Concat(knife.HoverTips);
         }
     }
 }

@@ -35,7 +35,6 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku),
-            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
         };
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new CardKeyword[0];

@@ -7,6 +7,7 @@ using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
@@ -38,7 +39,7 @@ namespace KomeijiKoishi.Cards
         {
             try
             {
-                var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
+                var player = base.Owner as Player;
                 if (player == null) return;
 
                 await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
@@ -46,13 +47,22 @@ namespace KomeijiKoishi.Cards
                 List<CardModel> allDanmakusSnapshot = new List<CardModel>();
                 PileType[] pilesToCheck = { PileType.Hand, PileType.Draw, PileType.Discard, PileType.Exhaust };
 
-                foreach (var pType in pilesToCheck)
+                var playersToCheck = base.CombatState?.Players
+                    .Where(p => p?.Creature != null && p.Creature.Side == player.Creature.Side)
+                    .ToList() ?? new List<Player> { player };
+
+                foreach (Player pileOwner in playersToCheck)
                 {
-                    var pile = pType.GetPile(player);
-                    if (pile != null && pile.Cards != null)
+                    foreach (var pType in pilesToCheck)
                     {
-                        var danmakusInPile = pile.Cards.Where(c => c.Tags != null && c.Tags.Contains(KoishiTags.Danmaku)).ToList();
-                        allDanmakusSnapshot.AddRange(danmakusInPile);
+                        var pile = pType.GetPile(pileOwner);
+                        if (pile != null && pile.Cards != null)
+                        {
+                            var danmakusInPile = pile.Cards
+                                .Where(c => c.Tags != null && c.Tags.Contains(KoishiTags.Danmaku))
+                                .ToList();
+                            allDanmakusSnapshot.AddRange(danmakusInPile);
+                        }
                     }
                 }
 
@@ -60,20 +70,12 @@ namespace KomeijiKoishi.Cards
                 {
                     foreach (var danmaku in allDanmakusSnapshot)
                     {
-                        var aliveEnemies = base.CombatState!.HittableEnemies.Where(e => e != null && !e.IsDead).ToList();
+                        Player danmakuOwner = danmaku.Owner ?? player;
+                        var aliveEnemies = danmakuOwner.Creature.CombatState!.HittableEnemies.Where(e => e != null && !e.IsDead).ToList();
                         if (aliveEnemies.Count == 0) break; 
 
-                        Creature? targetCreature = cardPlay.Target;
-
-                        if (targetCreature == null || targetCreature.IsDead)
-                        {
-                            if (danmaku.TargetType == TargetType.AnyEnemy)
-                            {
-                                targetCreature = player.RunState.Rng.Shuffle.NextItem(aliveEnemies);
-                            }
-                        }
-
-                        await KoishiExtensions.SafeAutoPlayCard(choiceContext, player, danmaku, targetCreature, AutoPlayType.Default, false, false);
+                        Creature? targetCreature = GetAutoTarget(danmakuOwner, danmaku, cardPlay.Target);
+                        await KoishiExtensions.SafeAutoPlayCard(choiceContext, danmakuOwner, danmaku, targetCreature, AutoPlayType.Default, false, false);
                         
                         await Cmd.Wait(0.15f, false); 
                     }
@@ -88,6 +90,42 @@ namespace KomeijiKoishi.Cards
         protected override void OnUpgrade()
         {
             base.EnergyCost.UpgradeBy(-1); 
+        }
+
+        private Creature? GetAutoTarget(Player player, CardModel card, Creature? originalTarget)
+        {
+            if (player.Creature.CombatState == null)
+            {
+                return null;
+            }
+
+            if (card.TargetType == TargetType.AnyEnemy)
+            {
+                if (originalTarget != null && !originalTarget.IsDead && originalTarget.Side != player.Creature.Side)
+                {
+                    return originalTarget;
+                }
+
+                var enemies = player.Creature.CombatState.HittableEnemies.Where(e => e != null && !e.IsDead).ToList();
+                return enemies.Count > 0 ? player.RunState.Rng.Shuffle.NextItem(enemies) : null;
+            }
+
+            if (card.TargetType == TargetType.AnyAlly)
+            {
+                var allies = player.Creature.CombatState.Players
+                    .Where(p => p != null && p != player && p.Creature != null && !p.Creature.IsDead && p.Creature.Side == player.Creature.Side)
+                    .Select(p => p.Creature)
+                    .ToList();
+
+                return allies.Count > 0 ? player.RunState.Rng.Shuffle.NextItem(allies) : null;
+            }
+
+            if (card.TargetType == TargetType.AnyPlayer)
+            {
+                return player.Creature;
+            }
+
+            return null;
         }
     }
 }

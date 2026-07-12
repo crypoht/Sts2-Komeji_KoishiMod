@@ -21,7 +21,7 @@ using KomeijiKoishi.Enums;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class SecondNeed_Koishi : CustomCardModel
+    public sealed class SecondNeed_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public SecondNeed_Koishi() 
             : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self, true) { }

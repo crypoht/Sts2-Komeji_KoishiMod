@@ -67,12 +67,18 @@ namespace KomeijiKoishi.Relics
 
         private decimal ModifyDamageMultiplicativeCore(Creature? target, ValueProp props, Creature? dealer, CardModel? cardSource)
         {
-            if (dealer != base.Owner.Creature || target == null || target.Side == dealer.Side)
+            bool isOwnerDamage = dealer == base.Owner.Creature || cardSource?.Owner == base.Owner;
+            if (!isOwnerDamage)
             {
                 return 1m;
             }
 
-            if (cardSource == null || cardSource.Type == CardType.Curse || cardSource.Type == CardType.Status)
+            if (target != null && (target == base.Owner.Creature || target.Side == base.Owner.Creature.Side))
+            {
+                return 1m;
+            }
+
+            if (cardSource != null && (cardSource.Type == CardType.Curse || cardSource.Type == CardType.Status))
             {
                 return 1m;
             }

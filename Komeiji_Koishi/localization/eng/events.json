@@ -40,8 +40,16 @@
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.DRINK.description": "Lose [red]{Damage}[/red] HP. Obtain [gold]Magic Potion Bottle[/gold].",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_KNIFE.title": "A general store means shopping!",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_KNIFE.description": "Lose [gold]{Gold}[/gold] Gold. Obtain [gold]Koishi's Knife[/gold].",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_ARTWORK.title": "Buy this artwork!",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_ARTWORK.description": "Lose [gold]{ArtworkGold}[/gold] Gold. Obtain [gold]Artwork+1[/gold].",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK.title": "Buy this artwork!",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK.description": "Lose [gold]{ArtworkGold}[/gold] Gold. Obtain [gold]True Artwork+1[/gold].",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK_LIBERATED.title": "Buy this artwork!",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK_LIBERATED.description": "Lose [gold]{ArtworkGold}[/gold] Gold. Obtain [gold]True Artwork: Liberated+1[/gold].",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_GOLD.title": "Not enough Gold.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_GOLD.description": "You cannot afford the knife.",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_ARTWORK_GOLD.title": "Not enough Gold.",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_ARTWORK_GOLD.description": "You cannot afford this artwork.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_CARDS.title": "Too few cards.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_CARDS.description": "Your deck cannot afford the price of another game.",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_LOSE.description": "You fail to understand your opponent's ideas.\nMaybe one more game will do it.[jitter][/jitter]",
@@ -58,5 +66,6 @@
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_WIN_MANY.options.TAKE.description": "Obtain [gold]Magic Potion Bottle[/gold] and [gold]Koishi's Knife[/gold].",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_DONE.description": "You leave the general store feeling much lighter... Did something go missing?",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.DRINK_DONE.description": "Ignoring the [gold]magician[/gold]'s warning, you down the [jitter][red]mysterious little drink[/red][/jitter].\nIt tastes like, like...\nWhen you wake up again, a blonde person is scolding the [gold]magician[/gold].\nIt really was a drink, made from [orange]mushrooms[/orange], but a [purple]poison mushroom[/purple] slipped in somehow...\nYou quietly leave with the emptied magic bottle.",
-  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.KNIFE_DONE.description": "Why is a strange knife being sold here?\nThe [gold]magician[/gold] says she found it on a previous hot spring trip...\nIf you find something, you should return it!"
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.KNIFE_DONE.description": "Why is a strange knife being sold here?\nThe [gold]magician[/gold] says she found it on a previous hot spring trip...\nIf you find something, you should return it!",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.ARTWORK_DONE.description": "The [gold]magician[/gold] hands it over gladly. Bro understands my [purple]art[/purple]."
 }

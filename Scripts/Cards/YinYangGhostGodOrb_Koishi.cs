@@ -77,7 +77,7 @@ namespace KomeijiKoishi.Cards
                 float totalVfxDuration =
                     NYinYangGhostGodOrbAttackVfx.FanSpreadDuration +
                     NYinYangGhostGodOrbAttackVfx.FanHoldDuration +
-                    NYinYangGhostGodOrbAttackVfx.FanReturnDurationPerOrb * NYinYangGhostGodOrbAttackVfx.FanOrbCount +
+                    NYinYangGhostGodOrbAttackVfx.FanReturnDuration +
                     NYinYangGhostGodOrbAttackVfx.FinalProjectileDuration;
                 await Cmd.Wait(totalVfxDuration, false);
             }

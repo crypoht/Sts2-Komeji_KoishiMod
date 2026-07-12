@@ -25,8 +25,6 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class BigHug_Koishi : CustomCardModel
     {
-        private const int MaxEnergyGain = 4;
-
         public BigHug_Koishi()
             : base(3, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true)
         {
@@ -41,7 +39,8 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new DamageVar(31m, ValueProp.Move)
+            new DamageVar(31m, ValueProp.Move),
+            new DynamicVar("Growth", 9m)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -49,20 +48,12 @@ namespace KomeijiKoishi.Cards
             try
             {
                 ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
-                var player = base.Owner as Player;
-                if (player == null) return;
                 
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                     .FromCard(this, cardPlay)
                     .Targeting(cardPlay.Target)
                     .WithHitFx("vfx/vfx_attack_blunt") 
                     .Execute(choiceContext);
-
-                int energyGain = Math.Min(MaxEnergyGain, CountUnconsciousCardsInDiscard(player));
-                if (energyGain > 0)
-                {
-                    await PlayerCmd.GainEnergy(energyGain, player);
-                }
             }
             catch (Exception e)
             {
@@ -70,23 +61,36 @@ namespace KomeijiKoishi.Cards
             }
         }
 
+        public override Task AfterCardEnteredCombat(CardModel card)
+        {
+            if (card != this || base.IsClone || base.CombatState == null) return Task.CompletedTask;
+
+            int playedCount = CombatManager.Instance.History.CardPlaysFinished.Count((CardPlayFinishedEntry e) =>
+                e.CardPlay.Card.Owner == base.Owner &&
+                KoishiExtensions.IsTrulyUnconscious(e.CardPlay.Card));
+
+            if (playedCount > 0)
+            {
+                base.DynamicVars.Damage.BaseValue += playedCount * base.DynamicVars["Growth"].BaseValue;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public override Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
+        {
+            if (cardPlay.Card.Owner == base.Owner && KoishiExtensions.IsTrulyUnconscious(cardPlay.Card))
+            {
+                base.DynamicVars.Damage.BaseValue += base.DynamicVars["Growth"].BaseValue;
+            }
+
+            return Task.CompletedTask;
+        }
+
         protected override void OnUpgrade()
         {
             base.DynamicVars.Damage.UpgradeValueBy(10m);
-        }
-
-        protected override bool ShouldGlowGoldInternal
-        {
-            get
-            {
-                return base.Owner is Player player && CountUnconsciousCardsInDiscard(player) > 0;
-            }
-        }
-
-        private static int CountUnconsciousCardsInDiscard(Player player)
-        {
-            var discardPile = PileType.Discard.GetPile(player);
-            return discardPile?.Cards.Count(c => KoishiExtensions.IsTrulyUnconscious(c)) ?? 0;
+            base.DynamicVars["Growth"].UpgradeValueBy(4m);
         }
     }
 }

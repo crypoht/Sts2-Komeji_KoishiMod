@@ -19,7 +19,6 @@ namespace KomeijiKoishi.Pools
         public override bool IsColorless => false;
     }
 
-
     public class KoishiRelicPool : CustomRelicPoolModel 
     {
 

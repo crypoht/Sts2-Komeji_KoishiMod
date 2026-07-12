@@ -30,21 +30,19 @@ namespace KomeijiKoishi.Powers
                 return;
             }
 
+            IReadOnlyList<Creature> otherEnemies = base.Owner.CombatState?.HittableEnemies
+                .Where(enemy => enemy != base.Owner && !enemy.IsDead)
+                .ToList() ?? new List<Creature>();
+
             base.Flash();
             await CreatureCmd.Damage(choiceContext, base.Owner, amount, ValueProp.Unblockable | ValueProp.Unpowered, null, null);
 
-            if (base.Owner.CombatState == null)
-            {
-                return;
-            }
-
-            IReadOnlyList<Creature> otherEnemies = base.Owner.CombatState.HittableEnemies
-                .Where(enemy => enemy != base.Owner && !enemy.IsDead)
-                .ToList();
-
             foreach (Creature enemy in otherEnemies)
             {
-                await PowerCmd.Apply<JiasuiPower>(choiceContext, enemy, amount, applier, sourceCard, false);
+                if (!enemy.IsDead)
+                {
+                    await PowerCmd.Apply<JiasuiPower>(choiceContext, enemy, amount, applier, sourceCard, false);
+                }
             }
         }
     }

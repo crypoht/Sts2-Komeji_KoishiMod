@@ -75,5 +75,8 @@
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THIS_SIDE_POWER.description": "仲間がアタックを [blue]{Amount}[/blue] 枚使用するたび、あなたは[gold]無形[/gold]を1得る。",
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.title": "電話の向こう側",
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.smartDescription": "このターン、アタックを無料で使用できる。",
-  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "このターン、アタックを無料で使用できる。"
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "このターン、アタックを無料で使用できる。",
+  "KOMEIJIKOISHI-SELF_POWER.title": "自我",
+  "KOMEIJIKOISHI-SELF_POWER.smartDescription": "敵のターン開始時、[gold]クウガ[/gold]を[blue]{Amount}[/blue]失う。",
+  "KOMEIJIKOISHI-SELF_POWER.description": "敵のターン開始時、[gold]クウガ[/gold]を[blue]{Amount}[/blue]失う。"
 }

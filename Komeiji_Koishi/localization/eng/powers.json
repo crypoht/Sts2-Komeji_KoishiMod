@@ -75,5 +75,8 @@
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THIS_SIDE_POWER.description": "Whenever teammates play [blue]{Amount}[/blue] Attack cards, you gain 1 [gold]Intangible[/gold].",
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.title": "That Side of the Phone",
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.smartDescription": "Attack cards can be played for free this turn.",
-  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "Attack cards can be played for free this turn."
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "Attack cards can be played for free this turn.",
+  "KOMEIJIKOISHI-SELF_POWER.title": "Self",
+  "KOMEIJIKOISHI-SELF_POWER.smartDescription": "At the start of the enemy turn, lose [blue]{Amount}[/blue] [gold]Kuuga[/gold].",
+  "KOMEIJIKOISHI-SELF_POWER.description": "At the start of the enemy turn, lose [blue]{Amount}[/blue] [gold]Kuuga[/gold]."
 }

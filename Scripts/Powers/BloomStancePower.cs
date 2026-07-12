@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -27,13 +28,12 @@ namespace KomeijiKoishi.Powers
 
         public static int BloomEnergyGainAmount = 1;
 
-        // ──────────────────────────────────────────────────
-        // 直接用实例字段存状态，避免 GetInternalData 多实例问题
-        // ──────────────────────────────────────────────────
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        // 鐩存帴鐢ㄥ疄渚嬪瓧娈靛瓨鐘舵€侊紝閬垮厤 GetInternalData 澶氬疄渚嬮棶棰?        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         private CardModel? _cardToIgnore;
         private AttackCommand? _commandToDouble;
 
-        // 硬防重入：用实例字段而非 Data 类，保证 await gap 期间也能正确读到
+        // 纭槻閲嶅叆锛氱敤瀹炰緥瀛楁鑰岄潪 Data 绫伙紝淇濊瘉 await gap 鏈熼棿涔熻兘姝ｇ‘璇诲埌
         private bool _isExecutingBloom = false;
 
         private static readonly AccessTools.FieldRef<AttackCommand, Creature?> SingleTargetRef =
@@ -49,9 +49,9 @@ namespace KomeijiKoishi.Powers
 
         public decimal BlockReduction => 60m;
 
-        // ──────────────────────────────────────────────────
-        // 格挡减益
-        // ──────────────────────────────────────────────────
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        // 鏍兼尅鍑忕泭
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         public override decimal ModifyBlockMultiplicative(
             Creature target, decimal block, ValueProp props,
             CardModel? cardSource, CardPlay? cardPlay)
@@ -60,9 +60,9 @@ namespace KomeijiKoishi.Powers
             return 1m;
         }
 
-        // ──────────────────────────────────────────────────
-        // 进入盛开
-        // ──────────────────────────────────────────────────
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        // 杩涘叆鐩涘紑
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         public static async Task EnterThisStance(
             PlayerChoiceContext context, Player player, CardModel sourceCard)
         {
@@ -84,7 +84,7 @@ namespace KomeijiKoishi.Powers
                     context,
                     player.Creature, 1m, player.Creature, sourceCard, false);
 
-                // 直接拿实例写 _cardToIgnore
+                // 鐩存帴鎷垮疄渚嬪啓 _cardToIgnore
                 var powerInstance = player.Creature.GetPower<BloomStancePower>();
                 if (powerInstance != null)
                     powerInstance._cardToIgnore = sourceCard;
@@ -98,12 +98,12 @@ namespace KomeijiKoishi.Powers
             }
         }
 
-        // ──────────────────────────────────────────────────
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         // BeforeAttack
-        // ──────────────────────────────────────────────────
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         public override Task BeforeAttack(AttackCommand command)
         {
-            // 硬防重入：盛开攻击执行期间屏蔽所有新登记
+            // 纭槻閲嶅叆锛氱洓寮€鏀诲嚮鎵ц鏈熼棿灞忚斀鎵€鏈夋柊鐧昏
             if (_isExecutingBloom)
             {
                 MegaCrit.Sts2.Core.Logging.Log.Info("[BloomStance] BeforeAttack: blocked by isExecutingBloom");
@@ -122,7 +122,7 @@ namespace KomeijiKoishi.Powers
             if (!command.DamageProps.IsPoweredAttack())
                 return Task.CompletedTask;
 
-            // 跳过触发进入盛开的源卡牌（只跳过一次）
+            // 璺宠繃瑙﹀彂杩涘叆鐩涘紑鐨勬簮鍗＄墝锛堝彧璺宠繃涓€娆★級
             if (cardModel == _cardToIgnore)
             {
                 _cardToIgnore = null;
@@ -137,9 +137,9 @@ namespace KomeijiKoishi.Powers
             return Task.CompletedTask;
         }
 
-        // ──────────────────────────────────────────────────
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         // AfterAttack
-        // ──────────────────────────────────────────────────
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         public override async Task AfterAttack(PlayerChoiceContext choiceContext, AttackCommand command)
         {
             if (command != _commandToDouble) return;
@@ -149,9 +149,9 @@ namespace KomeijiKoishi.Powers
             await RunBloomAttacksAsync(choiceContext, command);
         }
 
-        // ──────────────────────────────────────────────────
-        // 盛开翻倍伤害逻辑
-        // ──────────────────────────────────────────────────
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        // 鐩涘紑缈诲€嶄激瀹抽€昏緫
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         private async Task RunBloomAttacksAsync(PlayerChoiceContext choiceContext, AttackCommand originalCommand)
         {
             _isExecutingBloom = true;
@@ -171,19 +171,16 @@ namespace KomeijiKoishi.Powers
 
                 try
                 {
-                    Creature? originalTarget = GetSingleTarget(originalCommand);
-                    decimal dmgValue = GetBloomDamageValue(cardModel, originalTarget);
-
                     int repeat = GetBloomRepeatCount(cardModel);
 
                     MegaCrit.Sts2.Core.Logging.Log.Info(
-                        $"[BloomStance] RunBloom: dmg={dmgValue} repeat={repeat} originalTarget={originalTarget?.GetType().Name ?? "null"}");
+                        $"[BloomStance] RunBloom: repeat={repeat}");
 
                     this.Flash();
 
                     var bloomContext = new BlockingPlayerChoiceContext();
 
-                    // 用 GetOpponentsOf 而非 HittableEnemies，确保拿到正确的敌人列表
+                    // 鐢?GetOpponentsOf 鑰岄潪 HittableEnemies锛岀‘淇濇嬁鍒版纭殑鏁屼汉鍒楄〃
                     var opponents = base.CombatState.GetOpponentsOf(base.Owner);
 
                     for (int i = 0; i < repeat; i++)
@@ -205,27 +202,29 @@ namespace KomeijiKoishi.Powers
 
                         if (randomTarget == null) continue;
 
+                        decimal dmgValue = GetBloomDamageValue(cardModel, randomTarget);
+                        decimal modifiedDamage = GetBloomModifiedDamage(cardModel, originalCommand, randomTarget, dmgValue);
+
                         MegaCrit.Sts2.Core.Logging.Log.Info(
-                            $"[BloomStance] RunBloom: hit {i + 1}/{repeat} → {randomTarget.GetType().Name} dmg={dmgValue}");
+                            $"[BloomStance] RunBloom: hit {i + 1}/{repeat} 鈫?{randomTarget.GetType().Name} dmg={modifiedDamage}");
 
 #if STS2_BETA
                         var results = await CreatureCmd.Damage(
                             bloomContext,
                             randomTarget,
-                            dmgValue,
+                            modifiedDamage,
                             ValueProp.Unpowered,
                             base.Owner,
-                            cardModel,
-                            originalCommand.CardPlay
+                            null,
+                            null
                         );
 #else
                         var results = await CreatureCmd.Damage(
                             bloomContext,
                             randomTarget,
-                            dmgValue,
+                            modifiedDamage,
                             ValueProp.Unpowered,
-                            base.Owner,
-                            cardModel 
+                            base.Owner
                         );
 #endif
 
@@ -250,9 +249,9 @@ namespace KomeijiKoishi.Powers
             }
         }
 
-        // ──────────────────────────────────────────────────
-        // 辅助
-        // ──────────────────────────────────────────────────
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        // 杈呭姪
+        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         private bool IsCombatActive()
         {
             var mgr = CombatManager.Instance;
@@ -278,7 +277,42 @@ namespace KomeijiKoishi.Powers
                 return cardModel.DynamicVars.CalculatedDamage.Calculate(target);
             }
 
-            return cardModel.DynamicVars.Damage.PreviewValue;
+            return cardModel.DynamicVars.Damage.BaseValue;
+        }
+
+        private static decimal GetBloomModifiedDamage(CardModel cardModel, AttackCommand originalCommand, Creature target, decimal baseDamage)
+        {
+            if (cardModel.Owner?.RunState == null || cardModel.CombatState == null || cardModel.Owner.Creature == null)
+            {
+                return baseDamage;
+            }
+
+#if STS2_BETA
+            return Hook.ModifyDamage(
+                cardModel.Owner.RunState,
+                cardModel.CombatState,
+                target,
+                cardModel.Owner.Creature,
+                baseDamage,
+                ValueProp.Move,
+                cardModel,
+                originalCommand.CardPlay,
+                ModifyDamageHookType.Additive | ModifyDamageHookType.Multiplicative,
+                CardPreviewMode.None,
+                out _);
+#else
+            return Hook.ModifyDamage(
+                cardModel.Owner.RunState,
+                cardModel.CombatState,
+                target,
+                cardModel.Owner.Creature,
+                baseDamage,
+                ValueProp.Move,
+                cardModel,
+                ModifyDamageHookType.Additive | ModifyDamageHookType.Multiplicative,
+                CardPreviewMode.None,
+                out _);
+#endif
         }
 
         private static int GetBloomRepeatCount(CardModel cardModel)

@@ -40,7 +40,7 @@ namespace KomeijiKoishi.Relics
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new EnergyVar(10),
-            new DamageVar(25m, ValueProp.Unpowered) 
+            new DamageVar(39m, ValueProp.Unpowered) 
         };
 
         public override string PackedIconPath => $"res://mods/Komeiji_Koishi/images/relics/OkuusSecretEye_Koishi_outline.png";

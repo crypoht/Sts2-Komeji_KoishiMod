@@ -19,7 +19,7 @@ using KomeijiKoishi.Enums;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class ConsciousnessSpiral_Koishi : CustomCardModel
+    public sealed class ConsciousnessSpiral_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public ConsciousnessSpiral_Koishi() 
             : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self, true) { }

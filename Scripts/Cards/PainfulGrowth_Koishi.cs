@@ -33,7 +33,8 @@ namespace KomeijiKoishi.Cards
         };
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DynamicVar("Amount", 4m) 
+            new DynamicVar("GiveAmount", 1m),
+            new DynamicVar("PlayAmount", 3m)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -44,6 +45,23 @@ namespace KomeijiKoishi.Cards
                 if (player == null) return;
 
                 var handPile = PileType.Hand.GetPile(player);
+
+                var validCards = handPile.Cards.Where(c =>
+                    c != this &&
+                    !KoishiExtensions.IsTrulyUnconscious(c)
+                ).ToList();
+
+                int giveAmount = (int)base.DynamicVars["GiveAmount"].BaseValue;
+                for (int i = 0; i < giveAmount; i++)
+                {
+                    if (validCards.Count <= 0) break;
+
+                    var targetCard = player.RunState.Rng.Shuffle.NextItem(validCards);
+                    if (targetCard == null) break;
+
+                    KoishiExtensions.ApplyUnconsciousToCard(targetCard);
+                    validCards.Remove(targetCard);
+                }
                 
                 var unconsciousCards = handPile.Cards.Where(c => 
                     KoishiExtensions.IsTrulyUnconscious(c) && 
@@ -51,7 +69,7 @@ namespace KomeijiKoishi.Cards
                     c != this
                 ).ToList();
 
-                int countToPlay = (int)Math.Min(base.DynamicVars["Amount"].BaseValue, unconsciousCards.Count);
+                int countToPlay = (int)Math.Min(base.DynamicVars["PlayAmount"].BaseValue, unconsciousCards.Count);
 
                 for (int i = 0; i < countToPlay; i++)
                 {
@@ -80,7 +98,8 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars["Amount"].UpgradeValueBy(1m);
+            base.DynamicVars["GiveAmount"].UpgradeValueBy(1m);
+            base.DynamicVars["PlayAmount"].UpgradeValueBy(1m);
         }
     }
 }

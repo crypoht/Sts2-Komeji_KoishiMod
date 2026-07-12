@@ -75,5 +75,8 @@
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THIS_SIDE_POWER.description": "팀원들이 공격 카드를 [blue]{Amount}[/blue]장 사용할 때마다 당신은 [gold]무형[/gold]을 1 얻습니다.",
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.title": "전화 저쪽",
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.smartDescription": "이번 턴 공격 카드를 무료로 사용할 수 있습니다.",
-  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "이번 턴 공격 카드를 무료로 사용할 수 있습니다."
+  "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "이번 턴 공격 카드를 무료로 사용할 수 있습니다.",
+  "KOMEIJIKOISHI-SELF_POWER.title": "자아",
+  "KOMEIJIKOISHI-SELF_POWER.smartDescription": "적 턴이 시작될 때 [gold]쿠가[/gold]를 [blue]{Amount}[/blue] 잃습니다.",
+  "KOMEIJIKOISHI-SELF_POWER.description": "적 턴이 시작될 때 [gold]쿠가[/gold]를 [blue]{Amount}[/blue] 잃습니다."
 }

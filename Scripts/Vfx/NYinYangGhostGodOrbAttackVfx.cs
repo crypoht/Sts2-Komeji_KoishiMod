@@ -18,12 +18,15 @@ public sealed partial class NYinYangGhostGodOrbAttackVfx : Node2D
     public const int FanOrbCount = 7;
     public const float FanSpreadDuration = 0.3f;
     public const float FanHoldDuration = 0.1f;
-    public const float FanReturnDurationPerOrb = 0.15f;
+    public const float FanReturnDuration = 0.15f;
+    public const float FanReturnDurationPerOrb = FanReturnDuration;
     public const float FinalProjectileDuration = 0.25f;
     public const float RotationDuration = 0.6f;
     public const float FanRadius = 160f;
     public const float SmallOrbVisualWidth = 80f;
     public const float FinalOrbVisualWidth = 300f;
+    public const float FanReturnSpiralTurns = 0.58f;
+    public const float FanReturnSpiralDirection = 1f;
     public const float FanOrbAfterimageInterval = 0.025f;
     public const float FanOrbAfterimageLifetime = 0.18f;
     public const float FanOrbAfterimageAlpha = 0.38f;
@@ -56,17 +59,6 @@ public sealed partial class NYinYangGhostGodOrbAttackVfx : Node2D
         180f,
         225f,
         315f
-    };
-
-    private static readonly int[] FanOrbGatherOrder =
-    {
-        6,
-        0,
-        1,
-        2,
-        3,
-        4,
-        5
     };
 
     private Vector2 startPosition;
@@ -280,15 +272,22 @@ public sealed partial class NYinYangGhostGodOrbAttackVfx : Node2D
 
         PlaySound(GatherSoundPath);
 
-        for (int i = 0; i < FanOrbGatherOrder.Length; i++)
+        Tween returnTween = CreateTween();
+        returnTween.SetEase(Tween.EaseType.InOut);
+        returnTween.SetTrans(Tween.TransitionType.Sine);
+        for (int i = 0; i < fanSprites.Count; i++)
         {
-            int spriteIndex = FanOrbGatherOrder[i];
-            Tween returnTween = CreateTween();
-            returnTween.SetEase(Tween.EaseType.In);
-            returnTween.SetTrans(Tween.TransitionType.Quad);
-            returnTween.TweenProperty(fanSprites[spriteIndex], "global_position", startPosition, FanReturnDurationPerOrb);
-            await Cmd.Wait(FanReturnDurationPerOrb, token, false);
+            Sprite2D sprite = fanSprites[i];
+            Vector2 returnStart = sprite.GlobalPosition;
+            Tween tweener = i == 0 ? returnTween : returnTween.Parallel();
+            tweener.TweenMethod(
+                Callable.From<float>(progress => sprite.GlobalPosition = GetSpiralReturnPosition(returnStart, startPosition, progress)),
+                0f,
+                1f,
+                FanReturnDuration);
         }
+
+        await Cmd.Wait(FanReturnDuration, token, false);
 
         foreach (Sprite2D sprite in fanSprites)
         {
@@ -323,6 +322,22 @@ public sealed partial class NYinYangGhostGodOrbAttackVfx : Node2D
         float angleDegrees = FanOrbAngles[index];
         float radians = Mathf.DegToRad(angleDegrees);
         return new Vector2(Mathf.Cos(radians), -Mathf.Sin(radians)) * FanRadius;
+    }
+
+    private static Vector2 GetSpiralReturnPosition(Vector2 from, Vector2 center, float progress)
+    {
+        Vector2 offset = from - center;
+        if (offset.LengthSquared() <= 0f)
+        {
+            return center;
+        }
+
+        float clampedProgress = Mathf.Clamp(progress, 0f, 1f);
+        float radius = offset.Length() * (1f - clampedProgress);
+        float startAngle = Mathf.Atan2(offset.Y, offset.X);
+        float angle = startAngle + Mathf.Tau * FanReturnSpiralTurns * FanReturnSpiralDirection * clampedProgress;
+
+        return center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
     }
 
     private Vector2 GetFinalProjectileEndPosition()

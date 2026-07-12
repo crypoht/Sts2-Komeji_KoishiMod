@@ -13,10 +13,19 @@ using System.Linq;
 
 namespace KomeijiKoishi;
 
+public enum KoishiCardArtMode
+{
+    Normal,
+    Ancient,
+    Fumo
+}
+
 [ConfigHoverTipsByDefault]
 public sealed class KoishiModConfig : SimpleModConfig
 {
     private const int DefaultAncientWeight = 3;
+    private static bool _useFumoCardArt;
+    private static bool _useAncientCardArt;
     private AncientProbabilityChart? _ancientProbabilityChart;
     private HSeparator? _baseAncientWeightsSeparator;
 
@@ -24,7 +33,52 @@ public sealed class KoishiModConfig : SimpleModConfig
     public static bool EnableAncients { get; set; } = true;
 
     [ConfigSection("VisualSettings")]
-    public static bool UseFumoCardArt { get; set; } = false;
+    public static KoishiCardArtMode CardArtMode
+    {
+        get
+        {
+            if (_useFumoCardArt)
+            {
+                return KoishiCardArtMode.Fumo;
+            }
+
+            return _useAncientCardArt ? KoishiCardArtMode.Ancient : KoishiCardArtMode.Normal;
+        }
+        set
+        {
+            _useFumoCardArt = value == KoishiCardArtMode.Fumo;
+            _useAncientCardArt = value == KoishiCardArtMode.Ancient;
+        }
+    }
+
+    [ConfigHideInUI]
+    public static bool UseFumoCardArt
+    {
+        get => _useFumoCardArt;
+        set
+        {
+            _useFumoCardArt = value;
+            if (value)
+            {
+                _useAncientCardArt = false;
+            }
+        }
+    }
+
+    [ConfigSection("VisualSettings")]
+    [ConfigHideInUI]
+    public static bool UseAncientCardArt
+    {
+        get => _useAncientCardArt;
+        set
+        {
+            _useAncientCardArt = value;
+            if (value)
+            {
+                _useFumoCardArt = false;
+            }
+        }
+    }
 
     public static bool PlayMoriyaDanceForAllPlayers { get; set; } = false;
 

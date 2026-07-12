@@ -28,7 +28,7 @@ namespace KomeijiKoishi.Relics
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
             new EnergyVar(1),
-            new DamageVar(6m, ValueProp.Unblockable | ValueProp.Unpowered),
+            new DamageVar(4m, ValueProp.Unblockable | ValueProp.Unpowered),
             new DynamicVar(HandThresholdKey, 1m)
         };
 

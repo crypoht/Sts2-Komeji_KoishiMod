@@ -20,7 +20,7 @@ using KomeijiKoishi.Enums;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class AirStrike_Koishi : CustomCardModel
+    public sealed class AirStrike_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public AirStrike_Koishi() 
             : base(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) 

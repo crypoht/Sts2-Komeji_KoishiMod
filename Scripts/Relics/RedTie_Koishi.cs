@@ -22,7 +22,7 @@ namespace KomeijiKoishi.Relics
     [Pool(typeof(KoishiSharedRelicPool))]
     public sealed class RedTie_Koishi : CustomRelicModel
     {
-        private const decimal KuugaAmount = 3m;
+        private const decimal KuugaAmount = 2m;
 
         private int _attacksPlayedThisTurn;
 

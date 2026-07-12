@@ -40,8 +40,16 @@
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.DRINK.description": "[red]{Damage}[/red]HPを失い、[gold]魔法の薬瓶[/gold]を得る。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_KNIFE.title": "雑貨屋なら買い物でしょ！",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_KNIFE.description": "[gold]{Gold}[/gold]ゴールドを失い、[gold]こいしのナイフ[/gold]を得る。",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_ARTWORK.title": "この芸術品を買う！",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_ARTWORK.description": "[gold]{ArtworkGold}[/gold]ゴールドを失い、[gold]芸術品+1[/gold]を得る。",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK.title": "この芸術品を買う！",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK.description": "[gold]{ArtworkGold}[/gold]ゴールドを失い、[gold]真・芸術品+1[/gold]を得る。",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK_LIBERATED.title": "この芸術品を買う！",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.BUY_TRUE_ARTWORK_LIBERATED.description": "[gold]{ArtworkGold}[/gold]ゴールドを失い、[gold]真・芸術品・解放+1[/gold]を得る。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_GOLD.title": "ゴールド不足。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_GOLD.description": "このナイフは買えない。",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_ARTWORK_GOLD.title": "ゴールド不足。",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_ARTWORK_GOLD.description": "この芸術品は買えない。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_CARDS.title": "カードが少なすぎる。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.INITIAL.options.LOCKED_CARDS.description": "あなたのデッキは、もう一局の代償に耐えられない。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_LOSE.description": "相手の考えがまるで理解できない。\nもう一局やれば勝てるかもしれない。[jitter][/jitter]",
@@ -58,5 +66,6 @@
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_WIN_MANY.options.TAKE.description": "[gold]魔法の薬瓶[/gold]と[gold]こいしのナイフ[/gold]を得る。",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.CHESS_DONE.description": "雑貨屋を出ると、体がずいぶん軽くなった気がする……何か減っていない？",
   "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.DRINK_DONE.description": "[gold]魔法使い[/gold]の制止を無視して、[jitter][red]謎の小さな飲み物[/red][/jitter]を一気に飲み干した。\nその味は、まるで、まるで……\n再び目を覚ますと、金髪の人物が[gold]魔法使い[/gold]を叱っていた。\n確かに飲み物ではあったらしい。ただし[orange]キノコ[/orange]で作ったもので、うっかり[purple]毒キノコ[/purple]が混ざっていたようだ……\nあなたは空になった魔法の瓶を持って、こっそり立ち去った。",
-  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.KNIFE_DONE.description": "どうしてこんな奇妙なナイフが売られているのだろう？\n[gold]魔法使い[/gold]は、前に温泉へ行った時に拾ったものだと言う……\n拾った物は持ち主に返すべきでは！"
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.KNIFE_DONE.description": "どうしてこんな奇妙なナイフが売られているのだろう？\n[gold]魔法使い[/gold]は、前に温泉へ行った時に拾ったものだと言う……\n拾った物は持ち主に返すべきでは！",
+  "KOMEIJIKOISHI-WITCH_GENERAL_STORE_KOISHI.pages.ARTWORK_DONE.description": "[gold]魔法使い[/gold]は気前よく渡してくれた。broは私の[purple]芸術[/purple]をわかっている。"
 }

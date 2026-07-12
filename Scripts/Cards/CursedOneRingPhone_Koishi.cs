@@ -17,12 +17,12 @@ using MegaCrit.Sts2.Core.Models.Powers;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class CursedOneRingPhone_Koishi : CustomCardModel
+    public sealed class CursedOneRingPhone_Koishi : CustomCardModel, IUseAncientCardFace
     {
         private const string IntangibleAttackThresholdKey = "IntangibleAttackThreshold";
 
         public CursedOneRingPhone_Koishi()
-            : base(3, CardType.Skill, CardRarity.Rare, TargetType.Self, true)
+            : base(3, CardType.Skill, CardRarity.Rare, TargetType.AllAllies, true)
         {
         }
 
@@ -50,9 +50,8 @@ namespace KomeijiKoishi.Cards
 
             await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
 
-            var allies = base.CombatState.Players
-                .Where(p => p != null && p != base.Owner && p.Creature != null && !p.Creature.IsDead && p.Creature.Side == base.Owner.Creature.Side)
-                .Select(p => p.Creature)
+            var allies = base.CombatState.GetTeammatesOf(base.Owner.Creature)
+                .Where(c => c != null && c.IsAlive && c.IsPlayer && c != base.Owner.Creature)
                 .ToList();
 
             decimal totalAttackThreshold = UpdateIntangibleAttackThreshold(allies.Count);
@@ -103,7 +102,9 @@ namespace KomeijiKoishi.Cards
 
         private decimal UpdateIntangibleAttackThreshold()
         {
-            int allyCount = base.CombatState?.Players.Count(p => p != null && p != base.Owner && p.Creature != null && !p.Creature.IsDead && p.Creature.Side == base.Owner.Creature.Side) ?? 1;
+            int allyCount = base.CombatState?
+                .GetTeammatesOf(base.Owner.Creature)
+                .Count(c => c != null && c.IsAlive && c.IsPlayer && c != base.Owner.Creature) ?? 1;
             return UpdateIntangibleAttackThreshold(allyCount);
         }
 

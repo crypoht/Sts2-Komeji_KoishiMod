@@ -17,6 +17,8 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class ConsciousnessDive_Koishi : CustomCardModel
     {
+        private static readonly HashSet<Player> ResolvingPlayers = new();
+
         public ConsciousnessDive_Koishi()
             : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly, true)
         {
@@ -36,18 +38,31 @@ namespace KomeijiKoishi.Cards
             }
 
             Player targetPlayer = cardPlay.Target.Player;
-            await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
-
-            var cardsToPlay = PileType.Exhaust.GetPile(targetPlayer)
-                .Cards
-                .Where(card => card.Type == CardType.Attack || card.Type == CardType.Skill)
-                .ToList();
-
-            foreach (CardModel card in cardsToPlay)
+            if (!ResolvingPlayers.Add(targetPlayer))
             {
-                Creature? target = GetAutoTarget(targetPlayer, card);
-                await KoishiExtensions.SafeAutoPlayCard(choiceContext, targetPlayer, card, target, AutoPlayType.Default, true, false);
-                await Cmd.Wait(0.05f, false);
+                return;
+            }
+
+            try
+            {
+                await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
+
+                var cardsToPlay = PileType.Exhaust.GetPile(targetPlayer)
+                    .Cards
+                    .Where(card => (card.Type == CardType.Attack || card.Type == CardType.Skill)
+                        && card is not ConsciousnessDive_Koishi)
+                    .ToList();
+
+                foreach (CardModel card in cardsToPlay)
+                {
+                    Creature? target = GetAutoTarget(targetPlayer, card);
+                    await KoishiExtensions.SafeAutoPlayCard(choiceContext, targetPlayer, card, target, AutoPlayType.Default, true, false);
+                    await Cmd.Wait(0.05f, false);
+                }
+            }
+            finally
+            {
+                ResolvingPlayers.Remove(targetPlayer);
             }
         }
 

@@ -3,13 +3,13 @@
   "name": "Komeiji Koishi",
   "author": "UINYA",
   "description": "喂喂?听得到吗?我在你身后哦",
-  "version": "0.5.14yd",
+  "version": "0.5.14yf",
   "has_pck": true,
   "has_dll": true,
   "dependencies": [
     {
       "id": "BaseLib",
-      "min_version": "3.1.8"
+      "min_version": "3.3.5"
     }
   ],
   "affects_gameplay": true

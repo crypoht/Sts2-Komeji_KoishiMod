@@ -60,40 +60,14 @@ namespace KomeijiKoishi.Cards
 
         private async Task ApplyBloomHarmony(PlayerChoiceContext choiceContext, Player player, Creature target)
         {
-            await ClearStancesLocally(target);
             if (target.Player != null)
             {
-                int bonusEnergy = 0;
-                var superego = target.Powers.FirstOrDefault(p => p is SuperegoPower);
-                if (superego != null)
-                {
-                    bonusEnergy = (int)superego.Amount;
-                }
-
-                int totalEnergyGain = BloomStancePower.BloomEnergyGainAmount + bonusEnergy;
-                if (totalEnergyGain > 0)
-                {
-                    await PlayerCmd.GainEnergy(totalEnergyGain, target.Player);
-                }
+                await BloomStancePower.EnterThisStance(choiceContext, target.Player, this);
             }
-
-            await PowerCmd.Apply<BloomStancePower>(choiceContext, target, 1m, player.Creature, this, false);
             await PowerCmd.Apply<HuaKaiBloomHarmonyPower>(choiceContext, target, 1m, player.Creature, this, false);
 
             var harmonyPower = target.GetPower<HuaKaiBloomHarmonyPower>();
             harmonyPower?.BindSourceCard(this);
-        }
-
-        private async Task ClearStancesLocally(Creature targetCreature)
-        {
-            var powersToRemove = targetCreature.Powers
-                .Where(p => p is BloomStancePower || p is ClosedStancePower)
-                .ToList();
-
-            foreach (var power in powersToRemove)
-            {
-                await PowerCmd.Remove(power); 
-            }
         }
 
         protected override void OnUpgrade()
