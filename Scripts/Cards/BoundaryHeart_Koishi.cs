@@ -36,7 +36,7 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
 
-            new BlockVar(12m, ValueProp.Move)
+            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(12m, 8m), ValueProp.Move)
         };
 
         protected override bool ShouldGlowGoldInternal
@@ -69,7 +69,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Block.UpgradeValueBy(4m);
+            base.DynamicVars.Block.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(4m, 2m));
         }
     }
 }

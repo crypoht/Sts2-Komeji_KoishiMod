@@ -35,7 +35,7 @@ namespace KomeijiKoishi.Powers
 
                 FormPowerData data = base.GetInternalData<FormPowerData>();
 
-                if (KoishiExtensions.IsTrulyUnconscious(cardPlay.Card))
+                if (!KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled && KoishiExtensions.IsTrulyUnconscious(cardPlay.Card))
                 {
                     data.pendingDraws++;
                 }

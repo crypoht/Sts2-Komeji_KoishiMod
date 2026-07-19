@@ -53,10 +53,12 @@ namespace KomeijiKoishi.Cards
 
         public override Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
         {
-            if (card == this && !_isPlaybackBlockedForRun)
+            if (card == this)
             {
                 string? videoPath = base.Owner.RunState.Rng.Shuffle.NextItem(DanceVideoPaths);
-                if (videoPath != null && (KoishiModConfig.ActiveRunPlayMoriyaDanceForAllPlayers || LocalContext.IsMine(this)))
+                if (videoPath != null
+                    && !_isPlaybackBlockedForRun
+                    && (KoishiModConfig.ActiveRunPlayMoriyaDanceForAllPlayers || LocalContext.IsMine(this)))
                 {
                     PlayDanceVideo(videoPath);
                 }

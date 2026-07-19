@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
@@ -31,8 +31,8 @@ namespace KomeijiKoishi.Cards.Fumo
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(50m, ValueProp.Move), 
-            new RepeatVar(10)                   
+            new DamageVar(100m, ValueProp.Move), 
+            new RepeatVar(50)                   
         };
 
 
@@ -80,10 +80,11 @@ namespace KomeijiKoishi.Cards.Fumo
         }
 
 #if STS2_BETA
-        protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
+        protected override CardLocation GetResultLocationForCardPlay()
         {
-            (PileType resultPileType, CardPilePosition position) = base.GetResultPileTypeAndPositionForCardPlay();
-            return (KeepInHandIfDiscard(resultPileType), position);
+            CardLocation location = base.GetResultLocationForCardPlay();
+            location.pileType = KeepInHandIfDiscard(location.pileType);
+            return location;
         }
 #else
         protected override PileType GetResultPileTypeForCardPlay()

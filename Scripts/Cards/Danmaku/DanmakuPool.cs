@@ -84,6 +84,11 @@ namespace KomeijiKoishi.Cards.Danmaku
 
         public static void InheritEnchantment(CardModel? sourceCard, CardModel generatedCard)
         {
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                return;
+            }
+
             if (sourceCard?.Enchantment == null || generatedCard.Enchantment != null)
             {
                 return;

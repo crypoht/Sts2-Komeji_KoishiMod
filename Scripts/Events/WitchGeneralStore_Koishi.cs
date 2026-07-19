@@ -30,9 +30,9 @@ namespace KomeijiKoishi.Events
         protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
         {
             new DynamicVar("WinChance", InitialWinChance),
-            new DamageVar(15m, ValueProp.Unblockable | ValueProp.Unpowered),
-            new GoldVar(150),
-            new GoldVar("ArtworkGold", 250),
+            new DamageVar(11m, ValueProp.Unblockable | ValueProp.Unpowered),
+            new GoldVar(514),
+            new GoldVar("ArtworkGold", 150),
             new CardsVar(1)
         };
 
@@ -41,7 +41,7 @@ namespace KomeijiKoishi.Events
 
         public override bool IsAllowed(IRunState runState)
         {
-            return runState.Players.All(player => player.Creature.CurrentHp > 20 || player.Gold > 150);
+            return runState.Players.All(player => player.Creature.CurrentHp > 11 || player.Gold > 200);
         }
 
         protected override IReadOnlyList<EventOption> GenerateInitialOptions()
@@ -169,15 +169,27 @@ namespace KomeijiKoishi.Events
 
             SetEventState(PageDescription(page), new[]
             {
-                new EventOption(this, TakeChessRewards, $"{Id.Entry}.pages.{page}.options.TAKE", HoverTipFactory.FromRelic<MagicPotionBottle_Koishi>().Concat(GetKnifeHoverTips(Owner!.RunState.CurrentActIndex)))
+                new EventOption(this, TakeChessRewards, $"{Id.Entry}.pages.{page}.options.TAKE", GetRandomStoreRewardHoverTips(Owner!.RunState.CurrentActIndex))
             });
         }
 
         private async Task TakeChessRewards()
         {
             Player owner = Owner!;
-            await RelicCmd.Obtain<MagicPotionBottle_Koishi>(owner);
-            await AddKnifeToDeck(owner);
+            int rewardIndex = (int)(Rng.NextFloat(1f) * 3f);
+            switch (rewardIndex)
+            {
+                case 0:
+                    await RelicCmd.Obtain<MagicPotionBottle_Koishi>(owner);
+                    break;
+                case 1:
+                    await AddKnifeToDeck(owner);
+                    break;
+                default:
+                    await AddArtworkToDeck(owner);
+                    break;
+            }
+
             SetEventFinished(PageDescription("CHESS_DONE"));
         }
 
@@ -222,9 +234,9 @@ namespace KomeijiKoishi.Events
         {
             return actIndex switch
             {
-                <= 0 => 0,
-                1 => 8,
-                _ => 12
+                <= 0 => 2,
+                1 => 7,
+                _ => 10
             };
         }
 
@@ -278,6 +290,13 @@ namespace KomeijiKoishi.Events
             }
 
             return new[] { HoverTipFactory.FromCard(knife, false) }.Concat(knife.HoverTips);
+        }
+
+        private static IEnumerable<IHoverTip> GetRandomStoreRewardHoverTips(int actIndex)
+        {
+            return HoverTipFactory.FromRelic<MagicPotionBottle_Koishi>()
+                .Concat(GetKnifeHoverTips(actIndex))
+                .Concat(GetArtworkHoverTips(actIndex));
         }
     }
 }

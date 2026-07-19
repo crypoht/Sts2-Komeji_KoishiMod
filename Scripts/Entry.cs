@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
 using KomeijiKoishi.Cards.Danmaku;
 using KomeijiKoishi;
+using KomeijiKoishi.Config;
+using KomeijiKoishi.Patches;
 namespace KomeijiKoishi.Scripts;
 
 [ModInitializer("Init")]
@@ -17,6 +19,8 @@ public class Entry
 
         ScriptManagerBridge.LookupScriptsInAssembly(typeof(Entry).Assembly);
         ModConfigRegistry.Register("Komeiji_Koishi", new KoishiModConfig());
+        KoishiBalanceManager.Initialize();
+        BalanceCardDescriptionPatch.Register();
 
         Log.Debug("Koishi Mod: Initialized successfully!");
     }

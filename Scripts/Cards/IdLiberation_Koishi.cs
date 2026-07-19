@@ -32,14 +32,14 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
-        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Unconscious,KoishiTags.Subconscious};
+        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Unconscious };
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Unconscious };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DamageVar(3m, ValueProp.Move), 
-            new RepeatVar(9)                   
+            new RepeatVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(9, 8))                   
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -80,7 +80,7 @@ namespace KomeijiKoishi.Cards
         protected override void OnUpgrade()
         {
             base.DynamicVars.Damage.UpgradeValueBy(1m);
-            base.DynamicVars.Repeat.UpgradeValueBy(3m);
+            base.DynamicVars.Repeat.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(3m, 1m));
         }
 
         public void Activate()

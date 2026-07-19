@@ -11,6 +11,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Nodes.CommonUi; 
 using KomeijiKoishi.Pools;
+using KomeijiKoishi.Powers;
 using BaseLib.Utils;
 
 namespace KomeijiKoishi.Cards
@@ -19,15 +20,23 @@ namespace KomeijiKoishi.Cards
     public sealed class IdsShikigami_Koishi : CustomCardModel
     {
         public IdsShikigami_Koishi() 
-            : base(514, CardType.Skill, CardRarity.Rare, TargetType.Self, true)
+            : base(
+                KomeijiKoishi.Config.KoishiBalanceManager.Value(3, 514),
+                KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled ? CardType.Skill : CardType.Power,
+                CardRarity.Rare,
+                TargetType.Self,
+                true)
         {
         }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
-        protected override bool HasEnergyCostX => true;
+        protected override bool HasEnergyCostX => KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled;
 
-        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
+        public override IEnumerable<CardKeyword> CanonicalKeywords =>
+            KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled
+                ? new[] { CardKeyword.Exhaust }
+                : Array.Empty<CardKeyword>();
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
@@ -36,47 +45,67 @@ namespace KomeijiKoishi.Cards
 
             try
             {
-                await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
-
-                int xValue = base.ResolveEnergyXValue();
-                int generateCount = xValue * 2;
-                
-                if (generateCount <= 0) return;
-
-                var skillPool = from c in player.Character.CardPool.GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
-                                where c.Type == CardType.Skill
-                                select c;
-
-                for (int i = 0; i < generateCount; i++)
+                if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
                 {
-                    var randomSkill = CardFactory.GetDistinctForCombat(
-                        player, 
-                        skillPool, 
-                        1, 
-                        player.RunState.Rng.CombatCardGeneration
-                    ).FirstOrDefault();
+                    await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
+
+                    int xValue = base.ResolveEnergyXValue();
+                    int generateCount = xValue * 2;
                     
-                    if (randomSkill != null)
+                    if (generateCount <= 0) return;
+
+                    var skillPool = from c in player.Character.CardPool.GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint)
+                                    where c.Type == CardType.Skill
+                                    select c;
+
+                    for (int i = 0; i < generateCount; i++)
                     {
-                        if (base.IsUpgraded)
-                        {
-                            CardCmd.Upgrade(randomSkill, CardPreviewStyle.None);
-                        }
-                        
-                        CardPileAddResult addResult = await CardPileCmd.AddGeneratedCardToCombat(
-                            randomSkill, 
-                            PileType.Draw, 
+                        var randomSkill = CardFactory.GetDistinctForCombat(
                             player, 
-                            CardPilePosition.Random
-                        );
+                            skillPool, 
+                            1, 
+                            player.RunState.Rng.CombatCardGeneration
+                        ).FirstOrDefault();
                         
-                        CardCmd.PreviewCardPileAdd(addResult, 1.2f, CardPreviewStyle.HorizontalLayout);
+                        if (randomSkill != null)
+                        {
+                            if (base.IsUpgraded)
+                            {
+                                CardCmd.Upgrade(randomSkill, CardPreviewStyle.None);
+                            }
+                            
+                            CardPileAddResult addResult = await CardPileCmd.AddGeneratedCardToCombat(
+                                randomSkill, 
+                                PileType.Draw, 
+                                player, 
+                                CardPilePosition.Random
+                            );
+                            
+                            CardCmd.PreviewCardPileAdd(addResult, 1.2f, CardPreviewStyle.HorizontalLayout);
+                        }
+                    }
+                }
+                else
+                {
+                    await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
+
+                    if (player is MegaCrit.Sts2.Core.Entities.Players.Player p)
+                    {
+                        await PowerCmd.Apply<IdsShikigamiPower>(choiceContext, p.Creature, 1m, p.Creature, this, false);
                     }
                 }
             }
             catch (Exception e)
             {
                 MegaCrit.Sts2.Core.Logging.Log.Error($"[IdsShikigami] ERROR: {e}");
+            }
+        }
+
+        protected override void OnUpgrade()
+        {
+            if (!KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                base.EnergyCost.UpgradeBy(-1);
             }
         }
     }

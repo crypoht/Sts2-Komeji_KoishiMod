@@ -13,7 +13,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using System.Linq;
 using BaseLib.Utils;
-using MegaCrit.Sts2.Core.HoverTips; 
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Cards.Danmaku;
 using KomeijiKoishi.Enums;
@@ -23,23 +23,21 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class SecondNeed_Koishi : CustomCardModel, IUseAncientCardFace
     {
-        public SecondNeed_Koishi() 
+        public SecondNeed_Koishi()
             : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
-        { 
-            new DynamicVar("BlockAmount", 7m) 
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
+        {
+            new DynamicVar("BlockAmount", KomeijiKoishi.Config.KoishiBalanceManager.Value(7m, 5m))
         };
 
-        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
-
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
+        {
             HoverTipFactory.FromKeyword(KoishiKeywords.Stance),
             HoverTipFactory.FromPower<BloomStancePower>(),
-            HoverTipFactory.FromPower<ClosedStancePower>() 
+            HoverTipFactory.FromPower<ClosedStancePower>()
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -56,7 +54,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars["BlockAmount"].UpgradeValueBy(4m);
+            base.DynamicVars["BlockAmount"].UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(4m, 2m));
         }
     }
 }

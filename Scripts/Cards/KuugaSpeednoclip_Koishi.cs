@@ -28,9 +28,9 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
             new CalculationBaseVar(0m),
-            new ExtraDamageVar(2m),
+            new ExtraDamageVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(2m, 1m)),
             new CalculatedDamageVar(ValueProp.Move).WithMultiplier(GetPositiveKuugaStacks),
-            new RepeatVar(3)
+            new RepeatVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(3, 2))
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]

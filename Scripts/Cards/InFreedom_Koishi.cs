@@ -47,7 +47,10 @@ namespace KomeijiKoishi.Cards
 
             await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
 
-            await CardPileCmd.Draw(choiceContext, 1m, player, false);
+            if (!KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                await CardPileCmd.Draw(choiceContext, 1m, player, false);
+            }
 
             int maxCards = base.DynamicVars.Cards.IntValue;
 

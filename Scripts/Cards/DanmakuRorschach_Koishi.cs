@@ -20,7 +20,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class DanmakuRorschach_Koishi : CustomCardModel
+    public sealed class DanmakuRorschach_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public DanmakuRorschach_Koishi()
             : base(3, CardType.Skill, CardRarity.Rare, TargetType.AnyEnemy, true) { }

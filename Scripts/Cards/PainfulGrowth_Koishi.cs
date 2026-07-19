@@ -25,7 +25,9 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
-        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Retain };
+        public override IEnumerable<CardKeyword> CanonicalKeywords => KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled
+            ? (base.IsUpgraded ? new[] { CardKeyword.Retain } : Array.Empty<CardKeyword>())
+            : new[] { CardKeyword.Retain };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
@@ -98,6 +100,12 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                base.AddKeyword(CardKeyword.Retain);
+                return;
+            }
+
             base.DynamicVars["GiveAmount"].UpgradeValueBy(1m);
             base.DynamicVars["PlayAmount"].UpgradeValueBy(1m);
         }

@@ -30,11 +30,9 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(9m, ValueProp.Move),
+            new DamageVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(9m, 5m), ValueProp.Move),
             new RepeatVar(1)
         };
-
-        protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Subconscious };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
@@ -69,7 +67,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(5m);
+            base.DynamicVars.Damage.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(5m, 2m));
         }
     }
 }

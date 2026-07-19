@@ -29,7 +29,7 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DynamicVar("Power", 1m),
-            new DynamicVar("Flaw", 1m)
+            new DynamicVar("Flaw", KomeijiKoishi.Config.KoishiBalanceManager.Value(0m, 2m))
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip>
@@ -46,12 +46,22 @@ namespace KomeijiKoishi.Cards
             await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
             
             await PowerCmd.Apply<FlawOfDNAPower>(choiceContext,player.Creature, base.DynamicVars["Power"].BaseValue, player.Creature, this, false);
-            await PowerCmd.Apply<FlawPower>(choiceContext,player.Creature, base.DynamicVars["Flaw"].BaseValue, player.Creature, this, false);
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled && base.DynamicVars["Flaw"].BaseValue > 0m)
+            {
+                await PowerCmd.Apply<FlawPower>(choiceContext,player.Creature, base.DynamicVars["Flaw"].BaseValue, player.Creature, this, false);
+            }
         }
 
         protected override void OnUpgrade()
         {
-            base.EnergyCost.UpgradeBy(-1);
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                base.DynamicVars["Flaw"].UpgradeValueBy(-1m);
+            }
+            else
+            {
+                base.EnergyCost.UpgradeBy(-1);
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -19,7 +19,7 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class KomeijiDash_Koishi : CustomCardModel
     {
-        public KomeijiDash_Koishi() 
+        public KomeijiDash_Koishi()
             : base(4, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies, true)
         {
         }
@@ -29,9 +29,9 @@ namespace KomeijiKoishi.Cards
 
        public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Unconscious };
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
-        { 
-            new DamageVar(29m, ValueProp.Move) 
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
+        {
+            new DamageVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(29m, 21m), ValueProp.Move)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -44,13 +44,13 @@ namespace KomeijiKoishi.Cards
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                 .FromCard(this, cardPlay)
                 .TargetingAllOpponents(base.CombatState)
-                .WithHitFx("vfx/vfx_attack_slash", null, "heavy_attack.mp3") 
+                .WithHitFx("vfx/vfx_attack_slash", null, "heavy_attack.mp3")
                 .Execute(choiceContext);
         }
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(9m);
+            base.DynamicVars.Damage.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(9m, 6m));
         }
     }
 }

@@ -35,7 +35,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new RoseVar(40m) 
+            new RoseVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(40m, 20m)) 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

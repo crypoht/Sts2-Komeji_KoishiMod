@@ -22,7 +22,7 @@ namespace KomeijiKoishi.Cards
     public sealed class ConsciousnessSpiral_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public ConsciousnessSpiral_Koishi() 
-            : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self, true) { }
+            : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(2, 3), CardType.Power, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 

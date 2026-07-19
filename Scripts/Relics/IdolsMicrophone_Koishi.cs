@@ -43,13 +43,37 @@ namespace KomeijiKoishi.Relics
             return Task.CompletedTask;
         }
 
+#if STS2_BETA
+        public override CardLocation ModifyCardPlayResultLocation(CardModel card, bool isAutoPlay, ResourceInfo resources, CardLocation cardLocation)
+        {
+            if (!_usedThisTurn && card.Owner == base.Owner && KoishiExtensions.IsTrulyUnconscious(card))
+            {
+                cardLocation.pileType = PileType.Hand;
+                cardLocation.position = CardPilePosition.Top;
+                return cardLocation;
+            }
+
+            return cardLocation;
+        }
+
+        public override Task AfterModifyingCardPlayResultLocation(CardModel card, CardLocation cardLocation)
+        {
+            if (!_usedThisTurn && card.Owner == base.Owner && KoishiExtensions.IsTrulyUnconscious(card))
+            {
+                base.Flash();
+                _usedThisTurn = true;
+                base.Status = RelicStatus.Normal;
+            }
+            return Task.CompletedTask;
+        }
+#else
         public override ValueTuple<PileType, CardPilePosition> ModifyCardPlayResultPileTypeAndPosition(CardModel card, bool isAutoPlay, ResourceInfo resources, PileType pileType, CardPilePosition position)
         {
             if (!_usedThisTurn && card.Owner == base.Owner && KoishiExtensions.IsTrulyUnconscious(card))
             {
                 return new ValueTuple<PileType, CardPilePosition>(PileType.Hand, CardPilePosition.Top);
             }
-            
+
             return new ValueTuple<PileType, CardPilePosition>(pileType, position);
         }
 
@@ -57,11 +81,12 @@ namespace KomeijiKoishi.Relics
         {
             if (!_usedThisTurn && card.Owner == base.Owner && KoishiExtensions.IsTrulyUnconscious(card))
             {
-                base.Flash(); 
-                _usedThisTurn = true; 
-                base.Status = RelicStatus.Normal; 
+                base.Flash();
+                _usedThisTurn = true;
+                base.Status = RelicStatus.Normal;
             }
             return Task.CompletedTask;
         }
+#endif
     }
 }

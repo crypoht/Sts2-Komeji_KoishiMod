@@ -31,7 +31,7 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DamageVar(1m, ValueProp.Move),
-            new RepeatVar(3),
+            new RepeatVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(3, 2)),
             new EnergyVar(1) 
         };
 

@@ -23,7 +23,7 @@ using MegaCrit.Sts2.Core.Nodes.Rooms;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class UndergroundRose_Koishi : CustomCardModel
+    public sealed class UndergroundRose_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public UndergroundRose_Koishi() 
             : base(2, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }

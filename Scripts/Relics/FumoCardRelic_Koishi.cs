@@ -5,13 +5,17 @@ using BaseLib.Utils;
 using KomeijiKoishi.Cards.Fumo;
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Pools;
+using KomeijiKoishi.Vfx;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Saves.Runs;
 
@@ -83,7 +87,15 @@ namespace KomeijiKoishi.Relics
 
             for (int i = 0; i < base.DynamicVars[CardsKey].IntValue; i++)
             {
-                await FumoPool.CreateRandomFumoInHand(base.Owner, combatState);
+                CardModel? fumoCard = await FumoPool.CreateRandomFumoInHand(base.Owner, combatState);
+                if (fumoCard != null)
+                {
+                    NGiftYouFumoVfx? vfx = NGiftYouFumoVfx.Create(base.Owner.Creature, base.Owner.Creature, fumoCard);
+                    if (vfx != null)
+                    {
+                        NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);
+                    }
+                }
             }
         }
 

@@ -64,10 +64,11 @@ namespace KomeijiKoishi.Cards.Danmaku
         }
 
 #if STS2_BETA
-        protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
+        protected override CardLocation GetResultLocationForCardPlay()
         {
-            (PileType resultPileType, CardPilePosition position) = base.GetResultPileTypeAndPositionForCardPlay();
-            return (KeepInHandIfDiscard(resultPileType), position);
+            CardLocation location = base.GetResultLocationForCardPlay();
+            location.pileType = KeepInHandIfDiscard(location.pileType);
+            return location;
         }
 #else
         protected override PileType GetResultPileTypeForCardPlay()

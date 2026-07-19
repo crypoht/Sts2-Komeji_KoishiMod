@@ -69,7 +69,7 @@ public sealed class KoishiLoaderEntry
             ?? sts2Assembly.GetType("MegaCrit.Sts2.Core.Models.CardModel");
 
         return cardModelType?.GetMethod(
-            "GetResultPileTypeAndPositionForCardPlay",
+            "GetResultLocationForCardPlay",
             BindingFlags.Instance | BindingFlags.NonPublic) != null;
     }
 

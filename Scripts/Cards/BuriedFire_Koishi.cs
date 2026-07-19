@@ -27,7 +27,7 @@ namespace KomeijiKoishi.Cards
     public sealed class BuriedFire_Koishi : CustomCardModel
     {
         public BuriedFire_Koishi() 
-            : base(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) { }
+            : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(2, 3), CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 

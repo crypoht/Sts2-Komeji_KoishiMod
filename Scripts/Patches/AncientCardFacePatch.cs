@@ -4,7 +4,10 @@ using KomeijiKoishi.Cards;
 using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Nodes.Cards;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KomeijiKoishi.Patches
 {
@@ -13,6 +16,8 @@ namespace KomeijiKoishi.Patches
     public static class AncientCardFacePatch
     {
         private const string AppliedMetaKey = "koishi_ancient_card_face_applied";
+        private static readonly Dictionary<string, Texture2D> TextureCache = new();
+        private static bool loggedApplyError;
 
         private static readonly string AncientBorderPath =
             ImageHelper.GetImagePath("atlases/compressed_atlas.sprites/ancient_card_border.png.tres");
@@ -20,35 +25,46 @@ namespace KomeijiKoishi.Patches
         [HarmonyPostfix]
         public static void Postfix(NCard __instance)
         {
-            if (__instance.Model == null)
+            try
             {
-                return;
-            }
-
-            bool shouldApply = KoishiModConfig.UseAncientCardArt && __instance.Model is IUseAncientCardFace;
-            if (!shouldApply)
-            {
-                if (__instance.HasMeta(AppliedMetaKey))
+                if (!GodotObject.IsInstanceValid(__instance) || __instance.Model == null)
                 {
-                    __instance.RemoveMeta(AppliedMetaKey);
-                    RestoreOfficialFace(__instance);
+                    return;
                 }
-                return;
-            }
 
-            ApplyAncientFace(
-                __instance,
-                Field<TextureRect>(__instance, "_portrait"),
-                Field<TextureRect>(__instance, "_portraitBorder"),
-                Field<TextureRect>(__instance, "_frame"),
-                Field<TextureRect>(__instance, "_ancientPortrait"),
-                Field<TextureRect>(__instance, "_ancientBorderGlassOverlay"),
-                Field<TextureRect>(__instance, "_ancientBorder"),
-                Field<TextureRect>(__instance, "_ancientTextBg"),
-                Field<Control>(__instance, "_ancientBanner"),
-                Field<TextureRect>(__instance, "_banner"),
-                Field<CanvasGroup>(__instance, "_portraitCanvasGroup"),
-                KoishiImagePaths.CardAncientPortrait(__instance.Model.GetType()));
+                bool shouldApply = KoishiModConfig.UseAncientCardArt && __instance.Model is IUseAncientCardFace;
+                if (!shouldApply)
+                {
+                    if (__instance.HasMeta(AppliedMetaKey))
+                    {
+                        __instance.RemoveMeta(AppliedMetaKey);
+                        RestoreOfficialFace(__instance);
+                    }
+                    return;
+                }
+
+                ApplyAncientFace(
+                    __instance,
+                    Field<TextureRect>(__instance, "_portrait"),
+                    Field<TextureRect>(__instance, "_portraitBorder"),
+                    Field<TextureRect>(__instance, "_frame"),
+                    Field<TextureRect>(__instance, "_ancientPortrait"),
+                    Field<TextureRect>(__instance, "_ancientBorderGlassOverlay"),
+                    Field<TextureRect>(__instance, "_ancientBorder"),
+                    Field<TextureRect>(__instance, "_ancientTextBg"),
+                    Field<Control>(__instance, "_ancientBanner"),
+                    Field<TextureRect>(__instance, "_banner"),
+                    Field<CanvasGroup>(__instance, "_portraitCanvasGroup"),
+                    KoishiImagePaths.CardAncientPortrait(__instance.Model.GetType()));
+            }
+            catch (Exception e)
+            {
+                if (!loggedApplyError)
+                {
+                    loggedApplyError = true;
+                    Log.Warn($"[Koishi] Ancient card face patch skipped after error: {e}");
+                }
+            }
         }
 
         private static T? Field<T>(NCard card, string fieldName)
@@ -73,46 +89,45 @@ namespace KomeijiKoishi.Patches
         {
             card.SetMeta(AppliedMetaKey, true);
 
-            if (portrait != null)
+            if (IsValid(portrait))
             {
                 portrait.Visible = false;
             }
-            if (portraitBorder != null)
+            if (IsValid(portraitBorder))
             {
                 portraitBorder.Visible = false;
             }
-            if (frame != null)
+            if (IsValid(frame))
             {
                 frame.Visible = false;
             }
-            if (ancientPortrait != null)
+            if (IsValid(ancientPortrait))
             {
                 ancientPortrait.Visible = true;
                 ancientPortrait.Material = null;
                 ancientPortrait.StretchMode = TextureRect.StretchModeEnum.KeepAspectCovered;
-                ancientPortrait.Texture = ResourceLoader.Exists(texturePath)
-                    ? ResourceLoader.Load<Texture2D>(texturePath)
-                    : card.Model!.Portrait;
+                ancientPortrait.Texture = TryLoadTexture(texturePath)
+                    ?? (GodotObject.IsInstanceValid(card.Model!.Portrait) ? card.Model!.Portrait : null);
             }
-            if (ancientBorderGlassOverlay != null)
+            if (IsValid(ancientBorderGlassOverlay))
             {
                 ancientBorderGlassOverlay.Visible = true;
             }
-            if (ancientBorder != null)
+            if (IsValid(ancientBorder))
             {
                 ancientBorder.Visible = true;
-                ancientBorder.Texture = ResourceLoader.Load<Texture2D>(AncientBorderPath, null, ResourceLoader.CacheMode.Reuse);
+                ancientBorder.Texture = TryLoadTexture(AncientBorderPath);
             }
-            if (ancientTextBg != null)
+            if (IsValid(ancientTextBg))
             {
                 ancientTextBg.Visible = true;
-                ancientTextBg.Texture = ResourceLoader.Load<Texture2D>(GetAncientTextBgPath(card.Model!.Type), null, ResourceLoader.CacheMode.Reuse);
+                ancientTextBg.Texture = TryLoadTexture(GetAncientTextBgPath(card.Model!.Type));
             }
-            if (ancientBanner != null)
+            if (IsValid(ancientBanner))
             {
                 ancientBanner.Visible = false;
             }
-            if (banner != null)
+            if (IsValid(banner))
             {
                 banner.Visible = true;
             }
@@ -138,7 +153,7 @@ namespace KomeijiKoishi.Patches
             where T : CanvasItem
         {
             T? node = Field<T>(card, fieldName);
-            if (node != null)
+            if (IsValid(node))
             {
                 node.Visible = visible;
             }
@@ -169,6 +184,32 @@ namespace KomeijiKoishi.Patches
             };
 
             return ImageHelper.GetImagePath("atlases/compressed_atlas.sprites/ancient_text_bg_" + textBgType.ToString().ToLowerInvariant() + ".png.tres");
+        }
+
+        private static Texture2D? TryLoadTexture(string path)
+        {
+            if (TextureCache.TryGetValue(path, out Texture2D? cachedTexture) && GodotObject.IsInstanceValid(cachedTexture))
+            {
+                return cachedTexture;
+            }
+
+            if (!ResourceLoader.Exists(path))
+            {
+                return null;
+            }
+
+            Texture2D? texture = ResourceLoader.Load<Texture2D>(path, null, ResourceLoader.CacheMode.Reuse);
+            if (texture != null && GodotObject.IsInstanceValid(texture))
+            {
+                TextureCache[path] = texture;
+            }
+
+            return texture;
+        }
+
+        private static bool IsValid([NotNullWhen(true)] GodotObject? node)
+        {
+            return node != null && GodotObject.IsInstanceValid(node);
         }
     }
 }

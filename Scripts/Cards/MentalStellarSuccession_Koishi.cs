@@ -17,19 +17,19 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class MentalStellarSuccession_Koishi : CustomCardModel
     {
-        public MentalStellarSuccession_Koishi() 
+        public MentalStellarSuccession_Koishi()
             : base(2, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
-        { 
-            new DynamicVar("Multiplier", 100m) 
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
+        {
+            new DynamicVar("Multiplier", KomeijiKoishi.Config.KoishiBalanceManager.Value(100m, 50m))
         };
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
-            HoverTipFactory.FromPower<TracingPower>() 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
+        {
+            HoverTipFactory.FromPower<TracingPower>()
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -39,12 +39,13 @@ namespace KomeijiKoishi.Cards
                 var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
                 if (player == null) return;
 
+                int multiplier = GetCurrentMultiplier();
                 await PowerCmd.Apply<MentalStellarSuccessionPower>(
                     choiceContext,
-                    player.Creature, 
-                    (int)base.DynamicVars["Multiplier"].BaseValue, 
-                    player.Creature, 
-                    this, 
+                    player.Creature,
+                    multiplier,
+                    player.Creature,
+                    this,
                     false
                 );
             }
@@ -56,7 +57,14 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars["Multiplier"].UpgradeValueBy(50m);
+            base.DynamicVars["Multiplier"].UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(50m, 25m));
+        }
+
+        private int GetCurrentMultiplier()
+        {
+            int baseValue = KomeijiKoishi.Config.KoishiBalanceManager.Value(100, 50);
+            int upgradeValue = KomeijiKoishi.Config.KoishiBalanceManager.Value(50, 25);
+            return baseValue + upgradeValue * CurrentUpgradeLevel;
         }
     }
 }

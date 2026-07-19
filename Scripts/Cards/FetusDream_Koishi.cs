@@ -17,7 +17,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class FetusDream_Koishi : CustomCardModel
+    public sealed class FetusDream_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public FetusDream_Koishi() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }
 

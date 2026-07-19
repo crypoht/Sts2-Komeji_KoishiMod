@@ -9,13 +9,13 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Powers;
 using System.Linq;
-using MegaCrit.Sts2.Core.Nodes.CommonUi; 
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Entities.Creatures;
-using BaseLib.Utils; 
+using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models; 
+using MegaCrit.Sts2.Core.Models;
 using KomeijiKoishi.Cards.Danmaku;
 
 namespace KomeijiKoishi.Cards
@@ -23,21 +23,21 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class ReimuHelp_Koishi : CustomCardModel, IUseAncientCardFace
     {
-        public ReimuHelp_Koishi() 
+        public ReimuHelp_Koishi()
             : base(3, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
+        {
             HoverTipFactory.FromCard<YinYangOrbDanmaku_Koishi>(false)
         };
 
         private class OrbsVar : DynamicVar { public OrbsVar(decimal val) : base("Orbs", val) { } }
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
-        { 
-            new OrbsVar(3m) 
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
+        {
+            new OrbsVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(3m, 2m))
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -60,11 +60,11 @@ namespace KomeijiKoishi.Cards
                     DanmakuPool.InheritEnchantment(this, token);
                     drawTokens.Add(token);
                 }
-                
+
                 await CardPileCmd.AddGeneratedCardsToCombat(drawTokens, PileType.Draw, player, CardPilePosition.Random);
             }
 
-            await PowerCmd.Apply<ReimuHelpPower>(choiceContext,player.Creature, 20m, player.Creature, this, false);
+            await PowerCmd.Apply<ReimuHelpPower>(choiceContext, player.Creature, 20m, player.Creature, this, false);
         }
 
         protected override void OnUpgrade()

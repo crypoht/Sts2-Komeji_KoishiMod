@@ -22,6 +22,8 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class AirStrike_Koishi : CustomCardModel,IUseAncientCardFace
     {
+        private int _unconsciousPlayedThisCombat;
+
         public AirStrike_Koishi() 
             : base(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) 
         { 
@@ -50,12 +52,33 @@ namespace KomeijiKoishi.Cards
                 .Execute(choiceContext);
         }
 
+        public override Task AfterCardEnteredCombat(CardModel card)
+        {
+            if (card == this)
+            {
+                _unconsciousPlayedThisCombat = 0;
+            }
+
+            return Task.CompletedTask;
+        }
+
        public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             if (cardPlay.Card.Owner == base.Owner)
             {
                 if (cardPlay.Card != this && KoishiExtensions.IsTrulyUnconscious(cardPlay.Card))
                 {
+                    if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+                    {
+                        _unconsciousPlayedThisCombat++;
+                        if (_unconsciousPlayedThisCombat < 2)
+                        {
+                            return;
+                        }
+
+                        _unconsciousPlayedThisCombat = 0;
+                    }
+
                     if (!MegaCrit.Sts2.Core.Combat.CombatManager.Instance.IsInProgress)
                     {
                         return; 

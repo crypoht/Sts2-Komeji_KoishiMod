@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -23,7 +23,7 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class KuugaStrike_Koishi : CustomCardModel, IStanceListenerCard
     {
-        public KuugaStrike_Koishi() 
+        public KuugaStrike_Koishi()
             : base(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) { }
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike };
@@ -32,17 +32,17 @@ namespace KomeijiKoishi.Cards
 
         private class KuugaVar : DynamicVar { public KuugaVar(decimal val) : base("Kuuga", val) { } }
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
-        { 
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
+        {
             new DamageVar(1m, ValueProp.Move),
-            new KuugaVar(2m) 
+            new KuugaVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(2m, 1m))
         };
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
+        {
             HoverTipFactory.FromKeyword(KoishiKeywords.Stance),
             HoverTipFactory.FromPower<BloomStancePower>(),
-            HoverTipFactory.FromPower<ClosedStancePower>() 
+            HoverTipFactory.FromPower<ClosedStancePower>()
         };
 
 
@@ -65,7 +65,12 @@ namespace KomeijiKoishi.Cards
         public async Task OnStanceChanged(bool isClosedStance, bool isBloomStance)
         {
             var pile = base.Pile;
-            
+
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled && !isClosedStance)
+            {
+                return;
+            }
+
             if (pile != null && pile.Type != PileType.Hand && pile.Type != PileType.Exhaust)
             {
                 await CardPileCmd.Add(this, PileType.Hand, CardPilePosition.Bottom, null, false);

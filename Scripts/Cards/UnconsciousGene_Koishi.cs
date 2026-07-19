@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,10 +14,10 @@ using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Utils_Koishi;
 using KomeijiKoishi.Enums;
-using BaseLib.Utils; 
+using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Powers; 
-using KomeijiKoishi.Powers; 
+using MegaCrit.Sts2.Core.Models.Powers;
+using KomeijiKoishi.Powers;
 using MegaCrit.Sts2.Core.HoverTips;
 
 
@@ -39,18 +39,18 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new DamageVar(28m, ValueProp.Move), 
-            new ReductionVar(2m)               
+            new DamageVar(28m, ValueProp.Move),
+            new ReductionVar(2m)
         };
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
+        {
+            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
-            try 
+            try
             {
                 ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
                 var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
@@ -64,13 +64,30 @@ namespace KomeijiKoishi.Cards
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                         .FromCard(this, cardPlay)
                         .Targeting(cardPlay.Target)
-                        .WithHitFx("vfx/vfx_attack_blunt", null, "blunt_heavy.mp3") 
+                        .WithHitFx("vfx/vfx_attack_blunt", null, "blunt_heavy.mp3")
                         .Execute(choiceContext);
 
                 var handPile = PileType.Hand.GetPile(player);
                 if (handPile != null && handPile.Cards != null)
                 {
-                    foreach (var c in handPile.Cards)
+                    if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+                    {
+                        var candidates = handPile.Cards
+                            .Where(c => c != this && !KoishiExtensions.IsTrulyUnconscious(c))
+                            .ToList();
+                        for (int i = 0; i < 2 && candidates.Count > 0; i++)
+                        {
+                            var targetCard = player.RunState.Rng.Shuffle.NextItem(candidates);
+                            if (targetCard == null)
+                            {
+                                break;
+                            }
+
+                            KoishiExtensions.ApplyUnconsciousToCard(targetCard);
+                            candidates.Remove(targetCard);
+                        }
+                    }
+                    else foreach (var c in handPile.Cards)
                     {
                         if (c != this && !KoishiExtensions.IsTrulyUnconscious(c))
                         {
@@ -107,7 +124,7 @@ namespace KomeijiKoishi.Cards
         public override Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
         {
             if (cardPlay.Card.Owner != base.Owner) return Task.CompletedTask;
-            
+
             if (KoishiExtensions.IsTrulyUnconscious(cardPlay.Card))
             {
                 int reductionAmount = base.DynamicVars["Reduction"].IntValue;
@@ -118,8 +135,8 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(10m);     
-            base.DynamicVars["Reduction"].UpgradeValueBy(1m); 
+            base.DynamicVars.Damage.UpgradeValueBy(5m);
+            base.DynamicVars["Reduction"].UpgradeValueBy(1m);
         }
     }
 }

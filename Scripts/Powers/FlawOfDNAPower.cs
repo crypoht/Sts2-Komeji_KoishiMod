@@ -49,14 +49,27 @@ namespace KomeijiKoishi.Powers
             return true;
         }
 
+#if STS2_BETA
+        public override CardLocation ModifyCardPlayResultLocation(CardModel card, bool isAutoPlay, ResourceInfo resources, CardLocation cardLocation)
+        {
+            if (card.Owner?.Creature != base.Owner || card.Type != CardType.Attack)
+            {
+                return cardLocation;
+            }
+
+            cardLocation.pileType = PileType.Exhaust;
+            return cardLocation;
+        }
+#else
         public override (PileType, CardPilePosition) ModifyCardPlayResultPileTypeAndPosition(CardModel card, bool isAutoPlay, ResourceInfo resources, PileType pileType, CardPilePosition position)
         {
             if (card.Owner?.Creature != base.Owner || card.Type != CardType.Attack)
             {
                 return (pileType, position);
             }
-            
+
             return (PileType.Exhaust, position);
         }
+#endif
     }
 }

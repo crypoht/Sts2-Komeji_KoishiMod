@@ -6,7 +6,7 @@ using BaseLib.Abstracts;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Players; 
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
@@ -23,20 +23,20 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class UnintentionalDanmaku_Koishi : CustomCardModel
     {
-        public UnintentionalDanmaku_Koishi() 
+        public UnintentionalDanmaku_Koishi()
             : base(1, CardType.Skill, CardRarity.Common, TargetType.Self, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku) 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
+        {
+            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku)
         };
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
-        { 
-            new BlockVar(7m, ValueProp.Move), 
-            new DynamicVar("Amount", 1m)     
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
+        {
+            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(7m, 6m), ValueProp.Move),
+            new DynamicVar("Amount", 1m)
         };
 
        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -63,7 +63,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Block.UpgradeValueBy(1m);
+            base.DynamicVars.Block.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(1m, 0m));
             base.DynamicVars["Amount"].UpgradeValueBy(1m);
         }
     }

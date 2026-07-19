@@ -20,7 +20,7 @@ namespace KomeijiKoishi.Cards
     public sealed class VoidExpansion_Koishi : CustomCardModel
     {
         public VoidExpansion_Koishi() 
-            : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true)
+            : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(0, 1), CardType.Skill, CardRarity.Uncommon, TargetType.Self, true)
         {
         }
 

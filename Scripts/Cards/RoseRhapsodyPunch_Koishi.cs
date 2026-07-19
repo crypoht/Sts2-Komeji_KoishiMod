@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Utils_Koishi;
@@ -30,51 +31,37 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(14m, ValueProp.Move) 
+            new CalculationBaseVar(14m),
+            new ExtraDamageVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(3m, 2m)),
+            new CalculatedDamageVar(ValueProp.Move).WithMultiplier(GetThornsAmount)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
+            HoverTipFactory.FromPower<ThornsPower>() 
         };
 
-        protected override bool ShouldGlowGoldInternal => CountUnconsciousInHand() >= 3;
+        protected override bool ShouldGlowGoldInternal => GetThornsAmount(this, null) > 0;
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             if (cardPlay.Target == null) return;
 
-            await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
+            await DamageCmd.Attack(base.DynamicVars.CalculatedDamage)
                 .FromCard(this, cardPlay)
                 .Targeting(cardPlay.Target)
                 .WithHitFx("vfx/vfx_attack_blunt") 
                 .Execute(choiceContext);
-
-            if (CountUnconsciousInHand() >= 3)
-            {
-
-                await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                    .FromCard(this, cardPlay)
-                    .Targeting(cardPlay.Target)
-                    .WithHitFx("vfx/vfx_attack_blunt")  
-                    .Execute(choiceContext);
-            }
         }
 
-        private int CountUnconsciousInHand()
+        private static decimal GetThornsAmount(CardModel card, MegaCrit.Sts2.Core.Entities.Creatures.Creature? _)
         {
-            var player = base.Owner as Player;
-            if (player == null) return 0;
-
-            var handPile = PileType.Hand.GetPile(player);
-            if (handPile == null) return 0;
-
-            return handPile.Cards.Count(c => KoishiExtensions.IsTrulyUnconscious(c));
+            return card.Owner?.Creature.GetPower<ThornsPower>()?.Amount ?? 0m;
         }
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Damage.UpgradeValueBy(4m);
+            base.DynamicVars.ExtraDamage.UpgradeValueBy(1m);
         }
     }
 }

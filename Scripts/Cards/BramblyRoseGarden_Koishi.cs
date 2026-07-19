@@ -20,7 +20,7 @@ namespace KomeijiKoishi.Cards
     public sealed class BramblyRoseGarden_Koishi : CustomCardModel
     {
         public BramblyRoseGarden_Koishi()
-            : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self, true)
+            : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(2, 1), CardType.Power, CardRarity.Uncommon, TargetType.Self, true)
         {
         }
 
@@ -40,9 +40,12 @@ namespace KomeijiKoishi.Cards
             await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
             
             decimal thornsInitial = base.DynamicVars["ThornsPower"].BaseValue;
-            await PowerCmd.Apply<ThornsPower>(choiceContext,player.Creature, thornsInitial, player.Creature, this, false);
+            if (!KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                await PowerCmd.Apply<ThornsPower>(choiceContext,player.Creature, thornsInitial, player.Creature, this, false);
+            }
 
-            await PowerCmd.Apply<BramblyRoseGardenPower>(choiceContext,player.Creature, 1m, player.Creature, this, false);
+            await PowerCmd.Apply<BramblyRoseGardenPower>(choiceContext,player.Creature, KomeijiKoishi.Config.KoishiBalanceManager.Value(1m, thornsInitial), player.Creature, this, false);
         }
 
         protected override void OnUpgrade()

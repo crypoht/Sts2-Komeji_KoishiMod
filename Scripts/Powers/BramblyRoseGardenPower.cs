@@ -37,6 +37,13 @@ namespace KomeijiKoishi.Powers
             if (player == base.Owner.Player)
             {
 
+                if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+                {
+                    base.Flash();
+                    await PowerCmd.Apply<ThornsPower>(choiceContext,base.Owner, base.Amount, base.Owner, null, false);
+                    return;
+                }
+
                 var thornsPower = base.Owner.Powers.FirstOrDefault(p => p is ThornsPower);
                 
                 if (thornsPower != null && thornsPower.Amount > 0)

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Reflection;
 using BaseLib.Utils;
@@ -8,12 +8,12 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Modding; 
+using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
-using KomeijiKoishi.Powers; 
+using KomeijiKoishi.Powers;
 using KomeijiKoishi.Enums;
-using MegaCrit.Sts2.Core.HoverTips; 
+using MegaCrit.Sts2.Core.HoverTips;
 
 namespace KomeijiKoishi.Cards
 {
@@ -32,14 +32,14 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
-            HoverTipFactory.FromPower<BloomStancePower>() 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
+        {
+            HoverTipFactory.FromPower<BloomStancePower>()
         };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new DamageVar(9m, ValueProp.Move)
+            new DamageVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(9m, 8m), ValueProp.Move)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -61,7 +61,7 @@ namespace KomeijiKoishi.Cards
             {
                 if (kvp.Value is DamageVar dv)
                 {
-                    dv.UpgradeValueBy(4m); 
+                    dv.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(4m, 3m));
                     break;
                 }
             }

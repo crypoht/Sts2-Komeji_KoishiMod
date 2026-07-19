@@ -21,7 +21,7 @@ namespace KomeijiKoishi.Cards
     public sealed class Superego_Koishi : CustomCardModel
     {
         public Superego_Koishi() 
-            : base(4, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }
+            : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(3, 4), CardType.Power, CardRarity.Rare, TargetType.Self, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 

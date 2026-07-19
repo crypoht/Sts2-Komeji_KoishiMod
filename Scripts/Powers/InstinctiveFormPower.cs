@@ -28,8 +28,39 @@ namespace KomeijiKoishi.Powers
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/InstinctiveFormPower.png";
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/InstinctiveFormPower.png";
 
+        protected override object InitInternalData() => new InstinctiveFormData();
+
+        public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
+        {
+            if (!KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                return;
+            }
+
+            if (cardPlay.Card.Owner != base.Owner.Player || !KoishiExtensions.IsTrulyUnconscious(cardPlay.Card))
+            {
+                return;
+            }
+
+            InstinctiveFormData data = base.GetInternalData<InstinctiveFormData>();
+            data.UnconsciousPlayed++;
+            if (data.UnconsciousPlayed < 2)
+            {
+                return;
+            }
+
+            data.UnconsciousPlayed -= 2;
+            base.Flash();
+            await CardPileCmd.Draw(context, 1, base.Owner.Player, false);
+        }
+
         public override Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
         {
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                return Task.CompletedTask;
+            }
+
             try
             {
                 if (player != base.Owner.Player) return Task.CompletedTask;
@@ -60,6 +91,11 @@ namespace KomeijiKoishi.Powers
 
         public override async Task BeforeSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
         {
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                return;
+            }
+
             try
             {
 
@@ -100,6 +136,11 @@ namespace KomeijiKoishi.Powers
             {
                 MegaCrit.Sts2.Core.Logging.Log.Error($"[Power] InstinctiveFormPower Error: {e.Message}");
             }
+        }
+
+        private class InstinctiveFormData
+        {
+            public int UnconsciousPlayed;
         }
     }
 }

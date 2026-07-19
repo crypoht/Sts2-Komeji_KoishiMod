@@ -32,6 +32,9 @@ public sealed class KoishiModConfig : SimpleModConfig
     [ConfigSection("AncientSettings")]
     public static bool EnableAncients { get; set; } = true;
 
+    [ConfigSection("BalanceSettings")]
+    public static bool EnableBalancePatch { get; set; } = false;
+
     [ConfigSection("VisualSettings")]
     public static KoishiCardArtMode CardArtMode
     {
@@ -128,6 +131,9 @@ public sealed class KoishiModConfig : SimpleModConfig
     public static bool ActiveRunAncientsEnabled { get; private set; } = true;
 
     [ConfigIgnore]
+    public static bool ActiveRunBalancePatchEnabled { get; private set; }
+
+    [ConfigIgnore]
     public static bool ActiveRunPlayMoriyaDanceForAllPlayers { get; private set; }
 
     [ConfigIgnore]
@@ -183,6 +189,8 @@ public sealed class KoishiModConfig : SimpleModConfig
     private static void ApplyRunConfigFromModifiers(IReadOnlyList<ModifierModel> modifiers)
     {
         ActiveRunAncientsEnabled = !modifiers.Any(m => m is DisableKoishiAncientsModifier);
+        ActiveRunBalancePatchEnabled = EnableBalancePatch;
+        KoishiBalanceManager.SetEnabledForRun(ActiveRunBalancePatchEnabled);
         ActiveRunPlayMoriyaDanceForAllPlayers = modifiers.Any(m => m is MoriyaDanceForAllPlayersModifier);
         ActiveRunAncientWeightsEnabled = !modifiers.Any(m => m is DisableKoishiAncientWeightsModifier)
             && modifiers.Any(m => m is KoishiAncientWeightsModifier);
@@ -210,6 +218,7 @@ public sealed class KoishiModConfig : SimpleModConfig
         return new KoishiRunConfigMessage
         {
             AncientsEnabled = EnableAncients,
+            BalancePatchEnabled = EnableBalancePatch,
             PlayMoriyaDanceForAllPlayers = PlayMoriyaDanceForAllPlayers,
             AncientWeightsEnabled = EnableAncientWeights,
             Weights = CurrentAncientWeights,
@@ -221,6 +230,7 @@ public sealed class KoishiModConfig : SimpleModConfig
     {
         HasSyncedRunConfig = true;
         ActiveRunAncientsEnabled = message.AncientsEnabled;
+        ActiveRunBalancePatchEnabled = message.BalancePatchEnabled;
         ActiveRunPlayMoriyaDanceForAllPlayers = message.PlayMoriyaDanceForAllPlayers;
         ActiveRunAncientWeightsEnabled = message.AncientWeightsEnabled;
         ActiveRunAncientWeights = ActiveRunAncientWeightsEnabled ? message.Weights : AncientWeights.Default;
@@ -234,6 +244,8 @@ public sealed class KoishiModConfig : SimpleModConfig
     private static void ApplySyncedRunConfigToLocalConfig()
     {
         EnableAncients = ActiveRunAncientsEnabled;
+        EnableBalancePatch = ActiveRunBalancePatchEnabled;
+        KoishiBalanceManager.SetEnabledForRun(ActiveRunBalancePatchEnabled);
         PlayMoriyaDanceForAllPlayers = ActiveRunPlayMoriyaDanceForAllPlayers;
         EnableAncientWeights = ActiveRunAncientWeightsEnabled;
         MoriyaTwoGodsWeight = ActiveRunAncientWeights.MoriyaTwoGods;

@@ -21,25 +21,25 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class Freudian_Koishi : CustomCardModel
     {
-        public Freudian_Koishi() 
-            : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self, true) 
-        { 
+        public Freudian_Koishi()
+            : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self, true)
+        {
         }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
-        { 
-            new BlockVar(11m, ValueProp.Move) 
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
+        {
+            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(11m, 8m), ValueProp.Move)
         };
 
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Unconscious};
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Unconscious };
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
+        {
+            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious)
         };
 
         protected override bool ShouldGlowGoldInternal
@@ -85,7 +85,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Block.UpgradeValueBy(6m);
+            base.DynamicVars.Block.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(6m, 3m));
         }
     }
 }

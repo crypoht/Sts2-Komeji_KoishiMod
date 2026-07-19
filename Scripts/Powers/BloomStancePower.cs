@@ -15,6 +15,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace KomeijiKoishi.Powers
@@ -26,14 +27,16 @@ namespace KomeijiKoishi.Powers
         public override string? CustomBigIconPath =>
             "res://mods/Komeiji_Koishi/images/powers/BloomStancePower.png";
 
+        public override LocString Description =>
+            new("powers", base.Id.Entry + (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled ? ".balanceDescription" : ".description"));
+
         public static int BloomEnergyGainAmount = 1;
 
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-        // 鐩存帴鐢ㄥ疄渚嬪瓧娈靛瓨鐘舵€侊紝閬垮厤 GetInternalData 澶氬疄渚嬮棶棰?        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        
         private CardModel? _cardToIgnore;
         private AttackCommand? _commandToDouble;
 
-        // 纭槻閲嶅叆锛氱敤瀹炰緥瀛楁鑰岄潪 Data 绫伙紝淇濊瘉 await gap 鏈熼棿涔熻兘姝ｇ‘璇诲埌
+        
         private bool _isExecutingBloom = false;
 
         private static readonly AccessTools.FieldRef<AttackCommand, Creature?> SingleTargetRef =
@@ -45,13 +48,11 @@ namespace KomeijiKoishi.Powers
             new[] { HoverTipFactory.ForEnergy(this) };
 
         protected override IEnumerable<DynamicVar> CanonicalVars =>
-            new List<DynamicVar> { new DynamicVar("BlockReduction", 60m) };
+            new List<DynamicVar> { new DynamicVar("BlockReduction", KomeijiKoishi.Config.KoishiBalanceManager.Value(60m, 70m)) };
 
-        public decimal BlockReduction => 60m;
+        public decimal BlockReduction => KomeijiKoishi.Config.KoishiBalanceManager.Value(60m, 70m);
 
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-        // 鏍兼尅鍑忕泭
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+       
         public override decimal ModifyBlockMultiplicative(
             Creature target, decimal block, ValueProp props,
             CardModel? cardSource, CardPlay? cardPlay)
@@ -60,9 +61,7 @@ namespace KomeijiKoishi.Powers
             return 1m;
         }
 
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-        // 杩涘叆鐩涘紑
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        
         public static async Task EnterThisStance(
             PlayerChoiceContext context, Player player, CardModel sourceCard)
         {
@@ -84,7 +83,7 @@ namespace KomeijiKoishi.Powers
                     context,
                     player.Creature, 1m, player.Creature, sourceCard, false);
 
-                // 鐩存帴鎷垮疄渚嬪啓 _cardToIgnore
+
                 var powerInstance = player.Creature.GetPower<BloomStancePower>();
                 if (powerInstance != null)
                     powerInstance._cardToIgnore = sourceCard;
@@ -98,12 +97,9 @@ namespace KomeijiKoishi.Powers
             }
         }
 
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-        // BeforeAttack
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        
         public override Task BeforeAttack(AttackCommand command)
         {
-            // 纭槻閲嶅叆锛氱洓寮€鏀诲嚮鎵ц鏈熼棿灞忚斀鎵€鏈夋柊鐧昏
             if (_isExecutingBloom)
             {
                 MegaCrit.Sts2.Core.Logging.Log.Info("[BloomStance] BeforeAttack: blocked by isExecutingBloom");
@@ -122,7 +118,7 @@ namespace KomeijiKoishi.Powers
             if (!command.DamageProps.IsPoweredAttack())
                 return Task.CompletedTask;
 
-            // 璺宠繃瑙﹀彂杩涘叆鐩涘紑鐨勬簮鍗＄墝锛堝彧璺宠繃涓€娆★級
+
             if (cardModel == _cardToIgnore)
             {
                 _cardToIgnore = null;
@@ -137,9 +133,6 @@ namespace KomeijiKoishi.Powers
             return Task.CompletedTask;
         }
 
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-        // AfterAttack
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
         public override async Task AfterAttack(PlayerChoiceContext choiceContext, AttackCommand command)
         {
             if (command != _commandToDouble) return;
@@ -149,9 +142,7 @@ namespace KomeijiKoishi.Powers
             await RunBloomAttacksAsync(choiceContext, command);
         }
 
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-        // 鐩涘紑缈诲€嶄激瀹抽€昏緫
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+       
         private async Task RunBloomAttacksAsync(PlayerChoiceContext choiceContext, AttackCommand originalCommand)
         {
             _isExecutingBloom = true;
@@ -180,7 +171,6 @@ namespace KomeijiKoishi.Powers
 
                     var bloomContext = new BlockingPlayerChoiceContext();
 
-                    // 鐢?GetOpponentsOf 鑰岄潪 HittableEnemies锛岀‘淇濇嬁鍒版纭殑鏁屼汉鍒楄〃
                     var opponents = base.CombatState.GetOpponentsOf(base.Owner);
 
                     for (int i = 0; i < repeat; i++)
@@ -249,9 +239,7 @@ namespace KomeijiKoishi.Powers
             }
         }
 
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-        // 杈呭姪
-        // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+       
         private bool IsCombatActive()
         {
             var mgr = CombatManager.Instance;

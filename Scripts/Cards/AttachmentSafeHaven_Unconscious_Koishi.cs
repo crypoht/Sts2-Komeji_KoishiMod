@@ -12,15 +12,15 @@ using KomeijiKoishi.Enums;
 using System;
 using System.Linq;
 using BaseLib.Utils;
-using MegaCrit.Sts2.Core.Models;  
- 
+using MegaCrit.Sts2.Core.Models;
+
 
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
     public sealed class AttachmentSafeHaven_Unconscious_Koishi : CustomCardModel
     {
-        public AttachmentSafeHaven_Unconscious_Koishi() 
+        public AttachmentSafeHaven_Unconscious_Koishi()
             : base(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
@@ -28,9 +28,9 @@ namespace KomeijiKoishi.Cards
         protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { KoishiTags.Unconscious };
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Unconscious };
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
-        { 
-            new BlockVar(24m, ValueProp.Move) 
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
+        {
+            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(24m, 18m), ValueProp.Move)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -46,7 +46,7 @@ await CreatureCmd.GainBlock(player.Creature, base.DynamicVars.Block.BaseValue, V
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Block.UpgradeValueBy(8m);
+            base.DynamicVars.Block.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(8m, 3m));
         }
     }
 }

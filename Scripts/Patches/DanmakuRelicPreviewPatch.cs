@@ -102,31 +102,6 @@ namespace KomeijiKoishi.Patches
             {
                 bottomLabel.Text = "[center]" + prompt + "[/center]";
             }
-
-            if (screen.GetNodeOrNull<Label>("KoishiDanmakuPreviewTopPrompt") != null)
-            {
-                return;
-            }
-
-            Label topLabel = new Label
-            {
-                Name = "KoishiDanmakuPreviewTopPrompt",
-                Text = prompt,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                MouseFilter = Control.MouseFilterEnum.Ignore,
-                ZIndex = 1000
-            };
-            topLabel.SetAnchorsPreset(Control.LayoutPreset.TopWide);
-            topLabel.OffsetTop = 26f;
-            topLabel.OffsetBottom = 86f;
-            topLabel.AddThemeColorOverride(ThemeConstants.Label.FontColor, Colors.White);
-            topLabel.AddThemeColorOverride(ThemeConstants.Label.FontShadowColor, Colors.Black);
-            topLabel.AddThemeConstantOverride("shadow_offset_x", 2);
-            topLabel.AddThemeConstantOverride("shadow_offset_y", 2);
-            topLabel.AddThemeFontSizeOverride(ThemeConstants.Label.FontSize, 28);
-
-            screen.AddChildSafely(topLabel);
         }
 
         public static bool IsPreviewOpen()

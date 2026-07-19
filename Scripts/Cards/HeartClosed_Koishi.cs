@@ -13,7 +13,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Powers;
 using KomeijiKoishi.Enums;
-using MegaCrit.Sts2.Core.HoverTips; 
+using MegaCrit.Sts2.Core.HoverTips;
 
 namespace KomeijiKoishi.Cards
 {
@@ -27,14 +27,14 @@ namespace KomeijiKoishi.Cards
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
-            HoverTipFactory.FromPower<ClosedStancePower>() 
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
+        {
+            HoverTipFactory.FromPower<ClosedStancePower>()
         };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new BlockVar(9m, ValueProp.Move) 
+            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(9m, 8m), ValueProp.Move)
         };
 
        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -59,7 +59,7 @@ namespace KomeijiKoishi.Cards
             {
                 if (kvp.Value is BlockVar bv)
                 {
-                    bv.UpgradeValueBy(4m); 
+                    bv.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(4m, 3m));
                     break;
                 }
             }

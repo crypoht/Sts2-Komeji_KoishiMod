@@ -12,6 +12,7 @@ public struct KoishiRunConfigMessage : INetMessage
     public bool ShouldBuffer => true;
 
     public bool AncientsEnabled;
+    public bool BalancePatchEnabled;
     public bool PlayMoriyaDanceForAllPlayers;
     public bool AncientWeightsEnabled;
     public AncientWeights Weights;
@@ -20,6 +21,7 @@ public struct KoishiRunConfigMessage : INetMessage
     public void Serialize(PacketWriter writer)
     {
         writer.WriteBool(AncientsEnabled);
+        writer.WriteBool(BalancePatchEnabled);
         writer.WriteBool(PlayMoriyaDanceForAllPlayers);
         writer.WriteBool(AncientWeightsEnabled);
         WriteWeight(writer, Weights.MoriyaTwoGods);
@@ -37,6 +39,7 @@ public struct KoishiRunConfigMessage : INetMessage
     public void Deserialize(PacketReader reader)
     {
         AncientsEnabled = reader.ReadBool();
+        BalancePatchEnabled = reader.ReadBool();
         PlayMoriyaDanceForAllPlayers = reader.ReadBool();
         AncientWeightsEnabled = reader.ReadBool();
         Weights = new AncientWeights(

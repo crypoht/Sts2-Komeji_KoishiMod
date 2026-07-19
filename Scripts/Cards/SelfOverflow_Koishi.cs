@@ -22,7 +22,7 @@ namespace KomeijiKoishi.Cards
     public sealed class SelfOverflow_Koishi : CustomCardModel
     {
         public SelfOverflow_Koishi() 
-            : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
+            : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(0, 1), CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 

@@ -71,7 +71,7 @@ namespace KomeijiKoishi.Cards
                     await Cmd.Wait(0.1f, false);
                 }
 
-                int overflowCount = xValue * 2;
+                int overflowCount = xValue * KomeijiKoishi.Config.KoishiBalanceManager.Value(2, 3);
                 var overflowCards = new List<CardModel>();
                 
                 for (int i = 0; i < overflowCount; i++)

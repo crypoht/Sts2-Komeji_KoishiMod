@@ -33,11 +33,19 @@ namespace KomeijiKoishi.Cards
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { KoishiKeywords.Unconscious };
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip> 
-        { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious),
-            HoverTipFactory.FromKeyword(CardKeyword.Retain)
-        };
+        protected override IEnumerable<IHoverTip> ExtraHoverTips
+        {
+            get
+            {
+                yield return HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious);
+                if (ShouldRetainHand)
+                {
+                    yield return HoverTipFactory.FromKeyword(CardKeyword.Retain);
+                }
+            }
+        }
+
+        private bool ShouldRetainHand => !KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled || base.IsUpgraded;
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
@@ -53,7 +61,10 @@ namespace KomeijiKoishi.Cards
 
             await CardPileCmd.Draw(choiceContext, base.DynamicVars.Cards.BaseValue, player, false);
             
-            await PowerCmd.Apply<RetainHandPower>(choiceContext,player.Creature, 1m, player.Creature, this, false);
+            if (ShouldRetainHand)
+            {
+                await PowerCmd.Apply<RetainHandPower>(choiceContext,player.Creature, 1m, player.Creature, this, false);
+            }
         }
 
         protected override void OnUpgrade()

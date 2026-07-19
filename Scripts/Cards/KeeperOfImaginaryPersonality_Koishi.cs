@@ -116,10 +116,11 @@ namespace KomeijiKoishi.Cards
         }
 
 #if STS2_BETA
-        protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay()
+        protected override CardLocation GetResultLocationForCardPlay()
         {
-            (PileType resultPileType, CardPilePosition position) = base.GetResultPileTypeAndPositionForCardPlay();
-            return (GetKeeperResultPileType(resultPileType), position);
+            CardLocation location = base.GetResultLocationForCardPlay();
+            location.pileType = GetKeeperResultPileType(location.pileType);
+            return location;
         }
 #else
         protected override PileType GetResultPileTypeForCardPlay()

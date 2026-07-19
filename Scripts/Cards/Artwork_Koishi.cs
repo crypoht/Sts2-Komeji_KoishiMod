@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -38,6 +39,8 @@ namespace KomeijiKoishi.Cards
         public override int MaxUpgradeLevel => 2;
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
+
+        public override CardPoolModel VisualCardPool => ModelDb.CardPool<KoishiCardPool>();
 
         public bool ShouldEvolve => CurrentUpgradeLevel >= MaxUpgradeLevel;
 

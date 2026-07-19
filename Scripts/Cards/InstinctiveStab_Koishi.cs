@@ -37,8 +37,8 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(2m, ValueProp.Move),
-            new RepeatVar(6)
+            new DamageVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(2m, 3m), ValueProp.Move),
+            new RepeatVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(6, 4))
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -54,7 +54,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Repeat.UpgradeValueBy(3m);
+            base.DynamicVars.Repeat.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(3m, 2m));
         }
     }
 }
