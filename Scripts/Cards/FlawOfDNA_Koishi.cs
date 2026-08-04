@@ -17,7 +17,7 @@ using BaseLib.Utils;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class FlawOfDNA_Koishi : CustomCardModel
+    public sealed class FlawOfDNA_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public FlawOfDNA_Koishi()
             : base(3, CardType.Power, CardRarity.Rare, TargetType.Self, true)

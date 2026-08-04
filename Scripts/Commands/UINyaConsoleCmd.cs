@@ -18,7 +18,7 @@ public sealed class UINyaConsoleCmd : AbstractConsoleCmd
 {
     private static readonly string[] TestModes = { "test" };
     private static readonly string[] EffectNames = { "giftfumo" };
-    private static readonly string[] FumoNames = { "reimu", "cirno", "kogasa", "marisa", "okina", "reisen", "tewi", "yukari", "yuuka", "flandre", "lwkoishi", "shion", "youmu", "nue", "yuyuko" };
+    private static readonly string[] FumoNames = { "reimu", "cirno", "kogasa", "marisa", "okina", "reisen", "tewi", "yukari", "yuuka", "flandre", "lwkoishi", "shion", "youmu", "nue", "yuyuko", "minamitu", "koakuma", "pinkkoishi", "marisamoon" };
 
     public override string CmdName => "uinya";
     public override string Args => "test <effect-name> [fumo-name] [target-index]";
@@ -191,6 +191,10 @@ public sealed class UINyaConsoleCmd : AbstractConsoleCmd
             "youmu" or "youmufumo" => ModelDb.Card<YoumuFumo_Koishi>(),
             "nue" or "nuefumo" => ModelDb.Card<NueFumo_Koishi>(),
             "yuyuko" or "yuyukofumo" => ModelDb.Card<YuyukoFumo_Koishi>(),
+            "minamitu" or "minamitufumo" or "murasa" or "murasafumo" => ModelDb.Card<MinamituFumo_Koishi>(),
+            "koakuma" or "koakumafumo" => ModelDb.Card<KoakumaFumo_koishi>(),
+            "pinkkoishi" or "pinkkoishifumo" => ModelDb.Card<PinkKoishiFumo_Koishi>(),
+            "marisamoon" or "marisamoonfumo" => ModelDb.Card<MarisaMoonFumo_Koishi>(),
             _ => null
         };
     }

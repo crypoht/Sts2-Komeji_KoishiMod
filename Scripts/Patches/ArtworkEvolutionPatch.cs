@@ -64,6 +64,7 @@ namespace KomeijiKoishi.Patches
             return model.CurrentUpgradeLevel + 1 >= model.MaxUpgradeLevel
                 && !model.UpgradePreviewType.IsPreview()
                 && model.Pile != null
+                && model.Pile.Type != PileType.Play
                 && model.IsTransformable;
         }
 
@@ -73,6 +74,7 @@ namespace KomeijiKoishi.Patches
             return card.ShouldEvolve
                 && !model.UpgradePreviewType.IsPreview()
                 && model.Pile != null
+                && model.Pile.Type != PileType.Play
                 && model.IsTransformable;
         }
 

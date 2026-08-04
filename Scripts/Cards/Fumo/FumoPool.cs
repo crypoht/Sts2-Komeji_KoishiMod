@@ -40,7 +40,11 @@ namespace KomeijiKoishi.Cards.Fumo
                 (p, c) => c.CreateCard<ShionFumo_Koishi>(p),
                 (p, c) => c.CreateCard<YoumuFumo_Koishi>(p),
                 (p, c) => c.CreateCard<NueFumo_Koishi>(p),
-                (p, c) => c.CreateCard<YuyukoFumo_Koishi>(p)
+                (p, c) => c.CreateCard<YuyukoFumo_Koishi>(p),
+                (p, c) => c.CreateCard<MinamituFumo_Koishi>(p),
+                (p, c) => c.CreateCard<KoakumaFumo_koishi>(p),
+                (p, c) => c.CreateCard<PinkKoishiFumo_Koishi>(p),
+                (p, c) => c.CreateCard<MarisaMoonFumo_Koishi>(p)
 
             };
 
@@ -71,7 +75,11 @@ namespace KomeijiKoishi.Cards.Fumo
                 (p, c) => c.CreateCard<TewiFumo_Koishi>(p),
                 (p, c) => c.CreateCard<YukariFumo_Koishi>(p),
                 (p, c) => c.CreateCard<YuukaFumo_Koishi>(p),
-                (p, c) => c.CreateCard<YuyukoFumo_Koishi>(p)
+                (p, c) => c.CreateCard<YuyukoFumo_Koishi>(p),
+                (p, c) => c.CreateCard<MinamituFumo_Koishi>(p),
+                (p, c) => c.CreateCard<KoakumaFumo_koishi>(p),
+                (p, c) => c.CreateCard<PinkKoishiFumo_Koishi>(p),
+                (p, c) => c.CreateCard<MarisaMoonFumo_Koishi>(p)
             };
 
             var generator = owner.RunState.Rng.CombatCardGeneration.NextItem(generators);

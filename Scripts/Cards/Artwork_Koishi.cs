@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Enchantments;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace KomeijiKoishi.Cards
@@ -75,6 +76,16 @@ namespace KomeijiKoishi.Cards
             decimal increase = _upgradeValue - _baseValue;
             DynamicVars.Damage.UpgradeValueBy(increase);
             DynamicVars.Block.UpgradeValueBy(increase);
+        }
+
+        public override async Task AfterCardChangedPiles(CardModel card, PileType oldPileType, AbstractModel? clonedBy)
+        {
+            if (card != this || oldPileType != PileType.Play || !ShouldEvolve || Pile == null || Pile.Type == PileType.Play || !IsTransformable)
+            {
+                return;
+            }
+
+            await KomeijiKoishi.Patches.ArtworkEvolutionPatch.EvolveCards(new[] { this }, CardPreviewStyle.HorizontalLayout);
         }
 
         public abstract CardModel CreateEvolution();

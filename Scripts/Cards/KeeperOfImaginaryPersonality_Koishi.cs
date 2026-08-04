@@ -18,7 +18,7 @@ using KomeijiKoishi.Vfx;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class KeeperOfImaginaryPersonality_Koishi : CustomCardModel
+    public sealed class KeeperOfImaginaryPersonality_Koishi : CustomCardModel,IUseAncientCardFace
     {
         private const string ExhaustCardsKey = "ExhaustCards";
 

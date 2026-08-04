@@ -18,12 +18,14 @@ public sealed partial class NGiftYouFumoVfx : Node2D
     public const float VisualWidth = 96f;
     public const float SpinSpeed = 9f;
     public const float FootAnchorOffsetY = 4f;
-    public const float InnerRowSlotOffsetX = 38f;
-    public const float OuterRowSlotOffsetX = 24f;
+    public const float InnerRowSlotOffsetX = 57f;
+    public const float OuterRowSlotOffsetX = 36f;
     public const float OuterRowOffsetY = 30f;
     public const float IdleSquashSpeed = 3.4666f;
     public const float IdleSquashWidth = 1.1f;
     public const float IdleSquashHeight = 0.9167f;
+    public const float SecondaryFlightDelay = 0.5f;
+    public const float SecondaryGap = 10f;
 
     private Vector2 startPosition;
     private Vector2 endPosition;
@@ -31,10 +33,17 @@ public sealed partial class NGiftYouFumoVfx : Node2D
     private float gravity;
     private float elapsed;
     private string texturePath = string.Empty;
+    private string? secondaryTexturePath;
     private NCreature? targetNode;
     private int targetSlot;
     private Sprite2D? sprite;
+    private Sprite2D? secondarySprite;
     private Texture2D? texture;
+    private Texture2D? secondaryTexture;
+    private float primaryVisualWidth = VisualWidth;
+    private float secondaryVisualWidth = VisualWidth;
+    private bool primaryAttached;
+    private PersistentFumoMarker? attachedMarker;
 
     private static readonly Dictionary<ulong, TargetFumoSlots> TargetSlots = new();
 
@@ -47,9 +56,10 @@ public sealed partial class NGiftYouFumoVfx : Node2D
             return null;
         }
 
-        if (!ResourceLoader.Exists(path))
+        string? secondaryPath = GetSecondaryTexturePath(fumoCard);
+        if (!ResourceLoader.Exists(path) || (secondaryPath != null && !ResourceLoader.Exists(secondaryPath)))
         {
-            Log.Warn($"[KoishiGiftYouFumoVfx] Missing texture: {path}");
+            Log.Warn($"[KoishiGiftYouFumoVfx] Missing texture: primary={path}, secondary={secondaryPath ?? "none"}");
             return null;
         }
 
@@ -70,6 +80,7 @@ public sealed partial class NGiftYouFumoVfx : Node2D
             startPosition = start,
             endPosition = end,
             texturePath = path,
+            secondaryTexturePath = secondaryPath,
             targetNode = targetNode,
             targetSlot = targetSlot
         };
@@ -81,20 +92,42 @@ public sealed partial class NGiftYouFumoVfx : Node2D
         SolveGravityArc();
 
         texture = ResourceLoader.Load<Texture2D>(texturePath);
+        secondaryTexture = secondaryTexturePath == null ? null : ResourceLoader.Load<Texture2D>(secondaryTexturePath);
         sprite = new Sprite2D
         {
             Texture = texture,
             Centered = true,
-            ZIndex = 150,
+            ZIndex = 20,
             Modulate = Colors.White
         };
 
         if (texture.GetWidth() > 0)
         {
             sprite.Scale = Vector2.One * (VisualWidth / texture.GetWidth());
+            primaryVisualWidth = VisualWidth;
         }
 
         AddChild(sprite);
+
+        if (secondaryTexture != null)
+        {
+            secondarySprite = new Sprite2D
+            {
+                Texture = secondaryTexture,
+                Centered = true,
+                ZIndex = 19,
+                Modulate = Colors.White,
+                Visible = false
+            };
+
+            if (secondaryTexture.GetWidth() > 0)
+            {
+                secondarySprite.Scale = Vector2.One * (VisualWidth / secondaryTexture.GetWidth());
+                secondaryVisualWidth = VisualWidth;
+            }
+
+            AddChild(secondarySprite);
+        }
     }
 
     public override void _Process(double delta)
@@ -104,15 +137,59 @@ public sealed partial class NGiftYouFumoVfx : Node2D
         float time = FlightDuration * t;
         GlobalPosition = startPosition + velocity * time + Vector2.Down * (0.5f * gravity * time * time);
 
-        if (sprite != null)
+        if (sprite != null && t < 1f)
         {
             sprite.Rotation += SpinSpeed * (float)delta;
         }
 
-        if (t >= 1f)
+        if (secondarySprite != null)
         {
-            AttachPersistentFumo();
+            UpdateSecondaryProjectile((float)delta);
+        }
+
+        if (t >= 1f && !primaryAttached)
+        {
+            attachedMarker = AttachPersistentFumo(secondarySprite == null);
+            primaryAttached = true;
+            if (sprite != null)
+            {
+                sprite.Visible = false;
+            }
+        }
+
+        if (elapsed >= FlightDuration + (secondarySprite == null ? 0f : SecondaryFlightDelay))
+        {
+            attachedMarker?.ShowSecondary();
             this.QueueFreeSafely();
+        }
+    }
+
+    private void UpdateSecondaryProjectile(float delta)
+    {
+        if (secondarySprite == null)
+        {
+            return;
+        }
+
+        float delayedElapsed = elapsed - SecondaryFlightDelay;
+        if (delayedElapsed < 0f)
+        {
+            secondarySprite.Visible = false;
+            return;
+        }
+
+        secondarySprite.Visible = true;
+        float t = Mathf.Clamp(delayedElapsed / FlightDuration, 0f, 1f);
+        float time = FlightDuration * t;
+        Vector2 offset = GetSecondaryOffset();
+        Vector2 secondaryStart = startPosition + offset;
+        Vector2 secondaryEnd = endPosition + offset;
+        Vector2 secondaryVelocity = new Vector2((secondaryEnd.X - secondaryStart.X) / FlightDuration, velocity.Y);
+        Vector2 secondaryGlobalPosition = secondaryStart + secondaryVelocity * time + Vector2.Down * (0.5f * gravity * time * time);
+        secondarySprite.Position = secondaryGlobalPosition - GlobalPosition;
+        if (t < 1f)
+        {
+            secondarySprite.Rotation += SpinSpeed * delta;
         }
     }
 
@@ -141,11 +218,11 @@ public sealed partial class NGiftYouFumoVfx : Node2D
         return creatureNode.Hitbox.GlobalPosition + new Vector2(creatureNode.Hitbox.Size.X * 0.5f, HeadOffsetY);
     }
 
-    private void AttachPersistentFumo()
+    private PersistentFumoMarker? AttachPersistentFumo(bool showSecondary)
     {
         if (texture == null || targetNode == null || !GodotObject.IsInstanceValid(targetNode))
         {
-            return;
+            return null;
         }
 
         ulong targetId = targetNode.GetInstanceId();
@@ -155,7 +232,12 @@ public sealed partial class NGiftYouFumoVfx : Node2D
             TargetSlots[targetId] = slots;
         }
 
-        slots.Add(texture, targetSlot);
+        return slots.Add(texture, secondaryTexture, targetSlot, showSecondary);
+    }
+
+    private Vector2 GetSecondaryOffset()
+    {
+        return new Vector2(primaryVisualWidth * 0.5f + SecondaryGap + secondaryVisualWidth * 0.5f, 0f);
     }
 
     private static int GetNextTargetSlotIndex(NCreature target)
@@ -173,80 +255,165 @@ public sealed partial class NGiftYouFumoVfx : Node2D
     {
         private readonly NCreature target;
         private readonly PersistentFumoMarker?[] markers = new PersistentFumoMarker?[5];
+        private readonly ulong targetId;
         private int nextSlot;
 
         public TargetFumoSlots(NCreature target)
         {
             this.target = target;
+            targetId = target.GetInstanceId();
         }
 
         public bool IsValid => GodotObject.IsInstanceValid(target);
 
         public int NextSlotIndex => nextSlot;
 
-        public void Add(Texture2D texture, int slot)
+        public PersistentFumoMarker Add(Texture2D texture, Texture2D? secondaryTexture, int slot, bool showSecondary)
         {
             nextSlot = (slot + 1) % markers.Length;
 
             markers[slot]?.QueueFreeSafely();
 
-            PersistentFumoMarker marker = new(target, texture, slot);
+            PersistentFumoMarker marker = new(this, target, texture, secondaryTexture, slot, showSecondary);
             markers[slot] = marker;
-            NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(marker);
+            target.AddChildSafely(marker);
+            return marker;
+        }
+
+        public void ClearSlot(int slot, PersistentFumoMarker marker)
+        {
+            if (slot < 0 || slot >= markers.Length || markers[slot] != marker)
+            {
+                return;
+            }
+
+            markers[slot] = null;
+            if (IsEmpty)
+            {
+                TargetSlots.Remove(targetId);
+            }
+        }
+
+        private bool IsEmpty
+        {
+            get
+            {
+                foreach (PersistentFumoMarker? marker in markers)
+                {
+                    if (marker != null && GodotObject.IsInstanceValid(marker))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
         }
     }
 
     private sealed partial class PersistentFumoMarker : Node2D
     {
+        private readonly TargetFumoSlots ownerSlots;
         private readonly NCreature target;
         private readonly Texture2D texture;
+        private readonly Texture2D? secondaryTexture;
         private readonly int slot;
         private readonly float phase;
         private Sprite2D? sprite;
+        private Sprite2D? secondarySprite;
+        private bool showSecondary;
         private float baseSpriteScale = 1f;
+        private float secondarySpriteScale = 1f;
         private float baseVisualHeight;
+        private float secondaryVisualHeight;
+        private float baseVisualWidth;
+        private float secondaryVisualWidth;
         private float elapsed;
 
-        public PersistentFumoMarker(NCreature target, Texture2D texture, int slot)
+        public PersistentFumoMarker(TargetFumoSlots ownerSlots, NCreature target, Texture2D texture, Texture2D? secondaryTexture, int slot, bool showSecondary)
         {
+            this.ownerSlots = ownerSlots;
             this.target = target;
             this.texture = texture;
+            this.secondaryTexture = secondaryTexture;
             this.slot = slot;
+            this.showSecondary = showSecondary;
             phase = (slot + 1) * 1.37f;
         }
 
         public override void _Ready()
         {
+            ZIndex = 1;
             sprite = new Sprite2D
             {
                 Texture = texture,
                 Centered = true,
-                ZIndex = 120 + slot,
+                ZIndex = 0,
                 Modulate = Colors.White
             };
 
             if (texture.GetWidth() > 0)
             {
                 baseSpriteScale = VisualWidth / texture.GetWidth();
+                baseVisualWidth = texture.GetWidth() * baseSpriteScale;
                 baseVisualHeight = texture.GetHeight() * baseSpriteScale;
                 sprite.Scale = Vector2.One * baseSpriteScale;
                 sprite.Position = new Vector2(0f, -baseVisualHeight * 0.5f);
             }
 
             AddChild(sprite);
+
+            if (secondaryTexture != null)
+            {
+                secondarySprite = new Sprite2D
+                {
+                    Texture = secondaryTexture,
+                    Centered = true,
+                    ZIndex = 0,
+                    Modulate = Colors.White,
+                    Visible = showSecondary
+                };
+
+                if (secondaryTexture.GetWidth() > 0)
+                {
+                    secondarySpriteScale = VisualWidth / secondaryTexture.GetWidth();
+                    secondaryVisualWidth = secondaryTexture.GetWidth() * secondarySpriteScale;
+                    secondaryVisualHeight = secondaryTexture.GetHeight() * secondarySpriteScale;
+                    secondarySprite.Scale = Vector2.One * secondarySpriteScale;
+                    secondarySprite.Position = GetSecondaryBasePosition(1f);
+                }
+
+                AddChild(secondarySprite);
+            }
+
             UpdatePosition(0f);
         }
 
         public override void _Process(double delta)
         {
             elapsed += (float)delta;
-            if (!GodotObject.IsInstanceValid(target))
+            if (!GodotObject.IsInstanceValid(target) || !IsInCurrentCombatVfxContainer())
             {
                 this.QueueFreeSafely();
                 return;
             }
 
             UpdatePosition((float)delta);
+        }
+
+        public override void _ExitTree()
+        {
+            ownerSlots.ClearSlot(slot, this);
+            base._ExitTree();
+        }
+
+        public void ShowSecondary()
+        {
+            showSecondary = true;
+            if (secondarySprite != null)
+            {
+                secondarySprite.Visible = true;
+            }
         }
 
         private void UpdatePosition(float delta)
@@ -261,12 +428,28 @@ public sealed partial class NGiftYouFumoVfx : Node2D
                 float scaleY = Mathf.Lerp(1f, IdleSquashHeight, pulse);
                 sprite.Scale = new Vector2(baseSpriteScale * scaleX, baseSpriteScale * scaleY);
                 sprite.Position = new Vector2(0f, -baseVisualHeight * scaleY * 0.5f);
+
+                if (secondarySprite != null)
+                {
+                    secondarySprite.Scale = new Vector2(secondarySpriteScale * scaleX, secondarySpriteScale * scaleY);
+                    secondarySprite.Position = GetSecondaryBasePosition(scaleY);
+                }
             }
+        }
+
+        private Vector2 GetSecondaryBasePosition(float scaleY)
+        {
+            return new Vector2(baseVisualWidth * 0.5f + SecondaryGap + secondaryVisualWidth * 0.5f, -secondaryVisualHeight * scaleY * 0.5f);
         }
 
         private Vector2 GetAnchorPosition()
         {
             return GetTargetAnchorPosition(target, slot);
+        }
+
+        private bool IsInCurrentCombatVfxContainer()
+        {
+            return GetParent() == target && NCombatRoom.Instance != null;
         }
     }
 
@@ -306,6 +489,23 @@ public sealed partial class NGiftYouFumoVfx : Node2D
             YoumuFumo_Koishi => "Youmufumo.png",
             NueFumo_Koishi => "Nuefumo.png",
             YuyukoFumo_Koishi => "Yuyukofumo.png",
+            MinamituFumo_Koishi => "Minamitufumo.png",
+            KoakumaFumo_koishi => "Koakumafumo.png",
+            PinkKoishiFumo_Koishi => "PinkKoishifumo.png",
+            MarisaMoonFumo_Koishi => "MarisaMoonfumo_fumo.png",
+            _ => null
+        };
+
+        return fileName == null
+            ? null
+            : $"res://mods/Komeiji_Koishi/images/qingxu/{fileName}";
+    }
+
+    private static string? GetSecondaryTexturePath(CardModel card)
+    {
+        string? fileName = card switch
+        {
+            MarisaMoonFumo_Koishi => "MarisaMoonfumo_gun.png",
             _ => null
         };
 
