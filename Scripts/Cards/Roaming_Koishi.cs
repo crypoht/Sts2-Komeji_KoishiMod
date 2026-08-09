@@ -19,7 +19,7 @@ using KomeijiKoishi.Utils_Koishi;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class Roaming_Koishi : CustomCardModel
+    public sealed class Roaming_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public Roaming_Koishi() 
             : base(0, CardType.Skill, CardRarity.Basic, TargetType.Self, true) { }

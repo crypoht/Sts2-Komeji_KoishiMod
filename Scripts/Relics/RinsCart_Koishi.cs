@@ -44,6 +44,11 @@ namespace KomeijiKoishi.Relics
 
         public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature target, bool wasRemovalPrevented, float deathAnimLength)
         {
+            if (wasRemovalPrevented || target.Side == base.Owner.Creature.Side || base.Owner.Creature.IsDead)
+            {
+                return;
+            }
+
                 base.Flash(); 
                 await CardPileCmd.Draw(choiceContext, base.DynamicVars.Cards.BaseValue, base.Owner, false);
         }

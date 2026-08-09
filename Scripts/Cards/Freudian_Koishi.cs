@@ -19,7 +19,7 @@ using BaseLib.Utils;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class Freudian_Koishi : CustomCardModel
+    public sealed class Freudian_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public Freudian_Koishi()
             : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self, true)

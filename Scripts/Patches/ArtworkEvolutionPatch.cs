@@ -80,11 +80,14 @@ namespace KomeijiKoishi.Patches
 
         internal static async Task EvolveCards(IEnumerable<IArtworkEvolutionCard> cards, CardPreviewStyle style)
         {
+            List<IArtworkEvolutionCard> evolvingCards = cards.ToList();
+            await Task.Yield();
+
             CardPreviewStyle transformStyle = style == CardPreviewStyle.None
                 ? CardPreviewStyle.HorizontalLayout
                 : style;
 
-            foreach (IArtworkEvolutionCard artwork in cards)
+            foreach (IArtworkEvolutionCard artwork in evolvingCards)
             {
                 CardModel original = (CardModel)artwork;
                 if (original.Pile == null || !original.IsTransformable)

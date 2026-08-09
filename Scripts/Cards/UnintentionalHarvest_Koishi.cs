@@ -20,7 +20,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class UnintentionalHarvest_Koishi : CustomCardModel
+    public sealed class UnintentionalHarvest_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public UnintentionalHarvest_Koishi() 
             : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self, true)

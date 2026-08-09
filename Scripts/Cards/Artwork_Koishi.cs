@@ -154,11 +154,11 @@ namespace KomeijiKoishi.Cards
         }
     }
 
-    [Pool(typeof(KoishiCardPool))]
+    [Pool(typeof(EventCardPool))]
     public sealed class TrueArtwork_Koishi : ArtworkStage_Koishi
     {
         public TrueArtwork_Koishi()
-            : base(CardRarity.Uncommon, 11m, 15m)
+            : base(CardRarity.Event, 11m, 15m)
         {
         }
 
@@ -168,11 +168,11 @@ namespace KomeijiKoishi.Cards
         }
     }
 
-    [Pool(typeof(KoishiCardPool))]
+    [Pool(typeof(EventCardPool))]
     public sealed class TrueArtworkLiberated_Koishi : ArtworkStage_Koishi
     {
         public TrueArtworkLiberated_Koishi()
-            : base(CardRarity.Rare, 20m, 26m)
+            : base(CardRarity.Event, 20m, 26m)
         {
         }
 
@@ -182,7 +182,7 @@ namespace KomeijiKoishi.Cards
         }
     }
 
-    [Pool(typeof(KoishiCardPool))]
+    [Pool(typeof(TokenCardPool))]
     public sealed class TrueUnconsciousArtworkLiberated_Koishi : ArtworkStage_Koishi
     {
         public TrueUnconsciousArtworkLiberated_Koishi()

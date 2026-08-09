@@ -53,7 +53,12 @@ namespace KomeijiKoishi.Patches
                 typeof(SilentBombardment_Koishi),
                 "res://mods/Komeiji_Koishi/images/cards/animated/SilentBombardment_Koishi_fumo/",
                 46,
-                0.1d)
+                0.1d),
+            new(
+                typeof(KomeijiSpin_Koishi),
+                "res://mods/Komeiji_Koishi/images/cards/animated/KomeijiSpin_Koishi_fumo/",
+                44,
+                0.06d)
         };
 
         private static readonly AccessTools.FieldRef<NCard, TextureRect> PortraitRef =
