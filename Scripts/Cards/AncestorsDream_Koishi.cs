@@ -14,7 +14,7 @@ using BaseLib.Utils;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class AncestorsDream_Koishi : CustomCardModel
+    public sealed class AncestorsDream_Koishi : CustomCardModel,IUseAncientCardFace
     {
         private const int MaxPreviewCards = 20;
 

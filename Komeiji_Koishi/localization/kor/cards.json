@@ -148,6 +148,7 @@
     "KOMEIJIKOISHI-LOOKING_GLASS_SELF_KOISHI.description":  "소멸 더미마다있다1장카드, 얻습니다1점[gold]방어도[/gold].",
     "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.title":  "코이시의작은 칼",
     "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.description":  "피해를 {Damage:diff()} 줍니다.\n할 수 있다无限강화.\n[gold]처치[/gold]때강화자신",
+    "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.balanceDescription":  "피해를 {Damage:diff()} 줍니다.\n할 수 있다无限강화.\nHP가 10 미만인 적을 [gold]처치[/gold]하면 자신을 강화합니다.",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.title":  "자유 안~",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.description":  "카드를 1장 뽑습니다.\n최대선택 {Cards:diff()}장의 카드부여[gold]무의식[/gold]그리고丢弃.",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.balanceDescription":  "카드를 최대 {Cards:diff()}장 선택해 [gold]무의식[/gold]을 부여한 뒤 버립니다.",

@@ -84,6 +84,8 @@ namespace KomeijiKoishi.Cards
             var attackCommand = DamageCmd.Attack(base.DynamicVars.Damage.BaseValue).FromCard(this, cardPlay);
             bool shouldTriggerFatal = false; 
 
+            List<Creature> fatalUpgradeTargets = new();
+
             if (HasAoECondition)
             {
                 attackCommand = attackCommand.TargetingAllOpponents(combatState)
@@ -92,6 +94,9 @@ namespace KomeijiKoishi.Cards
                 if (combatState.HittableEnemies != null)
                 {
                     shouldTriggerFatal = combatState.HittableEnemies.All(e => e.Powers.All(p => p.ShouldOwnerDeathTriggerFatal()));
+                    fatalUpgradeTargets = combatState.HittableEnemies
+                        .Where(IsEligibleFatalUpgradeTarget)
+                        .ToList();
                 }
             }
             else
@@ -102,12 +107,16 @@ namespace KomeijiKoishi.Cards
                     .WithHitFx("vfx/vfx_attack_slash", null, "knife_attack.mp3");
                 
                 shouldTriggerFatal = cardPlay.Target.Powers.All(p => p.ShouldOwnerDeathTriggerFatal());
+                if (IsEligibleFatalUpgradeTarget(cardPlay.Target))
+                {
+                    fatalUpgradeTargets.Add(cardPlay.Target);
+                }
             }
 
             var result = await attackCommand.Execute(choiceContext);
 
 
-           if (shouldTriggerFatal && attackCommand.Results.SelectMany((List<DamageResult> r) => r).Any((DamageResult r) => r.WasTargetKilled))
+           if (shouldTriggerFatal && attackCommand.Results.SelectMany((List<DamageResult> r) => r).Any((DamageResult r) => r.WasTargetKilled && fatalUpgradeTargets.Contains(r.Receiver)))
             {
                 this.UpgradeInternal();
                 this.FinalizeUpgradeInternal();
@@ -134,7 +143,7 @@ namespace KomeijiKoishi.Cards
         }
         protected override void OnUpgrade()
         {
-            decimal rawIncrease = base.DynamicVars.Damage.BaseValue * KomeijiKoishi.Config.KoishiBalanceManager.Value(0.37m, 0.21m);
+            decimal rawIncrease = base.DynamicVars.Damage.BaseValue * 0.37m;
             
             decimal finalIncrease = Math.Floor(rawIncrease);
             if (finalIncrease < 1m) 
@@ -142,6 +151,11 @@ namespace KomeijiKoishi.Cards
                 finalIncrease = 1m;
             }
             base.DynamicVars.Damage.UpgradeValueBy(finalIncrease);
+        }
+
+        private static bool IsEligibleFatalUpgradeTarget(Creature target)
+        {
+            return !KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled || target.CurrentHp < 10;
         }
     }
 }

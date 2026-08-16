@@ -148,6 +148,7 @@
     "KOMEIJIKOISHI-LOOKING_GLASS_SELF_KOISHI.description":  "廃棄パイル每有1枚カード，得る1点[gold]ブロック[/gold]。",
     "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.title":  "こいしのナイフ",
     "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.description":  "{Damage:diff()}ダメージを与える。\n可以无限アップグレード。\n[gold]斩杀[/gold]时アップグレード自己",
+    "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.balanceDescription":  "{Damage:diff()}ダメージを与える。\n可以无限アップグレード。\nHPが10未満の敵を[gold]斩杀[/gold]した時、自身をアップグレードする。",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.title":  "自由中~",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.description":  "カードを1枚引く。\n至多選択 {Cards:diff()}枚のカード付与[gold]無意識[/gold]并丢弃。",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.balanceDescription":  "最大{Cards:diff()}枚のカードを選び、[gold]無意識[/gold]を付与して捨てる。",

@@ -148,6 +148,7 @@
     "KOMEIJIKOISHI-LOOKING_GLASS_SELF_KOISHI.description":  "For each card in your exhaust pile, gain 1 [gold]Block[/gold].",
     "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.title":  "Koishi\u0027s Knife",
     "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.description":  "Deal {Damage:diff()} damage.\nCan be upgraded any number of times.\nOn [gold]Fatal[/gold], upgrade itself.",
+    "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.balanceDescription":  "Deal {Damage:diff()} damage.\nCan be upgraded any number of times.\nWhen you [gold]Fatal[/gold] an enemy with less than 10 HP, upgrade itself.",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.title":  "In Freedom",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.description":  "Draw 1 card.\nChoose up to {Cards:diff()} card(s). They gain [gold]Unconscious[/gold], then discard them.",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.balanceDescription":  "Choose up to {Cards:diff()} card(s). They gain [gold]Unconscious[/gold], then discard them.",

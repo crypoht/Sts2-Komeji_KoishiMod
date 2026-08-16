@@ -19,10 +19,10 @@ using KomeijiKoishi.Cards.Danmaku;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class SelfOverflow_Koishi : CustomCardModel
+    public sealed class SelfOverflow_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public SelfOverflow_Koishi() 
-            : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(0, 1), CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
+            : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 

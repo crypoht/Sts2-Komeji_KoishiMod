@@ -18,7 +18,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class PerfectMindControl_Koishi : CustomCardModel
+    public sealed class PerfectMindControl_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public PerfectMindControl_Koishi() 
             : base(514, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }

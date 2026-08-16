@@ -148,6 +148,7 @@
     "KOMEIJIKOISHI-LOOKING_GLASS_SELF_KOISHI.description":  "消耗牌堆每有1张牌，获得1点[gold]格挡[/gold]。",
     "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.title":  "恋恋的小刀",
     "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.description":  "造成{Damage:diff()}点伤害。\n可以无限升级。\n[gold]斩杀[/gold]时升级自己",
+    "KOMEIJIKOISHI-KOISHIS_KNIFE_KOISHI.balanceDescription":  "造成{Damage:diff()}点伤害。\n可以无限升级。\n当[gold]斩杀[/gold]血量低于10的敌人时升级自己",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.title":  "自由中~",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.description":  "抽 1 张牌。\n至多选择 {Cards:diff()} 张牌给予[gold]无意识[/gold]并丢弃。",
     "KOMEIJIKOISHI-IN_FREEDOM_KOISHI.balanceDescription":  "至多选择 {Cards:diff()} 张牌给予[gold]无意识[/gold]并丢弃。",
