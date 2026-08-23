@@ -67,7 +67,11 @@ namespace KomeijiKoishi.Powers
         {
             try
             {
-                if (player.Creature.GetPower<BloomStancePower>() != null) return;
+                if (player.Creature.GetPower<BloomStancePower>() != null)
+                {
+                    await ClearOldStances(player, typeof(BloomStancePower));
+                    return;
+                }
 
                 await ClearOldStances(player);
 
@@ -82,6 +86,8 @@ namespace KomeijiKoishi.Powers
                 await PowerCmd.Apply<BloomStancePower>(
                     context,
                     player.Creature, 1m, player.Creature, sourceCard, false);
+
+                await ClearOldStances(player, typeof(BloomStancePower));
 
 
                 var powerInstance = player.Creature.GetPower<BloomStancePower>();

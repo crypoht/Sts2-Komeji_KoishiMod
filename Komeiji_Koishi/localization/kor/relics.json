@@ -99,5 +99,11 @@
   "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.flavor": "작은의翅膀, 承载着美味(划掉)伟큰의꿈想.",
   "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.title": "마법 물약병",
   "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.description": "적을 [blue]{Kills}[/blue]마리 처치할 때마다 무작위 포션을 1개 얻습니다.",
-  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.flavor": "비었으니 다른 걸 담아도 괜찮겠지."
+  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.flavor": "비었으니 다른 걸 담아도 괜찮겠지.",
+  "KOMEIJIKOISHI-KOISHI_ROCK.title": "고지석",
+  "KOMEIJIKOISHI-KOISHI_ROCK.description": "당신의 긍정적 버프는 이번 전투에서 기록한 최고값보다 낮아지지 않습니다.",
+  "KOMEIJIKOISHI-KOISHI_ROCK.flavor": "지하에 가라앉아도 한때 닿았던 높이를 기억합니다.",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.title": "데이터 마이너",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.description": "손에 있는 모든 카드의 효과를 무작위화합니다. 4턴마다 우클릭하여 발동할 수 있습니다.",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.flavor": "데이터에는 의미가 없습니다. 의미는 다시 컴파일할 수 있습니다."
 }

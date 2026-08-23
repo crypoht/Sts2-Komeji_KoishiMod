@@ -99,5 +99,11 @@
   "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.flavor": "小小的翅膀，承载着美味（划掉）伟大的梦想。",
   "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.title": "魔药瓶",
   "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.description": "每击杀[blue]{Kills}[/blue]只敌人，获得一瓶随机药水。",
-  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.flavor": "里面残留的东西总会发生奇怪的反应。"
+  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.flavor": "里面残留的东西总会发生奇怪的反应。",
+  "KOMEIJIKOISHI-KOISHI_ROCK.title": "古地石",
+  "KOMEIJIKOISHI-KOISHI_ROCK.description": "你的正面属性不会低于本场战斗最高时的值。",
+  "KOMEIJIKOISHI-KOISHI_ROCK.flavor": "已经在谷底了，怎么走都是只能向上爬。",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.title": "数据破解",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.description": "随机化手牌中所有牌的效果。随机化拥有能力的层数。右键使用。",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.flavor": "恋恋有一天捡到了一张死亡证明，昏迷了过去，醒来后就发现自己手上多出了这个东西"
 }

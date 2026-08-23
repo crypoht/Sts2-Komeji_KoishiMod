@@ -99,5 +99,11 @@
   "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.flavor": "Tiny wings bearing a delicious (crossed out) grand dream.",
   "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.title": "Magic Potion Bottle",
   "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.description": "Every [blue]{Kills}[/blue] enemies killed, obtain a random potion.",
-  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.flavor": "Once it is empty, surely it is fine to fill it with something else."
+  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.flavor": "Once it is empty, surely it is fine to fill it with something else.",
+  "KOMEIJIKOISHI-KOISHI_ROCK.title": "Ancient Earth Stone",
+  "KOMEIJIKOISHI-KOISHI_ROCK.description": "Your positive buffs cannot fall below their highest value this combat.",
+  "KOMEIJIKOISHI-KOISHI_ROCK.flavor": "Even underground, it remembers the heights it once reached.",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.title": "Dataminer",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.description": "Randomize the effects of all cards in your hand. Right-click to trigger once every 4 turns.",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.flavor": "Data has no meaning. Meaning can be recompiled."
 }

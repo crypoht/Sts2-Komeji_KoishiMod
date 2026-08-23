@@ -24,7 +24,11 @@ namespace KomeijiKoishi.Powers
         {
             try 
             {
-                if (player.Creature.GetPower<ClosedStancePower>() != null) return;
+                if (player.Creature.GetPower<ClosedStancePower>() != null)
+                {
+                    await ClearOldStances(player, typeof(ClosedStancePower));
+                    return;
+                }
                 
                 await ClearOldStances(player); 
 
@@ -34,6 +38,8 @@ namespace KomeijiKoishi.Powers
 
                 await CardPileCmd.Draw(context, drawAmount, player, false);
                 await PowerCmd.Apply<ClosedStancePower>(context,player.Creature, 1m, player.Creature, sourceCard, false);
+
+                await ClearOldStances(player, typeof(ClosedStancePower));
                 
                 await NotifyAllCardsStanceChanged(player, "Closed"); 
 

@@ -14,8 +14,6 @@ namespace KomeijiKoishi.Powers
 {
     public sealed class MissMarysPhoneThisSidePower : CustomPowerModel
     {
-        private int _attacksPlayedByAllies;
-
         public override PowerType Type => PowerType.Buff;
         public override PowerStackType StackType => PowerStackType.Counter;
 
@@ -35,13 +33,38 @@ namespace KomeijiKoishi.Powers
                 return;
             }
 
-            _attacksPlayedByAllies++;
-            while (_attacksPlayedByAllies >= threshold)
+            // Store the remaining attacks in Amount so the counter is visible
+            // and synchronized by the game's normal power state replication.
+            int remaining = (int)base.Amount;
+            if (remaining <= 0)
             {
-                _attacksPlayedByAllies -= threshold;
-                base.Flash();
-                await PowerCmd.Apply<IntangiblePower>(choiceContext, base.Owner, 1m, base.Owner, null, false);
+                remaining = threshold;
             }
+
+            if (remaining > 1)
+            {
+                await PowerCmd.ModifyAmount(
+                    choiceContext,
+                    this,
+                    -1m,
+                    base.Owner,
+                    null,
+                    false);
+                return;
+            }
+
+            base.Flash();
+            await PowerCmd.Apply<IntangiblePower>(choiceContext, base.Owner, 1m, base.Owner, null, false);
+
+            // The triggering attack consumed the final count. Reset directly
+            // to the next threshold without briefly removing the power.
+            await PowerCmd.ModifyAmount(
+                choiceContext,
+                this,
+                threshold - remaining,
+                base.Owner,
+                null,
+                false);
         }
 
         public override async Task BeforeSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)

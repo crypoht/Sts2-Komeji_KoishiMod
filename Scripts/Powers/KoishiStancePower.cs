@@ -63,10 +63,11 @@ namespace KomeijiKoishi.Powers
             }
         }
 
-        protected static async Task ClearOldStances(Player player)
+        protected static async Task ClearOldStances(Player player, Type? keepType = null)
         {
             var powersToRemove = player.Creature.Powers
                 .Where(p => p is BloomStancePower || p is ClosedStancePower)
+                .Where(p => keepType == null || p.GetType() != keepType)
                 .ToList();
 
             foreach (var power in powersToRemove)

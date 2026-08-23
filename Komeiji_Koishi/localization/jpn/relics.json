@@ -99,5 +99,11 @@
   "KOMEIJIKOISHI-NIGHT_SPARROW_WINGS_KOISHI.flavor": "小小の翅膀，承载着美味（划掉）伟大の梦想。",
   "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.title": "魔法の薬瓶",
   "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.description": "敵を[blue]{Kills}[/blue]体倒すたび、ランダムなポーションを1つ得る。",
-  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.flavor": "空になったなら、別のものを入れてもいいはず。"
+  "KOMEIJIKOISHI-MAGIC_POTION_BOTTLE_KOISHI.flavor": "空になったなら、別のものを入れてもいいはず。",
+  "KOMEIJIKOISHI-KOISHI_ROCK.title": "古地石",
+  "KOMEIJIKOISHI-KOISHI_ROCK.description": "あなたの正面バフは、この戦闘中の最高値を下回らない。",
+  "KOMEIJIKOISHI-KOISHI_ROCK.flavor": "地底に沈んでも、かつて届いた高さを覚えている。",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.title": "データマイナー",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.description": "手札のすべてのカードの効果をランダム化する。4ターンごとに右クリックで発動できる。",
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.flavor": "データに意味はない。意味は再コンパイルできる。"
 }
