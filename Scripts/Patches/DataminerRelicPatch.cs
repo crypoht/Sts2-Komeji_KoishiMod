@@ -169,9 +169,8 @@ namespace KomeijiKoishi.Patches
 
             foreach (PowerModel power in powers)
             {
-                int targetAmount = rng.NextInt(-5, 11);
-                int offset = targetAmount - power.Amount;
-                if (offset == 0)
+                int amountChange = rng.NextInt(-5, 4);
+                if (amountChange == 0)
                 {
                     continue;
                 }
@@ -179,7 +178,7 @@ namespace KomeijiKoishi.Patches
                 await PowerCmd.ModifyAmount(
                     new ThrowingPlayerChoiceContext(),
                     power,
-                    offset,
+                    amountChange,
                     owner.Creature,
                     null,
                     false);

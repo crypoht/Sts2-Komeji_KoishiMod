@@ -32,7 +32,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new DynamicVar("ArtAmount", KomeijiKoishi.Config.KoishiBalanceManager.Value(3m, 2m))
+            new DynamicVar("ArtAmount", KomeijiKoishi.Config.KoishiBalanceManager.Value(2m, 1m))
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -54,7 +54,13 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars["ArtAmount"].UpgradeValueBy(1m);
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                base.DynamicVars["ArtAmount"].UpgradeValueBy(1m);
+                return;
+            }
+
+            base.AddKeyword(CardKeyword.Innate);
         }
     }
 }

@@ -70,9 +70,10 @@ namespace KomeijiKoishi.Characters
 			ModelDb.Card<Roaming_Koishi>()
 		};
 
-		 public override IReadOnlyList<RelicModel> StartingRelics => new List<RelicModel>
+		public override IReadOnlyList<RelicModel> StartingRelics => new List<RelicModel>
 		{
-			ModelDb.Relic<KoishiStarterRelic>()
+			ModelDb.Relic<KoishiStarterRelic>(),
+			ModelDb.Relic<Top1_Koishi>()
 		};
 
 		public override BaseLib.Patches.UI.RelicIconData? CustomYummyCookie => new BaseLib.Patches.UI.RelicIconData(

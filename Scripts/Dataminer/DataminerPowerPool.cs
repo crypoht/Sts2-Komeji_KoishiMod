@@ -41,10 +41,29 @@ namespace KomeijiKoishi.Dataminer
             }
 
             powers = ModelDb.AllPowers
-                .Where(power => power.GetType().Namespace?.StartsWith("MegaCrit.Sts2.", StringComparison.Ordinal) == true)
+                .Where(IsAllowedOfficialPower)
                 .OrderBy(power => power.Id.Entry, StringComparer.Ordinal)
                 .ToList();
             return powers;
+        }
+
+        public static bool IsAllowedOfficialPower(PowerModel power)
+        {
+            Type type = power.GetType();
+            string? ns = type.Namespace;
+            if (ns?.StartsWith("MegaCrit.Sts2.", StringComparison.Ordinal) != true)
+            {
+                return false;
+            }
+
+            if (ns.Contains(".Mocks", StringComparison.Ordinal)
+                || type.Name.StartsWith("Mock", StringComparison.Ordinal)
+                || type.Name.Contains("Test", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            return !type.IsAbstract;
         }
     }
 }

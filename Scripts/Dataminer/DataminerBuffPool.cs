@@ -32,6 +32,13 @@ namespace KomeijiKoishi.Dataminer
             return GetPowers().FirstOrDefault(power => power.Id.Entry == powerId);
         }
 
+        public static IReadOnlyList<PowerModel> GetOfficialDebuffs()
+        {
+            return GetPowers()
+                .Where(power => power.TypeForCurrentAmount == PowerType.Debuff)
+                .ToList();
+        }
+
         private static List<PowerModel> GetPowers()
         {
             if (powers != null)
@@ -40,7 +47,7 @@ namespace KomeijiKoishi.Dataminer
             }
 
             powers = ModelDb.AllPowers
-                .Where(power => power.GetType().Namespace?.StartsWith("MegaCrit.Sts2.", StringComparison.Ordinal) == true)
+                .Where(DataminerPowerPool.IsAllowedOfficialPower)
                 .OrderBy(power => power.Id.Entry, StringComparer.Ordinal)
                 .ToList();
             return powers;

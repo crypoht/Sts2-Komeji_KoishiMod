@@ -7,7 +7,9 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using KomeijiKoishi.Config;
 
 namespace KomeijiKoishi.Powers
 {
@@ -15,6 +17,12 @@ namespace KomeijiKoishi.Powers
     {
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/ClosedStancePower.png";
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/ClosedStancePower.png";
+
+        public override LocString Description =>
+            new("powers", base.Id.Entry + (KoishiBalanceManager.IsEnabled ? ".balanceDescription" : ".description"));
+
+        protected override string SmartDescriptionLocKey =>
+            base.Id.Entry + (KoishiBalanceManager.IsEnabled ? ".balanceSmartDescription" : ".smartDescription");
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
@@ -73,5 +81,40 @@ namespace KomeijiKoishi.Powers
             }
             return 1m;
         }
+
+        private decimal ModifyDamageMultiplicativeCore(Creature? dealer)
+        {
+            if (KoishiBalanceManager.IsEnabled && dealer == base.Owner)
+            {
+                return 0.8m;
+            }
+
+            return 1m;
+        }
+
+#if STS2_BETA
+        public override decimal ModifyDamageMultiplicative(
+            Creature? target,
+            decimal amount,
+            ValueProp props,
+            Creature? dealer,
+            CardModel? cardSource,
+            CardPlay? cardPlay
+        )
+        {
+            return ModifyDamageMultiplicativeCore(dealer);
+        }
+#else
+        public override decimal ModifyDamageMultiplicative(
+            Creature? target,
+            decimal amount,
+            ValueProp props,
+            Creature? dealer,
+            CardModel? cardSource
+        )
+        {
+            return ModifyDamageMultiplicativeCore(dealer);
+        }
+#endif
     }
 }

@@ -20,7 +20,7 @@ using MegaCrit.Sts2.Core.Models;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class LookingGlassSelf_Koishi : CustomCardModel
+    public sealed class LookingGlassSelf_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public LookingGlassSelf_Koishi() 
             : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self, true) 

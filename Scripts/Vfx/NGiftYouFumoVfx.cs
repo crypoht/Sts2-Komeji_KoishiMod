@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
 using KomeijiKoishi.Cards.Fumo;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Helpers;
@@ -46,6 +47,44 @@ public sealed partial class NGiftYouFumoVfx : Node2D
     private PersistentFumoMarker? attachedMarker;
 
     private static readonly Dictionary<ulong, TargetFumoSlots> TargetSlots = new();
+    private const string TextureDirectory = "res://mods/Komeiji_Koishi/images/qingxu/";
+    private static readonly Dictionary<string, string> TextureFiles = new()
+    {
+        ["reimu"] = "Reimufumo.png",
+        ["cirno"] = "ciron.png",
+        ["kogasa"] = "Kogasafumo.png",
+        ["marisa"] = "Marisafumo.png",
+        ["okina"] = "Okinafumo.png",
+        ["reisen"] = "reisenfumo.png",
+        ["tewi"] = "Tewifumo.png",
+        ["yukari"] = "Yukarifumo.png",
+        ["yuuka"] = "Yuukafumo.png",
+        ["flandre"] = "Flanderfumo.png",
+        ["lwkoishi"] = "LWKoishifumo.png",
+        ["shion"] = "shionfumo.png",
+        ["youmu"] = "Youmufumo.png",
+        ["nue"] = "Nuefumo.png",
+        ["yuyuko"] = "Yuyukofumo.png",
+        ["minamitu"] = "Minamitufumo.png",
+        ["koakuma"] = "Koakumafumo.png",
+        ["pinkkoishi"] = "PinkKoishifumo.png",
+        ["marisamoon"] = "MarisaMoonfumo_fumo.png",
+        ["clownpiece"] = "Clownpiecefumo.png",
+        ["daiyousei"] = "Daiyouseifumo.png",
+        ["junko"] = "Junkofumo.png",
+        ["keiki"] = "Keikifumo.png",
+        ["lizunamaru"] = "Lizunamarufumo.png",
+        ["maribel"] = "Maribelfumo.png",
+        ["marisapast"] = "MarisaPastfumo.png",
+        ["reimumoon"] = "ReimuMoonfumo.png",
+        ["reimupast"] = "ReimuPastfumo.png",
+        ["renko"] = "Renkofumo.png",
+        ["sanae"] = "Sanaefumo.png",
+        ["satori"] = "Satorifumo.png",
+        ["suwako"] = "Suwakofumo.png"
+    };
+
+    public static IReadOnlyList<string> TextureNames => TextureFiles.Keys.OrderBy(name => name).ToList();
 
     public static NGiftYouFumoVfx? Create(Creature source, Creature target, CardModel fumoCard)
     {
@@ -56,7 +95,39 @@ public sealed partial class NGiftYouFumoVfx : Node2D
             return null;
         }
 
-        string? secondaryPath = GetSecondaryTexturePath(fumoCard);
+        return CreateFromPaths(source, target, path, GetSecondaryTexturePath(fumoCard));
+    }
+
+    public static NGiftYouFumoVfx? Create(Creature source, Creature target, string textureName)
+    {
+        if (!TryGetTexturePaths(textureName, out string? path, out string? secondaryPath) || path == null)
+        {
+            Log.Warn($"[KoishiGiftYouFumoVfx] Missing fumo texture mapping for '{textureName}'.");
+            return null;
+        }
+
+        return CreateFromPaths(source, target, path, secondaryPath);
+    }
+
+    public static bool TryGetTexturePaths(string textureName, out string? primaryPath, out string? secondaryPath)
+    {
+        string normalizedName = NormalizeTextureName(textureName);
+        if (!TextureFiles.TryGetValue(normalizedName, out string? fileName))
+        {
+            primaryPath = null;
+            secondaryPath = null;
+            return false;
+        }
+
+        primaryPath = TextureDirectory + fileName;
+        secondaryPath = normalizedName == "marisamoon"
+            ? TextureDirectory + "MarisaMoonfumo_gun.png"
+            : null;
+        return true;
+    }
+
+    private static NGiftYouFumoVfx? CreateFromPaths(Creature source, Creature target, string path, string? secondaryPath)
+    {
         if (!ResourceLoader.Exists(path) || (secondaryPath != null && !ResourceLoader.Exists(secondaryPath)))
         {
             Log.Warn($"[KoishiGiftYouFumoVfx] Missing texture: primary={path}, secondary={secondaryPath ?? "none"}");
@@ -472,33 +543,33 @@ public sealed partial class NGiftYouFumoVfx : Node2D
 
     private static string? GetTexturePath(CardModel card)
     {
-        string? fileName = card switch
+        string? name = card switch
         {
-            CirnoFumo_Koishi => "ciron.png",
-            KogasaFumo_Koishi => "Kogasafumo.png",
-            MarisaFumo_Koishi => "Marisafumo.png",
-            OkinaFumo_Koishi => "Okinafumo.png",
-            ReimuFumo_Koishi => "Reimufumo.png",
-            ReisenFumo_Koishi => "reisenfumo.png",
-            TewiFumo_Koishi => "Tewifumo.png",
-            YukariFumo_Koishi => "Yukarifumo.png",
-            YuukaFumo_Koishi => "Yuukafumo.png",
-            FlandreFumo_Koishi => "Flanderfumo.png",
-            LWKoishiFumo_Koishi => "LWKoishifumo.png",
-            ShionFumo_Koishi => "shionfumo.png",
-            YoumuFumo_Koishi => "Youmufumo.png",
-            NueFumo_Koishi => "Nuefumo.png",
-            YuyukoFumo_Koishi => "Yuyukofumo.png",
-            MinamituFumo_Koishi => "Minamitufumo.png",
-            KoakumaFumo_koishi => "Koakumafumo.png",
-            PinkKoishiFumo_Koishi => "PinkKoishifumo.png",
-            MarisaMoonFumo_Koishi => "MarisaMoonfumo_fumo.png",
+            CirnoFumo_Koishi => "cirno",
+            KogasaFumo_Koishi => "kogasa",
+            MarisaFumo_Koishi => "marisa",
+            OkinaFumo_Koishi => "okina",
+            ReimuFumo_Koishi => "reimu",
+            ReisenFumo_Koishi => "reisen",
+            TewiFumo_Koishi => "tewi",
+            YukariFumo_Koishi => "yukari",
+            YuukaFumo_Koishi => "yuuka",
+            FlandreFumo_Koishi => "flandre",
+            LWKoishiFumo_Koishi => "lwkoishi",
+            ShionFumo_Koishi => "shion",
+            YoumuFumo_Koishi => "youmu",
+            NueFumo_Koishi => "nue",
+            YuyukoFumo_Koishi => "yuyuko",
+            MinamituFumo_Koishi => "minamitu",
+            KoakumaFumo_koishi => "koakuma",
+            PinkKoishiFumo_Koishi => "pinkkoishi",
+            MarisaMoonFumo_Koishi => "marisamoon",
             _ => null
         };
 
-        return fileName == null
-            ? null
-            : $"res://mods/Komeiji_Koishi/images/qingxu/{fileName}";
+        return name != null && TryGetTexturePaths(name, out string? path, out _)
+            ? path
+            : null;
     }
 
     private static string? GetSecondaryTexturePath(CardModel card)
@@ -509,8 +580,15 @@ public sealed partial class NGiftYouFumoVfx : Node2D
             _ => null
         };
 
-        return fileName == null
-            ? null
-            : $"res://mods/Komeiji_Koishi/images/qingxu/{fileName}";
+        return fileName == null ? null : TextureDirectory + fileName;
+    }
+
+    private static string NormalizeTextureName(string value)
+    {
+        return value.Trim()
+            .Replace("_", string.Empty)
+            .Replace("-", string.Empty)
+            .Replace("fumo", string.Empty)
+            .ToLowerInvariant();
     }
 }

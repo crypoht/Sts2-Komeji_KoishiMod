@@ -5,9 +5,14 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
+using Godot;
 using KomeijiKoishi.Dataminer;
 using KomeijiKoishi.Patches;
 using KomeijiKoishi.Pools;
+using KomeijiKoishi.Powers;
+using KomeijiKoishi.Relics;
+using KomeijiKoishi.Multiplayer;
+using KomeijiKoishi.Vfx;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Combat;
@@ -19,6 +24,7 @@ using MegaCrit.Sts2.Core.Entities.Potions;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
@@ -26,7 +32,11 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Orbs;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
+using MegaCrit.Sts2.Core.Rewards;
+using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Saves.Runs;
+using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace KomeijiKoishi.Cards
@@ -87,6 +97,12 @@ namespace KomeijiKoishi.Cards
             }
         }
 
+        public DataminerEffect GetEffectForDescription()
+        {
+            EnsureEffectLoaded();
+            return effect;
+        }
+
         // The effect is already synchronized as part of the card transformation, so it
         // also provides a stable seed for purely visual randomization.
         public string CompositePortraitSeed
@@ -98,9 +114,11 @@ namespace KomeijiKoishi.Cards
                     + $"{FormatGeneratedCard(effect.Primary)}|"
                     + $"{effect.PlayCondition.Kind}:{effect.PlayCondition.Amount}|"
                     + $"{effect.ExtraCondition.Kind}:{effect.ExtraCondition.Amount}|"
-                    + $"{effect.ExtraEffect.Kind}:{effect.ExtraEffect.Amount}:{effect.ExtraEffect.PowerId}:{effect.ExtraEffect.PileScope}:{effect.ExtraEffect.SecondaryAmount}|"
+                    + $"{effect.ExtraEffect.Kind}:{effect.ExtraEffect.Amount}:{effect.ExtraEffect.PowerId}:{effect.ExtraEffect.PileScope}:{effect.ExtraEffect.SecondaryAmount}:{effect.ExtraEffect.PowerTarget}|"
                     + $"{FormatGeneratedCard(effect.ExtraEffect)}|"
-                    + $"{effect.PowerId}|{effect.ReturnPile}|{effect.ExtraPrimaryRepeats}";
+                    + $"{effect.PowerId}|{effect.ReturnPile}|{effect.ExtraPrimaryRepeats}|{effect.ComboAmount}|"
+                    + $"{effect.Unplayable}|{effect.MustPlayFirst}|{effect.AbilityTrigger}|"
+                    + $"{effect.AbilityEffect.Kind}:{effect.AbilityEffect.Amount}:{effect.AbilityEffect.PowerId}";
             }
         }
 
@@ -140,6 +158,32 @@ namespace KomeijiKoishi.Cards
             }
         }
 
+        public override IEnumerable<CardKeyword> CanonicalKeywords
+        {
+            get
+            {
+                EnsureEffectLoaded();
+                return effect.Unplayable
+                    ? new[] { CardKeyword.Unplayable }
+                    : Array.Empty<CardKeyword>();
+            }
+        }
+
+        public override bool ShouldPlay(CardModel card, AutoPlayType autoPlayType)
+        {
+            EnsureEffectLoaded();
+            if (!effect.MustPlayFirst || base.Owner == null || card.Owner != base.Owner)
+            {
+                return true;
+            }
+
+            CardPile? pile = base.Pile;
+            return pile == null
+                || pile.Type != PileType.Hand
+                || card == this
+                || autoPlayType != AutoPlayType.None;
+        }
+
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             EnsureEffectLoaded();
@@ -149,21 +193,45 @@ namespace KomeijiKoishi.Cards
                 return;
             }
 
+            if (effect.CardType == CardType.Power)
+            {
+                await ApplyGeneratedAbility(choiceContext, player);
+                return;
+            }
+
             if (!effect.PlayCondition.IsMet(player))
             {
                 return;
             }
 
             await ApplySubEffect(choiceContext, player, cardPlay, effect.Primary);
+            if (effect.ComboAmount > 0)
+            {
+                TryAddCombo(player, effect.ComboAmount);
+            }
+
             if (effect.ExtraEffect.Kind != DataminerEffectKind.None
                 && effect.ExtraCondition.IsMet(player))
             {
-                await ApplySubEffect(choiceContext, player, cardPlay, effect.ExtraEffect);
-                for (int i = 0; i < effect.ExtraPrimaryRepeats; i++)
+                if (effect.ExtraEffect.Kind == DataminerEffectKind.RepeatPrimary)
                 {
-                    await ApplySubEffect(choiceContext, player, cardPlay, effect.Primary);
+                    for (int i = 0; i < effect.ExtraEffect.Amount; i++)
+                    {
+                        await ApplySubEffect(choiceContext, player, cardPlay, effect.Primary);
+                    }
+                }
+                else
+                {
+                    await ApplySubEffect(choiceContext, player, cardPlay, effect.ExtraEffect);
                 }
             }
+        }
+
+        private async Task ApplyGeneratedAbility(PlayerChoiceContext context, Player player)
+        {
+            DataminerAbilityPower power = (DataminerAbilityPower)ModelDb.Power<DataminerAbilityPower>().ToMutable();
+            power.Configure(effect.AbilityTrigger, effect.AbilityEffect);
+            await PowerCmd.Apply(context, power, player.Creature, 1m, player.Creature, this, false);
         }
 
         private async Task ApplySubEffect(
@@ -213,6 +281,24 @@ namespace KomeijiKoishi.Cards
                             ValueProp.Unblockable | ValueProp.Unpowered, null, null);
                     }
                     break;
+                case DataminerEffectKind.HealthLossByPileCount:
+                    await LoseHealthByPileCount(choiceContext, player);
+                    break;
+                case DataminerEffectKind.GenerateShivs:
+                    await Shiv.CreateInHand(player, subEffect.Amount, base.CombatState!);
+                    break;
+                case DataminerEffectKind.GenerateSouls:
+                    await AddSoulsToPile(player, PileType.Hand, subEffect.Amount);
+                    break;
+                case DataminerEffectKind.GenerateSoulsToPile:
+                    await AddSoulsToPile(player, GetPileType(subEffect.PileScope), subEffect.Amount);
+                    break;
+                case DataminerEffectKind.RetrieveDiscardCards:
+                    await RetrieveCards(choiceContext, player, PileType.Discard, subEffect.Amount, subEffect.PileScope);
+                    break;
+                case DataminerEffectKind.RetrieveDrawCards:
+                    await RetrieveCards(choiceContext, player, PileType.Draw, subEffect.Amount, subEffect.PileScope);
+                    break;
                 case DataminerEffectKind.ExhaustRandomHand:
                     await ExhaustRandomHand(choiceContext, player, subEffect.Amount);
                     break;
@@ -223,17 +309,18 @@ namespace KomeijiKoishi.Cards
                     }
                     break;
                 case DataminerEffectKind.RandomPower:
+                case DataminerEffectKind.SpecificPower:
                     PowerModel? power = DataminerPowerPool.Resolve(subEffect.PowerId);
                     if (power != null)
                     {
-                        await PowerCmd.Apply(choiceContext, power.ToMutable(), player.Creature, subEffect.Amount, player.Creature, this, false);
+                        await ApplyPowerToTargets(choiceContext, player, power, subEffect);
                     }
                     break;
                 case DataminerEffectKind.RandomBuff:
                     PowerModel? buff = DataminerBuffPool.Resolve(subEffect.PowerId);
                     if (buff != null)
                     {
-                        await PowerCmd.Apply(choiceContext, buff.ToMutable(), player.Creature, subEffect.Amount, player.Creature, this, false);
+                        await ApplyPowerToTargets(choiceContext, player, buff, subEffect);
                     }
                     break;
                 case DataminerEffectKind.GenerateCards:
@@ -293,7 +380,7 @@ namespace KomeijiKoishi.Cards
                     UpgradeCards(GetCards(player, DataminerPileScope.All), int.MaxValue);
                     break;
                 case DataminerEffectKind.Summon:
-                    await PowerCmd.Apply<SummonNextTurnPower>(choiceContext, player.Creature, subEffect.Amount, player.Creature, this, false);
+                    await SummonRandomMonsters(player, subEffect);
                     break;
                 case DataminerEffectKind.Stars:
                     await PlayerCmd.GainStars(subEffect.Amount, player);
@@ -304,6 +391,462 @@ namespace KomeijiKoishi.Cards
                 case DataminerEffectKind.RandomizeHandCost:
                     RandomizeHandCost(player, subEffect.Amount);
                     break;
+                case DataminerEffectKind.DirectWin:
+                    await WinCombat(player);
+                    break;
+                case DataminerEffectKind.MaxHp:
+                    await ChangeMaxHp(choiceContext, player, subEffect);
+                    break;
+                case DataminerEffectKind.ExtraCardRewards:
+                    AddExtraCardRewards(player, subEffect.Amount);
+                    break;
+                case DataminerEffectKind.ObtainRelic:
+                    await ObtainRandomRelic(player);
+                    break;
+                case DataminerEffectKind.LoseRelic:
+                    await LoseRandomRelic(player, subEffect.SecondaryAmount);
+                    break;
+                case DataminerEffectKind.DoublePowers:
+                    await DoubleAllPowers(player, subEffect);
+                    break;
+                case DataminerEffectKind.OstyDamage:
+                    if (cardPlay.Target != null && player.Osty is { IsAlive: true } osty)
+                    {
+                        int damage = osty.CurrentHp * subEffect.Amount;
+                        await DamageCmd.Attack(damage).FromCard(this, cardPlay).Targeting(cardPlay.Target).Execute(choiceContext);
+                    }
+                    break;
+                case DataminerEffectKind.InstantDeath:
+                    await CreatureCmd.Kill(player.Creature, false);
+                    break;
+                case DataminerEffectKind.MoriyaDance:
+                    MoriyaDance_Koishi.PlayDataminerDanceVideo(subEffect.PowerId);
+                    break;
+                case DataminerEffectKind.SpawnFumo:
+                    SpawnFumo(player, subEffect.PowerId);
+                    break;
+                case DataminerEffectKind.ReplaceDeckWithIronWaves:
+                    await ReplaceDeckWithIronWaves(player, subEffect.Amount);
+                    break;
+                case DataminerEffectKind.GodMode:
+                    await EnableGodMode(choiceContext, player, subEffect.Amount == 0);
+                    break;
+                case DataminerEffectKind.ClearAllPowers:
+                    await ClearPowers(player, subEffect, null);
+                    break;
+                case DataminerEffectKind.ClearEnemyDebuffs:
+                    await ClearPowers(player, subEffect, PowerType.Debuff);
+                    break;
+                case DataminerEffectKind.ClearEnemyBuffs:
+                    await ClearPowers(player, subEffect, PowerType.Buff);
+                    break;
+                case DataminerEffectKind.OverlayPlayers:
+                case DataminerEffectKind.OverlayEnemies:
+                    ApplyCreatureOverlays(player, subEffect);
+                    break;
+                case DataminerEffectKind.RandomVfx:
+                case DataminerEffectKind.SpecificVfx:
+                    PlayOfficialVfx(player, subEffect);
+                    break;
+                case DataminerEffectKind.ModifyHandLimit:
+                    await PowerCmd.Apply<DataminerErrorPower>(
+                        choiceContext,
+                        player.Creature,
+                        subEffect.Amount,
+                        player.Creature,
+                        this,
+                        false);
+                    break;
+                case DataminerEffectKind.ApplyAllDebuffs:
+                    await ApplyAllOfficialDebuffs(choiceContext, player, subEffect);
+                    break;
+            }
+        }
+
+        private async Task ApplyPowerToTargets(
+            PlayerChoiceContext choiceContext,
+            Player player,
+            PowerModel power,
+            DataminerSubEffect effect)
+        {
+            if (player.Creature.CombatState == null)
+            {
+                return;
+            }
+
+            List<Creature> targets = GetPowerTargets(player, effect);
+            foreach (Creature target in targets)
+            {
+                await PowerCmd.Apply(
+                    choiceContext,
+                    power.ToMutable(),
+                    target,
+                    effect.Amount,
+                    player.Creature,
+                    this,
+                    false);
+            }
+        }
+
+        private static List<Creature> GetPowerTargets(Player player, DataminerSubEffect effect)
+        {
+            CombatState combatState = (CombatState)player.Creature.CombatState!;
+            List<Creature> allies = combatState.PlayerCreatures
+                .Where(creature => creature.IsAlive)
+                .OrderBy(creature => creature.CombatId)
+                .ToList();
+            List<Creature> enemies = combatState.Enemies
+                .Where(creature => creature.IsAlive)
+                .OrderBy(creature => creature.CombatId)
+                .ToList();
+
+            return effect.PowerTarget switch
+            {
+                DataminerPowerTarget.Self => new List<Creature> { player.Creature },
+                DataminerPowerTarget.Ally => SelectOneOrFallback(player, allies, effect.SecondaryAmount),
+                DataminerPowerTarget.AllAllies => allies,
+                DataminerPowerTarget.Enemy => SelectOne(enemies, effect.SecondaryAmount),
+                DataminerPowerTarget.AllEnemies => enemies,
+                DataminerPowerTarget.AllUnits => allies.Concat(enemies).ToList(),
+                _ => new List<Creature> { player.Creature }
+            };
+        }
+
+        private static List<Creature> SelectOneOrFallback(
+            Player player,
+            List<Creature> candidates,
+            int selectionSeed)
+        {
+            List<Creature> otherAllies = candidates
+                .Where(creature => creature != player.Creature)
+                .ToList();
+            if (otherAllies.Count == 0)
+            {
+                return new List<Creature> { player.Creature };
+            }
+
+            return new List<Creature> { SelectBySeed(otherAllies, selectionSeed) };
+        }
+
+        private static List<Creature> SelectOne(List<Creature> candidates, int selectionSeed)
+        {
+            if (candidates.Count == 0)
+            {
+                return new List<Creature>();
+            }
+
+            return new List<Creature> { SelectBySeed(candidates, selectionSeed) };
+        }
+
+        private static T SelectBySeed<T>(List<T> candidates, int selectionSeed) =>
+            candidates[selectionSeed % candidates.Count];
+
+        private static async Task SummonRandomMonsters(Player player, DataminerSubEffect effect)
+        {
+            if (effect.Amount <= 0 || string.IsNullOrEmpty(effect.PowerId) || player.Creature.CombatState == null)
+            {
+                return;
+            }
+
+            MonsterModel? monster = ModelDb.Monsters.FirstOrDefault(model => model.Id.Entry == effect.PowerId);
+            if (monster == null)
+            {
+                return;
+            }
+
+            List<string?> slots = GetSummonSlots(player, effect.Amount, effect.SecondaryAmount);
+            for (int i = 0; i < effect.Amount; i++)
+            {
+                Creature creature = await CreatureCmd.Add(
+                    monster.ToMutable(),
+                    player.Creature.CombatState,
+                    CombatSide.Enemy,
+                    i < slots.Count ? slots[i] : null);
+                if (i >= slots.Count || slots[i] == null)
+                {
+                    PositionSummonedMonster(player, creature, i, effect.SecondaryAmount);
+                }
+            }
+        }
+
+        private static List<string?> GetSummonSlots(Player player, int count, int seed)
+        {
+            CombatState? combatState = player.Creature.CombatState as CombatState;
+            if (combatState?.Encounter?.Slots == null)
+            {
+                return Enumerable.Repeat<string?>(null, count).ToList();
+            }
+
+            HashSet<string?> occupied = combatState.Enemies
+                .Select(enemy => enemy.SlotName)
+                .Where(slot => slot != null)
+                .ToHashSet();
+            List<string?> candidates = combatState.Encounter.Slots
+                .Where(slot => !occupied.Contains(slot))
+                .Cast<string?>()
+                .ToList();
+            List<string?> result = new();
+            while (result.Count < count && candidates.Count > 0)
+            {
+                int index = (seed + result.Count * 97) % candidates.Count;
+                string? slot = candidates[index];
+                candidates.RemoveAt(index);
+                result.Add(slot);
+            }
+
+            return result;
+        }
+
+        private static void PositionSummonedMonster(Player player, Creature summoned, int index, int seed)
+        {
+            MegaCrit.Sts2.Core.Nodes.Rooms.NCombatRoom? room = MegaCrit.Sts2.Core.Nodes.Rooms.NCombatRoom.Instance;
+            MegaCrit.Sts2.Core.Nodes.Combat.NCreature? node = room?.GetCreatureNode(summoned);
+            if (node == null)
+            {
+                return;
+            }
+
+            List<Creature> anchors = player.Creature.CombatState?.Enemies
+                .Where(enemy => enemy != summoned && enemy.IsAlive)
+                .ToList() ?? new List<Creature>();
+            MegaCrit.Sts2.Core.Nodes.Combat.NCreature? anchorNode = anchors.Count == 0
+                ? null
+                : room?.GetCreatureNode(anchors[(seed + index) % anchors.Count]);
+            Vector2 center = anchorNode?.GlobalPosition ?? node.GlobalPosition;
+            float angle = Mathf.DegToRad((seed + index * 137) % 360);
+            float radius = 280f + ((seed + index * 53) % 221);
+            node.GlobalPosition = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle) * 0.45f) * radius;
+        }
+
+        private static void SpawnFumo(Player player, string? textureName)
+        {
+            if (string.IsNullOrEmpty(textureName))
+            {
+                return;
+            }
+
+            NGiftYouFumoVfx? fumo = NGiftYouFumoVfx.Create(player.Creature, player.Creature, textureName);
+            if (fumo != null)
+            {
+                MegaCrit.Sts2.Core.Nodes.Rooms.NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(fumo);
+            }
+        }
+
+        private async Task ReplaceDeckWithIronWaves(Player player, int amount)
+        {
+            List<CardModel> deckCards = PileType.Deck.GetPile(player).Cards.ToList();
+            if (deckCards.Count > 0)
+            {
+                await CardPileCmd.RemoveFromCombat(deckCards, true);
+            }
+
+            for (int i = 0; i < amount; i++)
+            {
+                CardModel ironWave = player.RunState.CreateCard<IronWave>(player);
+                await AddCardToDeckSafely(ironWave);
+            }
+        }
+
+        private static async Task AddCardToDeckSafely(CardModel card)
+        {
+            using (DataminerDeckProtectionPatch.AllowInternalGeneration())
+            {
+                await CardPileCmd.Add(card, PileType.Deck, CardPilePosition.Bottom, null, false);
+            }
+        }
+
+        private async Task EnableGodMode(PlayerChoiceContext context, Player player, bool thisTurnOnly)
+        {
+            if (thisTurnOnly)
+            {
+                await PowerCmd.Apply<DataminerTurnGodModePower>(
+                    context,
+                    player.Creature,
+                    1,
+                    player.Creature,
+                    this,
+                    false);
+                return;
+            }
+
+            const decimal godModeAmount = 999999999m;
+            await PowerCmd.Apply<StrengthPower>(context, player.Creature, godModeAmount, player.Creature, null, false);
+            await PowerCmd.Apply<BufferPower>(context, player.Creature, godModeAmount, player.Creature, null, false);
+            await PowerCmd.Apply<RegenPower>(context, player.Creature, godModeAmount, player.Creature, null, false);
+        }
+
+        private static async Task ClearPowers(Player player, DataminerSubEffect effect, PowerType? type)
+        {
+            foreach (Creature target in GetPowerTargets(player, effect))
+            {
+                foreach (PowerModel power in target.Powers.ToList())
+                {
+                    if (type == null || power.TypeForCurrentAmount == type)
+                    {
+                        await PowerCmd.Remove(power);
+                    }
+                }
+            }
+        }
+
+        private static void ApplyCreatureOverlays(Player player, DataminerSubEffect effect)
+        {
+            if (string.IsNullOrEmpty(effect.PowerId))
+            {
+                return;
+            }
+
+            foreach (Creature target in GetPowerTargets(player, effect))
+            {
+                NDataminerCreatureOverlayVfx.Create(target, effect.PowerId);
+            }
+        }
+
+        private static void PlayOfficialVfx(Player player, DataminerSubEffect effect)
+        {
+            foreach (Creature target in GetPowerTargets(player, effect))
+            {
+                for (int i = 0; i < effect.Amount; i++)
+                {
+                    switch (effect.PowerId)
+                    {
+                        case "big_slash":
+                            NBigSlashVfx? slash = NBigSlashVfx.Create(target);
+                            if (slash != null)
+                            {
+                                MegaCrit.Sts2.Core.Nodes.Rooms.NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(slash);
+                            }
+                            break;
+                        case "block_spark":
+                            NBlockSparkVfx? spark = NBlockSparkVfx.Create(target);
+                            if (spark != null)
+                            {
+                                MegaCrit.Sts2.Core.Nodes.Rooms.NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(spark);
+                            }
+                            break;
+                        case "bounce_spark":
+                            NBounceSparkVfx? bounce = NBounceSparkVfx.Create(target);
+                            if (bounce != null)
+                            {
+                                MegaCrit.Sts2.Core.Nodes.Rooms.NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(bounce);
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        private async Task ApplyAllOfficialDebuffs(
+            PlayerChoiceContext context,
+            Player player,
+            DataminerSubEffect effect)
+        {
+            foreach (Creature target in GetPowerTargets(player, effect))
+            {
+                foreach (PowerModel debuff in DataminerBuffPool.GetOfficialDebuffs())
+                {
+                    await PowerCmd.Apply(
+                        context,
+                        debuff.ToMutable(),
+                        target,
+                        effect.Amount,
+                        player.Creature,
+                        this,
+                        false);
+                }
+            }
+        }
+
+        private static async Task WinCombat(Player player)
+        {
+            if (player.Creature.CombatState == null)
+            {
+                return;
+            }
+
+            foreach (Creature enemy in player.Creature.CombatState.Enemies.ToList())
+            {
+                enemy.RemoveAllPowersInternalExcept(null);
+                await CreatureCmd.Kill(enemy, false);
+            }
+
+            await CombatManager.Instance.CheckWinCondition();
+        }
+
+        private static async Task ChangeMaxHp(
+            PlayerChoiceContext context,
+            Player player,
+            DataminerSubEffect effect)
+        {
+            foreach (Creature target in GetPowerTargets(player, effect))
+            {
+                if (effect.Amount > 0)
+                {
+                    await CreatureCmd.GainMaxHp(target, effect.Amount);
+                }
+                else if (effect.Amount < 0)
+                {
+                    await CreatureCmd.LoseMaxHp(context, target, -effect.Amount, true);
+                }
+            }
+        }
+
+        private static void AddExtraCardRewards(Player player, int count)
+        {
+            if (count <= 0 || player.RunState.CurrentRoom is not CombatRoom combatRoom)
+            {
+                return;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                combatRoom.AddExtraReward(
+                    player,
+                    new CardReward(
+                        CardCreationOptions.ForRoom(player, combatRoom.RoomType),
+                        3,
+                        player,
+                        null));
+            }
+        }
+
+        private static async Task ObtainRandomRelic(Player player)
+        {
+            RelicModel relic = RelicFactory.PullNextRelicFromFront(player).ToMutable();
+            await RelicCmd.Obtain(relic, player, -1);
+        }
+
+        private static async Task LoseRandomRelic(Player player, int selectionSeed)
+        {
+            List<RelicModel> candidates = player.Relics
+                .Where(relic => relic is not Dataminer_Koishi)
+                .OrderBy(relic => relic.Id.Entry, StringComparer.Ordinal)
+                .ToList();
+            if (candidates.Count > 0)
+            {
+                await RelicCmd.Remove(SelectBySeed(candidates, selectionSeed));
+            }
+        }
+
+        private static async Task DoubleAllPowers(Player player, DataminerSubEffect effect)
+        {
+            foreach (Creature target in GetPowerTargets(player, effect))
+            {
+                foreach (PowerModel power in target.Powers.ToList())
+                {
+                    if (power.Amount == 0)
+                    {
+                        continue;
+                    }
+
+                    await PowerCmd.ModifyAmount(
+                        new ThrowingPlayerChoiceContext(),
+                        power,
+                        power.Amount,
+                        player.Creature,
+                        null,
+                        false);
+                }
             }
         }
 
@@ -319,6 +862,75 @@ namespace KomeijiKoishi.Cards
                 _ => new[] { PileType.Deck, PileType.Exhaust, PileType.Draw, PileType.Discard, PileType.Hand }
             };
             return piles.SelectMany(pile => pile.GetPile(player).Cards).ToList();
+        }
+
+        private static PileType GetPileType(DataminerPileScope? scope) => scope switch
+        {
+            DataminerPileScope.Draw => PileType.Draw,
+            DataminerPileScope.Discard => PileType.Discard,
+            DataminerPileScope.Exhaust => PileType.Exhaust,
+            DataminerPileScope.Hand => PileType.Hand,
+            _ => PileType.Hand
+        };
+
+        private static async Task LoseHealthByPileCount(PlayerChoiceContext context, Player player)
+        {
+            int count = PileType.Hand.GetPile(player).Cards.Count
+                + PileType.Discard.GetPile(player).Cards.Count
+                + PileType.Draw.GetPile(player).Cards.Count
+                + PileType.Deck.GetPile(player).Cards.Count
+                + PileType.Exhaust.GetPile(player).Cards.Count;
+            if (count > 0)
+            {
+                await CreatureCmd.Damage(
+                    context,
+                    player.Creature,
+                    count,
+                    ValueProp.Unblockable | ValueProp.Unpowered,
+                    null,
+                    null);
+            }
+        }
+
+        private static async Task AddSoulsToPile(Player player, PileType pileType, int amount)
+        {
+            if (amount <= 0 || pileType == PileType.Deck)
+            {
+                return;
+            }
+
+            List<Soul> souls = Soul.Create(player, amount, player.Creature.CombatState!).ToList();
+            await CardPileCmd.AddGeneratedCardsToCombat(souls, pileType, player, CardPilePosition.Bottom);
+        }
+
+        private static async Task RetrieveCards(
+            PlayerChoiceContext context,
+            Player player,
+            PileType sourcePile,
+            int amount,
+            DataminerPileScope? destinationScope)
+        {
+            if (amount <= 0 || sourcePile.GetPile(player).Cards.Count == 0)
+            {
+                return;
+            }
+
+            CardSelectorPrefs prefs = new CardSelectorPrefs(
+                new MegaCrit.Sts2.Core.Localization.LocString(
+                    "gameplay_ui",
+                    "KOMEIJIKOISHI_DATAMINER_ERROR_PROMPT"),
+                0,
+                amount);
+            IEnumerable<CardModel> selected = await CardSelectCmd.FromCombatPile(
+                context,
+                sourcePile.GetPile(player),
+                player,
+                prefs);
+            PileType destination = GetPileType(destinationScope);
+            foreach (CardModel card in selected.ToList())
+            {
+                await CardPileCmd.Add(card, destination, CardPilePosition.Bottom, null, false);
+            }
         }
 
         private static async Task ChannelOrbs(PlayerChoiceContext context, Player player, DataminerSubEffect effect)
@@ -466,10 +1078,7 @@ namespace KomeijiKoishi.Cards
 
                 if (subEffect.GeneratedCardDestination == DataminerGeneratedCardDestination.Deck)
                 {
-                    using (DataminerDeckProtectionPatch.AllowInternalGeneration())
-                    {
-                        await CardPileCmd.Add(generatedCard, PileType.Deck, CardPilePosition.Bottom, null, false);
-                    }
+                    await AddCardToDeckSafely(generatedCard);
                     continue;
                 }
 
@@ -593,8 +1202,9 @@ namespace KomeijiKoishi.Cards
 #if STS2_BETA
         protected override CardLocation GetResultLocationForCardPlay()
         {
+            EnsureEffectLoaded();
             CardLocation location = base.GetResultLocationForCardPlay();
-            location.pileType = GetStablePile(effect.ReturnPile);
+            location.pileType = GetResultPileForCardType();
             location.position = effect.ReturnPile switch
             {
                 DataminerReturnPile.DrawTop => CardPilePosition.Top,
@@ -606,9 +1216,29 @@ namespace KomeijiKoishi.Cards
 #else
         protected override PileType GetResultPileTypeForCardPlay()
         {
-            return GetStablePile(effect.ReturnPile);
+            return GetResultPileForCardType();
         }
 #endif
+
+        private PileType GetResultPileForCardType()
+        {
+            EnsureEffectLoaded();
+            return effect.CardType == CardType.Power || RemovesThisCardFromCombatAfterPlay()
+                ? PileType.None
+                : GetStablePile(effect.ReturnPile);
+        }
+
+        private bool RemovesThisCardFromCombatAfterPlay()
+        {
+            if (effect.Primary.Kind == DataminerEffectKind.ReplaceDeckWithIronWaves)
+            {
+                return true;
+            }
+
+            return effect.ExtraEffect.Kind == DataminerEffectKind.ReplaceDeckWithIronWaves
+                && base.Owner is Player player
+                && effect.ExtraCondition.IsMet(player);
+        }
     }
 
     [Pool(typeof(TokenCardPool))]

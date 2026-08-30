@@ -41,7 +41,9 @@ namespace KomeijiKoishi.Cards
 
             await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
 
-            int xValue = base.ResolveEnergyXValue();
+            int xValue = KoishiExtensions.AutoPlayedByUnconsciousCards.Contains(this)
+                ? (player.PlayerCombatState?.Energy ?? 0)
+                : base.ResolveEnergyXValue();
             int amount = xValue + (base.IsUpgraded ? 1 : 0);
             if (amount <= 0) return;
 

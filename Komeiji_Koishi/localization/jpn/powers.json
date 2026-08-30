@@ -7,7 +7,9 @@
     "KOMEIJIKOISHI-BLOOM_STANCE_POWER.balanceDescription":  "使用アタック时，额外对ランダム敵造成等同于该カードダメージのダメージ。得るの[gold]ブロック[/gold]减少 70%。入る该状态时,得る{energyPrefix:energyIcons(1)}。このスタンスを完全に使いこなせるのは古明地こいしだけ。",
     "KOMEIJIKOISHI-CLOSED_STANCE_POWER.title":  "閉合",
     "KOMEIJIKOISHI-CLOSED_STANCE_POWER.smartDescription":  "得るの[gold]ブロック[/gold]提升{BlockBonus}%。入る该状态时引く取一枚カード",
+    "KOMEIJIKOISHI-CLOSED_STANCE_POWER.balanceSmartDescription":  "得るの[gold]ブロック[/gold]提升{BlockBonus}%。与えるダメージが20%減少する。入る该状态时引く取一枚カード",
     "KOMEIJIKOISHI-CLOSED_STANCE_POWER.description":  "得るの[gold]ブロック[/gold]提升20%。入る该状态时引く取一枚カード",
+    "KOMEIJIKOISHI-CLOSED_STANCE_POWER.balanceDescription":  "得るの[gold]ブロック[/gold]提升20%。与えるダメージが20%減少する。入る该状态时引く取一枚カード",
     "KOMEIJIKOISHI-FETUS_DREAM_POWER.title":  "胎儿之梦",
     "KOMEIJIKOISHI-FETUS_DREAM_POWER.smartDescription":  "[gold]無意識[/gold]得到了扩枚!",
     "KOMEIJIKOISHI-TRACING_POWER.title":  "追跡",
@@ -82,5 +84,14 @@
     "KOMEIJIKOISHI-SELF_POWER.smartDescription":  "敵のターン開始時、[gold]クウガ[/gold]を[blue]{Amount}[/blue]失う。",
     "KOMEIJIKOISHI-SELF_POWER.description":  "敵のターン開始時、[gold]クウガ[/gold]を[blue]{Amount}[/blue]失う。",
     "KOMEIJIKOISHI-IDS_SHIKIGAMI_POWER.title":  "地妖符「本私の式神」",
-    "KOMEIJIKOISHI-IDS_SHIKIGAMI_POWER.smartDescription":  "スキルカードを使用するたび、ランダムなスキルカードを1枚手札に加える。"
+    "KOMEIJIKOISHI-IDS_SHIKIGAMI_POWER.smartDescription":  "スキルカードを使用するたび、ランダムなスキルカードを1枚手札に加える。",
+    "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.title":  "错误",
+    "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.description":  "！*#￥……&（&*0*@&&#*？》：‘",
+    "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.readableDescription":  "增加手牌等于层数的手牌上限",
+    "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.title":  "错误",
+    "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.description":  "！*#￥……&（&*0*@&&#*？》：‘",
+    "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.readableDescription":  "本回合内受到的伤害为0",
+    "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.title":  "错误",
+    "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.description":  "！*#￥……&（&*0*@&&#*？》：‘",
+    "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.readableDescription":  "発動条件：{Trigger}\n効果：{Effect}"
 }

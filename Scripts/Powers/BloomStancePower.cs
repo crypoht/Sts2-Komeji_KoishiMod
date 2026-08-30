@@ -33,7 +33,6 @@ namespace KomeijiKoishi.Powers
         public static int BloomEnergyGainAmount = 1;
 
         
-        private CardModel? _cardToIgnore;
         private AttackCommand? _commandToDouble;
 
         
@@ -90,10 +89,6 @@ namespace KomeijiKoishi.Powers
                 await ClearOldStances(player, typeof(BloomStancePower));
 
 
-                var powerInstance = player.Creature.GetPower<BloomStancePower>();
-                if (powerInstance != null)
-                    powerInstance._cardToIgnore = sourceCard;
-
                 await NotifyAllCardsStanceChanged(player, "Bloom");
                 await NotifyAllPowersStanceChanged(context, player, "Bloom", sourceCard);
             }
@@ -123,13 +118,6 @@ namespace KomeijiKoishi.Powers
 
             if (!command.DamageProps.IsPoweredAttack())
                 return Task.CompletedTask;
-
-
-            if (cardModel == _cardToIgnore)
-            {
-                _cardToIgnore = null;
-                return Task.CompletedTask;
-            }
 
             if (_commandToDouble != null)
                 return Task.CompletedTask;

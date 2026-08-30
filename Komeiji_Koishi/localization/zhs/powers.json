@@ -7,7 +7,9 @@
   "KOMEIJIKOISHI-BLOOM_STANCE_POWER.balanceDescription": "打出攻击牌时，额外对随机敌人造成等同于该牌伤害的伤害。获得的[gold]格挡[/gold]减少 70%。进入该状态时,获得{energyPrefix:energyIcons(1)}。只有古明地恋才能完全掌握这个姿态。",
   "KOMEIJIKOISHI-CLOSED_STANCE_POWER.title": "闭合",
   "KOMEIJIKOISHI-CLOSED_STANCE_POWER.smartDescription": "获得的[gold]格挡[/gold]提升{BlockBonus}%。进入该状态时抽取一张牌",
+  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.balanceSmartDescription": "获得的[gold]格挡[/gold]提升{BlockBonus}%。造成的伤害减少20%。进入该状态时抽取一张牌",
   "KOMEIJIKOISHI-CLOSED_STANCE_POWER.description": "获得的[gold]格挡[/gold]提升20%。进入该状态时抽取一张牌",
+  "KOMEIJIKOISHI-CLOSED_STANCE_POWER.balanceDescription": "获得的[gold]格挡[/gold]提升20%。造成的伤害减少20%。进入该状态时抽取一张牌",
   "KOMEIJIKOISHI-FETUS_DREAM_POWER.title": "胎儿之梦",
   "KOMEIJIKOISHI-FETUS_DREAM_POWER.smartDescription": "[gold]无意识[/gold]得到了扩张!",
   "KOMEIJIKOISHI-TRACING_POWER.title": "追踪",
@@ -82,5 +84,14 @@
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "攻击牌本回合可以免费打出。",
   "KOMEIJIKOISHI-SELF_POWER.title": "自我",
   "KOMEIJIKOISHI-SELF_POWER.smartDescription": "敌方回合开始时，失去 [blue]{Amount}[/blue] 层[gold]空我[/gold]。",
-  "KOMEIJIKOISHI-SELF_POWER.description": "敌方回合开始时，失去 [blue]{Amount}[/blue] 层[gold]空我[/gold]。"
+  "KOMEIJIKOISHI-SELF_POWER.description": "敌方回合开始时，失去 [blue]{Amount}[/blue] 层[gold]空我[/gold]。",
+  "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.title": "错误",
+  "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.description": "！*#￥……&（&*0*@&&#*？》：‘",
+  "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.readableDescription": "增加手牌等于层数的手牌上限",
+  "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.title": "错误",
+  "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.description": "！*#￥……&（&*0*@&&#*？》：‘",
+  "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.readableDescription": "本回合内受到的伤害为0",
+  "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.title": "错误",
+  "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.description": "！*#￥……&（&*0*@&&#*？》：‘",
+  "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.readableDescription": "触发条件：{Trigger}\n{Effect}"
 }

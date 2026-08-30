@@ -7,7 +7,9 @@
     "KOMEIJIKOISHI-BLOOM_STANCE_POWER.balanceDescription":  "사용공격 카드때, 추가에게무작위 적줍니다等同에该카드피해의피해.얻습니다의[gold]방어도[/gold]감소 70%.들어갑니다该상태때,얻습니다{energyPrefix:energyIcons(1)}. 이 태세를 완전히 다룰 수 있는 것은 코메이지 코이시뿐입니다.",
     "KOMEIJIKOISHI-CLOSED_STANCE_POWER.title":  "폐쇄",
     "KOMEIJIKOISHI-CLOSED_STANCE_POWER.smartDescription":  "얻습니다의[gold]방어도[/gold]증가{BlockBonus}%.들어갑니다该상태때뽑습니다1장카드",
+    "KOMEIJIKOISHI-CLOSED_STANCE_POWER.balanceSmartDescription":  "얻습니다의[gold]방어도[/gold]증가{BlockBonus}%. 주는 피해가 20% 감소합니다. 들어갑니다该상태때뽑습니다1장카드",
     "KOMEIJIKOISHI-CLOSED_STANCE_POWER.description":  "얻는 [gold]방어도[/gold]가 20% 증가합니다. 이 태세에 들어갈 때 카드를 1장 뽑습니다.",
+    "KOMEIJIKOISHI-CLOSED_STANCE_POWER.balanceDescription":  "얻는 [gold]방어도[/gold]가 20% 증가합니다. 주는 피해가 20% 감소합니다. 이 태세에 들어갈 때 카드를 1장 뽑습니다.",
     "KOMEIJIKOISHI-FETUS_DREAM_POWER.title":  "胎儿之꿈",
     "KOMEIJIKOISHI-FETUS_DREAM_POWER.smartDescription":  "[gold]무의식[/gold]得에扩장!",
     "KOMEIJIKOISHI-TRACING_POWER.title":  "추적",
@@ -82,5 +84,14 @@
     "KOMEIJIKOISHI-SELF_POWER.smartDescription":  "적 턴이 시작될 때 [gold]쿠가[/gold]를 [blue]{Amount}[/blue] 잃습니다.",
     "KOMEIJIKOISHI-SELF_POWER.description":  "적 턴이 시작될 때 [gold]쿠가[/gold]를 [blue]{Amount}[/blue] 잃습니다.",
     "KOMEIJIKOISHI-IDS_SHIKIGAMI_POWER.title":  "지요부「이드의식신」",
-    "KOMEIJIKOISHI-IDS_SHIKIGAMI_POWER.smartDescription":  "스킬 카드를 사용할 때마다 무작위 스킬 카드 1장을 손패에 추가한다."
+    "KOMEIJIKOISHI-IDS_SHIKIGAMI_POWER.smartDescription":  "스킬 카드를 사용할 때마다 무작위 스킬 카드 1장을 손패에 추가한다.",
+    "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.title":  "错误",
+    "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.description":  "！*#￥……&（&*0*@&&#*？》：‘",
+    "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.readableDescription":  "增加手牌等于层数的手牌上限",
+    "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.title":  "错误",
+    "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.description":  "！*#￥……&（&*0*@&&#*？》：‘",
+    "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.readableDescription":  "本回合内受到的伤害为0",
+    "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.title":  "错误",
+    "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.description":  "！*#￥……&（&*0*@&&#*？》：‘",
+    "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.readableDescription":  "발동 조건: {Trigger}\n효과: {Effect}"
 }

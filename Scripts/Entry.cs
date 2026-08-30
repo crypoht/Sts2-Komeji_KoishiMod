@@ -21,6 +21,7 @@ public class Entry
         ModConfigRegistry.Register("Komeiji_Koishi", new KoishiModConfig());
         KoishiBalanceManager.Initialize();
         BalanceCardDescriptionPatch.Register();
+        DataminerDescriptionPatch.Register();
 
         Log.Debug("Koishi Mod: Initialized successfully!");
     }

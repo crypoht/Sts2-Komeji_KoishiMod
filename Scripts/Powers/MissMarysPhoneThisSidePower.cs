@@ -8,7 +8,9 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Saves.Runs;
 
 namespace KomeijiKoishi.Powers
 {
@@ -19,6 +21,25 @@ namespace KomeijiKoishi.Powers
 
         public override string? CustomPackedIconPath => "res://mods/Komeiji_Koishi/images/powers/MissMarysPhoneThisSidePower.png";
         public override string? CustomBigIconPath => "res://mods/Komeiji_Koishi/images/powers/MissMarysPhoneThisSidePower.png";
+
+        [SavedProperty]
+        public int AttackThreshold { get; private set; }
+
+        public override Task BeforeApplied(
+            Creature target,
+            decimal amount,
+            Creature? applier,
+            CardModel? cardSource)
+        {
+            // Amount is also used as the visible remaining counter. Keep the
+            // original threshold separately so the counter can be reset.
+            if (AttackThreshold <= 0)
+            {
+                AttackThreshold = (int)amount;
+            }
+
+            return Task.CompletedTask;
+        }
 
         public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
@@ -82,7 +103,7 @@ namespace KomeijiKoishi.Powers
 
         private int GetAttackThreshold()
         {
-            return (int)base.Amount;
+            return AttackThreshold > 0 ? AttackThreshold : (int)base.Amount;
         }
     }
 }

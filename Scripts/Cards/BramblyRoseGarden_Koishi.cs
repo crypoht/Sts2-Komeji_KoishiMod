@@ -17,7 +17,7 @@ using BaseLib.Utils;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class BramblyRoseGarden_Koishi : CustomCardModel
+    public sealed class BramblyRoseGarden_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public BramblyRoseGarden_Koishi()
             : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(2, 1), CardType.Power, CardRarity.Uncommon, TargetType.Self, true)

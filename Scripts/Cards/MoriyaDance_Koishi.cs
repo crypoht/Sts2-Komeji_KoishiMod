@@ -80,6 +80,19 @@ namespace KomeijiKoishi.Cards
             StopActiveVideo();
         }
 
+        public static string? GetRandomDanceVideoPath(MegaCrit.Sts2.Core.Entities.Players.Player player)
+        {
+            return player.RunState.Rng.CombatCardGeneration.NextItem(DanceVideoPaths);
+        }
+
+        public static void PlayDataminerDanceVideo(string? videoPath)
+        {
+            if (!string.IsNullOrEmpty(videoPath))
+            {
+                PlayDanceVideo(videoPath);
+            }
+        }
+
         private static void StopActiveVideo()
         {
             _activePlayer?.Stop();

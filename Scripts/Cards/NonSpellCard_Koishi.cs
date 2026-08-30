@@ -17,6 +17,7 @@ using KomeijiKoishi.Enums;
 using KomeijiKoishi.Cards.Danmaku; 
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Combat;
+using KomeijiKoishi.Config;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
@@ -32,7 +33,12 @@ namespace KomeijiKoishi.Cards
             HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku) 
         };
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new CardsVar(2) };
+        public override IEnumerable<CardKeyword> CanonicalKeywords =>
+            KoishiBalanceManager.IsEnabled
+                ? new[] { CardKeyword.Exhaust }
+                : Array.Empty<CardKeyword>();
+
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new CardsVar(KoishiBalanceManager.Value(2, 3)) };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
