@@ -36,13 +36,13 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
             HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku),
-            HoverTipFactory.FromPower<TracingPower>() 
+            HoverTipFactory.FromPower<KuugaPower>() 
         };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DamageVar(3m, ValueProp.Move), 
-            new DynamicVar("Tracing", 1m)      
+            new DynamicVar("KuugaPower", 1m)      
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -85,21 +85,14 @@ namespace KomeijiKoishi.Cards
 
                     if (playedCount > 0)
                     {
-                        var remainingEnemies = base.CombatState?.HittableEnemies.Where(e => !e.IsDead).ToList();
-                        if (remainingEnemies != null)
-                        {
-                            foreach (var enemy in remainingEnemies)
-                            {
-                                await PowerCmd.Apply<TracingPower>(
-                                    choiceContext,
-                                    enemy, 
-                                    base.DynamicVars["Tracing"].BaseValue * playedCount, 
-                                    player.Creature, 
-                                    this, 
-                                    false
-                                );
-                            }
-                        }
+                        await PowerCmd.Apply<KuugaPower>(
+                            choiceContext,
+                            player.Creature,
+                            base.DynamicVars["KuugaPower"].BaseValue * playedCount,
+                            player.Creature,
+                            this,
+                            false
+                        );
                     }
                 }
             }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using KomeijiKoishi.Relics;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Gold;
@@ -26,13 +27,13 @@ namespace KomeijiKoishi.Events
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
         {
-            new HealVar(3m),
+            new HealVar(4m),
             new DynamicVar("SetMealCost", 75m),
             new DynamicVar("SetMealHeal", 10m),
             new DynamicVar("SetMealUpgrades", 1m),
             new DynamicVar("FestivalCost", 200m),
             new DynamicVar("FestivalHeal", 20m),
-            new DynamicVar("FestivalUpgrades", 3m),
+            new DynamicVar("FestivalUpgrades", 2m),
             new DamageVar(12m, ValueProp.Unblockable | ValueProp.Unpowered)
         };
 
@@ -64,7 +65,10 @@ namespace KomeijiKoishi.Events
         private async Task RiceBallOnly()
         {
             await CreatureCmd.Heal(Owner!.Creature, DynamicVars.Heal.BaseValue, true);
-            SetEventFinished(PageDescription("SATISFIED"));
+            SetEventState(PageDescription("SATISFIED"), new[]
+            {
+                new EventOption(this, FinishEvent, $"{Id.Entry}.pages.SATISFIED.options.CONTINUE", Array.Empty<IHoverTip>())
+            });
         }
 
         private async Task FavoriteSetMeal()
@@ -73,7 +77,10 @@ namespace KomeijiKoishi.Events
             await PlayerCmd.LoseGold(DynamicVars["SetMealCost"].BaseValue, owner, GoldLossType.Spent);
             await CreatureCmd.Heal(owner.Creature, DynamicVars["SetMealHeal"].BaseValue, true);
             UpgradeRandomCards(owner, DynamicVars["SetMealUpgrades"].IntValue);
-            SetEventFinished(PageDescription("SATISFIED"));
+            SetEventState(PageDescription("SATISFIED"), new[]
+            {
+                new EventOption(this, FinishEvent, $"{Id.Entry}.pages.SATISFIED.options.CONTINUE", Array.Empty<IHoverTip>())
+            });
         }
 
         private async Task EdoBoatFestival()
@@ -81,8 +88,11 @@ namespace KomeijiKoishi.Events
             Player owner = Owner!;
             await PlayerCmd.LoseGold(DynamicVars["FestivalCost"].BaseValue, owner, GoldLossType.Spent);
             await CreatureCmd.Heal(owner.Creature, DynamicVars["FestivalHeal"].BaseValue, true);
-            UpgradeRandomCards(owner, DynamicVars["FestivalUpgrades"].IntValue);
-            SetEventFinished(PageDescription("SATISFIED"));
+            await UpgradeSelectedCards(owner, DynamicVars["FestivalUpgrades"].IntValue);
+            SetEventState(PageDescription("SATISFIED"), new[]
+            {
+                new EventOption(this, FinishEvent, $"{Id.Entry}.pages.SATISFIED.options.CONTINUE", Array.Empty<IHoverTip>())
+            });
         }
 
         private async Task EatTheOwner()
@@ -91,6 +101,27 @@ namespace KomeijiKoishi.Events
             await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), owner.Creature, DynamicVars.Damage, null!, null!);
             await RelicCmd.Obtain<NightSparrowWings_Koishi>(owner);
             SetEventFinished(PageDescription("WINGS"));
+        }
+
+        private Task FinishEvent()
+        {
+            SetEventFinished(PageDescription("SATISFIED"));
+            return Task.CompletedTask;
+        }
+
+        private static async Task UpgradeSelectedCards(Player owner, int count)
+        {
+            CardSelectorPrefs prefs = new CardSelectorPrefs(CardSelectorPrefs.UpgradeSelectionPrompt, 0, count)
+            {
+                Cancelable = true,
+                RequireManualConfirmation = true
+            };
+
+            List<CardModel> cards = (await CardSelectCmd.FromDeckForUpgrade(owner, prefs)).ToList();
+            if (cards.Count > 0)
+            {
+                CardCmd.Upgrade(cards, CardPreviewStyle.HorizontalLayout);
+            }
         }
 
         private void UpgradeRandomCards(Player owner, int count)

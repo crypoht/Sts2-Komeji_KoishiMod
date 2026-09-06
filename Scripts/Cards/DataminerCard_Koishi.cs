@@ -55,8 +55,7 @@ namespace KomeijiKoishi.Cards
         {
         }
 
-        // The portrait is replaced at runtime by DataminerCompositePortraitPatch.
-        // Keep a real fallback asset so NCard does not repeatedly log a missing-resource error.
+
         public override string PortraitPath =>
             "res://mods/Komeiji_Koishi/images/error/DataminerCard_Koishi_1.png";
 
@@ -92,7 +91,6 @@ namespace KomeijiKoishi.Cards
             }
             catch (JsonException)
             {
-                // Keep the existing effect for legacy cards with no compatible payload.
                 effectLoaded = true;
             }
         }
@@ -102,9 +100,6 @@ namespace KomeijiKoishi.Cards
             EnsureEffectLoaded();
             return effect;
         }
-
-        // The effect is already synchronized as part of the card transformation, so it
-        // also provides a stable seed for purely visual randomization.
         public string CompositePortraitSeed
         {
             get
@@ -374,7 +369,11 @@ namespace KomeijiKoishi.Cards
                     }
                     break;
                 case DataminerEffectKind.UpgradePile:
-                    UpgradeCards(GetCards(player, subEffect.PileScope), subEffect.Amount);
+                    if (subEffect.PileScope is { } upgradeScope
+                        && upgradeScope != DataminerPileScope.All)
+                    {
+                        UpgradeCards(GetCards(player, upgradeScope), subEffect.Amount);
+                    }
                     break;
                 case DataminerEffectKind.UpgradeAll:
                     UpgradeCards(GetCards(player, DataminerPileScope.All), int.MaxValue);
@@ -477,6 +476,11 @@ namespace KomeijiKoishi.Cards
             List<Creature> targets = GetPowerTargets(player, effect);
             foreach (Creature target in targets)
             {
+                if (target.IsEnemy && !DataminerPowerPool.IsAllowedForEnemyTarget(power))
+                {
+                    continue;
+                }
+
                 await PowerCmd.Apply(
                     choiceContext,
                     power.ToMutable(),

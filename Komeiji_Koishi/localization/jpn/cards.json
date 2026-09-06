@@ -82,7 +82,7 @@
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.title":  "抑制「超私」",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.description":  "入る[gold]閉合[/gold]时，额外引く 1枚のカード。入る[gold]開花[/gold]时，额外得る {Energy:energyIcons()}。",
     "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.title":  "复燃「こいし之埋火」",
-    "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.description":  "{Damage:diff()}ダメージを与える。\n使用并[gold]廃棄[/gold]あなたの捨て札のすべてカード。每以此法使用一枚カード，付与すべて敵 {Tracing:diff()} 層[gold]追跡[/gold]。",
+    "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.description":  "{Damage:diff()}ダメージを与える。\nあなたの捨て札のすべてのカードを使用し、[gold]廃棄[/gold]する。この方法でカードを1枚使用するたび、すべての0{energyPrefix:energyIcons(1)}コストのアタックは{KuugaPower:diff()}追加ダメージを与える。",
     "KOMEIJIKOISHI-STINGING_MIND_KOISHI.title":  "刺す意識",
     "KOMEIJIKOISHI-STINGING_MIND_KOISHI.description":  "{Damage:diff(}ダメージを与える。\nランダム使用あなた手札中の2枚[gold]無意識[/gold]カード。",
     "KOMEIJIKOISHI-PAINFUL_GROWTH_KOISHI.title":  "苦痛成長",

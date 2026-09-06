@@ -82,7 +82,7 @@
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.title":  "抑制「超我」",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.description":  "进入[gold]闭合[/gold]时，额外抽 1 张牌。进入[gold]盛开[/gold]时，额外获得 {Energy:energyIcons()}。",
     "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.title":  "复燃「恋之埋火」",
-    "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.description":  "造成 {Damage:diff()} 点伤害。\n打出并[gold]消耗[/gold]你的弃牌堆的所有牌。每以此法打出一张牌，给予所有敌人 {Tracing:diff()} 层[gold]追踪[/gold]。",
+    "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.description":  "造成 {Damage:diff()} 点伤害。\n打出并[gold]消耗[/gold]你的弃牌堆的所有牌。每以此法打出一张牌，就让所有0{energyPrefix:energyIcons(1)}攻击牌增加{KuugaPower:diff()}点伤害。",
     "KOMEIJIKOISHI-STINGING_MIND_KOISHI.title":  "锥心意识",
     "KOMEIJIKOISHI-STINGING_MIND_KOISHI.description":  "造成 {Damage:diff(} 点伤害。\n随机打出你手牌中的2张[gold]无意识[/gold]牌。",
     "KOMEIJIKOISHI-PAINFUL_GROWTH_KOISHI.title":  "苦痛成长",

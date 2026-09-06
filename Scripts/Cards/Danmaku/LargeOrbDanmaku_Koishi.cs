@@ -36,7 +36,7 @@ namespace KomeijiKoishi.Cards.Danmaku
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(5m, 4m), ValueProp.Move),
+            new DamageVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(4m, 3m), ValueProp.Move),
             new PowerVar<VulnerablePower>(1m) 
         };
 

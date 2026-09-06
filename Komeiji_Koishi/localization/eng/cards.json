@@ -82,7 +82,7 @@
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.title":  "Superego",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.description":  "When you enter [gold]Closed[/gold], draw 1 additional card. When you enter [gold]Bloom[/gold], gain {Energy:energyIcons()} additional energy.",
     "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.title":  "Buried Fire",
-    "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.description":  "Deal {Damage:diff()} damage.\nPlay and [gold]Exhaust[/gold] all cards in your discard pile. For each card played this way, apply {Tracing:diff()} [gold]Tracing[/gold] to all enemies.",
+    "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.description":  "Deal {Damage:diff()} damage.\nPlay and [gold]Exhaust[/gold] all cards in your discard pile. For each card played this way, all 0{energyPrefix:energyIcons(1)} Attack cards deal {KuugaPower:diff()} more damage.",
     "KOMEIJIKOISHI-STINGING_MIND_KOISHI.title":  "Stinging Mind",
     "KOMEIJIKOISHI-STINGING_MIND_KOISHI.description":  "Deal {Damage:diff(} damage.\nRandomly play 2 [gold]Unconscious[/gold] cards from your hand.",
     "KOMEIJIKOISHI-PAINFUL_GROWTH_KOISHI.title":  "Painful Growth",

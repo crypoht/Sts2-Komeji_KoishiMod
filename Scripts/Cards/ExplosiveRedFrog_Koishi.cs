@@ -27,7 +27,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new PowerVar<JiasuiPower>(11m)
+            new PowerVar<JiasuiPower>(8m)
         };
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
@@ -59,7 +59,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars["JiasuiPower"].UpgradeValueBy(4m);
+            base.DynamicVars["JiasuiPower"].UpgradeValueBy(3m);
         }
     }
 }

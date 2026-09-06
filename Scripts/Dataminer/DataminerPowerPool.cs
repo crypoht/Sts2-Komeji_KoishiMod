@@ -11,9 +11,15 @@ namespace KomeijiKoishi.Dataminer
     {
         private static List<PowerModel>? powers;
 
-        public static string? SelectRandomPowerId(MegaCrit.Sts2.Core.Entities.Players.Player owner)
+        public static string? SelectRandomPowerId(
+            MegaCrit.Sts2.Core.Entities.Players.Player owner,
+            bool allowEnemyTargets = true,
+            bool allowNegativeAmounts = true)
         {
-            List<PowerModel> pool = GetPowers();
+            List<PowerModel> pool = GetPowers()
+                .Where(power => allowEnemyTargets || IsAllowedForEnemyTarget(power))
+                .Where(power => allowNegativeAmounts || power.AllowNegative)
+                .ToList();
             if (pool.Count == 0)
             {
                 return null;
@@ -22,6 +28,31 @@ namespace KomeijiKoishi.Dataminer
             PowerModel selected = owner.RunState.Rng.CombatCardGeneration.NextItem(pool)!;
             return selected.Id.Entry;
         }
+
+        public static bool IsAllowedForEnemyTarget(PowerModel power) =>
+            !EnemyUnsafePowerNames.Contains(power.GetType().Name);
+
+        private static readonly HashSet<string> EnemyUnsafePowerNames = new(StringComparer.Ordinal)
+        {
+            "AfterimagePower", "AggressionPower", "AutomationPower",
+            "BeaconOfHopePower", "BlackHolePower", "CallOfTheVoidPower",
+            "CalamityPower", "ChainsOfBindingPower", "ClarityPower",
+            "ConfusedPower", "ConsumingShadowPower", "CreativeAiPower",
+            "DarkEmbracePower", "DrawCardsNextTurnPower", "EnergyNextTurnPower",
+            "EntropyPower", "ForegoneConclusionPower", "FurnacePower",
+            "GalvanicPower", "GenesisPower", "HellraiserPower", "HexPower",
+            "ImprovementPower", "InfiniteBladesPower", "IterationPower",
+            "JuggernautPower", "LightningRodPower", "LoopPower",
+            "MachineLearningPower", "MasterPlannerPower", "MayhemPower",
+            "NightmarePower", "NoDrawPower", "NoEnergyGainPower",
+            "PagestormPower", "PaleBlueDotPower", "PhantomBladesPower",
+            "RagePower", "RetainHandPower", "RingingPower", "SerpentFormPower",
+            "SentryModePower", "SmoggyPower", "SpectrumShiftPower",
+            "SpiritOfAshPower", "StarNextTurnPower", "StormPower",
+            "StratagemPower", "SubroutinePower", "SummonNextTurnPower",
+            "TangledPower", "TheSealedThronePower", "ThunderPower",
+            "ToolsOfTheTradePower", "ViciousPower", "WellLaidPlansPower"
+        };
 
         public static PowerModel? Resolve(string? powerId)
         {

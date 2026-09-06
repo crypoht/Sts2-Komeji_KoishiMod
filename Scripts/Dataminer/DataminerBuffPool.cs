@@ -14,9 +14,15 @@ namespace KomeijiKoishi.Dataminer
     {
         private static List<PowerModel>? powers;
 
-        public static string? SelectRandomBuffId(Player owner)
+        public static string? SelectRandomBuffId(
+            Player owner,
+            bool allowEnemyTargets = true,
+            bool allowNegativeAmounts = true)
         {
-            List<PowerModel> pool = GetPowers();
+            List<PowerModel> pool = GetPowers()
+                .Where(power => allowEnemyTargets || DataminerPowerPool.IsAllowedForEnemyTarget(power))
+                .Where(power => allowNegativeAmounts || power.AllowNegative)
+                .ToList();
             return pool.Count == 0
                 ? null
                 : owner.RunState.Rng.CombatCardGeneration.NextItem(pool)?.Id.Entry;

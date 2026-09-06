@@ -82,7 +82,7 @@
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.title":  "抑制「초자아」",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.description":  "들어갑니다[gold]폐쇄[/gold]때, 추가뽑습니다 1장의 카드.들어갑니다[gold]개화[/gold]때, 추가얻습니다 {Energy:energyIcons()}.",
     "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.title":  "复燃「코이시之埋火」",
-    "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.description":  "피해를 {Damage:diff()} 줍니다.\n사용하고[gold]소멸[/gold]당신의버린 카드 더미의모든카드.마다로此法사용1장카드, 부여모든 적 {Tracing:diff()} 중첩[gold]추적[/gold].",
+    "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.description":  "피해를 {Damage:diff()} 줍니다.\n버린 카드 더미의 모든 카드를 사용하고 [gold]소멸[/gold]시킵니다. 이 방법으로 카드를 1장 사용할 때마다 모든 0{energyPrefix:energyIcons(1)} 비용 공격 카드의 피해가 {KuugaPower:diff()} 증가합니다.",
     "KOMEIJIKOISHI-STINGING_MIND_KOISHI.title":  "찌르는 의식",
     "KOMEIJIKOISHI-STINGING_MIND_KOISHI.description":  "피해를 {Damage:diff(} 줍니다.\n무작위로 사용당신손패 안의2장[gold]무의식[/gold]카드.",
     "KOMEIJIKOISHI-PAINFUL_GROWTH_KOISHI.title":  "고통 성장",
