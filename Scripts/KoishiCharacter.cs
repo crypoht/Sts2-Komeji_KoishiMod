@@ -72,8 +72,7 @@ namespace KomeijiKoishi.Characters
 
 		public override IReadOnlyList<RelicModel> StartingRelics => new List<RelicModel>
 		{
-			ModelDb.Relic<KoishiStarterRelic>(),
-			ModelDb.Relic<Top1_Koishi>()
+			ModelDb.Relic<KoishiStarterRelic>()
 		};
 
 		public override BaseLib.Patches.UI.RelicIconData? CustomYummyCookie => new BaseLib.Patches.UI.RelicIconData(

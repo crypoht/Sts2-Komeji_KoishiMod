@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Godot;
 using HarmonyLib;
@@ -98,7 +99,45 @@ namespace KomeijiKoishi.Patches
                 new DataminerRandomizeGameAction(owner, relicOrdinal));
         }
 
-        internal static async Task RandomizeHandForAction(Player owner, int relicOrdinal)
+        internal static string CreateRandomizationPlan(Player owner, int relicOrdinal)
+        {
+            CombatState? combatState = owner.Creature.CombatState as CombatState;
+            if (combatState == null)
+            {
+                return string.Empty;
+            }
+
+            List<RandomizedCardPlan> cards = new();
+            foreach (CardModel _ in PileType.Hand.GetPile(owner).Cards)
+            {
+                DataminerEffect effect = DataminerEffect.Create(owner);
+                int variant = owner.RunState.Rng.CombatCardGeneration.NextInt(7);
+                int keywordMask = CreateKeywordMask(owner);
+                cards.Add(new RandomizedCardPlan
+                {
+                    Effect = JsonSerializer.Serialize(effect),
+                    Variant = variant,
+                    KeywordMask = keywordMask
+                });
+            }
+
+            List<int> powerChanges = new();
+            foreach (PowerModel _ in owner.Creature.Powers)
+            {
+                powerChanges.Add(owner.RunState.Rng.CombatCardGeneration.NextInt(-5, 4));
+            }
+
+            return JsonSerializer.Serialize(new RandomizationPlan
+            {
+                Cards = cards,
+                PowerChanges = powerChanges
+            });
+        }
+
+        internal static async Task RandomizeHandForAction(
+            Player owner,
+            int relicOrdinal,
+            string serializedPlan)
         {
             try
             {
@@ -122,14 +161,29 @@ namespace KomeijiKoishi.Patches
                     return;
                 }
 
+                RandomizationPlan? plan = null;
+                if (!string.IsNullOrEmpty(serializedPlan))
+                {
+                    plan = JsonSerializer.Deserialize<RandomizationPlan>(serializedPlan);
+                }
+
+                if (plan == null || plan.Cards.Count != cards.Count)
+                {
+                    MegaCrit.Sts2.Core.Logging.Log.Error(
+                        $"[KoishiDataminer] Invalid synchronized plan: cards={cards.Count}, plan={plan?.Cards.Count ?? -1}.");
+                    return;
+                }
+
                 relic.StartCooldown();
 
-                foreach (CardModel original in cards)
+                for (int i = 0; i < cards.Count; i++)
                 {
-                    DataminerCard_Koishi replacement = CreateRandomDataminerCard(owner, combatState);
-                    DataminerEffect generatedEffect = DataminerEffect.Create(owner);
+                    CardModel original = cards[i];
+                    RandomizedCardPlan cardPlan = plan.Cards[i];
+                    DataminerCard_Koishi replacement = CreateDataminerCard(owner, combatState, cardPlan.Variant);
+                    DataminerEffect generatedEffect = JsonSerializer.Deserialize<DataminerEffect>(cardPlan.Effect);
                     replacement.SetEffect(generatedEffect);
-                    AddRandomKeywords(replacement, owner);
+                    AddKeywordsFromMask(replacement, cardPlan.KeywordMask);
                     await CardCmd.Transform(original, replacement, CardPreviewStyle.None);
                     // Transform can copy the source card's energy state onto the replacement.
                     // Reapply the generated effect after the card is in its final pile.
@@ -138,7 +192,7 @@ namespace KomeijiKoishi.Patches
                         $"[KoishiDataminer] Generated transformed card cost={generatedEffect.Cost}");
                 }
 
-                await RandomizePowerAmounts(owner);
+                await ApplyPowerChanges(owner, plan.PowerChanges);
 
                 relic.Flash();
             }
@@ -148,9 +202,12 @@ namespace KomeijiKoishi.Patches
             }
         }
 
-        private static DataminerCard_Koishi CreateRandomDataminerCard(Player owner, CombatState combatState)
+        private static DataminerCard_Koishi CreateDataminerCard(
+            Player owner,
+            CombatState combatState,
+            int variant)
         {
-            return owner.RunState.Rng.CombatCardGeneration.NextInt(7) switch
+            return variant switch
             {
                 0 => combatState.CreateCard<DataminerCard_Koishi>(owner),
                 1 => combatState.CreateCard<DataminerCard_Koishi_2>(owner),
@@ -162,14 +219,14 @@ namespace KomeijiKoishi.Patches
             };
         }
 
-        private static async Task RandomizePowerAmounts(Player owner)
+        private static async Task ApplyPowerChanges(Player owner, IReadOnlyList<int> changes)
         {
-            var rng = owner.RunState.Rng.CombatCardGeneration;
             List<PowerModel> powers = owner.Creature.Powers.ToList();
 
-            foreach (PowerModel power in powers)
+            for (int i = 0; i < powers.Count && i < changes.Count; i++)
             {
-                int amountChange = rng.NextInt(-5, 4);
+                PowerModel power = powers[i];
+                int amountChange = changes[i];
                 if (amountChange == 0)
                 {
                     continue;
@@ -185,23 +242,39 @@ namespace KomeijiKoishi.Patches
             }
         }
 
-        private static void AddRandomKeywords(DataminerCard_Koishi card, Player owner)
+        private static int CreateKeywordMask(Player owner)
         {
             var rng = owner.RunState.Rng.CombatCardGeneration;
+            int mask = 0;
             int keywordCount = rng.NextInt(3);
-            List<CardKeyword> keywords = new List<CardKeyword>
+            List<int> keywordBits = new() { 1, 2, 4 };
+            for (int i = 0; i < keywordCount && keywordBits.Count > 0; i++)
             {
-                CardKeyword.Exhaust,
-                CardKeyword.Ethereal,
-                CardKeyword.Sly
-            };
-
-            for (int i = 0; i < keywordCount && keywords.Count > 0; i++)
-            {
-                int index = rng.NextInt(keywords.Count);
-                card.AddKeyword(keywords[index]);
-                keywords.RemoveAt(index);
+                int index = rng.NextInt(keywordBits.Count);
+                mask |= keywordBits[index];
+                keywordBits.RemoveAt(index);
             }
+            return mask;
+        }
+
+        private static void AddKeywordsFromMask(DataminerCard_Koishi card, int mask)
+        {
+            if ((mask & 1) != 0) card.AddKeyword(CardKeyword.Exhaust);
+            if ((mask & 2) != 0) card.AddKeyword(CardKeyword.Ethereal);
+            if ((mask & 4) != 0) card.AddKeyword(CardKeyword.Sly);
+        }
+
+        private sealed class RandomizationPlan
+        {
+            public List<RandomizedCardPlan> Cards { get; set; } = new();
+            public List<int> PowerChanges { get; set; } = new();
+        }
+
+        private sealed class RandomizedCardPlan
+        {
+            public string Effect { get; set; } = string.Empty;
+            public int Variant { get; set; }
+            public int KeywordMask { get; set; }
         }
     }
 }

@@ -1,4 +1,4 @@
-using BaseLib.Config;
+﻿using BaseLib.Config;
 using BaseLib.Config.UI;
 using Godot;
 using KomeijiKoishi.Config;
@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using System.Linq;
+using System.Text.Json;
 
 namespace KomeijiKoishi;
 
@@ -26,8 +27,6 @@ public sealed class KoishiModConfig : SimpleModConfig
     private const int DefaultAncientWeight = 3;
     private static bool _useFumoCardArt;
     private static bool _useAncientCardArt;
-    private AncientProbabilityChart? _ancientProbabilityChart;
-    private HSeparator? _baseAncientWeightsSeparator;
 
     [ConfigSection("AncientSettings")]
     public static bool EnableAncients { get; set; } = true;
@@ -86,41 +85,42 @@ public sealed class KoishiModConfig : SimpleModConfig
     public static bool PlayMoriyaDanceForAllPlayers { get; set; } = false;
 
     [ConfigSection("AncientWeights")]
+    [ConfigHideInUI]
     public static bool EnableAncientWeights { get; set; } = false;
 
-    [ConfigVisibleIf(nameof(ShouldShowKoishiAncientWeight))]
+    [ConfigHideInUI]
     [ConfigSlider(0, 10, 1)]
     public static int MoriyaTwoGodsWeight { get; set; } = DefaultAncientWeight;
 
-    [ConfigVisibleIf(nameof(ShouldShowKoishiAncientWeight))]
+    [ConfigHideInUI]
     [ConfigSlider(0, 10, 1)]
     public static int HakureiReimuWeight { get; set; } = DefaultAncientWeight;
 
-    [ConfigVisibleIf(nameof(EnableAncientWeights))]
+    [ConfigHideInUI]
     [ConfigSlider(0, 10, 1)]
     public static int OrobasWeight { get; set; } = DefaultAncientWeight;
 
-    [ConfigVisibleIf(nameof(EnableAncientWeights))]
+    [ConfigHideInUI]
     [ConfigSlider(0, 10, 1)]
     public static int PaelWeight { get; set; } = DefaultAncientWeight;
 
-    [ConfigVisibleIf(nameof(EnableAncientWeights))]
+    [ConfigHideInUI]
     [ConfigSlider(0, 10, 1)]
     public static int TezcataraWeight { get; set; } = DefaultAncientWeight;
 
-    [ConfigVisibleIf(nameof(EnableAncientWeights))]
+    [ConfigHideInUI]
     [ConfigSlider(0, 10, 1)]
     public static int NonupeipeWeight { get; set; } = DefaultAncientWeight;
 
-    [ConfigVisibleIf(nameof(EnableAncientWeights))]
+    [ConfigHideInUI]
     [ConfigSlider(0, 10, 1)]
     public static int TanxWeight { get; set; } = DefaultAncientWeight;
 
-    [ConfigVisibleIf(nameof(EnableAncientWeights))]
+    [ConfigHideInUI]
     [ConfigSlider(0, 10, 1)]
     public static int VakuuWeight { get; set; } = DefaultAncientWeight;
 
-    [ConfigVisibleIf(nameof(EnableAncientWeights))]
+    [ConfigHideInUI]
     [ConfigSlider(0, 10, 1)]
     public static int DarvWeight { get; set; } = DefaultAncientWeight;
 
@@ -154,15 +154,6 @@ public sealed class KoishiModConfig : SimpleModConfig
     public override void SetupConfigUI(Control optionContainer)
     {
         base.SetupConfigUI(optionContainer);
-        try
-        {
-            AddAncientProbabilityChart(optionContainer);
-        }
-        catch (Exception e)
-        {
-            MegaCrit.Sts2.Core.Logging.Log.Error($"[KoishiAncientWeights] Failed to add ancient weight UI: {e}");
-        }
-
         try
         {
             SetupFocusNeighbors(optionContainer);
@@ -422,158 +413,37 @@ public sealed class KoishiModConfig : SimpleModConfig
 
         return runState.Modifiers.OfType<KoishiAncientWeightsModifier>().FirstOrDefault();
     }
-
-    private static bool ShouldShowKoishiAncientWeight()
-    {
-        return EnableAncients && EnableAncientWeights;
-    }
-
-    private void AddAncientProbabilityChart(Control optionContainer)
-    {
-        NConfigCollapsibleSection? section = optionContainer
-            .GetChildren()
-            .OfType<NConfigCollapsibleSection>()
-            .FirstOrDefault(child => child.Name == "CollapsibleSection_AncientWeights");
-
-        if (section == null)
-        {
-            return;
-        }
-
-        AddExternalAncientWeightRows(section);
-
-        _ancientProbabilityChart = new AncientProbabilityChart
-        {
-            Visible = EnableAncientWeights
-        };
-
-        _baseAncientWeightsSeparator = new HSeparator
-        {
-            Name = "KoishiBaseAncientWeightsSeparator",
-            Visible = EnableAncientWeights && !EnableAncients,
-            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
-        };
-
-        section.ContentContainer.AddChild(_baseAncientWeightsSeparator);
-        section.ContentContainer.MoveChild(_baseAncientWeightsSeparator, 2);
-        section.ContentContainer.AddChild(_ancientProbabilityChart);
-
-        EventHandler refreshHandler = (_, _) =>
-        {
-            _baseAncientWeightsSeparator.Visible = EnableAncientWeights && !EnableAncients;
-            _ancientProbabilityChart.Visible = EnableAncientWeights;
-            _ancientProbabilityChart.Refresh();
-        };
-        ConfigChanged += refreshHandler;
-        _configChangedHandlers.Add(refreshHandler);
-
-        Action reloadHandler = () =>
-        {
-            _baseAncientWeightsSeparator.Visible = EnableAncientWeights && !EnableAncients;
-            _ancientProbabilityChart.Visible = EnableAncientWeights;
-            _ancientProbabilityChart.Refresh();
-        };
-        OnConfigReloaded += reloadHandler;
-        _configReloadedHandlers.Add(reloadHandler);
-    }
-
-    private void AddExternalAncientWeightRows(NConfigCollapsibleSection section)
-    {
-        IReadOnlyList<AncientProbabilityInfo> externalAncients = AncientProbabilityData.ExternalInfos;
-        if (externalAncients.Count == 0)
-        {
-            return;
-        }
-
-        Dictionary<string, int> weights = ParseExternalAncientWeights();
-        foreach (AncientProbabilityInfo info in externalAncients)
-        {
-            try
-            {
-                weights.TryAdd(info.Key, DefaultAncientWeight);
-                section.ContentContainer.AddChild(CreateExternalAncientWeightRow(info, weights[info.Key]));
-            }
-            catch (Exception e)
-            {
-                MegaCrit.Sts2.Core.Logging.Log.Error($"[KoishiAncientWeights] Failed to add external ancient row {info.Key}: {e}");
-            }
-        }
-
-        ExternalAncientWeights = SerializeExternalAncientWeights(weights);
-    }
-
-    private Control CreateExternalAncientWeightRow(AncientProbabilityInfo info, int currentWeight)
-    {
-        Control label = CreateRawLabelControl($"{AncientProbabilityChart.LocalizedAncientName(info)} Weight", 28);
-        NExternalAncientWeightSlider slider = new(info.Key, currentWeight, SetExternalAncientWeight);
-        NConfigOptionRow row = new(ModPrefix, "ExternalAncientWeight_" + AncientProbabilityData.ConfigRowKey(info.Key), label, slider)
-        {
-            Visible = EnableAncientWeights
-        };
-
-        EventHandler refreshHandler = (_, _) => row.Visible = EnableAncientWeights;
-        ConfigChanged += refreshHandler;
-        _configChangedHandlers.Add(refreshHandler);
-
-        Action reloadHandler = () =>
-        {
-            row.Visible = EnableAncientWeights;
-            slider.SetWeight(GetExternalAncientWeight(info.Key));
-        };
-        OnConfigReloaded += reloadHandler;
-        _configReloadedHandlers.Add(reloadHandler);
-
-        return row;
-    }
-
-    private void SetExternalAncientWeight(string key, int weight)
-    {
-        Dictionary<string, int> weights = ParseExternalAncientWeights();
-        weights[key] = int.Clamp(weight, 0, 10);
-        ExternalAncientWeights = SerializeExternalAncientWeights(weights);
-        Changed();
-    }
-
-    public static int GetExternalAncientWeight(string key)
-    {
-        Dictionary<string, int> weights = ParseExternalAncientWeights();
-        return weights.TryGetValue(key, out int weight) ? int.Clamp(weight, 0, 10) : DefaultAncientWeight;
-    }
-
-    public static Dictionary<string, int> ParseExternalAncientWeights()
+    private static IReadOnlyDictionary<string, int> CurrentExternalAncientWeights()
     {
         return ParseExternalAncientWeights(ExternalAncientWeights);
     }
 
-    public static Dictionary<string, int> ParseExternalAncientWeights(string serializedWeights)
+    public static int GetExternalAncientWeight(string key)
     {
-        Dictionary<string, int> weights = new();
-        foreach (string entry in serializedWeights.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-        {
-            string[] parts = entry.Split('=', 2, StringSplitOptions.TrimEntries);
-            if (parts.Length == 2 && int.TryParse(parts[1], out int weight))
-            {
-                weights[parts[0]] = int.Clamp(weight, 0, 10);
-            }
-        }
-
-        return weights;
+        return CurrentExternalAncientWeights().TryGetValue(key, out int weight) ? int.Clamp(weight, 0, 10) : 0;
     }
 
-    private static Dictionary<string, int> CurrentExternalAncientWeights()
+    private static string SerializeExternalAncientWeights(IReadOnlyDictionary<string, int> weights)
     {
-        Dictionary<string, int> weights = ParseExternalAncientWeights();
-        foreach (AncientProbabilityInfo info in AncientProbabilityData.ExternalInfos)
-        {
-            weights.TryAdd(info.Key, DefaultAncientWeight);
-        }
-
-        return weights;
+        return JsonSerializer.Serialize(weights.ToDictionary(pair => pair.Key, pair => int.Clamp(pair.Value, 0, 10)));
     }
 
-    public static string SerializeExternalAncientWeights(IReadOnlyDictionary<string, int> weights)
+    private static IReadOnlyDictionary<string, int> ParseExternalAncientWeights(string serializedWeights)
     {
-        return string.Join(";", weights.OrderBy(pair => pair.Key).Select(pair => $"{pair.Key}={int.Clamp(pair.Value, 0, 10)}"));
+        if (string.IsNullOrWhiteSpace(serializedWeights))
+        {
+            return new Dictionary<string, int>();
+        }
+
+        try
+        {
+            Dictionary<string, int>? weights = JsonSerializer.Deserialize<Dictionary<string, int>>(serializedWeights);
+            return weights?.ToDictionary(pair => pair.Key, pair => int.Clamp(pair.Value, 0, 10)) ?? new Dictionary<string, int>();
+        }
+        catch
+        {
+            return new Dictionary<string, int>();
+        }
     }
 }
 

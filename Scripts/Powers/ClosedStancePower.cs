@@ -82,9 +82,21 @@ namespace KomeijiKoishi.Powers
             return 1m;
         }
 
-        private decimal ModifyDamageMultiplicativeCore(Creature? dealer)
+        private decimal ModifyDamageMultiplicativeCore(Creature? target, Creature? dealer)
         {
-            if (KoishiBalanceManager.IsEnabled && dealer == base.Owner)
+            // Closed stance reduces damage dealt to enemies, but not self-damage
+            // caused by a status or curse card.
+            if (dealer != base.Owner || target == base.Owner)
+            {
+                return 1m;
+            }
+
+            if (base.Owner.GetPower<PhilosophyOfTheHatedPower>() != null)
+            {
+                return 0.3m;
+            }
+
+            if (KoishiBalanceManager.IsEnabled)
             {
                 return 0.8m;
             }
@@ -102,7 +114,7 @@ namespace KomeijiKoishi.Powers
             CardPlay? cardPlay
         )
         {
-            return ModifyDamageMultiplicativeCore(dealer);
+            return ModifyDamageMultiplicativeCore(target, dealer);
         }
 #else
         public override decimal ModifyDamageMultiplicative(
@@ -113,7 +125,7 @@ namespace KomeijiKoishi.Powers
             CardModel? cardSource
         )
         {
-            return ModifyDamageMultiplicativeCore(dealer);
+            return ModifyDamageMultiplicativeCore(target, dealer);
         }
 #endif
     }

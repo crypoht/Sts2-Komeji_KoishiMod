@@ -6,18 +6,17 @@ using BaseLib.Abstracts;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.ValueProps;
+using MegaCrit.Sts2.Core.Combat;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Utils_Koishi;
 using KomeijiKoishi.Cards.Danmaku;
-using MegaCrit.Sts2.Core.Combat;
 
 namespace KomeijiKoishi.Cards
 {
@@ -31,9 +30,8 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(9m, 8m), ValueProp.Move),
-            new CardsVar(2),
-            new DynamicVar("Magic", 3m) 
+            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(15m, 11m), ValueProp.Move),
+            new DynamicVar("Magic", 3m)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -41,60 +39,40 @@ namespace KomeijiKoishi.Cards
             try
             {
                 var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
-                var CombatState = base.CombatState as MegaCrit.Sts2.Core.Combat.CombatState;
-                if (player == null || CombatState == null) return;
+                var combatState = base.CombatState as CombatState;
+                if (player == null || combatState == null) return;
 
                 await CreatureCmd.GainBlock(player.Creature, base.DynamicVars.Block.BaseValue, ValueProp.Move, cardPlay, false);
 
-                int generateCount = (int)base.DynamicVars["Magic"].BaseValue;
+                int generateCount = base.DynamicVars["Magic"].IntValue;
                 for (int i = 0; i < generateCount; i++)
                 {
-                    await DanmakuPool.CreateRandomDanmakuInExhaust(player, CombatState, this);
-                }
+                    var heartDanmaku = combatState.CreateCard<HeartDanmaku_Koishi>(player);
+                    DanmakuPool.InheritEnchantment(this, heartDanmaku);
 
-                await Cmd.Wait(0.1f, false);
+                    await CardPileCmd.AddGeneratedCardToCombat(
+                        heartDanmaku,
+                        PileType.Exhaust,
+                        player,
+                        CardPilePosition.Bottom);
 
-                var availableDanmaku = PileType.Exhaust.GetPile(player)
-                    .Cards
-                    .Where(c => c.Tags != null && c.Tags.Contains(KoishiTags.Danmaku))
-                    .ToList();
-
-                int playCount = base.DynamicVars.Cards.IntValue;
-                
-                List<CardModel> danmakuToPlay = new List<CardModel>();
-                var tempAvailable = new List<CardModel>(availableDanmaku);
-                
-                for (int i = 0; i < playCount; i++)
-                {
-                    if (tempAvailable.Count <= 0) break;
-                    var card = player.RunState.Rng.Shuffle.NextItem(tempAvailable);
-
-                    if (card != null)
+                    var aliveEnemies = combatState.HittableEnemies
+                        .Where(enemy => enemy != null && !enemy.IsDead)
+                        .ToList();
+                    if (aliveEnemies.Count == 0)
                     {
-                        danmakuToPlay.Add(card);
-                        tempAvailable.Remove(card); 
+                        break;
                     }
-                }
 
-                foreach (CardModel cardModel in danmakuToPlay)
-                {
-                    Creature? targetCreature = null;
-
-                    if (cardModel.TargetType == TargetType.AnyEnemy)
-                    {
-                        var combatState = player.Creature.CombatState; 
-                        if (combatState != null)
-                        {
-                            var validEnemies = combatState.HittableEnemies.Where(e => !e.IsDead).ToList();
-                            if (validEnemies.Count > 0)
-                            {
-                                targetCreature = player.RunState.Rng.Shuffle.NextItem(validEnemies);
-                            }
-                        }
-                    }
-                    await KoishiExtensions.SafeAutoPlayCard(choiceContext, player, cardModel, targetCreature, AutoPlayType.Default, true, false);
-                    
-                    await Cmd.Wait(0.1f, false);
+                    var target = player.RunState.Rng.Shuffle.NextItem(aliveEnemies);
+                    await KoishiExtensions.SafeAutoPlayCard(
+                        choiceContext,
+                        player,
+                        heartDanmaku,
+                        target,
+                        AutoPlayType.Default,
+                        true,
+                        false);
                 }
             }
             catch (Exception e)

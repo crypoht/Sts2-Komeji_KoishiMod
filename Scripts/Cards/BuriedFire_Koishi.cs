@@ -33,11 +33,13 @@ namespace KomeijiKoishi.Cards
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
-            HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku),
-            HoverTipFactory.FromPower<KuugaPower>() 
-        };
+        protected override IEnumerable<IHoverTip> ExtraHoverTips => KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled
+            ? new[] { HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku) }
+            : new[]
+            {
+                HoverTipFactory.FromKeyword(KoishiKeywords.Danmaku),
+                HoverTipFactory.FromPower<KuugaPower>()
+            };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
@@ -83,7 +85,7 @@ namespace KomeijiKoishi.Cards
                         }
                     }
 
-                    if (playedCount > 0)
+                    if (!KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled && playedCount > 0)
                     {
                         await PowerCmd.Apply<KuugaPower>(
                             choiceContext,

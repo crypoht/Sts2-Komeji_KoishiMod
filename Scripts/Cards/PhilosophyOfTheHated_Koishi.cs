@@ -26,8 +26,8 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
-            HoverTipFactory.FromPower<ClosedStancePower>(),
-            HoverTipFactory.FromKeyword(KoishiKeywords.Unconscious) 
+            HoverTipFactory.FromPower<BloomStancePower>(),
+            HoverTipFactory.FromPower<ClosedStancePower>()
         };
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());

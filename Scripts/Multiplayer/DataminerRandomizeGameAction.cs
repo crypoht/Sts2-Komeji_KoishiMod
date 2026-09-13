@@ -15,11 +15,20 @@ public sealed class DataminerRandomizeGameAction : GameAction
 {
     private readonly Player _player;
     private readonly int _relicOrdinal;
+    private readonly string _serializedPlan;
 
     public DataminerRandomizeGameAction(Player player, int relicOrdinal)
     {
         _player = player;
         _relicOrdinal = relicOrdinal;
+        _serializedPlan = DataminerRelicPatch.CreateRandomizationPlan(player, relicOrdinal);
+    }
+
+    private DataminerRandomizeGameAction(Player player, int relicOrdinal, string serializedPlan)
+    {
+        _player = player;
+        _relicOrdinal = relicOrdinal;
+        _serializedPlan = serializedPlan;
     }
 
     public override ulong OwnerId => _player.NetId;
@@ -28,31 +37,41 @@ public sealed class DataminerRandomizeGameAction : GameAction
 
     protected override Task ExecuteAction()
     {
-        return DataminerRelicPatch.RandomizeHandForAction(_player, _relicOrdinal);
+        return DataminerRelicPatch.RandomizeHandForAction(
+            _player,
+            _relicOrdinal,
+            _serializedPlan);
     }
 
     public override INetAction ToNetAction()
     {
-        return new NetDataminerRandomizeAction { RelicOrdinal = _relicOrdinal };
+        return new NetDataminerRandomizeAction
+        {
+            RelicOrdinal = _relicOrdinal,
+            SerializedPlan = _serializedPlan
+        };
     }
 }
 
 public struct NetDataminerRandomizeAction : INetAction, IPacketSerializable
 {
     public int RelicOrdinal;
+    public string SerializedPlan;
 
     public GameAction ToGameAction(Player player)
     {
-        return new DataminerRandomizeGameAction(player, RelicOrdinal);
+        return new DataminerRandomizeGameAction(player, RelicOrdinal, SerializedPlan);
     }
 
     public void Serialize(PacketWriter writer)
     {
         writer.WriteInt(RelicOrdinal);
+        writer.WriteString(SerializedPlan ?? string.Empty);
     }
 
     public void Deserialize(PacketReader reader)
     {
         RelicOrdinal = reader.ReadInt();
+        SerializedPlan = reader.ReadString();
     }
 }

@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
+using KomeijiKoishi.Config;
 
 namespace KomeijiKoishi.Powers
 {
@@ -48,7 +49,7 @@ namespace KomeijiKoishi.Powers
                 return 1m;
             }
 
-            return 2.5m;
+            return KoishiBalanceManager.IsEnabled ? 10m / 3m : 2.5m;
         }
 
         public override async Task AfterSideTurnStart(

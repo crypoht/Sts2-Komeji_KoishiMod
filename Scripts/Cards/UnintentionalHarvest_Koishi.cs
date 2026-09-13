@@ -69,7 +69,10 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Cards.UpgradeValueBy(2m);
+            if (!KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                base.DynamicVars.Cards.UpgradeValueBy(2m);
+            }
         }
     }
 }

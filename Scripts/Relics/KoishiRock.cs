@@ -49,7 +49,8 @@ namespace KomeijiKoishi.Relics
             if (!CombatManager.Instance.IsInProgress
                 || target != base.Owner.Creature
                 || canonicalPower.Type != PowerType.Buff
-                || canonicalPower is KoishiStancePower)
+                || canonicalPower is KoishiStancePower
+                || canonicalPower is MissMarysPhoneThisSidePower)
             {
                 return false;
             }

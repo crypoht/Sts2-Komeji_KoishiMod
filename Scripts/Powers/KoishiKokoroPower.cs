@@ -15,6 +15,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards; 
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Localization;
 using KomeijiKoishi.Vfx;
 
 
@@ -27,6 +28,12 @@ namespace KomeijiKoishi.Powers
 
         public override string? CustomPackedIconPath => "res://mods/Komeiji_Koishi/images/powers/KoishiKokoroPower.png";
         public override string? CustomBigIconPath => "res://mods/Komeiji_Koishi/images/powers/KoishiKokoroPower.png";
+
+        public override LocString Description =>
+            new("powers", base.Id.Entry + (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled ? ".balanceSmartDescription" : ".smartDescription"));
+
+        protected override string SmartDescriptionLocKey =>
+            base.Id.Entry + (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled ? ".balanceSmartDescription" : ".smartDescription");
         
         protected override object InitInternalData() => new Data();
 
@@ -46,15 +53,37 @@ namespace KomeijiKoishi.Powers
             return Task.CompletedTask;
         }
 
+        public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+        {
+            if (!KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled || player != base.Owner.Player)
+            {
+                return;
+            }
+
+            try 
+            {
+                await TriggerEffects(choiceContext, null);
+            }
+            catch (Exception ex)
+            {
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[KoishiKokoro] 触发效果报错: {ex}");
+            }
+        }
+
         public async Task OnStanceChanged(bool isClosedStance, bool isBloomStance, PlayerChoiceContext context, CardModel? sourceCard)
         {
-            try 
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                return;
+            }
+
+            try
             {
                 await TriggerEffects(context, sourceCard);
             }
             catch (Exception ex)
             {
-                MegaCrit.Sts2.Core.Logging.Log.Error($"[KoishiKokoro] 触发效果报错: {ex}");
+                MegaCrit.Sts2.Core.Logging.Log.Error($"[KoishiKokoro] 姿态触发效果报错: {ex}");
             }
         }
 

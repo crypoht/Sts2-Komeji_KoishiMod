@@ -144,7 +144,10 @@ namespace KomeijiKoishi.Cards
     public sealed class Artwork_Koishi : ArtworkStage_Koishi
     {
         public Artwork_Koishi()
-            : base(CardRarity.Common, 6m, 8m)
+            : base(
+                CardRarity.Common,
+                KomeijiKoishi.Config.KoishiBalanceManager.Value(6m, 6m),
+                KomeijiKoishi.Config.KoishiBalanceManager.Value(8m, 8m))
         {
         }
 
@@ -158,7 +161,10 @@ namespace KomeijiKoishi.Cards
     public sealed class TrueArtwork_Koishi : ArtworkStage_Koishi
     {
         public TrueArtwork_Koishi()
-            : base(CardRarity.Event, 11m, 15m)
+            : base(
+                CardRarity.Event,
+                KomeijiKoishi.Config.KoishiBalanceManager.Value(11m, 11m),
+                KomeijiKoishi.Config.KoishiBalanceManager.Value(15m, 14m))
         {
         }
 
@@ -172,7 +178,10 @@ namespace KomeijiKoishi.Cards
     public sealed class TrueArtworkLiberated_Koishi : ArtworkStage_Koishi
     {
         public TrueArtworkLiberated_Koishi()
-            : base(CardRarity.Event, 20m, 26m)
+            : base(
+                CardRarity.Event,
+                KomeijiKoishi.Config.KoishiBalanceManager.Value(20m, 18m),
+                KomeijiKoishi.Config.KoishiBalanceManager.Value(26m, 22m))
         {
         }
 
@@ -186,7 +195,10 @@ namespace KomeijiKoishi.Cards
     public sealed class TrueUnconsciousArtworkLiberated_Koishi : ArtworkStage_Koishi
     {
         public TrueUnconsciousArtworkLiberated_Koishi()
-            : base(CardRarity.Ancient, 33m, 41m)
+            : base(
+                CardRarity.Ancient,
+                KomeijiKoishi.Config.KoishiBalanceManager.Value(33m, 27m),
+                KomeijiKoishi.Config.KoishiBalanceManager.Value(41m, 32m))
         {
         }
 

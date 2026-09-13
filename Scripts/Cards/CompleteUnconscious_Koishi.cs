@@ -14,6 +14,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using KomeijiKoishi.Pools; 
 using KomeijiKoishi.Utils_Koishi; 
 using KomeijiKoishi.Enums;
+using KomeijiKoishi.Enchantments;
 
 namespace KomeijiKoishi.Cards
 {
@@ -31,6 +32,16 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<IHoverTip> ExtraHoverTips => new List<IHoverTip> { HoverTipFactory.FromPower<IntangiblePower>() };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new PowerVar<IntangiblePower>(1m) };
+
+        public override void AfterCreated()
+        {
+            base.AfterCreated();
+
+            if (base.Enchantment == null)
+            {
+                CardCmd.Enchant<CloseEye>(this, 1m);
+            }
+        }
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {

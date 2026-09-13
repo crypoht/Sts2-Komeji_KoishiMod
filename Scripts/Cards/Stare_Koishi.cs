@@ -15,6 +15,7 @@ using KomeijiKoishi.Enums;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers; 
 using MegaCrit.Sts2.Core.HoverTips;
+using KomeijiKoishi.Powers;
 
 namespace KomeijiKoishi.Cards
 {
@@ -28,16 +29,16 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(6m, ValueProp.Move),    
-            new CardsVar(1),                       
-            new PowerVar<VulnerablePower>(1m)         
+            new DamageVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(6m, 5m), ValueProp.Move),
+            new CardsVar(KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled ? 2 : 1),
+            new PowerVar<VulnerablePower>(1m),
+            new PowerVar<TracingPower>(2m)
         };
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
-        { 
-
-            HoverTipFactory.FromPower<VulnerablePower>() 
-        };
+        protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+            KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled
+                ? new[] { HoverTipFactory.FromPower<TracingPower>() }
+                : new[] { HoverTipFactory.FromPower<VulnerablePower>() };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
@@ -54,14 +55,26 @@ namespace KomeijiKoishi.Cards
                     .Execute(choiceContext);
 
     
-                await PowerCmd.Apply<VulnerablePower>(
-                    choiceContext,
-                    cardPlay.Target, 
-                    base.DynamicVars.Vulnerable.BaseValue, 
-                    player.Creature, 
-                    this, 
-                    false
-                );
+                if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+                {
+                    await PowerCmd.Apply<TracingPower>(
+                        choiceContext,
+                        cardPlay.Target,
+                        base.DynamicVars["TracingPower"].BaseValue,
+                        player.Creature,
+                        this,
+                        false);
+                }
+                else
+                {
+                    await PowerCmd.Apply<VulnerablePower>(
+                        choiceContext,
+                        cardPlay.Target,
+                        base.DynamicVars.Vulnerable.BaseValue,
+                        player.Creature,
+                        this,
+                        false);
+                }
 
 
                 await CardPileCmd.Draw(choiceContext, base.DynamicVars.Cards.BaseValue, player, false);
@@ -74,7 +87,15 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Cards.UpgradeValueBy(1m);
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                base.DynamicVars.Damage.UpgradeValueBy(3m);
+            }
+            else
+            {
+                base.DynamicVars.Cards.UpgradeValueBy(1m);
+                base.DynamicVars.Vulnerable.UpgradeValueBy(1m);
+            }
         }
     }
 }

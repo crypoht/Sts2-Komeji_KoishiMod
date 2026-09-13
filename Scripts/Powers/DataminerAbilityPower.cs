@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using KomeijiKoishi.Cards;
@@ -38,6 +39,14 @@ public sealed class DataminerAbilityPower : CustomPowerModel
 
     public DataminerPileScope? EffectPileScope { get; private set; }
 
+    public DataminerGeneratedCardKind? EffectGeneratedCardKind { get; private set; }
+
+    public string? EffectGeneratedCardId { get; private set; }
+
+    public DataminerGeneratedCardDestination? EffectGeneratedCardDestination { get; private set; }
+
+    public int EffectSecondaryAmount { get; private set; }
+
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Single;
     public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
@@ -56,7 +65,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             {
                 description.Add("Trigger", DataminerDescriptionPatch.BuildAbilityTrigger(Trigger));
                 description.Add("Effect", DataminerDescriptionPatch.BuildSubEffect(
-                    new DataminerSubEffect(EffectKind, EffectAmount, EffectPowerId, pileScope: EffectPileScope)));
+                    CurrentEffect));
             }
 
             return description;
@@ -77,10 +86,23 @@ public sealed class DataminerAbilityPower : CustomPowerModel
         EffectAmount = effect.Amount;
         EffectPowerId = effect.PowerId;
         EffectPileScope = effect.PileScope;
+        EffectGeneratedCardKind = effect.GeneratedCardKind;
+        EffectGeneratedCardId = effect.GeneratedCardId;
+        EffectGeneratedCardDestination = effect.GeneratedCardDestination;
+        EffectSecondaryAmount = effect.SecondaryAmount;
     }
 
     public DataminerSubEffect CurrentEffect =>
-        new(EffectKind, EffectAmount, EffectPowerId, pileScope: EffectPileScope);
+        new(
+            EffectKind,
+            EffectAmount,
+            EffectPowerId,
+            EffectGeneratedCardKind,
+            EffectGeneratedCardId,
+            EffectGeneratedCardDestination,
+            EffectPileScope,
+            EffectSecondaryAmount,
+            DataminerPowerTarget.Self);
 
     public override async Task BeforeApplied(
         Creature target,
@@ -90,7 +112,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
     {
         if (Trigger == DataminerAbilityTriggerKind.None && cardSource is not DataminerCard_Koishi)
         {
-            await TriggerEffect(new ThrowingPlayerChoiceContext());
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -107,7 +129,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && result.UnblockedDamage > 0
             && cardSource is not DataminerCard_Koishi)
         {
-            await TriggerEffect(context);
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -120,7 +142,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && card.Owner?.Creature == base.Owner
             && card is not DataminerCard_Koishi)
         {
-            await TriggerEffect(context);
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -145,7 +167,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
 
         if (matches)
         {
-            await TriggerEffect(context);
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -160,7 +182,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && (card.Id.Entry.Contains("STRIKE", StringComparison.OrdinalIgnoreCase)
                 || card.Title.Contains("打击", StringComparison.Ordinal)))
         {
-            await TriggerEffect(context);
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -175,7 +197,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && amount > 0
             && cardSource is not DataminerCard_Koishi)
         {
-            await TriggerEffect(new ThrowingPlayerChoiceContext());
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -187,14 +209,14 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && creator?.Creature == base.Owner
             && card is not DataminerCard_Koishi)
         {
-            await TriggerEffect(new ThrowingPlayerChoiceContext());
+            QueueTriggeredEffect(null);
         }
         else if (Trigger == DataminerAbilityTriggerKind.OnGenerateStatus
             && creator?.Creature == base.Owner
             && card is not DataminerCard_Koishi
             && card.Type == CardType.Status)
         {
-            await TriggerEffect(new ThrowingPlayerChoiceContext());
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -205,7 +227,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && amount > 0
             && card is not DataminerCard_Koishi)
         {
-            await TriggerEffect(new ThrowingPlayerChoiceContext());
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -218,7 +240,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && player.Creature == base.Owner
             && orb is LightningOrb)
         {
-            await TriggerEffect(context);
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -229,7 +251,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
         if (Trigger == DataminerAbilityTriggerKind.OnShuffleDrawPile
             && shuffler.Creature == base.Owner)
         {
-            await TriggerEffect(context);
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -239,7 +261,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && gainer.Creature == base.Owner
             && amount > 0)
         {
-            await TriggerEffect(new ThrowingPlayerChoiceContext());
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -249,7 +271,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && spender.Creature == base.Owner
             && amount > 0)
         {
-            await TriggerEffect(new ThrowingPlayerChoiceContext());
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -270,13 +292,13 @@ public sealed class DataminerAbilityPower : CustomPowerModel
         if (Trigger == DataminerAbilityTriggerKind.OnGiveVulnerable
             && power is VulnerablePower)
         {
-            await TriggerEffect(context);
+            QueueTriggeredEffect(power.Owner);
         }
         else if (Trigger == DataminerAbilityTriggerKind.OnGiveEnemyDebuff
             && power.TypeForCurrentAmount == PowerType.Debuff
             && power.Owner?.Side == CombatSide.Enemy)
         {
-            await TriggerEffect(context, power.Owner);
+            QueueTriggeredEffect(power.Owner);
         }
     }
 
@@ -321,7 +343,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
         if (player.Creature == base.Owner
             && Trigger == DataminerAbilityTriggerKind.OnTurnStart)
         {
-            await TriggerEffect(context);
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -334,7 +356,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && participants.Contains(base.Owner)
             && Trigger == DataminerAbilityTriggerKind.OnTurnEnd)
         {
-            await TriggerEffect(context);
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -352,7 +374,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             && Trigger is DataminerAbilityTriggerKind.OnUnblockedDamage
                 or DataminerAbilityTriggerKind.OnAttack)
         {
-            await TriggerEffect(context, target);
+            QueueTriggeredEffect(target);
         }
     }
 
@@ -360,7 +382,7 @@ public sealed class DataminerAbilityPower : CustomPowerModel
     {
         if (Trigger == DataminerAbilityTriggerKind.OnCombatEnd)
         {
-            await TriggerEffect(new ThrowingPlayerChoiceContext());
+            QueueTriggeredEffect(null);
         }
     }
 
@@ -435,6 +457,45 @@ public sealed class DataminerAbilityPower : CustomPowerModel
                             null,
                             null);
                     }
+                    break;
+                case DataminerEffectKind.AbilityHeal:
+                    await CreatureCmd.Heal(player.Creature, EffectAmount, true);
+                    break;
+                case DataminerEffectKind.AbilityMaxHpGain:
+                    await CreatureCmd.GainMaxHp(player.Creature, EffectAmount);
+                    break;
+                case DataminerEffectKind.AbilityHealthLoss:
+                    await CreatureCmd.Damage(
+                        effectContext,
+                        player.Creature,
+                        EffectAmount,
+                        ValueProp.Unblockable | ValueProp.Unpowered,
+                        null,
+                        null);
+                    break;
+                case DataminerEffectKind.AbilityMaxHpLoss:
+                    await CreatureCmd.LoseMaxHp(effectContext, player.Creature, EffectAmount, true);
+                    break;
+                case DataminerEffectKind.AbilityExhaustRandomHand:
+                    await ExhaustRandomHand(effectContext, player, EffectAmount);
+                    break;
+                case DataminerEffectKind.AbilityDiscardRandomHand:
+                    await DiscardRandomHand(effectContext, player, EffectAmount);
+                    break;
+                case DataminerEffectKind.AbilityStars:
+                    await PlayerCmd.GainStars(EffectAmount, player);
+                    break;
+                case DataminerEffectKind.AbilityRetainHand:
+                    await PowerCmd.Apply<RetainHandPower>(
+                        effectContext,
+                        player.Creature,
+                        1m,
+                        player.Creature,
+                        null,
+                        false);
+                    break;
+                case DataminerEffectKind.AbilityGenerateCards:
+                    await DataminerCard_Koishi.GenerateCardsForAbility(player, CurrentEffect);
                     break;
                 case DataminerEffectKind.Poison when enemy != null:
                     await PowerCmd.Apply<PoisonPower>(
@@ -526,12 +587,15 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             new DataminerAbilityTriggerGameAction(player, powerOrdinal, Trigger, CurrentEffect));
     }
 
-    public Task ResolveQueuedEffect(DataminerAbilityTriggerKind trigger, DataminerSubEffect effect)
+    public Task ResolveQueuedEffect(
+        DataminerAbilityTriggerKind trigger,
+        DataminerSubEffect effect,
+        Creature? preferredTarget = null)
     {
         Configure(trigger, effect);
         MegaCrit.Sts2.Core.Logging.Log.Info(
             $"[KoishiDataminerAbility] ResolveQueuedEffect trigger={Trigger}, effect={EffectKind}, amount={EffectAmount}.");
-        return TriggerEffect(new ThrowingPlayerChoiceContext());
+        return TriggerEffect(new ThrowingPlayerChoiceContext(), preferredTarget);
     }
 
     private async Task ChannelOrb(PlayerChoiceContext context, Player player)
@@ -550,6 +614,34 @@ public sealed class DataminerAbilityPower : CustomPowerModel
             default:
                 await OrbCmd.Channel<FrostOrb>(context, player);
                 break;
+        }
+    }
+
+    private async Task ExhaustRandomHand(
+        PlayerChoiceContext context,
+        Player player,
+        int count)
+    {
+        List<CardModel> hand = PileType.Hand.GetPile(player).Cards.ToList();
+        for (int i = 0; i < count && hand.Count > 0; i++)
+        {
+            CardModel card = hand[EffectSecondaryAmount % hand.Count];
+            hand.Remove(card);
+            await CardCmd.Exhaust(context, card, false, false);
+        }
+    }
+
+    private async Task DiscardRandomHand(
+        PlayerChoiceContext context,
+        Player player,
+        int count)
+    {
+        List<CardModel> hand = PileType.Hand.GetPile(player).Cards.ToList();
+        for (int i = 0; i < count && hand.Count > 0; i++)
+        {
+            CardModel card = hand[EffectSecondaryAmount % hand.Count];
+            hand.Remove(card);
+            await CardCmd.Discard(context, new[] { card });
         }
     }
 }

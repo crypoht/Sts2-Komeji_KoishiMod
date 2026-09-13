@@ -20,15 +20,13 @@ namespace KomeijiKoishi.Cards
     public sealed class HardmansYoukaiGirl_Koishi : CustomCardModel
     {
         public HardmansYoukaiGirl_Koishi()
-            : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyAlly, true)
+            : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AllAllies, true)
         {
         }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
-
-        public override TargetType TargetType => base.IsUpgraded ? TargetType.AllAllies : TargetType.AnyAlly;
 
          protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
         { 
@@ -49,27 +47,24 @@ namespace KomeijiKoishi.Cards
 
             await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
 
-            IEnumerable<Creature> targets;
-            if (base.IsUpgraded)
-            {
-                targets = base.CombatState.Players
-                    .Where(p => p != null && p != base.Owner && p.Creature != null && !p.Creature.IsDead && p.Creature.Side == base.Owner.Creature.Side)
-                    .Select(p => p.Creature);
-            }
-            else
-            {
-                targets = cardPlay.Target != null ? new[] { cardPlay.Target } : Enumerable.Empty<Creature>();
-            }
+            IEnumerable<Creature> targets = base.CombatState.Players
+                .Where(p => p != null && p != base.Owner && p.Creature != null && !p.Creature.IsDead && p.Creature.Side == base.Owner.Creature.Side)
+                .Select(p => p.Creature);
 
             foreach (Creature target in targets)
             {
-                await PowerCmd.Apply<HardmansYoukaiGirlPower>(
+                HardmansYoukaiGirlPower? power = await PowerCmd.Apply<HardmansYoukaiGirlPower>(
                     choiceContext,
                     target,
                     base.DynamicVars["HardmansYoukaiGirlPower"].BaseValue,
                     base.Owner.Creature,
                     this,
                     false);
+
+                if (power != null)
+                {
+                    power.GenerateUpgradedDanmaku |= base.IsUpgraded;
+                }
             }
         }
     }

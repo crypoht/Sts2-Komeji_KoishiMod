@@ -13,7 +13,7 @@ public static class BalanceEnergyCostPatch
 
     private static readonly Dictionary<string, (int Normal, int Balanced)> BalanceCosts = new()
     {
-        ["KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI"] = (1, 2),
+        ["KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI"] = (1, 1),
         ["KOMEIJIKOISHI-BRAMBLY_ROSE_GARDEN_KOISHI"] = (2, 1),
         ["KOMEIJIKOISHI-BURIED_FIRE_KOISHI"] = (2, 3),
         ["KOMEIJIKOISHI-CONSCIOUSNESS_SPIRAL_KOISHI"] = (2, 3),

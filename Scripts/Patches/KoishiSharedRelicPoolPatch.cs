@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using KomeijiKoishi.Config;
 using KomeijiKoishi.Pools;
+using KomeijiKoishi.Relics;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
@@ -20,6 +22,7 @@ namespace KomeijiKoishi.Patches
                 .GetUnlockedRelics(player.UnlockState)
                 .Concat(ModelDb.RelicPool<KoishiSharedRelicPool>().GetUnlockedRelics(player.UnlockState))
                 .Concat(player.Character.RelicPool.GetUnlockedRelics(player.UnlockState))
+                .Where(relic => !KoishiBalanceManager.IsEnabled || relic is not KoishiRock)
                 .DistinctBy(relic => relic.Id);
 
             __instance.Populate(relics, rng);
@@ -32,7 +35,9 @@ namespace KomeijiKoishi.Patches
     {
         public static void Prefix(ref IEnumerable<RelicModel> relics)
         {
-            List<RelicModel> relicList = relics.ToList();
+            List<RelicModel> relicList = relics
+                .Where(relic => !KoishiBalanceManager.IsEnabled || relic is not KoishiRock)
+                .ToList();
             bool isSharedRelicPoolPopulation = relicList.Any(relic => relic.Pool is SharedRelicPool);
             if (!isSharedRelicPoolPopulation)
             {

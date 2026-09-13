@@ -34,7 +34,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar>
         {
-            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(9m, 8m), ValueProp.Move)
+            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(8m, 7m), ValueProp.Move)
         };
 
        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -59,7 +59,7 @@ namespace KomeijiKoishi.Cards
             {
                 if (kvp.Value is BlockVar bv)
                 {
-                    bv.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(4m, 3m));
+                    bv.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(3m, 3m));
                     break;
                 }
             }

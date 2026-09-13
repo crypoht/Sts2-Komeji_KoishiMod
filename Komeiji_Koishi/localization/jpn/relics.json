@@ -105,8 +105,5 @@
   "KOMEIJIKOISHI-KOISHI_ROCK.flavor": "地底に沈んでも、かつて届いた高さを覚えている。",
   "KOMEIJIKOISHI-DATAMINER_KOISHI.title": "データマイナー",
   "KOMEIJIKOISHI-DATAMINER_KOISHI.description": "手札のすべてのカードの効果をランダム化する。4ターンごとに右クリックで発動できる。",
-  "KOMEIJIKOISHI-DATAMINER_KOISHI.flavor": "データに意味はない。意味は再コンパイルできる。",
-  "KOMEIJIKOISHI-TOP1_KOISHI.title": "第1位！",
-  "KOMEIJIKOISHI-TOP1_KOISHI.description": "2026年東方Project人気投票で、こいしが第1位になったことを祝福する。",
-  "KOMEIJIKOISHI-TOP1_KOISHI.flavor": "つまり、こいしの勝ち！"
+  "KOMEIJIKOISHI-DATAMINER_KOISHI.flavor": "データに意味はない。意味は再コンパイルできる。"
 }

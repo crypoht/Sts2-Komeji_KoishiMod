@@ -19,7 +19,6 @@ using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.HoverTips; 
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
-using KomeijiKoishi.Cards; 
 
 namespace KomeijiKoishi.Relics
 {
@@ -39,18 +38,6 @@ namespace KomeijiKoishi.Relics
         {
             HoverTipFactory.FromPower<ThornsPower>()
         };
-
-        public override bool TryModifyEnergyCostInCombat(CardModel card, decimal originalCost, out decimal modifiedCost)
-        {
-            if (card is CompleteUnconscious_Koishi)
-            {
-                modifiedCost = 514m;
-                return true; 
-            }
-            
-            modifiedCost = originalCost;
-            return false;
-        }
 
 #if STS2_BETA
         public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)

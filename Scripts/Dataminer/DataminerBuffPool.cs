@@ -4,6 +4,7 @@ using System.Linq;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace KomeijiKoishi.Dataminer
 {
@@ -22,6 +23,7 @@ namespace KomeijiKoishi.Dataminer
             List<PowerModel> pool = GetPowers()
                 .Where(power => allowEnemyTargets || DataminerPowerPool.IsAllowedForEnemyTarget(power))
                 .Where(power => allowNegativeAmounts || power.AllowNegative)
+                .Where(power => power is not PoisonPower)
                 .ToList();
             return pool.Count == 0
                 ? null
@@ -42,6 +44,7 @@ namespace KomeijiKoishi.Dataminer
         {
             return GetPowers()
                 .Where(power => power.TypeForCurrentAmount == PowerType.Debuff)
+                .Where(power => power is not PoisonPower)
                 .ToList();
         }
 

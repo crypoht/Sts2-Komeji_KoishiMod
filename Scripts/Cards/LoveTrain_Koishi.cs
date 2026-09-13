@@ -60,7 +60,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Block.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(4m, 2m));
+            base.DynamicVars.Block.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(5m, 4m));
         }
     }
 }

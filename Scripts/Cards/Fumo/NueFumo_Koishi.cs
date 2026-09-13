@@ -12,6 +12,7 @@ using MegaCrit.Sts2.Core.Nodes.Cards;
 using KomeijiKoishi.Pools;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using BaseLib.Utils;
+using KomeijiKoishi.Utils_Koishi;
 
 namespace KomeijiKoishi.Cards.Fumo
 {
@@ -26,6 +27,24 @@ namespace KomeijiKoishi.Cards.Fumo
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/fumo/{GetType().Name}.png";
         
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
+
+        public override async Task AfterCardChangedPiles(CardModel card, PileType oldPileType, AbstractModel? clonedBy)
+        {
+            if (card != this || base.Pile?.Type != PileType.Hand || base.Owner == null)
+            {
+                return;
+            }
+
+            await KoishiExtensions.SafeAutoPlayCard(
+                new ThrowingPlayerChoiceContext(),
+                base.Owner,
+                this,
+                null,
+                AutoPlayType.Default,
+                true,
+                false
+            );
+        }
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {

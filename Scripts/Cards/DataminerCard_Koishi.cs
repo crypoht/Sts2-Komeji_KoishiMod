@@ -26,6 +26,7 @@ using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Map;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Cards;
@@ -294,6 +295,9 @@ namespace KomeijiKoishi.Cards
                 case DataminerEffectKind.RetrieveDrawCards:
                     await RetrieveCards(choiceContext, player, PileType.Draw, subEffect.Amount, subEffect.PileScope);
                     break;
+                case DataminerEffectKind.SwapDeckWithAlly:
+                    await SwapDeckWithAlly(player, subEffect);
+                    break;
                 case DataminerEffectKind.ExhaustRandomHand:
                     await ExhaustRandomHand(choiceContext, player, subEffect.Amount);
                     break;
@@ -458,6 +462,9 @@ namespace KomeijiKoishi.Cards
                     break;
                 case DataminerEffectKind.ApplyAllDebuffs:
                     await ApplyAllOfficialDebuffs(choiceContext, player, subEffect);
+                    break;
+                case DataminerEffectKind.Fight:
+                    await EnterRandomFight(player, subEffect.PowerId);
                     break;
             }
         }
@@ -641,13 +648,54 @@ namespace KomeijiKoishi.Cards
             List<CardModel> deckCards = PileType.Deck.GetPile(player).Cards.ToList();
             if (deckCards.Count > 0)
             {
-                await CardPileCmd.RemoveFromCombat(deckCards, true);
+                await CardPileCmd.RemoveFromDeck(deckCards, false);
             }
 
             for (int i = 0; i < amount; i++)
             {
                 CardModel ironWave = player.RunState.CreateCard<IronWave>(player);
                 await AddCardToDeckSafely(ironWave);
+            }
+        }
+
+        private async Task SwapDeckWithAlly(Player player, DataminerSubEffect effect)
+        {
+            CombatState? combatState = player.Creature.CombatState as CombatState;
+            if (combatState == null)
+            {
+                return;
+            }
+
+            List<Player> allies = combatState.Players
+                .Where(other => other != player && other.Creature.IsAlive)
+                .ToList();
+            if (allies.Count == 0)
+            {
+                return;
+            }
+
+            Player ally = SelectBySeed(allies, effect.SecondaryAmount);
+            List<CardModel> playerDeck = PileType.Deck.GetPile(player).Cards.ToList();
+            List<CardModel> allyDeck = PileType.Deck.GetPile(ally).Cards.ToList();
+
+            if (playerDeck.Count > 0)
+            {
+                await CardPileCmd.RemoveFromDeck(playerDeck, false);
+            }
+
+            if (allyDeck.Count > 0)
+            {
+                await CardPileCmd.RemoveFromDeck(allyDeck, false);
+            }
+
+            foreach (CardModel card in allyDeck)
+            {
+                await CardPileCmd.Add(card, PileType.Deck, CardPilePosition.Bottom, null, false);
+            }
+
+            foreach (CardModel card in playerDeck)
+            {
+                await CardPileCmd.Add(card, PileType.Deck, CardPilePosition.Bottom, null, false);
             }
         }
 
@@ -1053,7 +1101,12 @@ namespace KomeijiKoishi.Cards
             }
         }
 
-        private async Task GenerateCards(Player player, DataminerSubEffect subEffect)
+        internal static async Task GenerateCardsForAbility(Player player, DataminerSubEffect subEffect)
+        {
+            await GenerateCards(player, subEffect);
+        }
+
+        private static async Task GenerateCards(Player player, DataminerSubEffect subEffect)
         {
             if (subEffect.Amount <= 0 || subEffect.GeneratedCardDestination == null)
             {
@@ -1073,7 +1126,8 @@ namespace KomeijiKoishi.Cards
                 {
                     generatedCard = CreateDataminerCard(
                         player,
-                        subEffect.GeneratedCardDestination != DataminerGeneratedCardDestination.Deck);
+                        subEffect.GeneratedCardDestination != DataminerGeneratedCardDestination.Deck,
+                        subEffect.SecondaryAmount + i);
                 }
                 else
                 {
@@ -1103,7 +1157,7 @@ namespace KomeijiKoishi.Cards
             }
         }
 
-        private CardModel? ResolveGeneratedCard(DataminerSubEffect subEffect)
+        private static CardModel? ResolveGeneratedCard(DataminerSubEffect subEffect)
         {
             if (subEffect.GeneratedCardKind == DataminerGeneratedCardKind.SpecificDataminer)
             {
@@ -1118,9 +1172,12 @@ namespace KomeijiKoishi.Cards
             return ModelDb.AllCards.FirstOrDefault(card => card.Id.Entry == subEffect.GeneratedCardId);
         }
 
-        private DataminerCard_Koishi CreateDataminerCard(Player player, bool combatScoped)
+        private static DataminerCard_Koishi CreateDataminerCard(
+            Player player,
+            bool combatScoped,
+            int variantSeed)
         {
-            int variant = player.RunState.Rng.CombatCardGeneration.NextInt(7);
+            int variant = (variantSeed & int.MaxValue) % 7;
             DataminerCard_Koishi card = variant switch
             {
                 0 => combatScoped
@@ -1147,6 +1204,28 @@ namespace KomeijiKoishi.Cards
             };
             card.SetEffect(DataminerEffect.Create(player));
             return card;
+        }
+
+        private static async Task EnterRandomFight(Player player, string? encounterId)
+        {
+            if (string.IsNullOrEmpty(encounterId) || RunManager.Instance == null)
+            {
+                return;
+            }
+
+            EncounterModel? encounter = ModelDb.AllEncounters
+                .FirstOrDefault(candidate => candidate.Id.Entry == encounterId);
+            if (encounter == null)
+            {
+                return;
+            }
+
+            EncounterModel mutableEncounter = encounter.ToMutable();
+            mutableEncounter.DebugRandomizeRng();
+            await RunManager.Instance.EnterRoomDebug(
+                RoomType.Monster,
+                MapPointType.Unassigned,
+                mutableEncounter);
         }
 
         private static async Task GeneratePotions(Player player, int count)

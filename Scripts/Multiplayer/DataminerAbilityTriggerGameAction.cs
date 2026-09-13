@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using KomeijiKoishi.Dataminer;
 using KomeijiKoishi.Powers;
 using MegaCrit.Sts2.Core.Entities.Multiplayer;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions;
@@ -16,17 +18,30 @@ public sealed class DataminerAbilityTriggerGameAction : GameAction
     private readonly int _powerOrdinal;
     private readonly DataminerAbilityTriggerKind _trigger;
     private readonly DataminerSubEffect _effect;
+    private readonly int _targetCombatId;
 
     public DataminerAbilityTriggerGameAction(
         Player player,
         int powerOrdinal,
         DataminerAbilityTriggerKind trigger,
-        DataminerSubEffect effect)
+        DataminerSubEffect effect,
+        Creature? target = null)
+        : this(player, powerOrdinal, trigger, effect, target?.CombatId ?? -1)
+    {
+    }
+
+    private DataminerAbilityTriggerGameAction(
+        Player player,
+        int powerOrdinal,
+        DataminerAbilityTriggerKind trigger,
+        DataminerSubEffect effect,
+        int targetCombatId)
     {
         _player = player;
         _powerOrdinal = powerOrdinal;
         _trigger = trigger;
         _effect = effect;
+        _targetCombatId = targetCombatId;
     }
 
     public override ulong OwnerId => _player.NetId;
@@ -49,7 +64,15 @@ public sealed class DataminerAbilityTriggerGameAction : GameAction
                 $"[KoishiDataminerAbility] ExecuteAction could not find power ordinal={_powerOrdinal}.");
         }
 
-        return power?.ResolveQueuedEffect(_trigger, _effect) ?? Task.CompletedTask;
+        Creature? target = null;
+        if (_targetCombatId >= 0 && _player.Creature.CombatState is { } combatState)
+        {
+            target = combatState.PlayerCreatures
+                .Concat(combatState.Enemies)
+                .FirstOrDefault(creature => creature.CombatId == _targetCombatId);
+        }
+
+        return power?.ResolveQueuedEffect(_trigger, _effect, target) ?? Task.CompletedTask;
     }
 
     public override INetAction ToNetAction() =>
@@ -61,7 +84,14 @@ public sealed class DataminerAbilityTriggerGameAction : GameAction
             EffectAmount = _effect.Amount,
             EffectPowerId = _effect.PowerId ?? string.Empty,
             HasPileScope = _effect.PileScope.HasValue,
-            PileScope = _effect.PileScope ?? DataminerPileScope.Hand
+            PileScope = _effect.PileScope ?? DataminerPileScope.Hand,
+            HasGeneratedCardKind = _effect.GeneratedCardKind.HasValue,
+            GeneratedCardKind = _effect.GeneratedCardKind ?? DataminerGeneratedCardKind.Random,
+            GeneratedCardId = _effect.GeneratedCardId ?? string.Empty,
+            HasGeneratedCardDestination = _effect.GeneratedCardDestination.HasValue,
+            GeneratedCardDestination = _effect.GeneratedCardDestination ?? DataminerGeneratedCardDestination.Hand,
+            SecondaryAmount = _effect.SecondaryAmount,
+            TargetCombatId = _targetCombatId
         };
 }
 
@@ -74,6 +104,13 @@ public struct NetDataminerAbilityTriggerAction : INetAction, IPacketSerializable
     public string EffectPowerId;
     public bool HasPileScope;
     public DataminerPileScope PileScope;
+    public bool HasGeneratedCardKind;
+    public DataminerGeneratedCardKind GeneratedCardKind;
+    public string GeneratedCardId;
+    public bool HasGeneratedCardDestination;
+    public DataminerGeneratedCardDestination GeneratedCardDestination;
+    public int SecondaryAmount;
+    public int TargetCombatId;
 
     public GameAction ToGameAction(Player player) =>
         new DataminerAbilityTriggerGameAction(
@@ -84,7 +121,13 @@ public struct NetDataminerAbilityTriggerAction : INetAction, IPacketSerializable
                 EffectKind,
                 EffectAmount,
                 string.IsNullOrEmpty(EffectPowerId) ? null : EffectPowerId,
-                pileScope: HasPileScope ? PileScope : null));
+                HasGeneratedCardKind ? GeneratedCardKind : null,
+                string.IsNullOrEmpty(GeneratedCardId) ? null : GeneratedCardId,
+                HasGeneratedCardDestination ? GeneratedCardDestination : null,
+                HasPileScope ? PileScope : null,
+                SecondaryAmount,
+                DataminerPowerTarget.Self),
+            TargetCombatId);
 
     public void Serialize(PacketWriter writer)
     {
@@ -95,6 +138,13 @@ public struct NetDataminerAbilityTriggerAction : INetAction, IPacketSerializable
         writer.WriteString(EffectPowerId ?? string.Empty);
         writer.WriteBool(HasPileScope);
         writer.WriteInt((int)PileScope);
+        writer.WriteBool(HasGeneratedCardKind);
+        writer.WriteInt((int)GeneratedCardKind);
+        writer.WriteString(GeneratedCardId ?? string.Empty);
+        writer.WriteBool(HasGeneratedCardDestination);
+        writer.WriteInt((int)GeneratedCardDestination);
+        writer.WriteInt(SecondaryAmount);
+        writer.WriteInt(TargetCombatId);
     }
 
     public void Deserialize(PacketReader reader)
@@ -106,5 +156,12 @@ public struct NetDataminerAbilityTriggerAction : INetAction, IPacketSerializable
         EffectPowerId = reader.ReadString();
         HasPileScope = reader.ReadBool();
         PileScope = (DataminerPileScope)reader.ReadInt();
+        HasGeneratedCardKind = reader.ReadBool();
+        GeneratedCardKind = (DataminerGeneratedCardKind)reader.ReadInt();
+        GeneratedCardId = reader.ReadString();
+        HasGeneratedCardDestination = reader.ReadBool();
+        GeneratedCardDestination = (DataminerGeneratedCardDestination)reader.ReadInt();
+        SecondaryAmount = reader.ReadInt();
+        TargetCombatId = reader.ReadInt();
     }
 }

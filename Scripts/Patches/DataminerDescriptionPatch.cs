@@ -96,7 +96,7 @@ public static class DataminerDescriptionPatch
 
         if (effect.ComboAmount > 0)
         {
-            lines.Add($"增加 {effect.ComboAmount} 次连击。");
+            lines.Add($"给予 {effect.ComboAmount} 层重放。");
         }
 
         if (effect.ReturnPile != DataminerReturnPile.None)
@@ -211,6 +211,7 @@ public static class DataminerDescriptionPatch
             DataminerEffectKind.GenerateSoulsToPile => $"将 {effect.Amount} 张灵魂加入{BuildPile(effect.PileScope)}。",
             DataminerEffectKind.RetrieveDiscardCards => $"从弃牌堆选择 {effect.Amount} 张牌放入{BuildPile(effect.PileScope)}。",
             DataminerEffectKind.RetrieveDrawCards => $"从抽牌堆选择 {effect.Amount} 张牌放入{BuildPile(effect.PileScope)}。",
+            DataminerEffectKind.SwapDeckWithAlly => "交换你与一名队友的卡组。",
             DataminerEffectKind.ExhaustRandomHand => $"随机消耗 {effect.Amount} 张手牌。",
             DataminerEffectKind.EnemyBlock => $"使敌人获得 {effect.Amount} 点格挡。",
             DataminerEffectKind.RandomPower => $"使{target}获得 {effect.Amount} 层随机能力。",
@@ -263,6 +264,16 @@ public static class DataminerDescriptionPatch
                 : $"手牌上限减少 {-effect.Amount}。",
             DataminerEffectKind.ApplyAllDebuffs => $"使{target}获得所有负面效果各 {effect.Amount} 层。",
             DataminerEffectKind.RepeatPrimary => $"额外执行主效果 {effect.Amount} 次。",
+            DataminerEffectKind.Fight => "进入随机战斗房间。",
+            DataminerEffectKind.AbilityHeal => $"回复 {effect.Amount} 点生命。",
+            DataminerEffectKind.AbilityMaxHpGain => $"增加 {effect.Amount} 点生命上限。",
+            DataminerEffectKind.AbilityHealthLoss => $"失去 {effect.Amount} 点生命。",
+            DataminerEffectKind.AbilityMaxHpLoss => $"减少 {effect.Amount} 点生命上限。",
+            DataminerEffectKind.AbilityExhaustRandomHand => $"消耗手中 {effect.Amount} 张随机牌。",
+            DataminerEffectKind.AbilityDiscardRandomHand => $"丢弃手中 {effect.Amount} 张随机牌。",
+            DataminerEffectKind.AbilityStars => $"获得 {effect.Amount} 颗星星。",
+            DataminerEffectKind.AbilityRetainHand => "回合结束不会丢弃你的手牌。",
+            DataminerEffectKind.AbilityGenerateCards => BuildGeneratedCards(effect),
             _ => "未知效果。"
         };
 

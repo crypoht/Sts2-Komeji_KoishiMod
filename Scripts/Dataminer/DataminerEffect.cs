@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
 
 namespace KomeijiKoishi.Dataminer
@@ -29,9 +30,13 @@ namespace KomeijiKoishi.Dataminer
         InstantDeath, MoriyaDance, SpawnFumo, ReplaceDeckWithIronWaves, GodMode,
         ClearAllPowers, ClearEnemyDebuffs, ClearEnemyBuffs,
         OverlayPlayers, OverlayEnemies, RandomVfx, SpecificVfx,
-        ModifyHandLimit, ApplyAllDebuffs, RepeatPrimary,
+        ModifyHandLimit, ApplyAllDebuffs, SwapDeckWithAlly, RepeatPrimary,
         HealthLossByPileCount, GenerateShivs, GenerateSouls,
-        GenerateSoulsToPile, RetrieveDiscardCards, RetrieveDrawCards
+        GenerateSoulsToPile, RetrieveDiscardCards, RetrieveDrawCards,
+        Fight,
+        AbilityHeal, AbilityMaxHpGain, AbilityHealthLoss, AbilityMaxHpLoss,
+        AbilityExhaustRandomHand, AbilityDiscardRandomHand, AbilityStars,
+        AbilityRetainHand, AbilityGenerateCards
     }
 
     public enum DataminerGeneratedCardKind { SpecificDataminer, Random }
@@ -277,6 +282,66 @@ namespace KomeijiKoishi.Dataminer
             _ => TargetType.Self
         };
 
+        private static readonly DataminerEffectKind[] RandomPrimaryEffectPool =
+        {
+            DataminerEffectKind.Damage,
+            DataminerEffectKind.DamageAll,
+            DataminerEffectKind.Block,
+            DataminerEffectKind.AllyBlock,
+            DataminerEffectKind.Draw,
+            DataminerEffectKind.Energy,
+            DataminerEffectKind.Health,
+            DataminerEffectKind.ExhaustRandomHand,
+            DataminerEffectKind.EnemyBlock,
+            DataminerEffectKind.RandomPower,
+            DataminerEffectKind.RandomBuff,
+            DataminerEffectKind.GenerateCards,
+            DataminerEffectKind.Gold,
+            DataminerEffectKind.Potions,
+            DataminerEffectKind.DamagePerPile,
+            DataminerEffectKind.ChannelOrb,
+            DataminerEffectKind.DiscardAllHand,
+            DataminerEffectKind.ExhaustAllHand,
+            DataminerEffectKind.ExhaustSelectedHand,
+            DataminerEffectKind.AutoPlayPile,
+            DataminerEffectKind.Poison,
+            DataminerEffectKind.UpgradePile,
+            DataminerEffectKind.UpgradeAll,
+            DataminerEffectKind.Summon,
+            DataminerEffectKind.Stars,
+            DataminerEffectKind.EnchantPile,
+            DataminerEffectKind.RandomizeHandCost,
+            DataminerEffectKind.DirectWin,
+            DataminerEffectKind.MaxHp,
+            DataminerEffectKind.ExtraCardRewards,
+            DataminerEffectKind.ObtainRelic,
+            DataminerEffectKind.LoseRelic,
+            DataminerEffectKind.DoublePowers,
+            DataminerEffectKind.OstyDamage,
+            DataminerEffectKind.InstantDeath,
+            DataminerEffectKind.MoriyaDance,
+            DataminerEffectKind.SpawnFumo,
+            DataminerEffectKind.ReplaceDeckWithIronWaves,
+            DataminerEffectKind.GodMode,
+            DataminerEffectKind.ClearAllPowers,
+            DataminerEffectKind.ClearEnemyDebuffs,
+            DataminerEffectKind.ClearEnemyBuffs,
+            DataminerEffectKind.OverlayPlayers,
+            DataminerEffectKind.OverlayEnemies,
+            DataminerEffectKind.RandomVfx,
+            DataminerEffectKind.SpecificVfx,
+            DataminerEffectKind.ModifyHandLimit,
+            DataminerEffectKind.ApplyAllDebuffs,
+            DataminerEffectKind.SwapDeckWithAlly,
+            DataminerEffectKind.HealthLossByPileCount,
+            DataminerEffectKind.GenerateShivs,
+            DataminerEffectKind.GenerateSouls,
+            DataminerEffectKind.GenerateSoulsToPile,
+            DataminerEffectKind.RetrieveDiscardCards,
+            DataminerEffectKind.RetrieveDrawCards,
+            DataminerEffectKind.Fight
+        };
+
         public static DataminerEffect Create(Player owner)
         {
             var rng = owner.RunState.Rng.CombatCardGeneration;
@@ -319,9 +384,32 @@ namespace KomeijiKoishi.Dataminer
                 DataminerEffectKind.Health, DataminerEffectKind.RandomPower,
                 DataminerEffectKind.Poison, DataminerEffectKind.InstantDeath,
                 DataminerEffectKind.DirectWin, DataminerEffectKind.GenerateShivs,
-                DataminerEffectKind.GenerateSouls, DataminerEffectKind.ChannelOrb
+                DataminerEffectKind.GenerateSouls, DataminerEffectKind.ChannelOrb,
+                DataminerEffectKind.AbilityHeal, DataminerEffectKind.AbilityMaxHpGain,
+                DataminerEffectKind.AbilityHealthLoss, DataminerEffectKind.AbilityMaxHpLoss,
+                DataminerEffectKind.AbilityExhaustRandomHand,
+                DataminerEffectKind.AbilityDiscardRandomHand,
+                DataminerEffectKind.AbilityStars,
+                DataminerEffectKind.AbilityRetainHand,
+                DataminerEffectKind.AbilityGenerateCards
             };
-            return CreateSubEffect(owner, pool[rng.NextInt(pool.Length)], true);
+            DataminerEffectKind kind = pool[rng.NextInt(pool.Length)];
+            if (kind == DataminerEffectKind.AbilityGenerateCards)
+            {
+                int amount = rng.NextInt(1, 3);
+                string? cardId = SelectRandomCardId(owner);
+                DataminerGeneratedCardDestination destination =
+                    (DataminerGeneratedCardDestination)rng.NextInt(4);
+                return new DataminerSubEffect(
+                    kind,
+                    amount,
+                    null,
+                    DataminerGeneratedCardKind.Random,
+                    cardId,
+                    destination);
+            }
+
+            return CreateSubEffect(owner, kind, true);
         }
 
         public static DataminerEffect CreateForConsole(
@@ -364,6 +452,18 @@ namespace KomeijiKoishi.Dataminer
             Player owner,
             DataminerEffectKind kind)
         {
+            if (kind == DataminerEffectKind.AbilityGenerateCards)
+            {
+                var rng = owner.RunState.Rng.CombatCardGeneration;
+                return new DataminerSubEffect(
+                    kind,
+                    rng.NextInt(1, 3),
+                    null,
+                    DataminerGeneratedCardKind.Random,
+                    SelectRandomCardId(owner),
+                    (DataminerGeneratedCardDestination)rng.NextInt(4));
+            }
+
             return CreateSubEffect(owner, kind, true);
         }
 
@@ -387,12 +487,11 @@ namespace KomeijiKoishi.Dataminer
             DataminerEffectKind kind = requestedKind ?? DataminerEffectKind.None;
             if (requestedKind == null)
             {
-                int max = (int)DataminerEffectKind.RepeatPrimary;
-                kind = (DataminerEffectKind)rng.NextInt(1, max + 1);
+                kind = RandomPrimaryEffectPool[rng.NextInt(RandomPrimaryEffectPool.Length)];
                 while (kind == DataminerEffectKind.Combo
                     || (!allowRepeat && kind == DataminerEffectKind.RepeatPrimary))
                 {
-                    kind = (DataminerEffectKind)rng.NextInt(1, max + 1);
+                    kind = RandomPrimaryEffectPool[rng.NextInt(RandomPrimaryEffectPool.Length)];
                 }
             }
 
@@ -403,6 +502,8 @@ namespace KomeijiKoishi.Dataminer
             DataminerPileScope? pileScope = null;
             int secondaryAmount = 0;
             DataminerPowerTarget powerTarget = DataminerPowerTarget.Self;
+
+            bool hasOtherAllies = HasOtherAllies(owner);
 
             int amount = kind switch
             {
@@ -432,11 +533,21 @@ namespace KomeijiKoishi.Dataminer
                 DataminerEffectKind.RandomVfx or DataminerEffectKind.SpecificVfx => rng.NextInt(1, 5),
                 DataminerEffectKind.ModifyHandLimit => rng.NextInt(2) == 0 ? rng.NextInt(1, 11) : -rng.NextInt(1, 6),
                 DataminerEffectKind.ApplyAllDebuffs => rng.NextInt(1, 3),
+                DataminerEffectKind.SwapDeckWithAlly => 0,
                 DataminerEffectKind.RepeatPrimary => rng.NextInt(1, 3),
                 DataminerEffectKind.HealthLossByPileCount => 0,
                 DataminerEffectKind.GenerateShivs or DataminerEffectKind.GenerateSouls
                     or DataminerEffectKind.GenerateSoulsToPile => rng.NextInt(1, 7),
                 DataminerEffectKind.RetrieveDiscardCards or DataminerEffectKind.RetrieveDrawCards => rng.NextInt(1, 5),
+                DataminerEffectKind.AbilityHeal => rng.NextInt(1, 6),
+                DataminerEffectKind.AbilityMaxHpGain => rng.NextInt(1, 6),
+                DataminerEffectKind.AbilityHealthLoss => rng.NextInt(1, 10),
+                DataminerEffectKind.AbilityMaxHpLoss => rng.NextInt(1, 5),
+                DataminerEffectKind.AbilityExhaustRandomHand => rng.NextInt(1, 4),
+                DataminerEffectKind.AbilityDiscardRandomHand => rng.NextInt(1, 3),
+                DataminerEffectKind.AbilityStars => rng.NextInt(1, 7),
+                DataminerEffectKind.Fight => 0,
+                DataminerEffectKind.AbilityRetainHand or DataminerEffectKind.AbilityGenerateCards => 0,
                 DataminerEffectKind.DirectWin or DataminerEffectKind.ObtainRelic or DataminerEffectKind.LoseRelic
                     or DataminerEffectKind.DoublePowers or DataminerEffectKind.InstantDeath
                     or DataminerEffectKind.MoriyaDance or DataminerEffectKind.SpawnFumo
@@ -449,7 +560,7 @@ namespace KomeijiKoishi.Dataminer
 
             if (kind is DataminerEffectKind.RandomPower or DataminerEffectKind.SpecificPower)
             {
-                powerTarget = (DataminerPowerTarget)rng.NextInt(6);
+                powerTarget = SelectRandomTarget(owner, hasOtherAllies);
                 powerId = DataminerPowerPool.SelectRandomPowerId(
                     owner,
                     !TargetsEnemies(powerTarget),
@@ -458,7 +569,7 @@ namespace KomeijiKoishi.Dataminer
             }
             else if (kind == DataminerEffectKind.RandomBuff)
             {
-                powerTarget = (DataminerPowerTarget)rng.NextInt(6);
+                powerTarget = SelectRandomTarget(owner, hasOtherAllies);
                 powerId = DataminerBuffPool.SelectRandomBuffId(
                     owner,
                     !TargetsEnemies(powerTarget),
@@ -467,12 +578,12 @@ namespace KomeijiKoishi.Dataminer
             }
             else if (kind == DataminerEffectKind.MaxHp)
             {
-                powerTarget = (DataminerPowerTarget)rng.NextInt(3);
+                powerTarget = SelectFriendlyTarget(owner, hasOtherAllies);
                 secondaryAmount = rng.NextInt(1_000_000);
             }
             else if (kind == DataminerEffectKind.DoublePowers)
             {
-                powerTarget = (DataminerPowerTarget)rng.NextInt(6);
+                powerTarget = SelectRandomTarget(owner, hasOtherAllies);
                 secondaryAmount = rng.NextInt(1_000_000);
             }
             else if (kind == DataminerEffectKind.LoseRelic)
@@ -518,19 +629,32 @@ namespace KomeijiKoishi.Dataminer
             {
                 powerId = GetDataminerPortraitPath(owner.RunState.Rng.CombatCardGeneration.NextInt(1, 8));
                 powerTarget = kind == DataminerEffectKind.OverlayPlayers
-                    ? (DataminerPowerTarget)rng.NextInt(3)
+                    ? SelectFriendlyTarget(owner, hasOtherAllies)
                     : (rng.NextInt(2) == 0 ? DataminerPowerTarget.Enemy : DataminerPowerTarget.AllEnemies);
                 secondaryAmount = rng.NextInt(1_000_000);
             }
             else if (kind is DataminerEffectKind.RandomVfx or DataminerEffectKind.SpecificVfx)
             {
                 powerId = SelectVfxId(owner);
-                powerTarget = (DataminerPowerTarget)rng.NextInt(6);
+                powerTarget = SelectRandomTarget(owner, hasOtherAllies);
+                secondaryAmount = rng.NextInt(1_000_000);
+            }
+            else if (kind == DataminerEffectKind.SwapDeckWithAlly)
+            {
+                powerTarget = hasOtherAllies ? DataminerPowerTarget.Ally : DataminerPowerTarget.Self;
+                secondaryAmount = rng.NextInt(1_000_000);
+            }
+            else if (kind == DataminerEffectKind.Fight)
+            {
+                powerId = SelectRandomEncounterId(owner);
+            }
+            else if (kind is DataminerEffectKind.AbilityExhaustRandomHand or DataminerEffectKind.AbilityDiscardRandomHand)
+            {
                 secondaryAmount = rng.NextInt(1_000_000);
             }
             else if (kind == DataminerEffectKind.ClearAllPowers)
             {
-                powerTarget = (DataminerPowerTarget)rng.NextInt(3);
+                powerTarget = SelectFriendlyTarget(owner, hasOtherAllies);
                 secondaryAmount = rng.NextInt(1_000_000);
             }
             else if (kind is DataminerEffectKind.ClearEnemyDebuffs or DataminerEffectKind.ClearEnemyBuffs)
@@ -540,7 +664,7 @@ namespace KomeijiKoishi.Dataminer
             }
             else if (kind == DataminerEffectKind.ApplyAllDebuffs)
             {
-                powerTarget = (DataminerPowerTarget)rng.NextInt(3);
+                powerTarget = SelectFriendlyTarget(owner, hasOtherAllies);
                 secondaryAmount = rng.NextInt(1_000_000);
             }
             else if (kind is DataminerEffectKind.GenerateSoulsToPile
@@ -557,6 +681,46 @@ namespace KomeijiKoishi.Dataminer
             target is DataminerPowerTarget.Enemy
                 or DataminerPowerTarget.AllEnemies
                 or DataminerPowerTarget.AllUnits;
+
+        private static bool HasOtherAllies(Player owner) =>
+            owner.Creature.CombatState?.PlayerCreatures.Any(creature => creature.IsAlive && creature != owner.Creature) == true;
+
+        private static DataminerPowerTarget SelectRandomTarget(Player owner, bool hasOtherAllies)
+        {
+            DataminerPowerTarget[] targets = hasOtherAllies
+                ? new[]
+                {
+                    DataminerPowerTarget.Self,
+                    DataminerPowerTarget.Ally,
+                    DataminerPowerTarget.AllAllies,
+                    DataminerPowerTarget.Enemy,
+                    DataminerPowerTarget.AllEnemies,
+                    DataminerPowerTarget.AllUnits
+                }
+                : new[]
+                {
+                    DataminerPowerTarget.Self,
+                    DataminerPowerTarget.Enemy,
+                    DataminerPowerTarget.AllEnemies,
+                    DataminerPowerTarget.AllUnits
+                };
+
+            return targets[owner.RunState.Rng.CombatCardGeneration.NextInt(targets.Length)];
+        }
+
+        private static DataminerPowerTarget SelectFriendlyTarget(Player owner, bool hasOtherAllies)
+        {
+            DataminerPowerTarget[] targets = hasOtherAllies
+                ? new[]
+                {
+                    DataminerPowerTarget.Self,
+                    DataminerPowerTarget.Ally,
+                    DataminerPowerTarget.AllAllies
+                }
+                : new[] { DataminerPowerTarget.Self };
+
+            return targets[owner.RunState.Rng.CombatCardGeneration.NextInt(targets.Length)];
+        }
 
         private static string? SelectRandomCardId(Player owner)
         {
@@ -575,6 +739,17 @@ namespace KomeijiKoishi.Dataminer
                 .OrderBy(monster => monster.Id.Entry, StringComparer.Ordinal)
                 .ToList();
             return pool.Count == 0 ? null : owner.RunState.Rng.CombatCardGeneration.NextItem(pool)?.Id.Entry;
+        }
+
+        private static string? SelectRandomEncounterId(Player owner)
+        {
+            List<EncounterModel> pool = ModelDb.AllEncounters
+                .Where(encounter => encounter.RoomType == RoomType.Monster)
+                .OrderBy(encounter => encounter.Id.Entry, StringComparer.Ordinal)
+                .ToList();
+            return pool.Count == 0
+                ? null
+                : owner.RunState.Rng.CombatCardGeneration.NextItem(pool)?.Id.Entry;
         }
 
         private static string GetDataminerPortraitPath(int variant) =>

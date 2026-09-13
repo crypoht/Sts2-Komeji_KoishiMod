@@ -64,10 +64,6 @@ namespace KomeijiKoishi.Cards
                     CardCmd.Upgrade(fumoCard, CardPreviewStyle.HorizontalLayout);
                 }
 
-                if (fumoCard is NueFumo_Koishi && targetAlly != base.Owner)
-                {
-                    await KoishiExtensions.SafeAutoPlayCard(choiceContext, targetAlly, fumoCard, null, AutoPlayType.Default, true, false); 
-                }
             }
         }
 

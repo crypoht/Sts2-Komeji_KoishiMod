@@ -11,13 +11,19 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using MegaCrit.Sts2.Core.Saves.Runs;
 
 namespace KomeijiKoishi.Powers
 {
     public sealed class HardmansYoukaiGirlPower : CustomPowerModel
     {
         private bool _isPlayingDanmaku;
+
+        [SavedProperty]
+        public bool GenerateUpgradedDanmaku { get; set; }
 
         public override PowerType Type => PowerType.Buff;
         public override PowerStackType StackType => PowerStackType.Counter;
@@ -55,6 +61,11 @@ namespace KomeijiKoishi.Powers
                     if (danmaku == null)
                     {
                         continue;
+                    }
+
+                    if (GenerateUpgradedDanmaku)
+                    {
+                        CardCmd.Upgrade(danmaku, CardPreviewStyle.None);
                     }
 
                     Creature? target = null;

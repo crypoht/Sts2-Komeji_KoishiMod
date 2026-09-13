@@ -17,7 +17,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums; 
 using KomeijiKoishi.Utils_Koishi; 
-using KomeijiKoishi.Cards;
 
 namespace KomeijiKoishi.Relics
 {
@@ -34,18 +33,6 @@ namespace KomeijiKoishi.Relics
 
         protected override string BigIconPath => $"res://mods/Komeiji_Koishi/images/relics/{Id.Entry.ToLowerInvariant()}.png";
         public override RelicModel? GetUpgradeReplacement() => ModelDb.Relic<KoishiAnicentRelic>();
-
-        public override bool TryModifyEnergyCostInCombat(CardModel card, decimal originalCost, out decimal modifiedCost)
-        {
-            if (card is CompleteUnconscious_Koishi)
-            {
-                modifiedCost = 514m;
-                return true; 
-            }
-            
-            modifiedCost = originalCost;
-            return false;
-        }
 
 #if STS2_BETA
         public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)

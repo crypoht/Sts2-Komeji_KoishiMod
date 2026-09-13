@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Combat;
@@ -32,14 +31,9 @@ namespace KomeijiKoishi.Powers
 
         public static int BloomEnergyGainAmount = 1;
 
-        
-        private AttackCommand? _commandToDouble;
+        private readonly Dictionary<CardModel, AttackCommand> _activeCardAttacks = new();
 
-        
         private bool _isExecutingBloom = false;
-
-        private static readonly AccessTools.FieldRef<AttackCommand, Creature?> SingleTargetRef =
-            AccessTools.FieldRefAccess<AttackCommand, Creature?>("_singleTarget");
 
         protected override object InitInternalData() => new object();
 
@@ -56,7 +50,16 @@ namespace KomeijiKoishi.Powers
             Creature target, decimal block, ValueProp props,
             CardModel? cardSource, CardPlay? cardPlay)
         {
-            if (target == base.Owner) return 1m - (BlockReduction / 100m);
+            if (target == base.Owner)
+            {
+                if (base.Owner.GetPower<PhilosophyOfTheHatedPower>() != null)
+                {
+                    return 1m;
+                }
+
+                return 1m - (BlockReduction / 100m);
+            }
+
             return 1m;
         }
 
@@ -103,7 +106,6 @@ namespace KomeijiKoishi.Powers
         {
             if (_isExecutingBloom)
             {
-                MegaCrit.Sts2.Core.Logging.Log.Info("[BloomStance] BeforeAttack: blocked by isExecutingBloom");
                 return Task.CompletedTask;
             }
 
@@ -119,103 +121,105 @@ namespace KomeijiKoishi.Powers
             if (!command.DamageProps.IsPoweredAttack())
                 return Task.CompletedTask;
 
-            if (_commandToDouble != null)
-                return Task.CompletedTask;
-
-            _commandToDouble = command;
-            MegaCrit.Sts2.Core.Logging.Log.Info($"[BloomStance] BeforeAttack: registered command for {cardModel.Id}");
+            _activeCardAttacks[cardModel] = command;
             return Task.CompletedTask;
         }
 
-        public override async Task AfterAttack(PlayerChoiceContext choiceContext, AttackCommand command)
+        public override Task AfterAttack(PlayerChoiceContext choiceContext, AttackCommand command)
         {
-            if (command != _commandToDouble) return;
+            if (command.ModelSource is CardModel cardModel
+                && _activeCardAttacks.TryGetValue(cardModel, out var activeCommand)
+                && activeCommand == command)
+            {
+                _activeCardAttacks.Remove(cardModel);
+            }
 
-            _commandToDouble = null;
-            MegaCrit.Sts2.Core.Logging.Log.Info("[BloomStance] AfterAttack: launching bloom attacks");
-            await RunBloomAttacksAsync(choiceContext, command);
+            return Task.CompletedTask;
         }
 
-       
-        private async Task RunBloomAttacksAsync(PlayerChoiceContext choiceContext, AttackCommand originalCommand)
+        public override async Task AfterDamageGiven(
+            PlayerChoiceContext choiceContext,
+            Creature? dealer,
+            DamageResult result,
+            ValueProp props,
+            Creature target,
+            CardModel? cardSource)
+        {
+            if (_isExecutingBloom
+                || dealer != base.Owner
+                || cardSource is not CardModel cardModel
+                || cardModel.Owner.Creature != base.Owner
+                || cardModel.Type != CardType.Attack
+                || !props.IsPoweredAttack()
+                || result.TotalDamage <= 0)
+            {
+                return;
+            }
+
+            _activeCardAttacks.TryGetValue(cardModel, out var originalCommand);
+            await RunBloomAttackAsync(cardModel, originalCommand);
+        }
+
+        private async Task RunBloomAttackAsync(CardModel cardModel, AttackCommand? originalCommand)
         {
             _isExecutingBloom = true;
             try
             {
                 if (!IsCombatActive()) return;
-                if (originalCommand.ModelSource is not CardModel cardModel) return;
                 if (base.CombatState == null) return;
 
 #if STS2_BETA
+                if (originalCommand?.CardPlay == null) return;
                 AttackContext attackContext =
-                    await AttackCommand.CreateContextAsync(base.CombatState, choiceContext, originalCommand.CardPlay!);
+                    await AttackCommand.CreateContextAsync(base.CombatState, new ThrowingPlayerChoiceContext(), originalCommand.CardPlay);
 #else
                 AttackContext attackContext =
-                    await AttackCommand.CreateContextAsync(base.CombatState, choiceContext, cardModel);
+                    await AttackCommand.CreateContextAsync(base.CombatState, new ThrowingPlayerChoiceContext(), cardModel);
 #endif
 
                 try
                 {
-                    int repeat = GetBloomRepeatCount(cardModel);
-
-                    MegaCrit.Sts2.Core.Logging.Log.Info(
-                        $"[BloomStance] RunBloom: repeat={repeat}");
-
                     this.Flash();
 
-                    var bloomContext = new BlockingPlayerChoiceContext();
+                    var bloomContext = new ThrowingPlayerChoiceContext();
 
                     var opponents = base.CombatState.GetOpponentsOf(base.Owner);
 
-                    for (int i = 0; i < repeat; i++)
-                    {
-                        if (!IsCombatActive()) break;
+                    var validEnemies = opponents
+                        .Where(e => e is { IsDead: false })
+                        .ToList();
 
-                        var validEnemies = opponents
-                            .Where(e => e is { IsDead: false })
-                            .ToList();
+                    if (validEnemies.Count == 0) return;
 
-                        if (validEnemies.Count == 0)
-                        {
-                            MegaCrit.Sts2.Core.Logging.Log.Info("[BloomStance] RunBloom: no valid enemies");
-                            break;
-                        }
+                    var randomTarget = base.Owner.Player?
+                        .RunState?.Rng?.CombatTargets?.NextItem(validEnemies);
 
-                        var randomTarget = base.Owner.Player?
-                            .RunState?.Rng?.CombatTargets?.NextItem(validEnemies);
+                    if (randomTarget == null) return;
 
-                        if (randomTarget == null) continue;
-
-                        decimal dmgValue = GetBloomDamageValue(cardModel, randomTarget);
-                        decimal modifiedDamage = GetBloomModifiedDamage(cardModel, originalCommand, randomTarget, dmgValue);
-
-                        MegaCrit.Sts2.Core.Logging.Log.Info(
-                            $"[BloomStance] RunBloom: hit {i + 1}/{repeat} 鈫?{randomTarget.GetType().Name} dmg={modifiedDamage}");
+                    decimal dmgValue = GetBloomDamageValue(cardModel, randomTarget);
+                    decimal modifiedDamage = GetBloomModifiedDamage(cardModel, originalCommand, randomTarget, dmgValue);
 
 #if STS2_BETA
-                        var results = await CreatureCmd.Damage(
-                            bloomContext,
-                            randomTarget,
-                            modifiedDamage,
-                            ValueProp.Unpowered,
-                            base.Owner,
-                            null,
-                            null
-                        );
+                    var results = await CreatureCmd.Damage(
+                        bloomContext,
+                        randomTarget,
+                        modifiedDamage,
+                        ValueProp.Unpowered,
+                        base.Owner,
+                        null,
+                        null
+                    );
 #else
-                        var results = await CreatureCmd.Damage(
-                            bloomContext,
-                            randomTarget,
-                            modifiedDamage,
-                            ValueProp.Unpowered,
-                            base.Owner
-                        );
+                    var results = await CreatureCmd.Damage(
+                        bloomContext,
+                        randomTarget,
+                        modifiedDamage,
+                        ValueProp.Unpowered,
+                        base.Owner
+                    );
 #endif
 
-                        attackContext.AddHit(results);
-
-                        if (!IsCombatActive()) break;
-                    }
+                    attackContext.AddHit(results);
                 }
                 finally
                 {
@@ -239,19 +243,6 @@ namespace KomeijiKoishi.Powers
             var mgr = CombatManager.Instance;
             return mgr != null && mgr.IsInProgress && base.CombatState != null;
         }
-
-        private static Creature? GetSingleTarget(AttackCommand command)
-        {
-            try
-            {
-                return SingleTargetRef(command);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
         private static decimal GetBloomDamageValue(CardModel cardModel, Creature? target)
         {
             if (cardModel.DynamicVars.ContainsKey("CalculatedDamage"))
@@ -262,7 +253,7 @@ namespace KomeijiKoishi.Powers
             return cardModel.DynamicVars.Damage.BaseValue;
         }
 
-        private static decimal GetBloomModifiedDamage(CardModel cardModel, AttackCommand originalCommand, Creature target, decimal baseDamage)
+        private static decimal GetBloomModifiedDamage(CardModel cardModel, AttackCommand? originalCommand, Creature target, decimal baseDamage)
         {
             if (cardModel.Owner?.RunState == null || cardModel.CombatState == null || cardModel.Owner.Creature == null)
             {
@@ -278,7 +269,7 @@ namespace KomeijiKoishi.Powers
                 baseDamage,
                 ValueProp.Move,
                 cardModel,
-                originalCommand.CardPlay,
+                originalCommand?.CardPlay,
                 ModifyDamageHookType.Additive | ModifyDamageHookType.Multiplicative,
                 CardPreviewMode.None,
                 out _);
@@ -297,20 +288,5 @@ namespace KomeijiKoishi.Powers
 #endif
         }
 
-        private static int GetBloomRepeatCount(CardModel cardModel)
-        {
-            int repeat = 1;
-
-            if (cardModel.DynamicVars.ContainsKey("Repeat"))
-            {
-                repeat = Math.Max(1, cardModel.DynamicVars["Repeat"].IntValue);
-            }
-            else if (cardModel.DynamicVars.ContainsKey("Hits"))
-            {
-                repeat = Math.Max(1, cardModel.DynamicVars["Hits"].IntValue);
-            }
-
-            return repeat;
-        }
     }
 }

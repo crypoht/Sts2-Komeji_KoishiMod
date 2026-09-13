@@ -19,9 +19,14 @@ namespace KomeijiKoishi.Cards
         private const int MaxPreviewCards = 20;
 
         public AncestorsDream_Koishi() 
-            : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(1, 2), CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
+            : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
+
+        public override IEnumerable<CardKeyword> CanonicalKeywords =>
+            KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled && !base.IsUpgraded
+                ? new[] { CardKeyword.Exhaust }
+                : Array.Empty<CardKeyword>();
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {

@@ -8,4 +8,8 @@
   "KOMEIJIKOISHI-FLYING_ENCHANTMENT.title": "Flying",
   "KOMEIJIKOISHI-FLYING_ENCHANTMENT.extraCardText": "When played, reduce damage taken this turn by 50%.",
   "KOMEIJIKOISHI-FLYING_ENCHANTMENT.description": "When you play this card, reduce damage taken this turn by 50%."
+  ,
+  "KOMEIJIKOISHI-CLOSE_EYE.title": "Closed Eye",
+  "KOMEIJIKOISHI-CLOSE_EYE.extraCardText": "",
+  "KOMEIJIKOISHI-CLOSE_EYE.description": "514 will not change."
 }

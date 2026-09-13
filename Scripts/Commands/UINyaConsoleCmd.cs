@@ -163,7 +163,18 @@ public sealed class UINyaConsoleCmd : AbstractConsoleCmd
             ["soulpile"] = DataminerEffectKind.GenerateSoulsToPile,
             ["retrievediscard"] = DataminerEffectKind.RetrieveDiscardCards,
             ["retrievedraw"] = DataminerEffectKind.RetrieveDrawCards,
-            ["repeat"] = DataminerEffectKind.RepeatPrimary
+            ["swapdeck"] = DataminerEffectKind.SwapDeckWithAlly,
+            ["repeat"] = DataminerEffectKind.RepeatPrimary,
+            ["fight"] = DataminerEffectKind.Fight,
+            ["abilityheal"] = DataminerEffectKind.AbilityHeal,
+            ["abilitymaxhp"] = DataminerEffectKind.AbilityMaxHpGain,
+            ["abilityhealthloss"] = DataminerEffectKind.AbilityHealthLoss,
+            ["abilitymaxhploss"] = DataminerEffectKind.AbilityMaxHpLoss,
+            ["abilityexhaust"] = DataminerEffectKind.AbilityExhaustRandomHand,
+            ["abilitydiscard"] = DataminerEffectKind.AbilityDiscardRandomHand,
+            ["abilitystars"] = DataminerEffectKind.AbilityStars,
+            ["retainhand"] = DataminerEffectKind.AbilityRetainHand,
+            ["abilitycards"] = DataminerEffectKind.AbilityGenerateCards
         };
     private static readonly IReadOnlyDictionary<string, string> ErrorCardEffectLabels =
         new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -186,7 +197,7 @@ public sealed class UINyaConsoleCmd : AbstractConsoleCmd
             ["potions"] = "获得随机药水",
             ["piledamage"] = "按牌堆数量造成伤害",
             ["orb"] = "生成充能球",
-            ["combo"] = "增加连击",
+            ["combo"] = "给予重放",
             ["discardall"] = "丢弃所有手牌",
             ["exhaustall"] = "消耗所有手牌",
             ["exhaustchoose"] = "选择消耗手牌",
@@ -219,7 +230,17 @@ public sealed class UINyaConsoleCmd : AbstractConsoleCmd
             ["fixedvfx"] = "播放固定特效",
             ["handlimit"] = "改变手牌上限",
             ["alldebuffs"] = "施加所有负面效果",
-            ["repeat"] = "额外执行主效果"
+            ["repeat"] = "额外执行主效果",
+            ["fight"] = "进入随机战斗房间",
+            ["abilityheal"] = "能力：回复生命",
+            ["abilitymaxhp"] = "能力：增加生命上限",
+            ["abilityhealthloss"] = "能力：失去生命",
+            ["abilitymaxhploss"] = "能力：减少生命上限",
+            ["abilityexhaust"] = "能力：消耗随机手牌",
+            ["abilitydiscard"] = "能力：丢弃随机手牌",
+            ["abilitystars"] = "能力：获得星星",
+            ["retainhand"] = "能力：保留手牌",
+            ["abilitycards"] = "能力：生成随机牌"
         };
     private static readonly IReadOnlyDictionary<string, CardType?> ErrorCardTypes =
         new Dictionary<string, CardType?>(StringComparer.OrdinalIgnoreCase)
@@ -594,7 +615,8 @@ public sealed class UINyaConsoleCmd : AbstractConsoleCmd
             if (extraArgs.Length is < 3 or > 6
                 || !TryGetMappedValue(ErrorCardAbilityTriggers, extraArgs[1], out abilityTrigger)
                 || !TryGetMappedValue(ErrorCardEffects, extraArgs[2], out DataminerEffectKind abilityEffectKind)
-                || abilityEffectKind == DataminerEffectKind.RepeatPrimary)
+                || abilityEffectKind == DataminerEffectKind.RepeatPrimary
+                || abilityEffectKind == DataminerEffectKind.Fight)
             {
                 return new CmdResult(false, "Usage: uinya test errorcard power <trigger> <effect> [cost] [auto] [pile]");
             }

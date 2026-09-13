@@ -43,7 +43,7 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DynamicVar("Draw", 3m) 
+            new DynamicVar("Draw", KomeijiKoishi.Config.KoishiBalanceManager.Value(3m, 2m))
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
