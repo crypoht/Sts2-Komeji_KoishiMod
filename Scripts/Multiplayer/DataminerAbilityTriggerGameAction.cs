@@ -26,11 +26,12 @@ public sealed class DataminerAbilityTriggerGameAction : GameAction
         DataminerAbilityTriggerKind trigger,
         DataminerSubEffect effect,
         Creature? target = null)
-        : this(player, powerOrdinal, trigger, effect, target?.CombatId ?? -1)
+        : this(player, powerOrdinal, trigger, effect,
+            target == null ? -1 : checked((int)target.CombatId))
     {
     }
 
-    private DataminerAbilityTriggerGameAction(
+    public DataminerAbilityTriggerGameAction(
         Player player,
         int powerOrdinal,
         DataminerAbilityTriggerKind trigger,

@@ -96,7 +96,7 @@ namespace KomeijiKoishi.Utils_Koishi
             {
                 KoishiExtensions.AutoPlayedByUnconsciousCards.Add(targetCard);
 
-                await CardCmd.AutoPlay(choiceContext, targetCard, target, autoPlayType, exhausts, showInHistory);
+                await CardCmd.AutoPlay(choiceContext, targetCard, target, autoPlayType, false, showInHistory);
             }
             catch (Exception e)
             {

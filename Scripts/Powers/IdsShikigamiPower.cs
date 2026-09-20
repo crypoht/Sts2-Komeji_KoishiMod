@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace KomeijiKoishi.Powers
@@ -23,7 +24,12 @@ namespace KomeijiKoishi.Powers
 
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/IdsShikigamiPower.png";
 
+        public override LocString Description => new("powers", BalanceDescriptionLocKey);
+
         protected override string SmartDescriptionLocKey =>
+            BalanceDescriptionLocKey;
+
+        private string BalanceDescriptionLocKey =>
             base.Id.Entry + (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled ? ".balanceDescription" : ".smartDescription");
 
         public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)

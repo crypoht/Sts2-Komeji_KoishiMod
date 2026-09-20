@@ -1,4 +1,4 @@
-﻿{
+{
     "KOMEIJIKOISHI-STRIKE_KOISHI.title":  "打击",
     "KOMEIJIKOISHI-STRIKE_KOISHI.description":  "造成 {Damage:diff()} 点伤害。",
     "KOMEIJIKOISHI-DEFEND_KOISHI.title":  "防御",
@@ -55,6 +55,7 @@
     "KOMEIJIKOISHI-SQUARE_DANMAKU_KOISHI.description":  "造成 {Damage:diff()} 点伤害。给予 {TracingPower:diff()} 层 [gold]追踪[/gold]。",
     "KOMEIJIKOISHI-NON_SPELL_CARD_KOISHI.title":  "非符",
     "KOMEIJIKOISHI-NON_SPELL_CARD_KOISHI.description":  "将 {Cards:diff()} 张随机[gold]弹幕[/gold]牌加入手牌。",
+    "KOMEIJIKOISHI-NON_SPELL_CARD_KOISHI.balanceDescription":  "将 {Cards:diff()} 张随机[gold]弹幕[/gold]牌加入手牌，然后[gold]消耗[/gold]。",
     "KOMEIJIKOISHI-UNCONSCIOUS_DANMAKU_ATTACK_KOISHI.title":  "无意识的弹幕攻击",
     "KOMEIJIKOISHI-UNCONSCIOUS_DANMAKU_ATTACK_KOISHI.description":  "随机生成并自动打出 {Cards:diff()} 张[gold]弹幕[/gold]牌。",
     "KOMEIJIKOISHI-UNCONSCIOUS_DANMAKU_ATTACK_KOISHI.flavor":  "弹幕应酬应该在双方同意的情况下开始,但这只是无意识丢出来的弹幕",
@@ -79,6 +80,7 @@
     "KOMEIJIKOISHI-RECOGNIZED_GENIUS_KOISHI.description":  "所有的[gold]弹幕[/gold]得到升级 \n所有0{energyPrefix:energyIcons(1)}攻击牌提高{KuugaPower:diff()}点伤害",
     "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.title":  "表象「列祖列宗入梦来」",
     "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.description":  "复制你[gold]消耗牌堆[/gold]中的所有牌，并将复制品放入[gold]消耗牌堆[/gold]。",
+    "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.balanceDescription":  "复制你[gold]消耗牌堆[/gold]中的所有牌，并将复制品放入[gold]消耗牌堆[/gold]。{IfUpgraded:show:|\n[gold]消耗[/gold]。}",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.title":  "抑制「超我」",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.description":  "进入[gold]闭合[/gold]时，额外抽 1 张牌。进入[gold]盛开[/gold]时，额外获得 {Energy:energyIcons()}。",
     "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.title":  "复燃「恋之埋火」",
@@ -177,7 +179,7 @@
     "KOMEIJIKOISHI-CONSCIOUSNESS_ROTATION_KOISHI.title":  "意识的回转",
     "KOMEIJIKOISHI-CONSCIOUSNESS_ROTATION_KOISHI.description":  " 切换当前[gold]姿态[/gold]。 \n本场战斗中，此牌耗能增加 1。\n打出后会回到手中",
     "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.title":  "被厌恶者的哲学",
-    "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.description":  "处于[gold]盛开[/gold]时，获得的格挡不再减少。\n处于[gold]闭合[/gold]时，造成的伤害减少70%。",
+    "KOMEIJIKOISHI-PHILOSOPHY_OF_THE_HATED_KOISHI.description":  "处于[gold]盛开[/gold]时，获得的格挡不再减少。\n处于[gold]闭合[/gold]时，对敌人造成的伤害减少70%。",
     "KOMEIJIKOISHI-SELFLESS_LOVE_KOISHI.title":  "心符「没我之爱」",
     "KOMEIJIKOISHI-SELFLESS_LOVE_KOISHI.description":  "每当你生成 6 张[gold]弹幕[/gold]牌时，抽 1 张牌。",
     "KOMEIJIKOISHI-FLAW_OF_DN_A_KOISHI.title":  "记忆「DNA的瑕疵」",

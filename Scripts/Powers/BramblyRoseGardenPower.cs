@@ -31,6 +31,16 @@ namespace KomeijiKoishi.Powers
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/BramblyRoseGardenPower.png";
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/BramblyRoseGardenPower.png";
 
+        public override LocString Description => new("powers", BalanceDescriptionLocKey);
+
+        protected override string SmartDescriptionLocKey =>
+            BalanceDescriptionLocKey;
+
+        private string BalanceDescriptionLocKey =>
+            base.Id.Entry + (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled
+                ? ".balanceSmartDescription"
+                : ".smartDescription");
+
         public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
         {
 

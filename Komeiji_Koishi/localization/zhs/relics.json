@@ -59,7 +59,7 @@
   "KOMEIJIKOISHI-FROG_CARD_KOISHI.description": "拾起时，将[blue]{Cards}[/blue]张[gold]爆裂赤蛙[/gold]加入你的牌组。",
   "KOMEIJIKOISHI-FROG_CARD_KOISHI.flavor": "谁会让青蛙去自爆啊！？",
   "KOMEIJIKOISHI-MOUNTAIN_GODS_BLESSING_KOISHI.title": "山神的祝福",
-  "KOMEIJIKOISHI-MOUNTAIN_GODS_BLESSING_KOISHI.description": "回合开始时，获得{Energy:energyIcons()}。回合结束时，如果手牌少于等于[blue]{HandThreshold}[/blue]张，则受到[red]{Damage}[/red]点伤害。",
+  "KOMEIJIKOISHI-MOUNTAIN_GODS_BLESSING_KOISHI.description": "回合开始时，获得{Energy:energyIcons()}。回合结束时，如果手牌少于等于[blue]{HandThreshold}[/blue]张，则扣除[red]{Damage}[/red]点生命值。",
   "KOMEIJIKOISHI-MOUNTAIN_GODS_BLESSING_KOISHI.flavor": "有点重。",
   "KOMEIJIKOISHI-MIRACLE_GOHEI_KOISHI.title": "奇迹御币",
   "KOMEIJIKOISHI-MIRACLE_GOHEI_KOISHI.description": "拾起时，选择[blue]{Cards}[/blue]张牌，为其附魔[gold]奇迹[/gold]。",

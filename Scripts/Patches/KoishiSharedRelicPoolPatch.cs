@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.RelicPools;
+using MegaCrit.Sts2.Core.Multiplayer.Game;
 using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.Runs;
 
@@ -22,11 +23,18 @@ namespace KomeijiKoishi.Patches
                 .GetUnlockedRelics(player.UnlockState)
                 .Concat(ModelDb.RelicPool<KoishiSharedRelicPool>().GetUnlockedRelics(player.UnlockState))
                 .Concat(player.Character.RelicPool.GetUnlockedRelics(player.UnlockState))
+                .Where(relic => !IsMultiplayerOnlyExcluded(relic))
                 .Where(relic => !KoishiBalanceManager.IsEnabled || relic is not KoishiRock)
                 .DistinctBy(relic => relic.Id);
 
             __instance.Populate(relics, rng);
             return false;
+        }
+
+        internal static bool IsMultiplayerOnlyExcluded(RelicModel relic)
+        {
+            return relic is Dataminer_Koishi
+                && RunManager.Instance?.NetService?.Type.IsMultiplayer() == true;
         }
     }
 
@@ -36,6 +44,7 @@ namespace KomeijiKoishi.Patches
         public static void Prefix(ref IEnumerable<RelicModel> relics)
         {
             List<RelicModel> relicList = relics
+                .Where(relic => !KoishiPlayerRelicGrabBagPatch.IsMultiplayerOnlyExcluded(relic))
                 .Where(relic => !KoishiBalanceManager.IsEnabled || relic is not KoishiRock)
                 .ToList();
             bool isSharedRelicPoolPopulation = relicList.Any(relic => relic.Pool is SharedRelicPool);

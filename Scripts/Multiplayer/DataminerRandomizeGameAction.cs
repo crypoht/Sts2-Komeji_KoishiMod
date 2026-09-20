@@ -24,7 +24,7 @@ public sealed class DataminerRandomizeGameAction : GameAction
         _serializedPlan = DataminerRelicPatch.CreateRandomizationPlan(player, relicOrdinal);
     }
 
-    private DataminerRandomizeGameAction(Player player, int relicOrdinal, string serializedPlan)
+    public DataminerRandomizeGameAction(Player player, int relicOrdinal, string serializedPlan)
     {
         _player = player;
         _relicOrdinal = relicOrdinal;

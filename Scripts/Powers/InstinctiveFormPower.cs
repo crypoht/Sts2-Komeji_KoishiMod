@@ -28,6 +28,16 @@ namespace KomeijiKoishi.Powers
         public override string? CustomPackedIconPath => $"res://mods/Komeiji_Koishi/images/powers/InstinctiveFormPower.png";
         public override string? CustomBigIconPath => $"res://mods/Komeiji_Koishi/images/powers/InstinctiveFormPower.png";
 
+        public override LocString Description => new("powers", BalanceDescriptionLocKey);
+
+        protected override string SmartDescriptionLocKey =>
+            BalanceDescriptionLocKey;
+
+        private string BalanceDescriptionLocKey =>
+            base.Id.Entry + (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled
+                ? ".balanceSmartDescription"
+                : ".smartDescription");
+
         protected override object InitInternalData() => new InstinctiveFormData();
 
         public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
