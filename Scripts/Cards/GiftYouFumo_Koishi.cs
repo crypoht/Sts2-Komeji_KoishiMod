@@ -22,7 +22,7 @@ using MegaCrit.Sts2.Core.Nodes.Rooms;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class GiftYouFumo_Koishi : CustomCardModel
+    public sealed class GiftYouFumo_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public GiftYouFumo_Koishi() 
             : base(0, CardType.Skill, CardRarity.Rare, TargetType.AnyAlly, true) 

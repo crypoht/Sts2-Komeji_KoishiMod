@@ -15,7 +15,7 @@ using MegaCrit.Sts2.Core.Models;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class ConsciousnessDive_Koishi : CustomCardModel
+    public sealed class ConsciousnessDive_Koishi : CustomCardModel,IUseAncientCardFace
     {
         private static readonly HashSet<Player> ResolvingPlayers = new();
 

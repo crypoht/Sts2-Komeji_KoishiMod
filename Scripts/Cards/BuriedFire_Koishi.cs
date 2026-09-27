@@ -24,7 +24,7 @@ using KomeijiKoishi.Cards.Danmaku;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class BuriedFire_Koishi : CustomCardModel
+    public sealed class BuriedFire_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public BuriedFire_Koishi() 
             : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(2, 3), CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, true) { }
