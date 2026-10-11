@@ -1,4 +1,4 @@
-{
+﻿{
     "KOMEIJIKOISHI-STRIKE_KOISHI.title":  "打击",
     "KOMEIJIKOISHI-STRIKE_KOISHI.description":  "造成 {Damage:diff()} 点伤害。",
     "KOMEIJIKOISHI-DEFEND_KOISHI.title":  "防御",
@@ -55,7 +55,7 @@
     "KOMEIJIKOISHI-SQUARE_DANMAKU_KOISHI.description":  "造成 {Damage:diff()} 点伤害。给予 {TracingPower:diff()} 层 [gold]追踪[/gold]。",
     "KOMEIJIKOISHI-NON_SPELL_CARD_KOISHI.title":  "非符",
     "KOMEIJIKOISHI-NON_SPELL_CARD_KOISHI.description":  "将 {Cards:diff()} 张随机[gold]弹幕[/gold]牌加入手牌。",
-    "KOMEIJIKOISHI-NON_SPELL_CARD_KOISHI.balanceDescription":  "将 {Cards:diff()} 张随机[gold]弹幕[/gold]牌加入手牌，然后[gold]消耗[/gold]。",
+    "KOMEIJIKOISHI-NON_SPELL_CARD_KOISHI.balanceDescription":  "将 {Cards:diff()} 张随机[gold]弹幕[/gold]牌加入手牌。",
     "KOMEIJIKOISHI-UNCONSCIOUS_DANMAKU_ATTACK_KOISHI.title":  "无意识的弹幕攻击",
     "KOMEIJIKOISHI-UNCONSCIOUS_DANMAKU_ATTACK_KOISHI.description":  "随机生成并自动打出 {Cards:diff()} 张[gold]弹幕[/gold]牌。",
     "KOMEIJIKOISHI-UNCONSCIOUS_DANMAKU_ATTACK_KOISHI.flavor":  "弹幕应酬应该在双方同意的情况下开始,但这只是无意识丢出来的弹幕",
