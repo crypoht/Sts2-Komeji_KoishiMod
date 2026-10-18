@@ -7,6 +7,8 @@ using KomeijiKoishi.Cards.Fumo;
 using KomeijiKoishi.Dataminer;
 using KomeijiKoishi.Patches;
 using KomeijiKoishi.Vfx;
+using KomeijiKoishi.Characters;
+using KomeijiKoishi.Scripts.Nodes;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.DevConsole;
@@ -15,6 +17,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 
@@ -23,7 +26,7 @@ namespace KomeijiKoishi.Commands;
 public sealed class UINyaConsoleCmd : AbstractConsoleCmd
 {
     private static readonly string[] TestModes = { "test" };
-    private static readonly string[] EffectNames = { "giftfumo", "errorcard", "seeerror" };
+    private static readonly string[] EffectNames = { "giftfumo", "errorcard", "seeerror", "die" };
     private static readonly string[] FumoNames = NGiftYouFumoVfx.TextureNames.ToArray();
     private static readonly IReadOnlyDictionary<string, string> FumoLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
     {
@@ -359,7 +362,7 @@ public sealed class UINyaConsoleCmd : AbstractConsoleCmd
     };
 
     public override string CmdName => "uinya";
-    public override string Args => "test giftfumo [fumo-name] [target-index] | test errorcard <type> <condition/trigger> <effect> <extra-condition> <extra-effect> [cost] [return] [auto] [pile] | test seeerror <true|false>";
+    public override string Args => "test giftfumo [fumo-name] [target-index] | test errorcard <type> <condition/trigger> <effect> <extra-condition> <extra-effect> [cost] [return] [auto] [pile] | test seeerror <true|false> | test die <boom|fumo|null>";
     public override string Description => "UINya mod debug helpers.";
     public override bool IsNetworked => false;
 
@@ -382,6 +385,7 @@ public sealed class UINyaConsoleCmd : AbstractConsoleCmd
             "giftfumo" => TestGiftYouFumoVfx(issuingPlayer, args.Skip(2).ToArray()),
             "errorcard" => TestErrorCard(issuingPlayer, args.Skip(2).ToArray()),
             "seeerror" => TestSeeError(issuingPlayer, args.Skip(2).ToArray()),
+            "die" => TestDie(issuingPlayer, args.Skip(2).ToArray()),
             _ => new CmdResult(false, $"Unknown UINya test effect '{args[1]}'. Effects: {string.Join(", ", EffectNames)}")
         };
     }
@@ -400,6 +404,10 @@ public sealed class UINyaConsoleCmd : AbstractConsoleCmd
 
         if (args.Length == 3 && TestModes.Contains(Normalize(args[0])) && EffectNames.Contains(Normalize(args[1])))
         {
+            if (Normalize(args[1]) == "die")
+                return CompleteArgument(new[] { "boom", "fumo", "null" },
+                    new[] { args[0], args[1] }, args[2], CompletionType.Argument);
+
             if (Normalize(args[1]) == "seeerror")
             {
                 return CompleteArgument(
@@ -710,6 +718,24 @@ public sealed class UINyaConsoleCmd : AbstractConsoleCmd
             enabled
                 ? "Dataminer descriptions are now readable."
                 : "Dataminer descriptions are now obfuscated.");
+    }
+
+    private static CmdResult TestDie(Player? issuingPlayer, string[] extraArgs)
+    {
+        Log.Info($"[KoishiDeath] Command received: uinya test die {string.Join(" ", extraArgs)}");
+        if (extraArgs.Length != 1 || Normalize(extraArgs[0]) is not ("boom" or "fumo" or "null"))
+            return new CmdResult(false, "Usage: uinya test die <boom|fumo|null>");
+        if (issuingPlayer?.Character is not KoishiCharacter)
+            return new CmdResult(false, "This command requires Koishi.");
+        if (issuingPlayer.Creature.IsDead)
+            return new CmdResult(false, "Koishi must be alive to override the next death.");
+        if (NCombatRoom.Instance?.GetCreatureNode(issuingPlayer.Creature)?.Visuals
+            is not KoishiCreatureVisuals { SupportsSpecialDeaths: true } visuals)
+            return new CmdResult(false, "This command requires an active combat using Koishi's premium animation model.");
+
+        string effect = Normalize(extraArgs[0]);
+        visuals.SetNextDeath(effect);
+        return new CmdResult(true, $"Next Koishi death animation: {effect} (one use only).");
     }
 
     private static CmdResult TestGiftYouFumoVfx(Player? issuingPlayer, string[] extraArgs)

@@ -1,4 +1,11 @@
 {
+  "KOMEIJIKOISHI-SPINE_MODE.title": "Character Animation",
+  "KOMEIJIKOISHI-SPINE_MODE.hover.title": "Character Animation",
+  "KOMEIJIKOISHI-SPINE_MODE.hover.desc": "官方素材的美观才是王道，你的立绘平移根本没有技巧。\n简易的动画才受大众喜爱，你的精品动画早就有人搞来。",
+  "KOMEIJIKOISHI-SPINE_MODE.PortraitSlide": "Sliding Portrait",
+  "KOMEIJIKOISHI-SPINE_MODE.PremiumAnimation": "Premium Animation",
+  "KOMEIJIKOISHI-KOISHI_SPINE_MODE.PortraitSlide": "Sliding Portrait",
+  "KOMEIJIKOISHI-KOISHI_SPINE_MODE.PremiumAnimation": "Premium Animation",
   "KOMEIJIKOISHI.mod_title": "Komeiji Koishi",
   "KOMEIJIKOISHI-ANCIENT_SETTINGS.title": "Ancient Settings",
   "KOMEIJIKOISHI-BALANCE_SETTINGS.title": "Balance Patch",

@@ -1,4 +1,11 @@
 {
+  "KOMEIJIKOISHI-SPINE_MODE.title": "キャラクターアニメーション",
+  "KOMEIJIKOISHI-SPINE_MODE.hover.title": "キャラクターアニメーション",
+  "KOMEIJIKOISHI-SPINE_MODE.hover.desc": "官方素材的美观才是王道，你的立绘平移根本没有技巧。\n简易的动画才受大众喜爱，你的精品动画早就有人搞来。",
+  "KOMEIJIKOISHI-SPINE_MODE.PortraitSlide": "立ち絵スライド",
+  "KOMEIJIKOISHI-SPINE_MODE.PremiumAnimation": "高品質アニメーション",
+  "KOMEIJIKOISHI-KOISHI_SPINE_MODE.PortraitSlide": "立ち絵スライド",
+  "KOMEIJIKOISHI-KOISHI_SPINE_MODE.PremiumAnimation": "高品質アニメーション",
   "KOMEIJIKOISHI.mod_title": "古明地こいし",
   "KOMEIJIKOISHI-ANCIENT_SETTINGS.title": "先古の民設定",
   "KOMEIJIKOISHI-BALANCE_SETTINGS.title": "バランスパッチ",

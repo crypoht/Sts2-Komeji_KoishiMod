@@ -32,6 +32,7 @@ namespace KomeijiKoishi.Cards
             var owner = base.Owner;
             if (owner != null)
             {
+                await CreatureCmd.TriggerAnim(owner.Creature, "Cast", owner.Character.CastAnimDelay);
                 await PowerCmd.Apply<FetusDreamPower>(choiceContext,owner.Creature, 1m, owner.Creature, this, false);
             }
         }

@@ -23,11 +23,6 @@ namespace KomeijiKoishi.Relics
             new PowerVar<GuardianPower>(2m)
         };
 
-        protected override IEnumerable<IHoverTip> ExtraHoverTips => new[]
-        {
-            HoverTipFactory.FromPower<GuardianPower>()
-        };
-
         public override string PackedIconPath => "res://mods/Komeiji_Koishi/images/relics/KomainuStoneCarving_Koishi.png";
         protected override string PackedIconOutlinePath => "res://mods/Komeiji_Koishi/images/relics/KomainuStoneCarving_Koishi.png";
         protected override string BigIconPath => "res://mods/Komeiji_Koishi/images/relics/KomainuStoneCarving_Koishi.png";

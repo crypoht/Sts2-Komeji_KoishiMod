@@ -46,7 +46,7 @@ namespace KomeijiKoishi.Cards
             if (player == null) return;
 
 
-            await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
+            await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
 
             if (base.CombatState != null)
             {

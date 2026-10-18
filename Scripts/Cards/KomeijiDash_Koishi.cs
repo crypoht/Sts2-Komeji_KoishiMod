@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums;
 using BaseLib.Utils;
+using KomeijiKoishi.Characters;
 
 namespace KomeijiKoishi.Cards
 {
@@ -39,11 +40,10 @@ namespace KomeijiKoishi.Cards
             var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
             if (player == null || base.CombatState == null) return;
 
-            await CreatureCmd.TriggerAnim(player.Creature, "Attack", player.Character.AttackAnimDelay);
-
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                 .FromCard(this, cardPlay)
                 .TargetingAllOpponents(base.CombatState)
+                .WithAttackerAnim(KoishiCharacter.GetHeavyAnimIfApplicable(player.Character), KoishiCharacter.GetHeavyAttackDelayIfApplicable(player.Character), null)
                 .WithHitFx("vfx/vfx_attack_slash", null, "heavy_attack.mp3")
                 .Execute(choiceContext);
         }

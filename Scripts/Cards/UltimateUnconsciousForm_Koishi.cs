@@ -36,7 +36,7 @@ namespace KomeijiKoishi.Cards
             var owner = base.Owner;
             if (owner != null)
             {
-                await CreatureCmd.TriggerAnim(owner.Creature, "Buff", owner.Character.CastAnimDelay);
+                await CreatureCmd.TriggerAnim(owner.Creature, "Cast", owner.Character.CastAnimDelay);
                 await PowerCmd.Apply<UltimateUnconsciousFormPower>(choiceContext,owner.Creature, base.DynamicVars["FormAmount"].BaseValue, owner.Creature, this, false);
             }
         }

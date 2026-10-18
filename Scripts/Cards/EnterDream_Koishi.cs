@@ -19,7 +19,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class EnterDream_Koishi : CustomCardModel
+    public sealed class EnterDream_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public EnterDream_Koishi() 
             : base(1, CardType.Skill, CardRarity.Common, TargetType.Self, true) { }

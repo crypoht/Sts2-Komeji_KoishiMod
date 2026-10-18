@@ -38,7 +38,7 @@ namespace KomeijiKoishi.Cards
             var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
             if (player == null) return;
 
-            await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
+            await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
             
             // 施加 1 层能力
             await PowerCmd.Apply<ConsciousnessSpiralPower>(choiceContext,player.Creature, 1m, player.Creature, this, false);

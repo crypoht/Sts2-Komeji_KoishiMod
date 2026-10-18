@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using Godot; 
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Characters;
+using MegaCrit.Sts2.Core.Animation;
+using MegaCrit.Sts2.Core.Bindings.MegaSpine;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using KomeijiKoishi.Cards;
 using BaseLib.Abstracts; 
@@ -17,6 +20,43 @@ namespace KomeijiKoishi.Characters
 {
 	public class KoishiCharacter : PlaceholderCharacterModel
 	{
+		public static string GetHeavyAnimIfApplicable(CharacterModel character) =>
+			character is KoishiCharacter ? "heavyAttack" : "Attack";
+
+		public static float GetHeavyAttackDelayIfApplicable(CharacterModel character) =>
+			character is KoishiCharacter ? 0.2f : character.AttackAnimDelay;
+
+		#if STS2_BETA
+		public override CreatureAnimator GenerateAnimator(MegaSprite controller, Creature creature)
+		#else
+		public override CreatureAnimator GenerateAnimator(MegaSprite controller)
+		#endif
+		{
+			AnimState idle = new("idle_loop", true);
+			AnimState cast = new("cast", false);
+			AnimState attack = new("attack", false);
+			AnimState heavyAttack = new("attack_heavy", false);
+			AnimState hurt = new("hurt", false);
+			AnimState die = new("die", false);
+			AnimState relaxed = new("relaxed_loop", true);
+
+			cast.NextState = idle;
+			attack.NextState = idle;
+			heavyAttack.NextState = idle;
+			hurt.NextState = idle;
+			relaxed.AddBranch("Idle", idle, null);
+
+			CreatureAnimator animator = new(idle, controller);
+			animator.AddAnyState("Idle", idle, null);
+			animator.AddAnyState("Dead", die, null);
+			animator.AddAnyState("Hit", hurt, null);
+			animator.AddAnyState("Attack", attack, null);
+			animator.AddAnyState("heavyAttack", heavyAttack, null);
+			animator.AddAnyState("Cast", cast, null);
+			animator.AddAnyState("PowerUp", cast, null);
+			animator.AddAnyState("Relaxed", relaxed, null);
+			return animator;
+		}
 		public override int StartingHp => 67; 
 		
 		public override Color NameColor => new(0.3f, 0.7f, 0.3f); 
@@ -38,11 +78,27 @@ namespace KomeijiKoishi.Characters
 
 		public override string CustomMapMarkerPath => "res://mods/Komeiji_Koishi/images/ui/koishi_icon.png";
 
-		public override string CustomVisualPath => "res://mods/Komeiji_Koishi/scenes/koishi_character.tscn";
-		public override string CustomMerchantAnimPath => "res://mods/Komeiji_Koishi/scenes/koishi_merchant.tscn";
-		public override string CustomRestSiteAnimPath => "res://mods/Komeiji_Koishi/scenes/koishi_rest_site.tscn";
+		public override string CustomVisualPath => KoishiModConfig.EffectiveSpineMode == KoishiSpineMode.PremiumAnimation
+            ? "res://mods/Komeiji_Koishi/scenes/koishi_character_2.tscn"
+            : "res://mods/Komeiji_Koishi/scenes/koishi_character.tscn";
+		public override string CustomMerchantAnimPath => KoishiModConfig.EffectiveSpineMode == KoishiSpineMode.PremiumAnimation
+            ? "res://mods/Komeiji_Koishi/scenes/koishi_merchant_2.tscn"
+            : "res://mods/Komeiji_Koishi/scenes/koishi_merchant.tscn";
+		public override string CustomRestSiteAnimPath => KoishiModConfig.EffectiveSpineMode == KoishiSpineMode.PremiumAnimation
+            ? "res://mods/Komeiji_Koishi/scenes/koishi_rest_site_2.tscn"
+            : "res://mods/Komeiji_Koishi/scenes/koishi_rest_site.tscn";
 
 		public override string CustomEnergyCounterPath => "res://mods/Komeiji_Koishi/scenes/koishi_energy_counter.tscn";
+
+        protected override IEnumerable<string> ExtraAssetPaths => new[]
+        {
+            "res://mods/Komeiji_Koishi/scenes/koishi_character.tscn",
+            "res://mods/Komeiji_Koishi/scenes/koishi_character_2.tscn",
+            "res://mods/Komeiji_Koishi/scenes/koishi_merchant.tscn",
+            "res://mods/Komeiji_Koishi/scenes/koishi_merchant_2.tscn",
+            "res://mods/Komeiji_Koishi/scenes/koishi_rest_site.tscn",
+            "res://mods/Komeiji_Koishi/scenes/koishi_rest_site_2.tscn"
+        };
 
 		public override string CharacterTransitionSfx => "event:/sfx/ui/wipe_ironclad";
 		public override string CustomArmPointingTexturePath => "res://mods/Komeiji_Koishi/images/hands/up.png";

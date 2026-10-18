@@ -18,7 +18,7 @@ using KomeijiKoishi.Enums;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class Superego_Koishi : CustomCardModel
+    public sealed class Superego_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public Superego_Koishi() 
             : base(KomeijiKoishi.Config.KoishiBalanceManager.Value(3, 4), CardType.Power, CardRarity.Rare, TargetType.Self, true) { }
@@ -39,7 +39,7 @@ namespace KomeijiKoishi.Cards
             var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
             if (player == null) return;
 
-            await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
+            await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character!.CastAnimDelay);
             await PowerCmd.Apply<SuperegoPower>(choiceContext,player.Creature, 1m, player.Creature, this, false);
         }
 

@@ -105,6 +105,7 @@ namespace KomeijiKoishi.Patches
             RunState? state = RunStateRef(__instance);
             if (state != null)
             {
+                KoishiModConfig.RestoreRunSpineMode(state.Modifiers);
                 KoishiModConfig.SetActiveRunCurrentActIndex(state.CurrentActIndex);
             }
         }

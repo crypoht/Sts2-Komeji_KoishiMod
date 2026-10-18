@@ -19,6 +19,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using KomeijiKoishi.Powers;
 using MegaCrit.Sts2.Core.HoverTips;
+using KomeijiKoishi.Characters;
 
 
 namespace KomeijiKoishi.Cards
@@ -56,14 +57,10 @@ namespace KomeijiKoishi.Cards
                 var player = base.Owner as MegaCrit.Sts2.Core.Entities.Players.Player;
                 if (player == null) return;
 
-                if (player.Character != null)
-                {
-                    await CreatureCmd.TriggerAnim(player.Creature, "Attack", player.Character.CastAnimDelay);
-                }
-
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                         .FromCard(this, cardPlay)
                         .Targeting(cardPlay.Target)
+                        .WithAttackerAnim(KoishiCharacter.GetHeavyAnimIfApplicable(player.Character), KoishiCharacter.GetHeavyAttackDelayIfApplicable(player.Character), null)
                         .WithHitFx("vfx/vfx_attack_blunt", null, "blunt_heavy.mp3")
                         .Execute(choiceContext);
 

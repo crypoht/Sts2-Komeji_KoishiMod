@@ -191,6 +191,7 @@ namespace KomeijiKoishi.Cards
 
             if (effect.CardType == CardType.Power)
             {
+                await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
                 await ApplyGeneratedAbility(choiceContext, player);
                 return;
             }

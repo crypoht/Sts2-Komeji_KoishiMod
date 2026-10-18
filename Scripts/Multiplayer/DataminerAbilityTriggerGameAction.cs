@@ -27,7 +27,7 @@ public sealed class DataminerAbilityTriggerGameAction : GameAction
         DataminerSubEffect effect,
         Creature? target = null)
         : this(player, powerOrdinal, trigger, effect,
-            target == null ? -1 : checked((int)target.CombatId))
+            target?.CombatId is { } combatId ? checked((int)combatId) : -1)
     {
     }
 

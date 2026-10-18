@@ -21,12 +21,28 @@ public enum KoishiCardArtMode
     Fumo
 }
 
+public enum KoishiSpineMode
+{
+    PortraitSlide,
+    PremiumAnimation
+}
+
 [ConfigHoverTipsByDefault]
 public sealed class KoishiModConfig : SimpleModConfig
 {
     private const int DefaultAncientWeight = 3;
     private static bool _useFumoCardArt;
     private static bool _useAncientCardArt;
+
+    [ConfigSection("VisualSettings")]
+    public static KoishiSpineMode SpineMode { get; set; } = KoishiSpineMode.PortraitSlide;
+
+    [ConfigIgnore]
+    public static KoishiSpineMode ActiveRunSpineMode { get; private set; }
+
+    [ConfigIgnore]
+    public static KoishiSpineMode EffectiveSpineMode => RunManager.Instance.IsInProgress
+        && RunManager.Instance.NetService?.Type.IsMultiplayer() == true ? ActiveRunSpineMode : SpineMode;
 
     [ConfigSection("AncientSettings")]
     public static bool EnableAncients { get; set; } = true;
@@ -179,6 +195,7 @@ public sealed class KoishiModConfig : SimpleModConfig
 
     private static void ApplyRunConfigFromModifiers(IReadOnlyList<ModifierModel> modifiers)
     {
+        RestoreRunSpineMode(modifiers);
         ActiveRunAncientsEnabled = !modifiers.Any(m => m is DisableKoishiAncientsModifier);
         ActiveRunBalancePatchEnabled = EnableBalancePatch;
         KoishiBalanceManager.SetEnabledForRun(ActiveRunBalancePatchEnabled);
@@ -196,6 +213,7 @@ public sealed class KoishiModConfig : SimpleModConfig
 
     public static void BeginRunWithHostConfig(RunState state)
     {
+        RestoreRunSpineMode(state.Modifiers);
         if (!HasSyncedRunConfig)
         {
             ApplyRunConfigFromModifiers(state.Modifiers);
@@ -210,6 +228,7 @@ public sealed class KoishiModConfig : SimpleModConfig
         {
             AncientsEnabled = EnableAncients,
             BalancePatchEnabled = EnableBalancePatch,
+            PremiumAnimation = SpineMode == KoishiSpineMode.PremiumAnimation,
             PlayMoriyaDanceForAllPlayers = PlayMoriyaDanceForAllPlayers,
             AncientWeightsEnabled = EnableAncientWeights,
             Weights = CurrentAncientWeights,
@@ -222,6 +241,7 @@ public sealed class KoishiModConfig : SimpleModConfig
         HasSyncedRunConfig = true;
         ActiveRunAncientsEnabled = message.AncientsEnabled;
         ActiveRunBalancePatchEnabled = message.BalancePatchEnabled;
+        ActiveRunSpineMode = message.PremiumAnimation ? KoishiSpineMode.PremiumAnimation : KoishiSpineMode.PortraitSlide;
         ActiveRunPlayMoriyaDanceForAllPlayers = message.PlayMoriyaDanceForAllPlayers;
         ActiveRunAncientWeightsEnabled = message.AncientWeightsEnabled;
         ActiveRunAncientWeights = ActiveRunAncientWeightsEnabled ? message.Weights : AncientWeights.Default;
@@ -236,6 +256,7 @@ public sealed class KoishiModConfig : SimpleModConfig
     {
         EnableAncients = ActiveRunAncientsEnabled;
         EnableBalancePatch = ActiveRunBalancePatchEnabled;
+        SpineMode = ActiveRunSpineMode;
         KoishiBalanceManager.SetEnabledForRun(ActiveRunBalancePatchEnabled);
         PlayMoriyaDanceForAllPlayers = ActiveRunPlayMoriyaDanceForAllPlayers;
         EnableAncientWeights = ActiveRunAncientWeightsEnabled;
@@ -289,6 +310,7 @@ public sealed class KoishiModConfig : SimpleModConfig
             result.Add(ModelDb.Modifier<DisableKoishiAncientWeightsModifier>().ToMutable());
         }
 
+        SetSpineModifier(result, ActiveRunSpineMode);
         return result;
     }
 
@@ -372,7 +394,23 @@ public sealed class KoishiModConfig : SimpleModConfig
             result.Add(ModelDb.Modifier<DisableKoishiAncientWeightsModifier>().ToMutable());
         }
 
+        SetSpineModifier(result, SpineMode);
         return result;
+    }
+
+    public static void RestoreRunSpineMode(IReadOnlyList<ModifierModel> modifiers)
+    {
+        KoishiSpineModeModifier? marker = modifiers.OfType<KoishiSpineModeModifier>().FirstOrDefault();
+        ActiveRunSpineMode = marker == null ? SpineMode
+            : marker.PremiumAnimation ? KoishiSpineMode.PremiumAnimation : KoishiSpineMode.PortraitSlide;
+    }
+
+    private static void SetSpineModifier(List<ModifierModel> modifiers, KoishiSpineMode mode)
+    {
+        modifiers.RemoveAll(m => m is KoishiSpineModeModifier);
+        KoishiSpineModeModifier marker = (KoishiSpineModeModifier)ModelDb.Modifier<KoishiSpineModeModifier>().ToMutable();
+        marker.SetMode(mode);
+        modifiers.Add(marker);
     }
 
     private static KoishiAncientWeightsModifier CreateWeightsModifier()

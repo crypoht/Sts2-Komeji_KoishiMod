@@ -19,6 +19,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Enums;
 using KomeijiKoishi.Utils_Koishi;
+using KomeijiKoishi.Characters;
 
 namespace KomeijiKoishi.Cards
 {
@@ -52,6 +53,7 @@ namespace KomeijiKoishi.Cards
                 await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                     .FromCard(this, cardPlay)
                     .Targeting(cardPlay.Target)
+                    .WithAttackerAnim(KoishiCharacter.GetHeavyAnimIfApplicable(base.Owner.Character), KoishiCharacter.GetHeavyAttackDelayIfApplicable(base.Owner.Character), null)
                     .WithHitFx("vfx/vfx_attack_blunt") 
                     .Execute(choiceContext);
             }

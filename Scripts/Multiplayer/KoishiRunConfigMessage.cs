@@ -13,6 +13,7 @@ public struct KoishiRunConfigMessage : INetMessage
 
     public bool AncientsEnabled;
     public bool BalancePatchEnabled;
+    public bool PremiumAnimation;
     public bool PlayMoriyaDanceForAllPlayers;
     public bool AncientWeightsEnabled;
     public AncientWeights Weights;
@@ -34,6 +35,7 @@ public struct KoishiRunConfigMessage : INetMessage
         WriteWeight(writer, Weights.Vakuu);
         WriteWeight(writer, Weights.Darv);
         writer.WriteString(ExternalWeights ?? string.Empty);
+        writer.WriteBool(PremiumAnimation);
     }
 
     public void Deserialize(PacketReader reader)
@@ -53,6 +55,7 @@ public struct KoishiRunConfigMessage : INetMessage
             ReadWeight(reader),
             ReadWeight(reader));
         ExternalWeights = reader.ReadString();
+        PremiumAnimation = reader.ReadBool();
     }
 
     private static void WriteWeight(PacketWriter writer, int value)

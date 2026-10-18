@@ -45,10 +45,9 @@ namespace KomeijiKoishi.Cards
 
             try
             {
+                await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
                 if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
                 {
-                    await CreatureCmd.TriggerAnim(player.Creature, "Cast", player.Character.CastAnimDelay);
-
                     int xValue = base.ResolveEnergyXValue();
                     int generateCount = xValue * 2;
                     
@@ -87,8 +86,6 @@ namespace KomeijiKoishi.Cards
                 }
                 else
                 {
-                    await CreatureCmd.TriggerAnim(player.Creature, "Buff", player.Character!.CastAnimDelay);
-
                     if (player is MegaCrit.Sts2.Core.Entities.Players.Player p)
                     {
                         await PowerCmd.Apply<IdsShikigamiPower>(choiceContext, p.Creature, 1m, p.Creature, this, false);

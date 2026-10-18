@@ -17,24 +17,39 @@ namespace KomeijiKoishi.Patches
     [HarmonyPatch(typeof(RelicGrabBag), nameof(RelicGrabBag.Populate), typeof(Player), typeof(Rng))]
     public static class KoishiPlayerRelicGrabBagPatch
     {
+        [ThreadStatic]
+        private static bool? _nestedPopulateIsMultiplayer;
+
+        internal static bool? IsNestedPopulateMultiplayer => _nestedPopulateIsMultiplayer;
+
         public static bool Prefix(RelicGrabBag __instance, Player player, Rng rng)
         {
+            bool isMultiplayer = player.RunState.Players.Count > 1;
             var relics = ModelDb.RelicPool<SharedRelicPool>()
                 .GetUnlockedRelics(player.UnlockState)
                 .Concat(ModelDb.RelicPool<KoishiSharedRelicPool>().GetUnlockedRelics(player.UnlockState))
                 .Concat(player.Character.RelicPool.GetUnlockedRelics(player.UnlockState))
-                .Where(relic => !IsMultiplayerOnlyExcluded(relic))
+                .Where(relic => !IsMultiplayerOnlyExcluded(relic, isMultiplayer))
                 .Where(relic => !KoishiBalanceManager.IsEnabled || relic is not KoishiRock)
                 .DistinctBy(relic => relic.Id);
 
-            __instance.Populate(relics, rng);
+            _nestedPopulateIsMultiplayer = isMultiplayer;
+            try
+            {
+                __instance.Populate(relics, rng);
+            }
+            finally
+            {
+                _nestedPopulateIsMultiplayer = null;
+            }
+
             return false;
         }
 
-        internal static bool IsMultiplayerOnlyExcluded(RelicModel relic)
+        internal static bool IsMultiplayerOnlyExcluded(RelicModel relic, bool isMultiplayer)
         {
             return relic is Dataminer_Koishi
-                && RunManager.Instance?.NetService?.Type.IsMultiplayer() == true;
+                && isMultiplayer;
         }
     }
 
@@ -44,7 +59,7 @@ namespace KomeijiKoishi.Patches
         public static void Prefix(ref IEnumerable<RelicModel> relics)
         {
             List<RelicModel> relicList = relics
-                .Where(relic => !KoishiPlayerRelicGrabBagPatch.IsMultiplayerOnlyExcluded(relic))
+                .Where(relic => !IsMultiplayerOnlyExcluded(relic))
                 .Where(relic => !KoishiBalanceManager.IsEnabled || relic is not KoishiRock)
                 .ToList();
             bool isSharedRelicPoolPopulation = relicList.Any(relic => relic.Pool is SharedRelicPool);
@@ -57,13 +72,21 @@ namespace KomeijiKoishi.Patches
             HashSet<ModelId> existingIds = relicList.Select(relic => relic.Id).ToHashSet();
             foreach (RelicModel relic in ModelDb.RelicPool<KoishiSharedRelicPool>().AllRelics)
             {
-                if (existingIds.Add(relic.Id))
+                if (!IsMultiplayerOnlyExcluded(relic) && existingIds.Add(relic.Id))
                 {
                     relicList.Add(relic);
                 }
             }
 
             relics = relicList;
+        }
+
+        private static bool IsMultiplayerOnlyExcluded(RelicModel relic)
+        {
+            bool isMultiplayer = KoishiPlayerRelicGrabBagPatch.IsNestedPopulateMultiplayer
+                ?? RunManager.Instance?.NetService?.Type.IsMultiplayer()
+                ?? false;
+            return KoishiPlayerRelicGrabBagPatch.IsMultiplayerOnlyExcluded(relic, isMultiplayer);
         }
     }
 }
