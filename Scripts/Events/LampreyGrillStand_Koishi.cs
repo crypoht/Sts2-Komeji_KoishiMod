@@ -16,6 +16,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -67,7 +68,7 @@ namespace KomeijiKoishi.Events
             await CreatureCmd.Heal(Owner!.Creature, DynamicVars.Heal.BaseValue, true);
             SetEventState(PageDescription("SATISFIED"), new[]
             {
-                new EventOption(this, FinishEvent, $"{Id.Entry}.pages.SATISFIED.options.CONTINUE", Array.Empty<IHoverTip>())
+                new EventOption(this, FinishEvent, $"{Id.Entry}.pages.SATISFIED.options.CONTINUE", false, true, Array.Empty<IHoverTip>())
             });
         }
 
@@ -79,7 +80,7 @@ namespace KomeijiKoishi.Events
             UpgradeRandomCards(owner, DynamicVars["SetMealUpgrades"].IntValue);
             SetEventState(PageDescription("SATISFIED"), new[]
             {
-                new EventOption(this, FinishEvent, $"{Id.Entry}.pages.SATISFIED.options.CONTINUE", Array.Empty<IHoverTip>())
+                new EventOption(this, FinishEvent, $"{Id.Entry}.pages.SATISFIED.options.CONTINUE", false, true, Array.Empty<IHoverTip>())
             });
         }
 
@@ -91,7 +92,7 @@ namespace KomeijiKoishi.Events
             await UpgradeSelectedCards(owner, DynamicVars["FestivalUpgrades"].IntValue);
             SetEventState(PageDescription("SATISFIED"), new[]
             {
-                new EventOption(this, FinishEvent, $"{Id.Entry}.pages.SATISFIED.options.CONTINUE", Array.Empty<IHoverTip>())
+                new EventOption(this, FinishEvent, $"{Id.Entry}.pages.SATISFIED.options.CONTINUE", false, true, Array.Empty<IHoverTip>())
             });
         }
 
@@ -105,8 +106,8 @@ namespace KomeijiKoishi.Events
 
         private Task FinishEvent()
         {
-            SetEventFinished(PageDescription("SATISFIED"));
-            return Task.CompletedTask;
+            SetEventFinished(PageDescription("SATISFIED.options.CONTINUE"));
+            return NEventRoom.Proceed();
         }
 
         private static async Task UpgradeSelectedCards(Player owner, int count)
