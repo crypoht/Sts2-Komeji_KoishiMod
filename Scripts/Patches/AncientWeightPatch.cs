@@ -14,7 +14,11 @@ using System.Collections;
 
 namespace KomeijiKoishi.Patches
 {
+#if STS2_BETA
+    [HarmonyPatch(typeof(ActModel), nameof(ActModel.GenerateRooms), typeof(RunState))]
+#else
     [HarmonyPatch(typeof(ActModel), nameof(ActModel.GenerateRooms))]
+#endif
     [HarmonyAfter("BaseLib")]
     public static class AncientWeightPatch
     {

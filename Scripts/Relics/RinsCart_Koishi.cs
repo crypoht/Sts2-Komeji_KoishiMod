@@ -42,7 +42,11 @@ namespace KomeijiKoishi.Relics
         protected override string PackedIconOutlinePath => $"res://mods/Komeiji_Koishi/images/relics/RinsCart_Koishi.png";
         protected override string BigIconPath => $"res://mods/Komeiji_Koishi/images/relics/RinsCart_Koishi.png";
 
+#if STS2_BETA
+        public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature target, CardModel? source, bool wasRemovalPrevented, float deathAnimLength)
+#else
         public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature target, bool wasRemovalPrevented, float deathAnimLength)
+#endif
         {
             if (wasRemovalPrevented || target.Side == base.Owner.Creature.Side || base.Owner.Creature.IsDead)
             {

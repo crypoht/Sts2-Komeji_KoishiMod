@@ -80,7 +80,7 @@
     "KOMEIJIKOISHI-RECOGNIZED_GENIUS_KOISHI.description":  "모든의[gold]탄막[/gold]得에강화 \n모든0{energyPrefix:energyIcons(1)}공격 카드증가{KuugaPower:diff()}점피해",
     "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.title":  "表象「列祖列宗入꿈오다」",
     "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.description":  "복사당신[gold]소멸 더미[/gold] 안의모든카드, 그리고복사본넣습니다[gold]소멸 더미[/gold].",
-    "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.balanceDescription":  "[gold]소멸 더미[/gold]의 모든 카드를 복사하고, 복사본을 [gold]소멸 더미[/gold]에 넣습니다.{IfUpgraded:show:|\n[gold]소멸[/gold].}",
+    "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.balanceDescription":  "[gold]소멸 더미[/gold]의 모든 카드를 복사하고, 복사본을 [gold]소멸 더미[/gold]에 넣습니다.",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.title":  "抑制「초자아」",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.description":  "들어갑니다[gold]폐쇄[/gold]때, 추가뽑습니다 1장의 카드.들어갑니다[gold]개화[/gold]때, 추가얻습니다 {Energy:energyIcons()}.",
     "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.title":  "复燃「코이시之埋火」",

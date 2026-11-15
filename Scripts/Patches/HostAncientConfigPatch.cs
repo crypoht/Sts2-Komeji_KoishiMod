@@ -65,7 +65,11 @@ namespace KomeijiKoishi.Patches
         }
     }
 
+#if STS2_BETA
+    [HarmonyPatch(typeof(StartRunLobby), MethodType.Constructor, typeof(GameMode), typeof(bool), typeof(MegaCrit.Sts2.Core.Multiplayer.Game.INetGameService), typeof(IStartRunLobbyListener), typeof(int))]
+#else
     [HarmonyPatch(typeof(StartRunLobby), MethodType.Constructor, typeof(GameMode), typeof(MegaCrit.Sts2.Core.Multiplayer.Game.INetGameService), typeof(IStartRunLobbyListener), typeof(int))]
+#endif
     public static class StartRunLobbyKoishiConfigSyncPatch
     {
         public static void Postfix(StartRunLobby __instance)

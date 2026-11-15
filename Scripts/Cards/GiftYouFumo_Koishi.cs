@@ -24,6 +24,8 @@ namespace KomeijiKoishi.Cards
     [Pool(typeof(KoishiCardPool))]
     public sealed class GiftYouFumo_Koishi : CustomCardModel,IUseAncientCardFace
     {
+        private const string KazamiYukaCharacterId = "KAZAMI_YUKA_CHARACTER_KAZAMI_YUKA_CHARACTER";
+
         public GiftYouFumo_Koishi() 
             : base(0, CardType.Skill, CardRarity.Rare, TargetType.AnyAlly, true) 
         { 
@@ -49,7 +51,20 @@ namespace KomeijiKoishi.Cards
 
             await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
 
-            CardModel? fumoCard = await FumoPool.CreateRandomFumoInHand(targetAlly, combatState);
+            bool isKazamiYuka = string.Equals(
+                targetAlly.Character.Id.Entry, KazamiYukaCharacterId, StringComparison.Ordinal);
+            CardModel? fumoCard;
+            if (isKazamiYuka)
+            {
+                fumoCard = combatState.CreateCard<YukariFumo_Koishi>(targetAlly);
+                CardCmd.Upgrade(fumoCard, CardPreviewStyle.HorizontalLayout);
+                await CardPileCmd.AddGeneratedCardToCombat(
+                    fumoCard, PileType.Hand, targetAlly, CardPilePosition.Bottom);
+            }
+            else
+            {
+                fumoCard = await FumoPool.CreateRandomFumoInHand(targetAlly, combatState);
+            }
 
             if (fumoCard != null)
             {
@@ -59,7 +74,7 @@ namespace KomeijiKoishi.Cards
                     NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);
                 }
 
-                if (base.IsUpgraded)
+                if (base.IsUpgraded && !isKazamiYuka)
                 {
                     CardCmd.Upgrade(fumoCard, CardPreviewStyle.HorizontalLayout);
                 }

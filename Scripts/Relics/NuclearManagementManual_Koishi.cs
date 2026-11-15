@@ -82,7 +82,11 @@ namespace KomeijiKoishi.Relics
             {
                 this.CardsExhausted -= threshold;
                 base.Flash();
+#if STS2_BETA
+                await RelicCmd.Obtain(RelicFactory.PullNextRelicFromFront(base.Owner, base.Owner.PlayerRng.Rewards).ToMutable(), base.Owner, -1);
+#else
                 await RelicCmd.Obtain(RelicFactory.PullNextRelicFromFront(base.Owner).ToMutable(), base.Owner, -1);
+#endif
             }
 
             base.Status = RelicStatus.Normal;

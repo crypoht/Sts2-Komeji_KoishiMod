@@ -80,7 +80,7 @@
     "KOMEIJIKOISHI-RECOGNIZED_GENIUS_KOISHI.description":  "Upgrade all [gold]Danmaku[/gold].\nAll 0{energyPrefix:energyIcons(1)} Attack cards deal {KuugaPower:diff()} more damage.",
     "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.title":  "Ancestors\u0027 Dream",
     "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.description":  "Copy all cards in your [gold]exhaust pile[/gold] and put the copies into your [gold]exhaust pile[/gold].",
-    "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.balanceDescription":  "Copy all cards in your [gold]exhaust pile[/gold] and put the copies into your [gold]exhaust pile[/gold].{IfUpgraded:show:|\n[gold]Exhaust[/gold].}",
+    "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.balanceDescription":  "Copy all cards in your [gold]exhaust pile[/gold] and put the copies into your [gold]exhaust pile[/gold].",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.title":  "Superego",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.description":  "When you enter [gold]Closed[/gold], draw 1 additional card. When you enter [gold]Bloom[/gold], gain {Energy:energyIcons()} additional energy.",
     "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.title":  "Buried Fire",

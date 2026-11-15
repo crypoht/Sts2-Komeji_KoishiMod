@@ -27,7 +27,11 @@ namespace KomeijiKoishi.Cards.Fumo
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
+#if STS2_BETA
+            RelicModel relic = RelicFactory.PullNextRelicFromFront(base.Owner, base.Owner.PlayerRng.Rewards).ToMutable();
+#else
             RelicModel relic = RelicFactory.PullNextRelicFromFront(base.Owner).ToMutable();
+#endif
             await RelicCmd.Obtain(relic, base.Owner, -1);
         }
 

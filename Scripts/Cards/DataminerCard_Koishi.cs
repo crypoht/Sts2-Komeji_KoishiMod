@@ -826,7 +826,7 @@ namespace KomeijiKoishi.Cards
             await CombatManager.Instance.CheckWinCondition();
         }
 
-        private static async Task ChangeMaxHp(
+        private async Task ChangeMaxHp(
             PlayerChoiceContext context,
             Player player,
             DataminerSubEffect effect)
@@ -839,7 +839,11 @@ namespace KomeijiKoishi.Cards
                 }
                 else if (effect.Amount < 0)
                 {
+#if STS2_BETA
+                    await CreatureCmd.LoseMaxHp(context, target, -effect.Amount, this);
+#else
                     await CreatureCmd.LoseMaxHp(context, target, -effect.Amount, true);
+#endif
                 }
             }
         }
@@ -865,7 +869,11 @@ namespace KomeijiKoishi.Cards
 
         private static async Task ObtainRandomRelic(Player player)
         {
+#if STS2_BETA
+            RelicModel relic = RelicFactory.PullNextRelicFromFront(player, player.PlayerRng.Rewards).ToMutable();
+#else
             RelicModel relic = RelicFactory.PullNextRelicFromFront(player).ToMutable();
+#endif
             await RelicCmd.Obtain(relic, player, -1);
         }
 

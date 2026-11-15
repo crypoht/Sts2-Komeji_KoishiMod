@@ -474,7 +474,11 @@ public sealed class DataminerAbilityPower : CustomPowerModel
                         null);
                     break;
                 case DataminerEffectKind.AbilityMaxHpLoss:
+#if STS2_BETA
+                    await CreatureCmd.LoseMaxHp(effectContext, player.Creature, EffectAmount, null);
+#else
                     await CreatureCmd.LoseMaxHp(effectContext, player.Creature, EffectAmount, true);
+#endif
                     break;
                 case DataminerEffectKind.AbilityExhaustRandomHand:
                     await ExhaustRandomHand(effectContext, player, EffectAmount);

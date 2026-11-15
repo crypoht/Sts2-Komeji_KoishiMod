@@ -24,7 +24,7 @@ namespace KomeijiKoishi.Cards
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
 
         public override IEnumerable<CardKeyword> CanonicalKeywords =>
-            KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled && !base.IsUpgraded
+            KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled
                 ? new[] { CardKeyword.Exhaust }
                 : Array.Empty<CardKeyword>();
 
@@ -70,7 +70,14 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.EnergyCost.UpgradeBy(-1); 
+            if (KomeijiKoishi.Config.KoishiBalanceManager.IsEnabled)
+            {
+                base.RemoveKeyword(CardKeyword.Exhaust);
+            }
+            else
+            {
+                base.EnergyCost.UpgradeBy(-1);
+            }
         }
     }
 }

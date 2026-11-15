@@ -80,7 +80,7 @@
     "KOMEIJIKOISHI-RECOGNIZED_GENIUS_KOISHI.description":  "すべての[gold]弾幕[/gold]得到アップグレード \nすべて0{energyPrefix:energyIcons(1)}アタック提高{KuugaPower:diff()}点ダメージ",
     "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.title":  "表象「列祖列宗入梦来」",
     "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.description":  "复制あなた[gold]廃棄パイル[/gold]中のすべてカード，并将复制品放入[gold]廃棄パイル[/gold]。",
-    "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.balanceDescription":  "[gold]廃棄パイル[/gold]のすべてのカードをコピーし、コピーを[gold]廃棄パイル[/gold]に置く。{IfUpgraded:show:|\n[gold]廃棄[/gold]。}",
+    "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.balanceDescription":  "[gold]廃棄パイル[/gold]のすべてのカードをコピーし、コピーを[gold]廃棄パイル[/gold]に置く。",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.title":  "抑制「超私」",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.description":  "入る[gold]閉合[/gold]时，额外引く 1枚のカード。入る[gold]開花[/gold]时，额外得る {Energy:energyIcons()}。",
     "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.title":  "复燃「こいし之埋火」",

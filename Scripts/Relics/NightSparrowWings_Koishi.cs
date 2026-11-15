@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 
 namespace KomeijiKoishi.Relics
 {
@@ -27,7 +28,11 @@ namespace KomeijiKoishi.Relics
             new HealVar(1m)
         };
 
+#if STS2_BETA
+        public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature creature, CardModel? source, bool wasRemovalPrevented, float deathAnimLength)
+#else
         public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature creature, bool wasRemovalPrevented, float deathAnimLength)
+#endif
         {
             if (wasRemovalPrevented || creature.Side == base.Owner.Creature.Side || base.Owner.Creature.IsDead)
             {

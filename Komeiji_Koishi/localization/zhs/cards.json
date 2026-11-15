@@ -80,7 +80,7 @@
     "KOMEIJIKOISHI-RECOGNIZED_GENIUS_KOISHI.description":  "所有的[gold]弹幕[/gold]得到升级 \n所有0{energyPrefix:energyIcons(1)}攻击牌提高{KuugaPower:diff()}点伤害",
     "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.title":  "表象「列祖列宗入梦来」",
     "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.description":  "复制你[gold]消耗牌堆[/gold]中的所有牌，并将复制品放入[gold]消耗牌堆[/gold]。",
-    "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.balanceDescription":  "复制你[gold]消耗牌堆[/gold]中的所有牌，并将复制品放入[gold]消耗牌堆[/gold]。{IfUpgraded:show:|\n[gold]消耗[/gold]。}",
+    "KOMEIJIKOISHI-ANCESTORS_DREAM_KOISHI.balanceDescription":  "复制你[gold]消耗牌堆[/gold]中的所有牌，并将复制品放入[gold]消耗牌堆[/gold]。",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.title":  "抑制「超我」",
     "KOMEIJIKOISHI-SUPEREGO_KOISHI.description":  "进入[gold]闭合[/gold]时，额外抽 1 张牌。\n进入[gold]盛开[/gold]时，额外获得 {Energy:energyIcons()}。",
     "KOMEIJIKOISHI-BURIED_FIRE_KOISHI.title":  "复燃「恋之埋火」",

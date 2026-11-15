@@ -49,7 +49,11 @@ namespace KomeijiKoishi.Relics
             }
         }
 
+#if STS2_BETA
+        public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature creature, CardModel? source, bool wasRemovalPrevented, float deathAnimLength)
+#else
         public override async Task AfterDeath(PlayerChoiceContext choiceContext, Creature creature, bool wasRemovalPrevented, float deathAnimLength)
+#endif
         {
             if (wasRemovalPrevented || creature.Side == base.Owner.Creature.Side || base.Owner.Creature.IsDead)
             {
@@ -74,4 +78,3 @@ namespace KomeijiKoishi.Relics
         }
     }
 }
-
