@@ -36,8 +36,8 @@
   "KOMEIJIKOISHI-MIRACLE_POWER.title": "奇迹",
   "KOMEIJIKOISHI-MIRACLE_POWER.smartDescription": "每当你打出一张[gold]弹幕[/gold]牌，再打出该牌 {Amount} 次。",
   "KOMEIJIKOISHI-KUUGA_POWER.title": "空我",
-  "KOMEIJIKOISHI-KUUGA_POWER.smartDescription": "你所有耗能为 0 的攻击牌造成的伤害{Amount:cond:<0?减少|增加} [blue]{Amount:abs()}[/blue] 点。",
-  "KOMEIJIKOISHI-KUUGA_POWER.description": "你所有耗能为 0 的攻击牌造成的伤害{Amount:cond:<0?减少|增加} [blue]{Amount:abs()}[/blue] 点。",
+  "KOMEIJIKOISHI-KUUGA_POWER.smartDescription": "你所有耗能为 0 的攻击牌造成的伤害{Amount:cond:<0?减少 [red]{Amount:abs()}[/red]|增加 [blue]{Amount:abs()}[/blue]} 点。",
+  "KOMEIJIKOISHI-KUUGA_POWER.description": "你所有耗能为 0 的攻击牌造成的伤害{Amount:cond:<0?减少 [red]{Amount:abs()}[/red]|增加 [blue]{Amount:abs()}[/blue]} 点。",
   "KOMEIJIKOISHI-SECOND_NEED_POWER.title": "第二需求",
   "KOMEIJIKOISHI-SECOND_NEED_POWER.smartDescription": "每当你切换姿态时，获得 {Amount} 点格挡。",
   "KOMEIJIKOISHI-UNDERGROUND_ROSE_POWER.title": "地底蔷薇",
@@ -87,8 +87,8 @@
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.smartDescription": "攻击牌本回合可以免费打出。",
   "KOMEIJIKOISHI-MISS_MARYS_PHONE_THAT_SIDE_POWER.description": "攻击牌本回合可以免费打出。",
   "KOMEIJIKOISHI-SELF_POWER.title": "自我",
-  "KOMEIJIKOISHI-SELF_POWER.smartDescription": "敌方回合开始时，失去 [blue]{Amount}[/blue] 层[gold]空我[/gold]。",
-  "KOMEIJIKOISHI-SELF_POWER.description": "敌方回合开始时，失去 [blue]{Amount}[/blue] 层[gold]空我[/gold]。",
+  "KOMEIJIKOISHI-SELF_POWER.smartDescription": "敌方回合开始时，{Amount:cond:<0?回复 [blue]{Amount:abs()}[/blue]|失去 [red]{Amount:abs()}[/red]} 层[gold]空我[/gold]。",
+  "KOMEIJIKOISHI-SELF_POWER.description": "敌方回合开始时，{Amount:cond:<0?回复 [blue]{Amount:abs()}[/blue]|失去 [red]{Amount:abs()}[/red]} 层[gold]空我[/gold]。",
   "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.title": "错误",
   "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.description": "！*#￥……&（&*0*@&&#*？》：‘",
   "KOMEIJIKOISHI-DATAMINER_ERROR_POWER.readableDescription": "增加手牌等于层数的手牌上限",
@@ -97,5 +97,5 @@
   "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.readableDescription": "本回合内受到的伤害为0",
   "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.title": "错误",
   "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.description": "！*#￥……&（&*0*@&&#*？》：‘",
-  "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.readableDescription": "触发条件：{Trigger}\n{Effect}"
+  "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.readableDescription": "{Trigger}\n{Effect}"
 }

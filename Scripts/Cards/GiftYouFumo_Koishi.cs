@@ -56,7 +56,7 @@ namespace KomeijiKoishi.Cards
             CardModel? fumoCard;
             if (isKazamiYuka)
             {
-                fumoCard = combatState.CreateCard<YukariFumo_Koishi>(targetAlly);
+                fumoCard = combatState.CreateCard<YuukaFumo_Koishi>(targetAlly);
                 CardCmd.Upgrade(fumoCard, CardPreviewStyle.HorizontalLayout);
                 await CardPileCmd.AddGeneratedCardToCombat(
                     fumoCard, PileType.Hand, targetAlly, CardPilePosition.Bottom);

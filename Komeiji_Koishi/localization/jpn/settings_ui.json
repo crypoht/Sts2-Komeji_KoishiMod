@@ -1,4 +1,7 @@
 {
+  "KOMEIJIKOISHI-MORIYA_DANCE_VOLUME.title": "守矢ダンスの音量（%）",
+  "KOMEIJIKOISHI-MORIYA_DANCE_VOLUME.hover.title": "守矢ダンスの音量",
+  "KOMEIJIKOISHI-MORIYA_DANCE_VOLUME.hover.desc": "守矢ダンス動画の音量を調整します。0で消音、100で元の音量になります。この端末でのみ即座に反映され、ゲームのマスター音量にも従います。",
   "KOMEIJIKOISHI-SPINE_MODE.title": "キャラクターアニメーション",
   "KOMEIJIKOISHI-SPINE_MODE.hover.title": "キャラクターアニメーション",
   "KOMEIJIKOISHI-SPINE_MODE.hover.desc": "官方素材的美观才是王道，你的立绘平移根本没有技巧。\n简易的动画才受大众喜爱，你的精品动画早就有人搞来。",

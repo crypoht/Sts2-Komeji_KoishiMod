@@ -15,7 +15,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class MentalStellarSuccession_Koishi : CustomCardModel
+    public sealed class MentalStellarSuccession_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public MentalStellarSuccession_Koishi()
             : base(2, CardType.Power, CardRarity.Rare, TargetType.Self, true) { }

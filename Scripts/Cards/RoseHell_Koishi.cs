@@ -18,7 +18,7 @@ using MegaCrit.Sts2.Core.Combat;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class RoseHell_Koishi : CustomCardModel
+    public sealed class RoseHell_Koishi : CustomCardModel,IUseAncientCardFace
     {
         public RoseHell_Koishi() 
             : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }

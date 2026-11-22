@@ -29,7 +29,7 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
 
-            new CardsVar(4),
+            new CardsVar(5),
             new PowerVar<KuugaPower>(1m)
         };
 
@@ -66,6 +66,13 @@ namespace KomeijiKoishi.Cards
                     this, 
                     false
                 );
+                await PowerCmd.Apply<SelfPower>(
+                    choiceContext,
+                    player.Creature,
+                    -base.DynamicVars["KuugaPower"].BaseValue,
+                    player.Creature,
+                    this,
+                    false);
             }
             catch (Exception e)
             {

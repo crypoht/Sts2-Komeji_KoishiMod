@@ -17,6 +17,7 @@ using KomeijiKoishi.Enums;
 using KomeijiKoishi.Pools;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using KomeijiKoishi.Cards.Danmaku;
+using MegaCrit.Sts2.Core.HoverTips;
 
 namespace KomeijiKoishi.Cards
 {
@@ -32,6 +33,11 @@ namespace KomeijiKoishi.Cards
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };
 
         public override string PortraitPath => KoishiImagePaths.CardPortrait(GetType());
+
+         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromPower<ThornsPower>() 
+        };
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 

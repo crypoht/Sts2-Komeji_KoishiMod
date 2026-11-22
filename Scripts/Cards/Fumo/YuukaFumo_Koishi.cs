@@ -22,7 +22,7 @@ namespace KomeijiKoishi.Cards.Fumo
             : base(0, CardType.Skill, CardRarity.Token, TargetType.Self, true) 
         { 
         }
-
+ 
         public override string PortraitPath => $"res://mods/Komeiji_Koishi/images/cards/fumo/{GetType().Name}.png";
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new[] { CardKeyword.Exhaust };

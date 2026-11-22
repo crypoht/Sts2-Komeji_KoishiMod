@@ -46,7 +46,7 @@ await CreatureCmd.GainBlock(player.Creature, base.DynamicVars.Block.BaseValue, V
 
         protected override void OnUpgrade()
         {
-            base.DynamicVars.Block.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(8m, 3m));
+            base.DynamicVars.Block.UpgradeValueBy(KomeijiKoishi.Config.KoishiBalanceManager.Value(8m, 6m));
         }
     }
 }

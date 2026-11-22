@@ -30,8 +30,8 @@ namespace KomeijiKoishi.Cards
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(15m, 11m), ValueProp.Move),
-            new DynamicVar("Magic", 3m)
+            new BlockVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(11m, 10m), ValueProp.Move),
+            new DynamicVar("Magic", 2m)
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

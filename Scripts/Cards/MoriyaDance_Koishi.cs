@@ -102,6 +102,14 @@ namespace KomeijiKoishi.Cards
             _isDanceVideoPlaying = false;
         }
 
+        public static void UpdatePlaybackVolume()
+        {
+            if (GodotObject.IsInstanceValid(_activePlayer))
+            {
+                _activePlayer!.Volume = KoishiModConfig.MoriyaDanceVolume / 100f;
+            }
+        }
+
         private static void PlayDanceVideo(string videoPath)
         {
             if (_isPlaybackBlockedForRun)
@@ -148,6 +156,7 @@ namespace KomeijiKoishi.Cards
             VideoStreamPlayer player = new VideoStreamPlayer
             {
                 Stream = stream,
+                Volume = KoishiModConfig.MoriyaDanceVolume / 100f,
                 Autoplay = false,
                 Expand = true,
                 CustomMinimumSize = new Vector2(960f, 540f),

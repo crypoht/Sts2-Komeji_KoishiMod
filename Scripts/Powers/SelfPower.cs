@@ -14,6 +14,7 @@ namespace KomeijiKoishi.Powers
     {
         public override PowerType Type => PowerType.Debuff;
         public override PowerStackType StackType => PowerStackType.Counter;
+        public override bool AllowNegative => true;
         public override string? CustomPackedIconPath => "res://mods/Komeiji_Koishi/images/powers/SelfPower.png";
         public override string? CustomBigIconPath => "res://mods/Komeiji_Koishi/images/powers/SelfPower.png";
 

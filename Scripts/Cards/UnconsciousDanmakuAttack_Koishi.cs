@@ -39,7 +39,7 @@ namespace KomeijiKoishi.Cards
 
         public override IEnumerable<CardKeyword> CanonicalKeywords => new CardKeyword[0];
 
-        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new CardsVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(3, 4)) };
+        protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> { new CardsVar(KomeijiKoishi.Config.KoishiBalanceManager.Value(4, 5)) };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {

@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.Nodes.Vfx;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Powers;
 using BaseLib.Utils;
+using MegaCrit.Sts2.Core.HoverTips;
 
 namespace KomeijiKoishi.Cards
 {
@@ -29,6 +30,11 @@ namespace KomeijiKoishi.Cards
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new PowerVar<ThornsPower>(1m) 
+        };
+
+         protected override IEnumerable<IHoverTip> ExtraHoverTips => new[] 
+        { 
+            HoverTipFactory.FromPower<ThornsPower>() 
         };
 
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

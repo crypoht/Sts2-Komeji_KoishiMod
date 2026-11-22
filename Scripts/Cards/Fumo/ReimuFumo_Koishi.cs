@@ -6,14 +6,14 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Cards;
-using MegaCrit.Sts2.Core.Models; // 🌟 引入 PileType
+using MegaCrit.Sts2.Core.Models; 
 using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using KomeijiKoishi.Pools;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using System;
 using BaseLib.Utils;
-using MegaCrit.Sts2.Core.Entities.Gold; // 🌟 引入金币相关枚举
+using MegaCrit.Sts2.Core.Entities.Gold; 
 
 namespace KomeijiKoishi.Cards.Fumo
 {
@@ -21,7 +21,7 @@ namespace KomeijiKoishi.Cards.Fumo
     public sealed class ReimuFumo_Koishi : CustomCardModel
     {
         public ReimuFumo_Koishi() 
-            : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy, true) 
+            : base(0, CardType.Attack, CardRarity.Token, TargetType.AllEnemies, true)
         { 
         }
 
@@ -32,7 +32,7 @@ namespace KomeijiKoishi.Cards.Fumo
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
             new DamageVar(100m, ValueProp.Move), 
-            new RepeatVar(50)                   
+            new RepeatVar(500)                   
         };
 
 
@@ -54,13 +54,13 @@ namespace KomeijiKoishi.Cards.Fumo
         {
             var player = base.Owner as Player;
 
-            if (player == null || cardPlay.Target == null) return;
+            if (player == null) return;
 
   
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                     .WithHitCount(base.DynamicVars.Repeat.IntValue)
                     .FromCard(this, cardPlay)
-                    .Targeting(cardPlay.Target)
+                    .TargetingAllOpponents(base.CombatState)
                     .WithHitFx("vfx/vfx_attack_blunt") 
                     .Execute(choiceContext);
   

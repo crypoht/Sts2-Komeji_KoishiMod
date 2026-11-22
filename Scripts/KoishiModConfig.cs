@@ -100,6 +100,19 @@ public sealed class KoishiModConfig : SimpleModConfig
 
     public static bool PlayMoriyaDanceForAllPlayers { get; set; } = false;
 
+    private static int _moriyaDanceVolume = 100;
+
+    [ConfigSlider(0, 100, 1)]
+    public static int MoriyaDanceVolume
+    {
+        get => _moriyaDanceVolume;
+        set
+        {
+            _moriyaDanceVolume = Math.Clamp(value, 0, 100);
+            Cards.MoriyaDance_Koishi.UpdatePlaybackVolume();
+        }
+    }
+
     [ConfigSection("AncientWeights")]
     [ConfigHideInUI]
     public static bool EnableAncientWeights { get; set; } = false;

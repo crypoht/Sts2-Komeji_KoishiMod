@@ -18,7 +18,7 @@ namespace KomeijiKoishi.Cards
     public sealed class AncestorsWatching_Koishi : CustomCardModel
     {
         public AncestorsWatching_Koishi() 
-            : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self, true) 
+            : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self, true) 
         { 
         }
 
@@ -49,7 +49,7 @@ namespace KomeijiKoishi.Cards
 
         protected override void OnUpgrade()
         {
-            base.EnergyCost.UpgradeBy(-1);
+             base.RemoveKeyword(CardKeyword.Exhaust);
         }
     }
 }

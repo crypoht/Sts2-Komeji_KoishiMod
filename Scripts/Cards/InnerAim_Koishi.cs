@@ -17,7 +17,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 namespace KomeijiKoishi.Cards
 {
     [Pool(typeof(KoishiCardPool))]
-    public sealed class InnerAim_Koishi : CustomCardModel
+    public sealed class InnerAim_Koishi : CustomCardModel, IUseAncientCardFace
     {
         public InnerAim_Koishi() 
             : base(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy, true) { }

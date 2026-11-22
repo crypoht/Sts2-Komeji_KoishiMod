@@ -1,4 +1,7 @@
 {
+  "KOMEIJIKOISHI-MORIYA_DANCE_VOLUME.title": "모리야 댄스 음량 (%)",
+  "KOMEIJIKOISHI-MORIYA_DANCE_VOLUME.hover.title": "모리야 댄스 음량",
+  "KOMEIJIKOISHI-MORIYA_DANCE_VOLUME.hover.desc": "모리야 댄스 영상의 음량을 조절합니다. 0은 음소거, 100은 원래 음량입니다. 이 기기에만 즉시 적용되며 게임의 전체 음량 설정도 적용됩니다.",
   "KOMEIJIKOISHI-SPINE_MODE.title": "캐릭터 애니메이션",
   "KOMEIJIKOISHI-SPINE_MODE.hover.title": "캐릭터 애니메이션",
   "KOMEIJIKOISHI-SPINE_MODE.hover.desc": "官方素材的美观才是王道，你的立绘平移根本没有技巧。\n简易的动画才受大众喜爱，你的精品动画早就有人搞来。",

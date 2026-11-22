@@ -90,16 +90,6 @@ namespace KomeijiKoishi.Characters
 
 		public override string CustomEnergyCounterPath => "res://mods/Komeiji_Koishi/scenes/koishi_energy_counter.tscn";
 
-        protected override IEnumerable<string> ExtraAssetPaths => new[]
-        {
-            "res://mods/Komeiji_Koishi/scenes/koishi_character.tscn",
-            "res://mods/Komeiji_Koishi/scenes/koishi_character_2.tscn",
-            "res://mods/Komeiji_Koishi/scenes/koishi_merchant.tscn",
-            "res://mods/Komeiji_Koishi/scenes/koishi_merchant_2.tscn",
-            "res://mods/Komeiji_Koishi/scenes/koishi_rest_site.tscn",
-            "res://mods/Komeiji_Koishi/scenes/koishi_rest_site_2.tscn"
-        };
-
 		public override string CharacterTransitionSfx => "event:/sfx/ui/wipe_ironclad";
 		public override string CustomArmPointingTexturePath => "res://mods/Komeiji_Koishi/images/hands/up.png";
 		public override string CustomArmRockTexturePath => "res://mods/Komeiji_Koishi/images/hands/koishiya.png";
