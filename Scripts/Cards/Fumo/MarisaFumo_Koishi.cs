@@ -36,7 +36,7 @@ namespace KomeijiKoishi.Cards.Fumo
 
         protected override IEnumerable<DynamicVar> CanonicalVars => new List<DynamicVar> 
         { 
-            new DamageVar(70m, ValueProp.Move),
+            new DamageVar(100m, ValueProp.Move),
             new PowerVar<KuugaPower>(10m) 
         };
 

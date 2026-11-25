@@ -25,7 +25,8 @@ namespace KomeijiKoishi.Patches
     {
         public static void Prefix(StartRunLobby lobby, ref IReadOnlyList<ModifierModel> modifiers)
         {
-            modifiers = KoishiModConfig.WithHostAncientConfig(modifiers);
+            modifiers = KoishiModConfig.WithHostAncientConfig(modifiers,
+                applyLocalSpecialAncientSetting: lobby.NetService.Type != NetGameType.Client);
             KoishiModConfig.BeginRunWithHostConfig(modifiers);
         }
     }

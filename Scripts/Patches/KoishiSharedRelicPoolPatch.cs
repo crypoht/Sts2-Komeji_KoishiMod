@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
-using KomeijiKoishi.Config;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Relics;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -30,7 +29,7 @@ namespace KomeijiKoishi.Patches
                 .Concat(ModelDb.RelicPool<KoishiSharedRelicPool>().GetUnlockedRelics(player.UnlockState))
                 .Concat(player.Character.RelicPool.GetUnlockedRelics(player.UnlockState))
                 .Where(relic => !IsMultiplayerOnlyExcluded(relic, isMultiplayer))
-                .Where(relic => !KoishiBalanceManager.IsEnabled || relic is not KoishiRock)
+                .Where(relic => relic is not KoishiCollaborationRelic)
                 .DistinctBy(relic => relic.Id);
 
             _nestedPopulateIsMultiplayer = isMultiplayer;
@@ -60,7 +59,7 @@ namespace KomeijiKoishi.Patches
         {
             List<RelicModel> relicList = relics
                 .Where(relic => !IsMultiplayerOnlyExcluded(relic))
-                .Where(relic => !KoishiBalanceManager.IsEnabled || relic is not KoishiRock)
+                .Where(relic => relic is not KoishiCollaborationRelic)
                 .ToList();
             bool isSharedRelicPoolPopulation = relicList.Any(relic => relic.Pool is SharedRelicPool);
             if (!isSharedRelicPoolPopulation)
@@ -72,7 +71,7 @@ namespace KomeijiKoishi.Patches
             HashSet<ModelId> existingIds = relicList.Select(relic => relic.Id).ToHashSet();
             foreach (RelicModel relic in ModelDb.RelicPool<KoishiSharedRelicPool>().AllRelics)
             {
-                if (!IsMultiplayerOnlyExcluded(relic) && existingIds.Add(relic.Id))
+                if (relic is not KoishiCollaborationRelic && !IsMultiplayerOnlyExcluded(relic) && existingIds.Add(relic.Id))
                 {
                     relicList.Add(relic);
                 }

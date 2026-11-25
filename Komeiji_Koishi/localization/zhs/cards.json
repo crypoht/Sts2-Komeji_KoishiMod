@@ -1,4 +1,6 @@
 ﻿{
+    "KOMEIJIKOISHI-UNCONSCIOUS_KNIFE_KOISHI.title": "无意识小刀",
+    "KOMEIJIKOISHI-UNCONSCIOUS_KNIFE_KOISHI.description": "抽到时，自动打出。\n随机{IfUpgraded:show:|[red]对任何生物[/red]}造成{Damage:diff()}点伤害{Repeat:diff()}次。\n打出后进入[gold]随机牌堆[/gold]。",
     "KOMEIJIKOISHI-STRIKE_KOISHI.title":  "打击",
     "KOMEIJIKOISHI-STRIKE_KOISHI.description":  "造成 {Damage:diff()} 点伤害。",
     "KOMEIJIKOISHI-DEFEND_KOISHI.title":  "防御",

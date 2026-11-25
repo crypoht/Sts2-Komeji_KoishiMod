@@ -23,7 +23,8 @@ namespace KomeijiKoishi.Patches
 
             IReadOnlyList<ModifierModel> modifiers = mutableRunState.Modifiers;
             List<ModifierModel> visibleModifiers = modifiers
-                .Where(m => m is not DisableKoishiAncientWeightsModifier and not DisableKoishiAncientsModifier and not MoriyaDanceForAllPlayersModifier and not KoishiSpineModeModifier)
+                .Where(m => m is not DisableKoishiAncientWeightsModifier and not DisableKoishiAncientsModifier
+                    and not DisableKoishiSpecialAncientsModifier and not MoriyaDanceForAllPlayersModifier and not KoishiSpineModeModifier)
                 .ToList();
 
             if (visibleModifiers.Count == modifiers.Count)

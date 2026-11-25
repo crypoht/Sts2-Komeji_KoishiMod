@@ -27,3 +27,6 @@
 # 确保不忽略 cs 和 json
 !*.cs
 !*.json
+
+# Local Dataminer design notes. Keep this out of the repository.
+/tools/DATAMINER_REFERENCE.local.md

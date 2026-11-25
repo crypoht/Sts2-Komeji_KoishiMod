@@ -53,14 +53,14 @@ namespace KomeijiKoishi.Cards.Fumo
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
         {
             var player = base.Owner as Player;
-
-            if (player == null) return;
+            var combatState = base.CombatState;
+            if (player == null || combatState == null) return;
 
   
             await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
                     .WithHitCount(base.DynamicVars.Repeat.IntValue)
                     .FromCard(this, cardPlay)
-                    .TargetingAllOpponents(base.CombatState)
+                    .TargetingAllOpponents(combatState)
                     .WithHitFx("vfx/vfx_attack_blunt") 
                     .Execute(choiceContext);
   

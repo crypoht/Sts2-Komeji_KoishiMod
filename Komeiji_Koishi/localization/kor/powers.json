@@ -97,5 +97,5 @@
     "KOMEIJIKOISHI-DATAMINER_TURN_GOD_MODE_POWER.readableDescription":  "本回合内受到的伤害为0",
     "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.title":  "错误",
     "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.description":  "！*#￥……&（&*0*@&&#*？》：‘",
-    "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.readableDescription":  "발동 조건: {Trigger}\n효과: {Effect}"
+    "KOMEIJIKOISHI-DATAMINER_ABILITY_POWER.readableDescription":  "{Trigger}\n{Effect}"
 }

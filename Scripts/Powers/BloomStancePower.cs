@@ -157,74 +157,110 @@ namespace KomeijiKoishi.Powers
             }
 
             _activeCardAttacks.TryGetValue(cardModel, out var originalCommand);
-            await RunBloomAttackAsync(cardModel, originalCommand);
+            CardPlay? cardPlay = null;
+#if STS2_BETA
+            cardPlay = originalCommand?.CardPlay;
+#endif
+            var bloomContext = new ThrowingPlayerChoiceContext();
+            await RunBloomAttackAsync(bloomContext, cardModel, cardPlay, target =>
+            {
+                decimal baseDamage = GetBloomDamageValue(cardModel, target);
+                decimal damage = GetBloomModifiedDamage(cardModel, cardPlay, target, baseDamage);
+                return CreatureCmd.Damage(bloomContext, target, damage, ValueProp.Unpowered, base.Owner);
+            });
         }
 
-        private async Task RunBloomAttackAsync(CardModel cardModel, AttackCommand? originalCommand)
+        /// <summary>Replays one resolved attack-card hit from an allied external attacker.</summary>
+        /// <remarks>
+        /// Await once per original hit on the card owner's active Bloom. Suppress forwarding while
+        /// resolving the replay. Pass the original context, amount before damage hooks, and flags.
+        /// Stable damage commands use ModifyDamageHookType.All.
+        /// </remarks>
+        /// <returns>True if the replay recorded a hit. False does not authorize a fallback replay.</returns>
+        public Task<bool> TryTriggerExternalAttackAsync(
+            PlayerChoiceContext choiceContext,
+            CardPlay cardPlay,
+            Creature attacker,
+            DamageResult result,
+            decimal baseDamage,
+            ValueProp props,
+            ModifyDamageHookType modifyDamageHookType)
         {
+            if (_isExecutingBloom
+                || cardPlay.Card is not { Type: CardType.Attack, Owner: { } player } card
+                || player.Creature != base.Owner
+                || !base.Owner.IsAlive
+                || base.Owner.GetPower<BloomStancePower>() != this
+                || attacker == base.Owner
+                || attacker.Side != base.Owner.Side
+                || !attacker.IsAlive
+                || base.CombatState is not { } combat
+                || card.CombatState != combat
+                || attacker.CombatState != combat
+                || !props.IsPoweredAttack()
+                || !result.Props.IsPoweredAttack()
+                || result.TotalDamage <= 0
+                || result.Receiver.Side == base.Owner.Side
+#if STS2_BETA
+                || result.OriginalTarget.Side == base.Owner.Side
+#else
+                || modifyDamageHookType != ModifyDamageHookType.All
+#endif
+                )
+            {
+                return Task.FromResult(false);
+            }
+
+            // Let the command modify raw damage once using the actual dealer and the new target.
+            return RunBloomAttackAsync(choiceContext, card, cardPlay, target =>
+#if STS2_BETA
+                CreatureCmd.Damage(choiceContext, new[] { target }, baseDamage, props, attacker, card, cardPlay, modifyDamageHookType));
+#else
+                CreatureCmd.Damage(choiceContext, target, baseDamage, props, attacker, card));
+#endif
+        }
+
+        private async Task<bool> RunBloomAttackAsync(
+            PlayerChoiceContext choiceContext,
+            CardModel cardModel,
+            CardPlay? cardPlay,
+            Func<Creature, Task<IEnumerable<DamageResult>>> dealDamage)
+        {
+            if (_isExecutingBloom
+                || CombatManager.Instance is not { IsInProgress: true }
+                || base.CombatState is not { } combat
+                || base.Owner.Player is not { } player)
+            {
+                return false;
+            }
+#if STS2_BETA
+            if (cardPlay == null)
+                return false;
+#endif
+
             _isExecutingBloom = true;
             try
             {
-                if (!IsCombatActive()) return;
-                if (base.CombatState == null) return;
-
 #if STS2_BETA
-                if (originalCommand?.CardPlay == null) return;
-                AttackContext attackContext =
-                    await AttackCommand.CreateContextAsync(base.CombatState, new ThrowingPlayerChoiceContext(), originalCommand.CardPlay);
+                await using var attackContext = await AttackCommand.CreateContextAsync(combat, choiceContext, cardPlay);
 #else
-                AttackContext attackContext =
-                    await AttackCommand.CreateContextAsync(base.CombatState, new ThrowingPlayerChoiceContext(), cardModel);
+                await using var attackContext = await AttackCommand.CreateContextAsync(combat, choiceContext, cardModel);
 #endif
+                var enemies = combat.GetOpponentsOf(base.Owner).Where(enemy => !enemy.IsDead).ToList();
+                if (enemies.Count == 0)
+                    return false;
 
-                try
-                {
-                    this.Flash();
+                Creature? target = player.RunState.Rng.CombatTargets.NextItem(enemies);
+                if (target == null)
+                    return false;
 
-                    var bloomContext = new ThrowingPlayerChoiceContext();
+                Flash();
+                var results = (await dealDamage(target)).ToList();
+                if (results.Count == 0)
+                    return false;
 
-                    var opponents = base.CombatState.GetOpponentsOf(base.Owner);
-
-                    var validEnemies = opponents
-                        .Where(e => e is { IsDead: false })
-                        .ToList();
-
-                    if (validEnemies.Count == 0) return;
-
-                    var randomTarget = base.Owner.Player?
-                        .RunState?.Rng?.CombatTargets?.NextItem(validEnemies);
-
-                    if (randomTarget == null) return;
-
-                    decimal dmgValue = GetBloomDamageValue(cardModel, randomTarget);
-                    decimal modifiedDamage = GetBloomModifiedDamage(cardModel, originalCommand, randomTarget, dmgValue);
-
-#if STS2_BETA
-                    var results = await CreatureCmd.Damage(
-                        bloomContext,
-                        randomTarget,
-                        modifiedDamage,
-                        ValueProp.Unpowered,
-                        base.Owner,
-                        null,
-                        null
-                    );
-#else
-                    var results = await CreatureCmd.Damage(
-                        bloomContext,
-                        randomTarget,
-                        modifiedDamage,
-                        ValueProp.Unpowered,
-                        base.Owner
-                    );
-#endif
-
-                    attackContext.AddHit(results);
-                }
-                finally
-                {
-                    await attackContext.DisposeAsync();
-                }
+                attackContext.AddHit(results);
+                return true;
             }
             catch (OperationCanceledException) { }
             catch (Exception e)
@@ -235,14 +271,9 @@ namespace KomeijiKoishi.Powers
             {
                 _isExecutingBloom = false;
             }
+            return false;
         }
 
-       
-        private bool IsCombatActive()
-        {
-            var mgr = CombatManager.Instance;
-            return mgr != null && mgr.IsInProgress && base.CombatState != null;
-        }
         private static decimal GetBloomDamageValue(CardModel cardModel, Creature? target)
         {
             if (cardModel.DynamicVars.ContainsKey("CalculatedDamage"))
@@ -253,7 +284,7 @@ namespace KomeijiKoishi.Powers
             return cardModel.DynamicVars.Damage.BaseValue;
         }
 
-        private static decimal GetBloomModifiedDamage(CardModel cardModel, AttackCommand? originalCommand, Creature target, decimal baseDamage)
+        private static decimal GetBloomModifiedDamage(CardModel cardModel, CardPlay? cardPlay, Creature target, decimal baseDamage)
         {
             if (cardModel.Owner?.RunState == null || cardModel.CombatState == null || cardModel.Owner.Creature == null)
             {
@@ -269,7 +300,7 @@ namespace KomeijiKoishi.Powers
                 baseDamage,
                 ValueProp.Move,
                 cardModel,
-                originalCommand?.CardPlay,
+                cardPlay,
                 ModifyDamageHookType.Additive | ModifyDamageHookType.Multiplicative,
                 CardPreviewMode.None,
                 out _);

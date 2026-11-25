@@ -2,33 +2,42 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BaseLib.Abstracts;
 using BaseLib.Utils;
+using KomeijiKoishi.Cards.Danmaku;
 using KomeijiKoishi.Pools;
 using KomeijiKoishi.Powers;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
-using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Powers;
-using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Rooms;
 
 namespace KomeijiKoishi.Relics
 {
-    [Pool(typeof(KoishiRelicPool))]
-    public sealed class KoishiRock : CustomRelicModel
+    [Pool(typeof(KoishiSharedRelicPool))]
+    public sealed class KoishiRock : KoishiCollaborationRelic
     {
-        private readonly Dictionary<Type, BuffRecord> _buffRecords = new();
+        private Dictionary<Type, BuffRecord> _buffRecords = new();
         private int _highestUpdatesPending;
 
-        public override RelicRarity Rarity => RelicRarity.Rare;
+        protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+            [HoverTipFactory.FromCard<ConsciousOverflow_Koishi>()];
 
-        public override string PackedIconPath => "res://mods/Komeiji_Koishi/images/relics/KoishiRock_outline.png";
-        protected override string PackedIconOutlinePath => "res://mods/Komeiji_Koishi/images/relics/KoishiRock.png";
-        protected override string BigIconPath => "res://mods/Komeiji_Koishi/images/relics/KoishiRock.png";
+        public override async Task BeforeHandDraw(Player player, PlayerChoiceContext choiceContext, ICombatState combatState)
+        {
+            if (player != Owner || player.Creature.IsDead || CombatManager.Instance.IsOverOrEnding)
+                return;
+
+            Flash();
+            await CardPileCmd.AddGeneratedCardsToCombat(
+                [combatState.CreateCard<ConsciousOverflow_Koishi>(player), combatState.CreateCard<ConsciousOverflow_Koishi>(player)],
+                PileType.Draw, player, CardPilePosition.Random);
+        }
 
         public override Task BeforeCombatStart()
         {
@@ -109,6 +118,12 @@ namespace KomeijiKoishi.Relics
         {
             PowerModel? power = target.Powers.FirstOrDefault(p => p.GetType() == powerType);
             return power?.Amount ?? 0m;
+        }
+
+        protected override void DeepCloneFields()
+        {
+            base.DeepCloneFields();
+            _buffRecords = new();
         }
 
         private sealed class BuffRecord

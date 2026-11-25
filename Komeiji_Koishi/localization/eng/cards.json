@@ -1,4 +1,6 @@
 {
+    "KOMEIJIKOISHI-UNCONSCIOUS_KNIFE_KOISHI.title": "Unconscious Knife",
+    "KOMEIJIKOISHI-UNCONSCIOUS_KNIFE_KOISHI.description": "When drawn, [green]automatically play[/green] this card.\nRandomly deal {Damage:diff()} damage {Repeat:diff()} times{IfUpgraded:show: to any creature|}.\nAfter playing, move this card to a random pile.",
     "KOMEIJIKOISHI-STRIKE_KOISHI.title":  "Strike",
     "KOMEIJIKOISHI-STRIKE_KOISHI.description":  "Deal {Damage:diff()} damage.",
     "KOMEIJIKOISHI-DEFEND_KOISHI.title":  "Defend",
@@ -135,7 +137,7 @@
     "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.title":  "Rose Protection",
     "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.description":  "While in [gold]Closed[/gold], [gold]Block[/gold] you gain is increased by {Rose:diff()}%.",
     "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.title":  "Air Strike",
-    "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.description":  "Deal {Damage:diff()} damage. Whenever you play an [gold]Unconscious[/gold] card, if this card is not in the exhaust pile, add it to your hand.",
+    "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.description":  "Deal {Damage:diff()} damage.\nWhenever you play an [gold]Unconscious[/gold] card, if this card is not in the exhaust pile, add it to your hand.",
     "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.balanceDescription":  "Deal {Damage:diff()} damage. Whenever you play 2 [gold]Unconscious[/gold] cards, if this card is not in the exhaust pile, add it to your hand.",
     "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.title":  "Kuuga Strike",
     "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.description":  "Deal {Damage:diff()} damage.\nAll 0{energyPrefix:energyIcons(1)} Attack cards deal {Kuuga:diff()} more damage.\nWhenever you switch [gold]Stances[/gold], if this card has not been [gold]Exhausted[/gold], return it to your hand.",

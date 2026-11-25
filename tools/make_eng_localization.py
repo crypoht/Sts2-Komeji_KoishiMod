@@ -1,4 +1,4 @@
-import json
+﻿import json
 from collections import OrderedDict
 from pathlib import Path
 
@@ -140,8 +140,18 @@ cards = ordered([
 ("KOMEIJIKOISHI-ROAMING_KOISHI.description", "Gain {Block:diff()} [gold]Block[/gold].\nRandomly choose {Amount:diff()} card(s) in your hand. They gain [gold]Unconscious[/gold] for this combat."),
 ("CARD.KOMEIJIKOISHI-ROAMING_KOISHI.prompt", "Choose a card to gain Unconscious."),
 ("KOMEIJIKOISHI-ARTWORK_KOISHI.title", "Artwork"),
-("KOMEIJIKOISHI-ARTWORK_KOISHI.description", "Deal {Damage:diff()} damage.\nGain {Block:diff()} [gold]Block[/gold]."),
+("KOMEIJIKOISHI-ARTWORK_KOISHI.description", "Deal {Damage:diff()} damage.\nGain {Block:diff()} [gold]Block[/gold].{ArtworkEvolutionHint}"),
 ("KOMEIJIKOISHI-ARTWORK_KOISHI.flavor", "A work of art for both attack and defense."),
+("KOMEIJIKOISHI-ARTWORK_EVOLUTION_HINT", "\n[koishi_rainbow]Upgrade again to change.[/koishi_rainbow]"),
+("KOMEIJIKOISHI-TRUE_ARTWORK_KOISHI.title", "True Artwork"),
+("KOMEIJIKOISHI-TRUE_ARTWORK_KOISHI.description", "Deal {Damage:diff()} damage.\nGain {Block:diff()} [gold]Block[/gold].{ArtworkEvolutionHint}"),
+("KOMEIJIKOISHI-TRUE_ARTWORK_KOISHI.flavor", "This is no longer merely artwork."),
+("KOMEIJIKOISHI-TRUE_ARTWORK_LIBERATED_KOISHI.title", "True Artwork: Liberated"),
+("KOMEIJIKOISHI-TRUE_ARTWORK_LIBERATED_KOISHI.description", "Deal {Damage:diff()} damage.\nGain {Block:diff()} [gold]Block[/gold].{ArtworkEvolutionHint}"),
+("KOMEIJIKOISHI-TRUE_ARTWORK_LIBERATED_KOISHI.flavor", "The artwork begins to break free from its frame."),
+("KOMEIJIKOISHI-TRUE_UNCONSCIOUS_ARTWORK_LIBERATED_KOISHI.title", "True Unconscious Artwork: Liberated"),
+("KOMEIJIKOISHI-TRUE_UNCONSCIOUS_ARTWORK_LIBERATED_KOISHI.description", "Deal {Damage:diff()} damage.\nGain {Block:diff()} [gold]Block[/gold].{ArtworkEvolutionHint}"),
+("KOMEIJIKOISHI-TRUE_UNCONSCIOUS_ARTWORK_LIBERATED_KOISHI.flavor", "Consciousness leaves the stage, and the artwork is finally free."),
 ("KOMEIJIKOISHI-COMPLETE_UNCONSCIOUS_KOISHI.title", "Complete Unconscious"),
 ("KOMEIJIKOISHI-COMPLETE_UNCONSCIOUS_KOISHI.description", "Gain {IntangiblePower:diff()} [gold]Intangible[/gold].\n[thinky_dots][orange]5[/orange][purple]1[/purple][green]4[/green] cannot be [red]changed[/red][/thinky_dots]"),
 ("KOMEIJIKOISHI-COMPLETE_UNCONSCIOUS_KOISHI.flavor", "Complete unconsciousness. No one knows what will happen."),
@@ -846,3 +856,4 @@ print("Generated English localization:")
 for filename in sorted(translations):
     print(f" - {filename}: {len(translations[filename])} keys")
 print(f"Long-name review: {LONG_NAMES}")
+

@@ -47,6 +47,9 @@ public sealed class KoishiModConfig : SimpleModConfig
     [ConfigSection("AncientSettings")]
     public static bool EnableAncients { get; set; } = true;
 
+    [ConfigSection("AncientSettings")]
+    public static bool EnableSpecialAncients { get; set; } = true;
+
     [ConfigSection("BalanceSettings")]
     public static bool EnableBalancePatch { get; set; } = false;
 
@@ -373,7 +376,11 @@ public sealed class KoishiModConfig : SimpleModConfig
         return !runState.Modifiers.Any(m => m is DisableKoishiAncientsModifier);
     }
 
-    public static IReadOnlyList<ModifierModel> WithHostAncientConfig(IReadOnlyList<ModifierModel> modifiers)
+    public static bool AreSpecialAncientsEnabledForRun(IRunState? runState) =>
+        runState == null ? EnableSpecialAncients : !runState.Modifiers.Any(m => m is DisableKoishiSpecialAncientsModifier);
+
+    public static IReadOnlyList<ModifierModel> WithHostAncientConfig(
+        IReadOnlyList<ModifierModel> modifiers, bool applyLocalSpecialAncientSetting = true)
     {
         List<ModifierModel> result = modifiers
             .Where(m => m is not KoishiAncientWeightsModifier and not DisableKoishiAncientWeightsModifier and not MoriyaDanceForAllPlayersModifier)
@@ -396,6 +403,15 @@ public sealed class KoishiModConfig : SimpleModConfig
         else if (!hasMarker)
         {
             result.Add(ModelDb.Modifier<DisableKoishiAncientsModifier>().ToMutable());
+        }
+
+        if (applyLocalSpecialAncientSetting)
+        {
+            result.RemoveAll(m => m is DisableKoishiSpecialAncientsModifier);
+            if (!EnableSpecialAncients)
+            {
+                result.Add(ModelDb.Modifier<DisableKoishiSpecialAncientsModifier>().ToMutable());
+            }
         }
 
         if (EnableAncientWeights)

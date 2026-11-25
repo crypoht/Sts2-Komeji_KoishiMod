@@ -1,4 +1,6 @@
 {
+    "KOMEIJIKOISHI-UNCONSCIOUS_KNIFE_KOISHI.title": "無意識ナイフ",
+    "KOMEIJIKOISHI-UNCONSCIOUS_KNIFE_KOISHI.description": "引いた時、[green]自動でプレイ[/green]する。\nランダムに{IfUpgraded:show:生物を対象に|}{Damage:diff()}ダメージを{Repeat:diff()}回与える。\nプレイ後、ランダムなカードの山に移動する。",
     "KOMEIJIKOISHI-STRIKE_KOISHI.title":  "ストライク",
     "KOMEIJIKOISHI-STRIKE_KOISHI.description":  "{Damage:diff()}ダメージを与える。",
     "KOMEIJIKOISHI-DEFEND_KOISHI.title":  "防御",
@@ -135,7 +137,7 @@
     "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.title":  "薔薇护身",
     "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.description":  "处于[gold]閉合[/gold]スタンス时，得るのブロック值额外提高{Rose:diff()}%。",
     "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.title":  "\"空\"袭",
-    "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.description":  "造成{Damage:diff()}点ダメージ。～するたび、あなた使用一枚[gold]無意識[/gold]カード时，如果这枚カード不在廃棄パイル中，将其加えるあなたの手札。",
+    "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.description":  "{Damage:diff()}ダメージを与える。\n[gold]無意識[/gold]カードをプレイするたび、このカードが廃棄パイルにないなら、手札に加える。",
     "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.balanceDescription":  "造成{Damage:diff()}点ダメージ。あなたが[gold]無意識[/gold]カードを2枚プレイするたび、このカードが廃棄パイルになければ手札に加える。",
     "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.title":  "クウガ打击",
     "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.description":  "{Damage:diff()}ダメージを与える。\nすべての0{energyPrefix:energyIcons(1)}アタックは{Kuuga:diff()}追加ダメージを与える。\n[gold]スタンス[/gold]を切り替えるたび、このカードが[gold]廃棄[/gold]されていなければ手札に戻る。",

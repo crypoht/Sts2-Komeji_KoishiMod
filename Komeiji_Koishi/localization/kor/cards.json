@@ -1,4 +1,6 @@
 {
+    "KOMEIJIKOISHI-UNCONSCIOUS_KNIFE_KOISHI.title": "무의식 단도",
+    "KOMEIJIKOISHI-UNCONSCIOUS_KNIFE_KOISHI.description": "뽑을 때 이 카드를 [green]자동으로 사용[/green]합니다.\n무작위로{IfUpgraded:show: 아무 생물에게나|} 피해를 {Damage:diff()}씩 {Repeat:diff()}번 줍니다.\n사용 후 무작위 카드 더미로 이동합니다.",
     "KOMEIJIKOISHI-STRIKE_KOISHI.title":  "타격",
     "KOMEIJIKOISHI-STRIKE_KOISHI.description":  "피해를 {Damage:diff()} 줍니다.",
     "KOMEIJIKOISHI-DEFEND_KOISHI.title":  "방어",
@@ -135,7 +137,7 @@
     "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.title":  "장미护몸",
     "KOMEIJIKOISHI-ROSE_PROTECTION_KOISHI.description":  "상태라면[gold]폐쇄[/gold]태세때, 얻습니다의방어도值추가증가{Rose:diff()}%.",
     "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.title":  "\"空\"袭",
-    "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.description":  "줍니다{Damage:diff()}점피해.때마다 당신사용1장[gold]무의식[/gold]카드때, 만약이 카드不에소멸 더미 안, 其넣습니다당신의손패.",
+    "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.description":  "피해를 {Damage:diff()} 줍니다.\n[gold]무의식[/gold] 카드를 사용할 때마다 이 카드가 소멸 더미에 없다면 손으로 가져옵니다.",
     "KOMEIJIKOISHI-AIR_STRIKE_KOISHI.balanceDescription":  "줍니다{Damage:diff()}점피해. [gold]무의식[/gold] 카드를 2장 사용할 때마다, 이 카드가 소멸 더미에 없다면 손패에 넣습니다.",
     "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.title":  "쿠우가打击",
     "KOMEIJIKOISHI-KUUGA_STRIKE_KOISHI.description":  "피해를 {Damage:diff()} 줍니다.\n모든0{energyPrefix:energyIcons(1)}비용공격카드증가{Kuuga:diff()}점피해\n마다회전환[gold]태세[/gold]때,且없으면[gold]소멸[/gold],돌아가다에손패",

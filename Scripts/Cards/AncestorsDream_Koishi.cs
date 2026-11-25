@@ -59,7 +59,7 @@ namespace KomeijiKoishi.Cards
 
                 if (addResults.Count > 0)
                 {
-                    CardCmd.PreviewCardPileAdd(addResults.Take(MaxPreviewCards).ToList(), 2.2f, CardPreviewStyle.HorizontalLayout);
+                    CardCmd.PreviewCardPileAdd(addResults.Take(MaxPreviewCards).ToList(), 1.5f, CardPreviewStyle.HorizontalLayout);
                 }
             }
             catch (Exception e)
